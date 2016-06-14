@@ -1,30 +1,36 @@
 ---
 title: About
 ---
-I am a software engineer living software engineer and a lifelong student of 
-computer science, with specific interests in programming languages, type 
-theory, compilers, and math. I live in Columbus, OH. I work for Improving 
-and co-founded the Columbus branch of Papers We Love, a reading group for 
-people interested in academic computer science research. You can also read 
-my full résumé or look at some of my public source code. In my spare time, 
-I play Irish traditional music on the wooden flute and tin whistle.
+I am a software engineer living software engineer and a lifelong student of
+computer science, with specific interests in programming languages, type
+theory, compilers, and math. I live in Columbus, OH. I work for
+[Improving](http://improving.com/) and co-founded [the Columbus branch of
+Papers We Love](http://paperswelove.org/chapter/columbus/), a reading group
+for people interested in academic computer science research. You can also
+[read my full résumé](https://stackoverflow.com/cv/craigstuntz) or look at
+some of [my open source code](https://github.com/craigstuntz/). In my spare
+time, [I play Irish traditional music on the wooden flute and tin
+whistle](http://learningtowhistle.blogspot.com/).
 
 ### Legal Information
 
-The English text on this site by Craig Stuntz is licensed under a Creative 
-Commons Attribution-Noncommercial-Share Alike 3.0 United States License.
+The English text on this site by Craig Stuntz is licensed under a
+[Creative Commons Attribution-Noncommercial-Share Alike
+3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/us/) United States
+License.
 
-The software source code in all posts and source code attachments written 
-by Craig Stuntz may be used under terms of the MIT license. Note, however, 
-that some of the attached projects include code written by other people, 
-under terms of different licenses. While I believe that these licenses are 
-compatible with the MIT license, and that I am using their works legally, 
-it is entirely up to you to make sure that these licenses are compatible 
-with your own code, and that you are using this code legally, should you 
+The software source code in all posts and source code attachments written
+by Craig Stuntz may be used under terms of the [MIT
+license](https://opensource.org/licenses/MIT). Note, however,
+that some of the attached projects include code written by other people,
+under terms of different licenses. While I believe that these licenses are
+compatible with the MIT license, and that I am using their works legally,
+it is entirely up to you to make sure that these licenses are compatible
+with your own code, and that you are using this code legally, should you
 include their work as well as my own in your project.
 
-Binary attachments (executable code) are copyright by Craig Stuntz with 
+Binary attachments (executable code) are copyright by Craig Stuntz with
 all rights reserved.
 
-Permissions beyond the scope of this license may be available; contact me 
+Permissions beyond the scope of this license may be available; contact me
 at the address above.
