@@ -5,6 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Craig Stuntz - Designing for Problems Too Big to Test</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
     </head>
     <body>
         <div id="header">
@@ -47,23 +49,23 @@
 <h3 id="there-are-no-edge-cases-in-programming-languages">There Are No Edge Cases In Programming Languages</h3>
 <p>As noted above, a compiler must be able to accept any string and either produce an equivalent program or explain clearly to a human being why this is string is not a valid program. A compiler designer cannot predict the valid programs people may write, nor the errors they may create.</p>
 <p>For example, let’s consider <a href="https://en.wikipedia.org/wiki/Duff%27s_device">Duff’s Device</a>. It’s safe to presume that Brian Kernighan and Dennis Ritchie did not have this in mind when they designed the C programming language. For the uninitiated, Duff’s Device nests a while loop inside of a switch statement:</p>
-<pre><code>send(to, from, count)
-register short *to, *from;
-register count;
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c">send(to, from, count)
+<span class="dt">register</span> <span class="dt">short</span> *to, *from;
+<span class="dt">register</span> count;
 {
-    register n = (count + 7) / 8;
-    switch (count % 8 ) {
-    case 0: do { *to = *from++;
-    case 7:      *to = *from++;
-    case 6:      *to = *from++;
-    case 5:      *to = *from++;
-    case 4:      *to = *from++;
-    case 3:      *to = *from++;
-    case 2:      *to = *from++;
-    case 1:      *to = *from++;
-            } while (--n &gt; 0);
+    <span class="dt">register</span> n = (count + <span class="dv">7</span>) / <span class="dv">8</span>;
+    <span class="kw">switch</span> (count % <span class="dv">8</span> ) {
+    <span class="kw">case</span> <span class="dv">0</span>: <span class="kw">do</span> { *to = *from++;
+    <span class="kw">case</span> <span class="dv">7</span>:      *to = *from++;
+    <span class="kw">case</span> <span class="dv">6</span>:      *to = *from++;
+    <span class="kw">case</span> <span class="dv">5</span>:      *to = *from++;
+    <span class="kw">case</span> <span class="dv">4</span>:      *to = *from++;
+    <span class="kw">case</span> <span class="dv">3</span>:      *to = *from++;
+    <span class="kw">case</span> <span class="dv">2</span>:      *to = *from++;
+    <span class="kw">case</span> <span class="dv">1</span>:      *to = *from++;
+            } <span class="kw">while</span> (--n &gt; <span class="dv">0</span>);
     }
-}</code></pre>
+}</code></pre></div>
 <p>This is unreadable to the point that it borders on obfuscation, but is legal C, per the specification, and does perform a useful optimization on a particular case. I bring it up because, as a language implementer, I think it drives home the point that there is no possibility of creating (anywhere near) all of the possible unit tests for all of the possible ways someone might choose to use your language.</p>
 <h3 id="different-tasks-different-design-methodologies">Different Tasks, Different Design Methodologies</h3>
 <p>In many programming tasks, the number of “happy path” cases are similar to the number of edge and error cases. At least within the same order of magnitude. In these cases it’s probably possible to exhaustively test the system, even if people don’t usually bother to do so.</p>
@@ -73,7 +75,7 @@ register count;
 <p>This will make more sense if I give an example.</p>
 <h3 id="lexing-and-regular-expressions">Lexing and Regular Expressions</h3>
 <p>In many compilers, the first phase of compilation is lexing, where the string representing the program source code is split into tokens. The token list will be passed to the parser, which attempts to match them up with the grammar of the programming language. As a practical example, consider the following expression from a Lisp-like language, which increments the number 1, resulting in the value 2.</p>
-<pre class="lisp"><code>(inc 1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(inc <span class="dv">1</span>)</code></pre></div>
 <p>Lexing divides this source code into a stream of tokens, like this:</p>
 <pre><code>LeftParenthesis
 Identifier &quot;inc&quot;
@@ -81,13 +83,13 @@ LiteralInt 1
 RightParenthesis</code></pre>
 <p>These tokens will be consumed by the parser to produce and abstract syntax tree, type checked, optimized, etc., but let’s just look at lexing for now.</p>
 <p>Substrings of the input source code are mapped to tokens using regular expressions. Not <a href="http://www.regular-expressions.info/quickstart.html">the PCRE type with zillions of features</a> you might be familiar with, but <a href="https://en.wikipedia.org/wiki/Lexical_grammar">a far simpler version</a> with only a few rules. The lexical grammar for this language looks something like this:</p>
-<pre><code>leftParenthesis  = '('
-rightParenthesis = ')'
-letter           = 'A' | 'B' | 'C' | …
-digit            = '0' | '1' | '2' | …
-number           = ('+'digit|'-'digit|digit) digit*
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">leftParenthesis  = <span class="ch">'('</span>
+rightParenthesis = <span class="ch">')'</span>
+letter           = <span class="ch">'A'</span> | <span class="ch">'B'</span> | <span class="ch">'C'</span> | …
+digit            = <span class="ch">'0'</span> | <span class="ch">'1'</span> | <span class="ch">'2'</span> | …
+number           = (<span class="ch">'+'</span>digit|<span class="ch">'-'</span>digit|digit) digit*
 alphanumeric     = letter | number
-// …</code></pre>
+//<span class="co"> …</span></code></pre></div>
 <p>You don’t use <code>System.Text.RegularExpressions.Regex</code> for this; it’s slow, and has features you won’t need.</p>
 <p>How can we guarantee that we can tokenize any possible string? We don’t need to; as long as we explicitly handle the case of strings we can’t tokenize, we’re covered. I do this by having an extra token type for unrecognized characters. These are eventually mapped into errors the user sees.</p>
 <p>How can we guarantee that we can tokenize any string representing a valid program without seeing an unrecognizable character? Because the parser is designed around a formalism (a context free grammar) which maps lexemes to abstract syntax trees, and the only valid programs are those which can be constructed from repeated applications of the production rules in the parser’s grammar. We have changed the scope of the problem from “any possible string” to “any possible sequence of lexemes.”</p>
@@ -101,25 +103,25 @@ alphanumeric     = letter | number
     | Unrecognized  <span class="kw">of</span> <span class="dt">char</span></code></pre></div>
 <p>We can test the lexer in isolation with a much smaller number of test cases.</p>
 <p>The example I gave was a very simple expression, but real-world programs obviously contain more complicated expressions. Also, real-world code is often invalid and must be rejected by the compiler. Some coding errors cannot be detected until further on in the compilation pipeline, but there are possible errors at the lexing stage. For example, in my language, identifiers must begin with a letter, so the expression</p>
-<pre><code>(| 1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(| <span class="dv">1</span>)</code></pre></div>
 <p>…maps to:</p>
-<pre><code>LeftParenthesis
-Unrecognized '|'
-LiteralInt 1
-RightParenthesis</code></pre>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">LeftParenthesis
+Unrecognized <span class="ch">'|'</span>
+LiteralInt <span class="dv">1</span>
+RightParenthesis</code></pre></div>
 <p>Importantly, we should be able to examine any character of a real-world string, and map it into one of these types. The <code>Unrecognized</code> type serves as a kind of fall through for characters which do not fit into the types in the union.</p>
 <p>F#’s exhaustiveness checking ensures that we cannot forget to handle a particular case even if we add additional lexemes to the language specification later. As a simple example, consider this pretty print function which takes a list of lexemes and produces a string similar to the originally parsed source code:</p>
-<pre><code>let private prettyPrintLexeme = function
-| LeftParenthesis          -&gt; &quot;(&quot;
-| RightParenthesis         -&gt; &quot;)&quot;
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> <span class="kw">private</span> prettyPrintLexeme = <span class="kw">function</span>
+| LeftParenthesis          -&gt; <span class="st">&quot;(&quot;</span>
+| RightParenthesis         -&gt; <span class="st">&quot;)&quot;</span>
 | Identifier    identifier -&gt; identifier
 | LiteralInt    num        -&gt; num.ToString()
-| LiteralString str        -&gt; sprintf &quot;\&quot;%s&quot;\&quot; str
-| Unrecognized  ch         -&gt; ch.ToString()
+| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">%s&quot;</span>\<span class="st">&quot; str</span>
+<span class="st">| Unrecognized  ch         -&gt; ch.ToString()</span>
 
-let prettyPrint =
-    List.map prettyPrintLexeme
-    &gt;&gt; String.concat &quot; &quot;</code></pre>
+<span class="st">let prettyPrint =</span>
+<span class="st">    List.map prettyPrintLexeme</span>
+<span class="st">    &gt;&gt; String.concat &quot;</span> <span class="st">&quot;</span></code></pre></div>
 <p>If we were to, after the fact, add an additional type of lexeme, but forgot to modify the <code>prettyPrint</code> function, we would receive a compiler warning since the function would no longer be exhaustive.</p>
 <h3 id="the-rest-of-the-pipeline">The Rest of the Pipeline</h3>
 <p>What about parsing, type checking, and the rest of the compilation pipeline? Formalisms exist for those, as well.</p>
@@ -155,10 +157,6 @@ let prettyPrint =
 <p>And of this downside of this methodology is that it becomes big design up front in those cases when there is not an off the shelf formalism available for your use. That’s OK! The important thing is to know when these formalisms exist in how to use them, when necessary.</p>
 <p>The <a href="https://github.com/craigstuntz/TinyLanguage">full source code for this post</a> is available.</p>
 
-        </div>
-        <div id="footer">
-            Site proudly generated by
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
         </div>
     </body>
 </html>
