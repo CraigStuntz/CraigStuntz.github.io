@@ -17,8 +17,10 @@ have a `CNAME` file (see step 3 in this list) in your `develop` branch. Ensure y
 7. You might want to look at some
 <a href="http://katychuang.com/hakyll-cssgarden/gallery/">sample
 themes</a>.
-7. If you want code syntax highlighting, you need some
+8. If you want code syntax highlighting, you need some
 <a href="https://www.jdreaver.com/posts/2014-06-22-math-programming-blog-hakyll.html">additional
 CSS</a>. A list of supported languages can be found in the
 <a href="https://github.com/jgm/highlighting-kate/tree/master/xml">highlighting-kate</a>
 source code.
+9. You might also want an <a href="https://thibaud.dauce.fr/posts/2015-11-15-rss-feed-with-hakyll.html">RSS
+feed</a>.

@@ -25,6 +25,7 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
@@ -59,9 +60,38 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
+    createFeed "feed.xml" renderRss
+    createFeed "atom.xml" renderAtom
 
 --------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+feedCtx :: Context String
+feedCtx =
+    postCtx `mappend`
+    bodyField "description"
+
+type RenderingFunction = FeedConfiguration
+           -> Context String
+           -> [Item String]
+           -> Compiler (Item String)
+
+createFeed :: Identifier -> RenderingFunction -> Rules ()
+createFeed name renderingFunction = create [name] $ do
+      route idRoute
+      compile $ do
+          posts <- fmap (take 10) . recentFirst =<<
+              loadAllSnapshots "posts/*" "content"
+          renderingFunction myFeedConfiguration feedCtx posts
+
+myFeedConfiguration :: FeedConfiguration
+myFeedConfiguration = FeedConfiguration
+    { feedTitle       = "Craig Stuntz's blog"
+    , feedDescription = "Craig Stuntz's blog"
+    , feedAuthorName  = "Craig Stuntz"
+    , feedAuthorEmail = ""
+    , feedRoot        = "http://www.craigstuntz.com"
+    }
