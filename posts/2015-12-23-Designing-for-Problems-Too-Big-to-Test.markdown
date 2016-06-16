@@ -33,7 +33,7 @@ As noted above, a compiler must be able to accept any string and either produce 
 
 For example, let’s consider [Duff’s Device](https://en.wikipedia.org/wiki/Duff%27s_device). It’s safe to presume that Brian Kernighan and Dennis Ritchie did not have this in mind when they designed the C programming language. For the uninitiated, Duff’s Device nests a while loop inside of a switch statement:
 
-```
+```c
 send(to, from, count)
 register short *to, *from;
 register count;
@@ -68,7 +68,7 @@ This will make more sense if I give an example.
 ### Lexing and Regular Expressions
 In many compilers, the first phase of compilation is lexing, where the string representing the program source code is split into tokens. The token list will be passed to the parser, which attempts to match them up with the grammar of the programming language. As a practical example, consider the following expression from a Lisp-like language, which increments the number 1, resulting in the value 2.
 
-```lisp
+```commonlisp
 (inc 1)
 ```
 
@@ -88,7 +88,7 @@ Substrings of the input source code are mapped to tokens using regular expressio
 you might be familiar with, but [a far simpler version](https://en.wikipedia.org/wiki/Lexical_grammar)
 with only a few rules. The lexical grammar for this language looks something like this:
 
-```
+```fsharp
 leftParenthesis  = '('
 rightParenthesis = ')'
 letter           = 'A' | 'B' | 'C' | …
@@ -123,13 +123,13 @@ We can test the lexer in isolation with a much smaller number of test cases.
 
 The example I gave was a very simple expression, but real-world programs obviously contain more complicated expressions. Also, real-world code is often invalid and must be rejected by the compiler. Some coding errors cannot be detected until further on in the compilation pipeline, but there are possible errors at the lexing stage. For example, in my language, identifiers must begin with a letter, so the expression
 
-```
+```commonlisp
 (| 1)
 ```
 
 …maps to:
 
-```
+```fsharp
 LeftParenthesis
 Unrecognized '|'
 LiteralInt 1
@@ -140,7 +140,7 @@ Importantly, we should be able to examine any character of a real-world string, 
 
 F#’s exhaustiveness checking ensures that we cannot forget to handle a particular case even if we add additional lexemes to the language specification later. As a simple example, consider this pretty print function which takes a list of lexemes and produces a string similar to the originally parsed source code:
 
-```
+```fsharp
 let private prettyPrintLexeme = function
 | LeftParenthesis          -> "("
 | RightParenthesis         -> ")"
