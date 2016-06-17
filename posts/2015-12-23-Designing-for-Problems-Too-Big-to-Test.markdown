@@ -1,5 +1,6 @@
 ---
 title: Designing for Problems Too Big to Test
+tags: F#, compilers, testing, formal methods
 ---
 
 In this post, I will show an example of where using unit testing as a design

@@ -1,5 +1,6 @@
 ---
 title: Hosting a Hakyll Blog On GitHub With a Custom Domain
+tags: Hakyll, GitHub
 ---
 
 1. Create a [GitHub user page](https://pages.github.com/). Follow the
@@ -24,3 +25,4 @@ CSS</a>. A list of supported languages can be found in the
 source code.
 9. You might also want an <a href="https://thibaud.dauce.fr/posts/2015-11-15-rss-feed-with-hakyll.html">RSS
 feed</a>.
+10. You might also want <a href="http://javran.github.io/posts/2014-03-01-add-tags-to-your-hakyll-blog.html">tags</a>.
