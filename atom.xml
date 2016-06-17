@@ -30,7 +30,14 @@
 <li>You might want to look at some <a href="http://katychuang.com/hakyll-cssgarden/gallery/">sample themes</a>.</li>
 <li>If you want code syntax highlighting, you need some <a href="https://www.jdreaver.com/posts/2014-06-22-math-programming-blog-hakyll.html">additional CSS</a>. A list of supported languages can be found in the <a href="https://github.com/jgm/highlighting-kate/tree/master/xml">highlighting-kate</a> source code.</li>
 <li>You might also want an <a href="https://thibaud.dauce.fr/posts/2015-11-15-rss-feed-with-hakyll.html">RSS feed</a>.</li>
+<li>You might also want <a href="http://javran.github.io/posts/2014-03-01-add-tags-to-your-hakyll-blog.html">tags</a>.</li>
 </ol>
+
+<div class="info">
+    
+    Tags: <a href="/tags/Hakyll.html">Hakyll</a>, <a href="/tags/GitHub.html">GitHub</a>
+    
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -170,6 +177,12 @@ RightParenthesis</code></pre></div>
 <p>If “formal methods” sounds too snobby for your taste, you can simply call this “programming with proven recipes.”</p>
 <p>And of this downside of this methodology is that it becomes big design up front in those cases when there is not an off the shelf formalism available for your use. That’s OK! The important thing is to know when these formalisms exist in how to use them, when necessary.</p>
 <p>The <a href="https://github.com/craigstuntz/TinyLanguage">full source code for this post</a> is available.</p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/F%23.html">F#</a>, <a href="/tags/compilers.html">compilers</a>, <a href="/tags/testing.html">testing</a>, <a href="/tags/formal%20methods.html">formal methods</a>
+    
+</div>
 ]]></summary>
 </entry>
 
