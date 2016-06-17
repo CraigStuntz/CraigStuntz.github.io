@@ -1,45 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Craig Stuntz's blog</title>
-    <link href="http://www.craigstuntz.com/atom.xml" rel="self" />
-    <link href="http://www.craigstuntz.com" />
-    <id>http://www.craigstuntz.com/atom.xml</id>
-    <author>
-        <name>Craig Stuntz</name>
-        <email></email>
-    </author>
-    <updated>2016-06-14T00:00:00Z</updated>
-    <entry>
-    <title>Hosting a Hakyll Blog On GitHub With a Custom Domain</title>
-    <link href="http://www.craigstuntz.com/posts/2016-06-14-hakyll.html" />
-    <id>http://www.craigstuntz.com/posts/2016-06-14-hakyll.html</id>
-    <published>2016-06-14T00:00:00Z</published>
-    <updated>2016-06-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on June 14, 2016
-    
-</div>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - Designing for Problems Too Big to Test</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
 
-<ol style="list-style-type: decimal">
-<li>Create a <a href="https://pages.github.com/">GitHub user page</a>. Follow the directions there to create a “Hello world” site. Don’t proceed until that works.</li>
-<li>Register a domain.</li>
-<li><a href="https://help.github.com/articles/setting-up-your-pages-site-repository/">Point your domain at your GitHub user pages site</a>. It may take 3+ hours before your domain propagates. Don’t continue until this works.</li>
-<li>Install <a href="http://www.haskellstack.org">stack</a></li>
-<li>Install hakyll via <a href="https://jaspervdj.be/hakyll/tutorials/01-installation.html"><code>stack install hakyll</code></a></li>
-<li>Follow <a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">this tutorial</a>. <em>However!</em> You already have a <code>master</code> branch. That’s OK. But you do want to have a <code>CNAME</code> file (see step 3 in this list) in your <code>develop</code> branch. Ensure your site looks good before proceeding.</li>
-<li>You might want to look at some <a href="http://katychuang.com/hakyll-cssgarden/gallery/">sample themes</a>.</li>
-<li>If you want code syntax highlighting, you need some <a href="https://www.jdreaver.com/posts/2014-06-22-math-programming-blog-hakyll.html">additional CSS</a>. A list of supported languages can be found in the <a href="https://github.com/jgm/highlighting-kate/tree/master/xml">highlighting-kate</a> source code.</li>
-<li>You might also want an <a href="https://thibaud.dauce.fr/posts/2015-11-15-rss-feed-with-hakyll.html">RSS feed</a>.</li>
-</ol>
-]]></summary>
-</entry>
-<entry>
-    <title>Designing for Problems Too Big to Test</title>
-    <link href="http://www.craigstuntz.com/posts/2015-12-23-Designing-for-Problems-Too-Big-to-Test.html" />
-    <id>http://www.craigstuntz.com/posts/2015-12-23-Designing-for-Problems-Too-Big-to-Test.html</id>
-    <published>2015-12-23T00:00:00Z</published>
-    <updated>2015-12-23T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
+        <div id="content">
+            <h1>Designing for Problems Too Big to Test</h1>
+
+            <div class="info">
     Posted on December 23, 2015
     
 </div>
@@ -97,11 +83,11 @@ LiteralInt 1
 RightParenthesis</code></pre>
 <p>These tokens will be consumed by the parser to produce and abstract syntax tree, type checked, optimized, etc., but let’s just look at lexing for now.</p>
 <p>Substrings of the input source code are mapped to tokens using regular expressions. Not <a href="http://www.regular-expressions.info/quickstart.html">the PCRE type with zillions of features</a> you might be familiar with, but <a href="https://en.wikipedia.org/wiki/Lexical_grammar">a far simpler version</a> with only a few rules. The lexical grammar for this language looks something like this:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">leftParenthesis  = <span class="ch">&#39;(&#39;</span>
-rightParenthesis = <span class="ch">&#39;)&#39;</span>
-letter           = <span class="ch">&#39;A&#39;</span> | <span class="ch">&#39;B&#39;</span> | <span class="ch">&#39;C&#39;</span> | …
-digit            = <span class="ch">&#39;0&#39;</span> | <span class="ch">&#39;1&#39;</span> | <span class="ch">&#39;2&#39;</span> | …
-number           = (<span class="ch">&#39;+&#39;</span>digit|<span class="ch">&#39;-&#39;</span>digit|digit) digit*
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">leftParenthesis  = <span class="ch">'('</span>
+rightParenthesis = <span class="ch">')'</span>
+letter           = <span class="ch">'A'</span> | <span class="ch">'B'</span> | <span class="ch">'C'</span> | …
+digit            = <span class="ch">'0'</span> | <span class="ch">'1'</span> | <span class="ch">'2'</span> | …
+number           = (<span class="ch">'+'</span>digit|<span class="ch">'-'</span>digit|digit) digit*
 alphanumeric     = letter | number
 //<span class="co"> …</span></code></pre></div>
 <p>You don’t use <code>System.Text.RegularExpressions.Regex</code> for this; it’s slow, and has features you won’t need.</p>
@@ -120,7 +106,7 @@ alphanumeric     = letter | number
 <div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(| <span class="dv">1</span>)</code></pre></div>
 <p>…maps to:</p>
 <div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">LeftParenthesis
-Unrecognized <span class="ch">&#39;|&#39;</span>
+Unrecognized <span class="ch">'|'</span>
 LiteralInt <span class="dv">1</span>
 RightParenthesis</code></pre></div>
 <p>Importantly, we should be able to examine any character of a real-world string, and map it into one of these types. The <code>Unrecognized</code> type serves as a kind of fall through for characters which do not fit into the types in the union.</p>
@@ -170,7 +156,7 @@ RightParenthesis</code></pre></div>
 <p>If “formal methods” sounds too snobby for your taste, you can simply call this “programming with proven recipes.”</p>
 <p>And of this downside of this methodology is that it becomes big design up front in those cases when there is not an off the shelf formalism available for your use. That’s OK! The important thing is to know when these formalisms exist in how to use them, when necessary.</p>
 <p>The <a href="https://github.com/craigstuntz/TinyLanguage">full source code for this post</a> is available.</p>
-]]></summary>
-</entry>
 
-</feed>
+        </div>
+    </body>
+</html>
