@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - "Static vs. Dynamic" Is the Wrong Question</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>"Static vs. Dynamic" Is the Wrong Question</h1>
+
+            <div class="info">
+    Posted on June 18, 2016
+    
+</div>
+
+<p>It’s common to ask, <em>“Is there evidence that programmers write safer code or are more productive when using a static or a dynamic language?”</em> It’s also common to write really terrible blog post answers to this question. I’m not going to link to examples, but let’s just say that general comparisons of “mainstream dynamic language A” with “mainstream static language B” don’t give a lot of insight into the broader question.</p>
+<p>Yet <a href="http://rundis.github.io/blog/2016/type_confused.html">reasonable people do want to know the answer</a>. Can we shed more light on the topic?</p>
+<p>Well-designed, peer reviewed research on the subject is <a href="https://www.quorumlanguage.com/evidence/evidence.pdf">highly uncommon</a> [PDF] and <a href="http://danluu.com/empirical-pl/">tends to examine very specific claims with fairly small effects</a>. The few good studies which do exist at all, narrow as they might be, are <a href="2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html">never reproduced by anyone</a>. Any argument claiming a “scientific” answer to this question is instantly suspect.</p>
+<h2 id="there-arent-two-distinct-buckets-of-languages-named-static-and-dynamic">There Aren’t Two Distinct Buckets of Languages Named Static and Dynamic</h2>
+<p>To be honest, I don’t think this question is answerable. In part this is because, increasingly, I think <strong>the notion of a strict distinction between static and dynamic languages is less than helpful</strong>. From the point of view of the working programmer, it confuses a number of different and important ways that both languages and tooling can vary.</p>
+<p>Why? Ask yourself these questions:</p>
+<h3 id="what-is-a-statically-typed-language">What Is a Statically Typed Language?</h3>
+<p>Is Elm a statically typed language? Is Java a statically typed language?</p>
+<ul>
+<li><a href="http://elm-lang.org/blog/compilers-as-assistants">Elm’s type system acts as a coach</a> to help the programmer complete her work, but doesn’t really affect performance.</li>
+<li>Java’s type system is a <a href="http://openjdk.java.net/jeps/286">verbose</a> impediment to code readers and writers, but <a href="http://cr.openjdk.java.net/~jrose/values/values-0.html">improves performance</a>.</li>
+</ul>
+<p>If both languages are called “statically typed” and yet the two languages’ type systems do such different things, then how much value is there in lumping them into the same specific bucket?</p>
+<h3 id="what-is-a-dynamic-language">What Is a Dynamic Language?</h3>
+<p>Is Erlang a statically typed language? Many would say no, but what if I run <a href="http://erlang.org/doc/man/dialyzer.html">Dialyzer</a> first? Sure, I’m not getting the runtime performance benefits static typing can bring, but if types are inferred statically at build time and can fail the build, then I’m getting at least some help from static typing. So in this case the distinction between statically and dynamically typed has more to do with the tooling I might be using than the language itself. That’s interesting!</p>
+<p>You can even <a href="https://github.com/frenchy64/ambrosebs.com/blob/gh-pages/talks/dynamic%20inference%20boston%20pi%202016.pdf">infer static types from unit tests instead of code itself</a>!</p>
+<h3 id="whatever-static-and-dynamic-are-production-languages-often-have-both">Whatever “Static” and “Dynamic” Are, Production Languages Often Have Both</h3>
+<p>C# has <code>dynamic</code>. Racket has <a href="https://docs.racket-lang.org/ts-guide/">Typed Racket</a>. Java has reflection. Clojure has <code>core.typed</code>.</p>
+<h3 id="well-ok-but-surely-there-must-be-a-formal-distinction-right">Well, OK, But Surely There Must Be a <em>Formal</em> Distinction, Right?</h3>
+<p>Less so than you might think.</p>
+<blockquote>
+<p>Terms like “dynamically typed” are arguably misnomers and should probably be replaced by “dynamically checked,” but the usage is standard.<br /> – Benjamin C. Pierce, <em>Types and Programming Languages</em><sup>1</sup></p>
+</blockquote>
+<blockquote>
+<p>Thus we see that the canonical untyped language, <strong>Λ</strong> [the untyped lambda calculus], which by dint of terminology stands in opposition to typed languages, turns out to be but a typed language after all. Rather than eliminating types, an untyped language consolidates an infinite collection of types into a single recursive type. Doing so renders static type checking trivial, at the cost of incurring dynamic overhead to coerce values to and from the recursive type.<br /> - Robert Harper, <em>Practical Foundations for Programming Languages</em><sup>2</sup></p>
+</blockquote>
+<p>One can consider a “dynamic language” as a language which has <a href="https://existentialtype.wordpress.com/2011/03/19/dynamic-languages-are-static-languages/">fewer statically checked types</a> (namely, one) than a “static language.”</p>
+<h2 id="what-does-static-typing-really-do">What Does Static Typing Really Do?</h2>
+<p>Given some programming language, “static typing” is a feature (or, more properly, a family of features) the language designer could add to an otherwise “dynamic language” which might deliver one or more of the following benefits:</p>
+<ul>
+<li>Proof that certain kinds of dynamic errors are impossible</li>
+<li>Automatic and machine verified documentation</li>
+<li>Improved runtime performance</li>
+<li>Better tooling supported</li>
+</ul>
+<p>It might also have one or more of the following drawbacks</p>
+<ul>
+<li>Increased verbosity</li>
+<li>Rejection of otherwise correct programs</li>
+<li>Slower programmer iteration (possibly lengthy compile/run cycles)</li>
+<li>A need for the developer to learn “static typing” language feature (through she still must understand types to some degree regardless)</li>
+</ul>
+<p>However, every single one of these benefits and drawbacks could also come from adding a different feature (distinct from “static typing”) to the language.</p>
+<p>For example, “proof that certain kinds of dynamic errors are impossible” could come via model checking or formal verification. “Increased verbosity” is hardly limited to “static languages”; most “dynamic languages” are more verbose than Haskell.</p>
+<p>Instead of asking, “Should the whole world use a ‘statically typed’ language,” we could ask “In which cases would it make sense to write formal proofs of our programs?”</p>
+<h2 id="if-static-vs.dynamic-is-the-wrong-question-then-what-is-the-right-question">If “Static vs. Dynamic” Is the Wrong Question, Then What Is the Right Question?</h2>
+<p>If you’re a working programmer, then the right question is:</p>
+<blockquote>
+<p><strong>How can my languages and tooling help me be a better programmer?</strong></p>
+</blockquote>
+<p>Importantly, programming is still in its infancy. We are still discovering new methods of designing code. We must keep an open mind, because programmers 50 years from now will laugh at whatever we choose. Today, you can design your code using top-down, bottom-up, test-first, <a href="https://www.manning.com/books/type-driven-development-with-idris">type-driven</a>, or a multitude of other techniques. The design methodologies of the next decade probably haven’t been invented yet.</p>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+<a href="https://twitter.com/raichoo"><span class="citation">@raichoo</span></a> <a href="https://twitter.com/kamatsu8"><span class="citation">@kamatsu8</span></a> let's have some imagination about where languages and tools might go if we let go of how current tools trade things off
+</p>
+— Edwin Brady (<span class="citation">@edwinbrady</span>) <a href="https://twitter.com/edwinbrady/status/743865720912609280">June 17, 2016</a>
+</blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<h5 id="notes">Notes</h5>
+<p><sup>1</sup> Pierce, Benjamin C. <em>Types and Programming Languages</em>, p. 2</p>
+<p><sup>2</sup> Harper, Robert <em>Practical Foundations for Programming Languages</em>, 2nd Edition, §21.4</p>
+
+<div class="info">
+    
+    Tags: <a href="../tags/programming%20languages.html">programming languages</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>
