@@ -13,13 +13,16 @@ don't give a lot of insight into the broader question.
 Yet [reasonable people do want to know the answer](http://rundis.github.io/blog/2016/type_confused.html).
 Can we shed more light on the topic?
 
-Well-designed, peer reviewed research on the subject is [highly uncommon](https://www.quorumlanguage.com/evidence/evidence.pdf)
-[PDF] and
+Well-designed, peer reviewed research on human interaction with
+programming languages is [uncommon](https://jyx.jyu.fi/dspace/handle/123456789/47698).
+Static typing is [better studied than most other PL features](https://www.quorumlanguage.com/evidence/evidence.pdf)
+but
 [tends to examine very specific claims with fairly small effects](http://danluu.com/empirical-pl/).
-The few good studies which do exist at all, narrow as they might be, are
-[never reproduced by anyone](2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html).
-Any argument claiming a "scientific" answer to this question is instantly
-suspect.
+Good studies which do exist at all, narrow as their findings might be, are
+[generally not reproduced by anyone](2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html).
+There is [an effort to fix this](http://www.cs.cmu.edu/~NatProg/programminglanguageusability/),
+but for now any argument claiming a "scientific" answer to this question
+is suspect.
 
 ## There Aren't Two Distinct Buckets of Languages Named Static and Dynamic
 
@@ -40,11 +43,21 @@ Is Elm a statically typed language? Is Java a statically typed language?
   performance.
 * Java's type system is a [verbose](http://openjdk.java.net/jeps/286)
   impediment to code readers and writers, but
-  [improves performance](http://cr.openjdk.java.net/~jrose/values/values-0.html).
+  [improves performance](http://cr.openjdk.java.net/~jrose/values/values-0.html)
+  by, for example, supporting many different primitive numeric types.
 
 If both languages are called "statically typed" and yet the two languages'
 type systems do such different things, then how much value is there in
 lumping them into the same specific bucket?
+
+Indeed, even the [word "type" itself is used in multiple, not entirely
+compatible senses](https://www.cl.cam.ac.uk/~srk31/research/papers/kell14in-author-version.pdf) in computer science.
+
+Tomas Petricek [argues](http://tomasp.net/blog/2015/against-types/):
+
+> Rather than seeking the elusive definition of what is a type (which does
+> not exist), I believe that we should look for innovative ways to think
+> about and work with types that do not require an exact formal definition.
 
 ### What Is a Dynamic Language?
 
@@ -82,24 +95,23 @@ Less so than you might think.
 > - Robert Harper, _Practical Foundations for Programming Languages_<sup>2</sup>
 
 One can consider a "dynamic language" as a language which has
-[fewer statically checked types](https://existentialtype.wordpress.com/2011/03/19/dynamic-languages-are-static-languages/)
-(namely, one) than a "static language."
+fewer statically checked types (namely, one) than a "static language."
 
 ## What Does Static Typing Really Do?
 
-Given some programming language, "static typing" is a feature (or, more
-properly, a family of features) the language designer could add to an
-otherwise "dynamic language" which might deliver one or more of the
-following benefits:
+Given some programming language, you can think of "static typing" as a
+feature (or, more properly, a family of features) the language designer
+could add to an otherwise untyped or dynamic language which might deliver
+one or more of the following benefits:
 
 * Proof that certain kinds of dynamic errors are impossible
 * Automatic and machine verified documentation
 * Improved runtime performance
-* Better tooling supported
+* Better tooling support
 
 It might also have one or more of the following drawbacks
 
-* Increased verbosity
+* Increased verbosity or [reduced expressiveness](http://tratt.net/laurie/blog/entries/another_non_argument_in_type_systems.html)
 * Rejection of otherwise correct programs
 * Slower programmer iteration (possibly lengthy compile/run cycles)
 * A need for the developer to learn "static typing" language feature (through
@@ -112,17 +124,38 @@ language.
 For example, "proof that certain kinds of dynamic errors are impossible"
 could come via model checking or formal verification. "Increased
 verbosity" is hardly limited to "static languages"; most "dynamic languages"
-are more verbose than Haskell.
+are more verbose than SML or Haskell.
 
-Instead of asking, "Should the whole world use a 'statically typed' language,"
+Instead of asking, "Should the whole world use a 'statically typed' language?"
 we could ask "In which cases would it make sense to write formal proofs of
-our programs?"
+(at least some parts of) our programs?"
 
 ## If "Static vs. Dynamic" Is the Wrong Question, Then What Is the Right Question?
 
 If you're a working programmer, then the right question is:
 
 > **How can my languages and tooling help me be a better programmer?**
+
+Follow-up questions might be:
+
+*  If I care about verification of correctness properties above and beyond
+   what I can do with simple tests, what are my choices, in terms of language
+   features and tooling?
+*  What are the properties which are difficult or impossible to verify?
+*  Do the features and tooling of the language steer you towards great
+   solutions to problems, provide you little guidance, or get in your way?
+   Does the answer vary depending on which kind of problem?
+*  What compromises does the language I'm using now make?
+*  Can I use tools to fill in some of the shortcomings?
+*  How do other languages and systems address my pain points?
+*  Given some correct program I want to be the output of my process, how
+   do I arrive at that program? Do I start by writing a specification
+   (possibly in the form of types), or
+   by writing tests, or by writing code, or a mix of these?
+
+These are difficult questions, because you can't really answer them without
+experience with diverse languages, programming communities,
+and ecosystems. Zealots need not apply, but be kind to excited newbies!
 
 Importantly, programming is still in its infancy. We are still discovering
 new methods of designing code. We must keep an open mind, because programmers

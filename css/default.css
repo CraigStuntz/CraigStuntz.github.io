@@ -94,6 +94,12 @@ div.info {
     font-style: italic;
 }
 
+/* Links */
+a[href$='.pdf'] {
+    background: transparent url(/images/icon_pdf.gif) center right no-repeat;
+    padding-right: 18px;
+}
+
 /* Source code */
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre
    {
