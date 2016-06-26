@@ -147,7 +147,7 @@ let private prettyPrintLexeme = function
 | RightParenthesis         -> ")"
 | Identifier    identifier -> identifier
 | LiteralInt    num        -> num.ToString()
-| LiteralString str        -> sprintf "\"%s"\" str
+| LiteralString str        -> sprintf "\"%s\"" str
 | Unrecognized  ch         -> ch.ToString()
 
 let prettyPrint =
