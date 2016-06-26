@@ -17,7 +17,6 @@
                 <a href="../">Home</a>
                 <a href="../about.html">About</a>
                 <a href="../presentations.html">Presentations</a>
-                <a href="../contact.html">Contact</a>
                 <a href="../archive.html">Archive</a>
             </div>
         </div>
@@ -116,12 +115,12 @@ RightParenthesis</code></pre></div>
 | RightParenthesis         -&gt; <span class="st">&quot;)&quot;</span>
 | Identifier    identifier -&gt; identifier
 | LiteralInt    num        -&gt; num.ToString()
-| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">%s&quot;</span>\<span class="st">&quot; str</span>
-<span class="st">| Unrecognized  ch         -&gt; ch.ToString()</span>
+| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">%s</span><span class="ch">\&quot;</span><span class="st">&quot;</span> str
+| Unrecognized  ch         -&gt; ch.ToString()
 
-<span class="st">let prettyPrint =</span>
-<span class="st">    List.map prettyPrintLexeme</span>
-<span class="st">    &gt;&gt; String.concat &quot;</span> <span class="st">&quot;</span></code></pre></div>
+<span class="kw">let</span> prettyPrint =
+    List<span class="kw">.</span>map prettyPrintLexeme
+    &gt;&gt; String<span class="kw">.</span>concat <span class="st">&quot; &quot;</span></code></pre></div>
 <p>If we were to, after the fact, add an additional type of lexeme, but forgot to modify the <code>prettyPrint</code> function, we would receive a compiler warning since the function would no longer be exhaustive.</p>
 <h3 id="the-rest-of-the-pipeline">The Rest of the Pipeline</h3>
 <p>What about parsing, type checking, and the rest of the compilation pipeline? Formalisms exist for those, as well.</p>
