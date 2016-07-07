@@ -10,8 +10,14 @@ not going to link to examples, but let's just say that general comparisons of
 "mainstream dynamic language A" with "mainstream static language B"
 don't give a lot of insight into the broader question.
 
+Programmers who say they prefer static or dynamic languages are [often 
+interested in specific language features](https://www.ics.uci.edu/~lopes/teaching/inf212W12/readings/rdl04meijer.pdf)
+rather than static or dynamic type systems, *per se.*
+
 Yet [reasonable people do want to know the answer](http://rundis.github.io/blog/2016/type_confused.html).
 Can we shed more light on the topic?
+
+## Science Cannot Give Us a Definitive answer – Yet!
 
 Well-designed, peer reviewed research on human interaction with
 programming languages is [uncommon](https://jyx.jyu.fi/dspace/handle/123456789/47698).
@@ -46,6 +52,10 @@ Is Elm a statically typed language? Is Java a statically typed language?
   [improves performance](http://cr.openjdk.java.net/~jrose/values/values-0.html)
   by, for example, supporting many different primitive numeric types.
 
+Elm's type system is substantially more powerful than Java's, and eliminates
+entire classes of bugs which plague Java applications such as dereferencing
+null pointers and inexhaustive `switch` blocks. 
+
 If both languages are called "statically typed" and yet the two languages'
 type systems do such different things, then how much value is there in
 lumping them into the same specific bucket?
@@ -76,13 +86,18 @@ You can even [infer static types from unit tests instead of code itself](https:/
 C# has `dynamic`. Racket has [Typed Racket](https://docs.racket-lang.org/ts-guide/).
 Java has reflection. Clojure has `core.typed`.
 
+Statically typed languages typically check certain types of errors at compile
+time and other types of errors at runtime.<sup>1</sup> Which types of errors 
+are checked when varies by programming language. For example, Idris can 
+statically prove that a program does not divide by zero, whereas C# cannot. 
+
 ### Well, OK, But Surely There Must Be a _Formal_ Distinction, Right?
 
 Less so than you might think.
 
 > Terms like "dynamically typed" are arguably misnomers and should probably
 > be replaced by "dynamically checked," but the usage is standard.<br/>
-> – Benjamin C. Pierce, _Types and Programming Languages_<sup>1</sup>
+> – Benjamin C. Pierce, _Types and Programming Languages_<sup>2</sup>
 
 > Thus we see that the canonical untyped language, **Λ** [the untyped
 > lambda calculus], which by dint of
@@ -92,27 +107,27 @@ Less so than you might think.
 > recursive type. Doing so renders static type checking trivial, at the cost
 > of incurring dynamic overhead to coerce values to and from the recursive
 > type.<br/>
-> - Robert Harper, _Practical Foundations for Programming Languages_<sup>2</sup>
+> - Robert Harper, _Practical Foundations for Programming Languages_<sup>3</sup>
 
 One can consider a "dynamic language" as a language which has
 fewer statically checked types (namely, one) than a "static language."
 
 ## What Does Static Typing Really Do?
 
-Given some programming language, you can think of "static typing" as a
+Given some programming language, you can imagine "static typing" as a
 feature (or, more properly, a family of features) the language designer
-could add to an otherwise untyped or dynamic language which might deliver
+could add to an otherwise untyped or dynamic language which **might** deliver
 one or more of the following benefits:
 
-* Proof that certain kinds of dynamic errors are impossible
+* Proof that certain kinds of dynamic errors are impossible<sup>4</sup>
 * Automatic and machine verified documentation
 * Improved runtime performance
 * Better tooling support
 
-It might also have one or more of the following drawbacks
+It **might** also have one or more of the following drawbacks
 
 * Increased verbosity or [reduced expressiveness](http://tratt.net/laurie/blog/entries/another_non_argument_in_type_systems.html)
-* Rejection of otherwise correct programs
+* Rejection of otherwise correct programs<sup>5</sup>
 * Slower programmer iteration (possibly lengthy compile/run cycles)
 * A need for the developer to learn "static typing" language feature (through
   she still must understand types to some degree regardless)
@@ -170,6 +185,12 @@ haven't been invented yet.
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ##### Notes
-<sup>1</sup> Pierce, Benjamin C. _Types and Programming Languages_, p. 2
+<sup>1</sup> Harper, Robert, [_Practical Foundations for Programming Languages_](http://www.cs.cmu.edu/~rwh/pfpl.html), 2nd Edition, §6.3
 
-<sup>2</sup> Harper, Robert _Practical Foundations for Programming Languages_, 2nd Edition, §21.4
+<sup>2</sup> Pierce, Benjamin C. [_Types and Programming Languages_](https://www.cis.upenn.edu/~bcpierce/tapl/), p. 2
+
+<sup>3</sup> Harper, §21.4
+
+<sup>4</sup> Harper, §6
+
+<sup>5</sup> Rémy, Didier, [_Type systems for programming languages_](http://gallium.inria.fr/~remy/mpri/cours1.pdf), p. 29
