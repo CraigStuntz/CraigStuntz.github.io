@@ -21,7 +21,9 @@
 </div>
 
 <p>It’s common to ask, <em>“Is there evidence that programmers write safer code or are more productive when using a static or a dynamic language?”</em> It’s also common to write really terrible blog post answers to this question. I’m not going to link to examples, but let’s just say that general comparisons of “mainstream dynamic language A” with “mainstream static language B” don’t give a lot of insight into the broader question.</p>
+<p>Programmers who say they prefer static or dynamic languages are <a href="https://www.ics.uci.edu/~lopes/teaching/inf212W12/readings/rdl04meijer.pdf">often interested in specific language features</a> rather than static or dynamic type systems, <em>per se.</em></p>
 <p>Yet <a href="http://rundis.github.io/blog/2016/type_confused.html">reasonable people do want to know the answer</a>. Can we shed more light on the topic?</p>
+<h2 id="science-cannot-give-us-a-definitive-answer-yet">Science Cannot Give Us a Definitive answer – Yet!</h2>
 <p>Well-designed, peer reviewed research on human interaction with programming languages is <a href="https://jyx.jyu.fi/dspace/handle/123456789/47698">uncommon</a>. Static typing is <a href="https://www.quorumlanguage.com/evidence/evidence.pdf">better studied than most other PL features</a> but <a href="http://danluu.com/empirical-pl/">tends to examine very specific claims with fairly small effects</a>. Good studies which do exist at all, narrow as their findings might be, are <a href="2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html">generally not reproduced by anyone</a>. There is <a href="http://www.cs.cmu.edu/~NatProg/programminglanguageusability/">an effort to fix this</a>, but for now any argument claiming a “scientific” answer to this question is suspect.</p>
 <h2 id="there-arent-two-distinct-buckets-of-languages-named-static-and-dynamic">There Aren’t Two Distinct Buckets of Languages Named Static and Dynamic</h2>
 <p>To be honest, I don’t think this question is answerable. In part this is because, increasingly, I think <strong>the notion of a strict distinction between static and dynamic languages is less than helpful</strong>. From the point of view of the working programmer, it confuses a number of different and important ways that both languages and tooling can vary.</p>
@@ -32,6 +34,7 @@
 <li><a href="http://elm-lang.org/blog/compilers-as-assistants">Elm’s type system acts as a coach</a> to help the programmer complete her work, but doesn’t really affect performance.</li>
 <li>Java’s type system is a <a href="http://openjdk.java.net/jeps/286">verbose</a> impediment to code readers and writers, but <a href="http://cr.openjdk.java.net/~jrose/values/values-0.html">improves performance</a> by, for example, supporting many different primitive numeric types.</li>
 </ul>
+<p>Elm’s type system is substantially more powerful than Java’s, and eliminates entire classes of bugs which plague Java applications such as dereferencing null pointers and inexhaustive <code>switch</code> blocks.</p>
 <p>If both languages are called “statically typed” and yet the two languages’ type systems do such different things, then how much value is there in lumping them into the same specific bucket?</p>
 <p>Indeed, even the <a href="https://www.cl.cam.ac.uk/~srk31/research/papers/kell14in-author-version.pdf">word “type” itself is used in multiple, not entirely compatible senses</a> in computer science.</p>
 <p>Tomas Petricek <a href="http://tomasp.net/blog/2015/against-types/">argues</a>:</p>
@@ -43,27 +46,28 @@
 <p>You can even <a href="https://github.com/frenchy64/ambrosebs.com/blob/gh-pages/talks/dynamic%20inference%20boston%20pi%202016.pdf">infer static types from unit tests instead of code itself</a>!</p>
 <h3 id="whatever-static-and-dynamic-are-production-languages-often-have-both">Whatever “Static” and “Dynamic” Are, Production Languages Often Have Both</h3>
 <p>C# has <code>dynamic</code>. Racket has <a href="https://docs.racket-lang.org/ts-guide/">Typed Racket</a>. Java has reflection. Clojure has <code>core.typed</code>.</p>
+<p>Statically typed languages typically check certain types of errors at compile time and other types of errors at runtime.<sup>1</sup> Which types of errors are checked when varies by programming language. For example, Idris can statically prove that a program does not divide by zero, whereas C# cannot.</p>
 <h3 id="well-ok-but-surely-there-must-be-a-formal-distinction-right">Well, OK, But Surely There Must Be a <em>Formal</em> Distinction, Right?</h3>
 <p>Less so than you might think.</p>
 <blockquote>
-<p>Terms like “dynamically typed” are arguably misnomers and should probably be replaced by “dynamically checked,” but the usage is standard.<br/> – Benjamin C. Pierce, <em>Types and Programming Languages</em><sup>1</sup></p>
+<p>Terms like “dynamically typed” are arguably misnomers and should probably be replaced by “dynamically checked,” but the usage is standard.<br/> – Benjamin C. Pierce, <em>Types and Programming Languages</em><sup>2</sup></p>
 </blockquote>
 <blockquote>
-<p>Thus we see that the canonical untyped language, <strong>Λ</strong> [the untyped lambda calculus], which by dint of terminology stands in opposition to typed languages, turns out to be but a typed language after all. Rather than eliminating types, an untyped language consolidates an infinite collection of types into a single recursive type. Doing so renders static type checking trivial, at the cost of incurring dynamic overhead to coerce values to and from the recursive type.<br/> - Robert Harper, <em>Practical Foundations for Programming Languages</em><sup>2</sup></p>
+<p>Thus we see that the canonical untyped language, <strong>Λ</strong> [the untyped lambda calculus], which by dint of terminology stands in opposition to typed languages, turns out to be but a typed language after all. Rather than eliminating types, an untyped language consolidates an infinite collection of types into a single recursive type. Doing so renders static type checking trivial, at the cost of incurring dynamic overhead to coerce values to and from the recursive type.<br/> - Robert Harper, <em>Practical Foundations for Programming Languages</em><sup>3</sup></p>
 </blockquote>
 <p>One can consider a “dynamic language” as a language which has fewer statically checked types (namely, one) than a “static language.”</p>
 <h2 id="what-does-static-typing-really-do">What Does Static Typing Really Do?</h2>
-<p>Given some programming language, you can think of “static typing” as a feature (or, more properly, a family of features) the language designer could add to an otherwise untyped or dynamic language which might deliver one or more of the following benefits:</p>
+<p>Given some programming language, you can imagine “static typing” as a feature (or, more properly, a family of features) the language designer could add to an otherwise untyped or dynamic language which <strong>might</strong> deliver one or more of the following benefits:</p>
 <ul>
-<li>Proof that certain kinds of dynamic errors are impossible</li>
+<li>Proof that certain kinds of dynamic errors are impossible<sup>4</sup></li>
 <li>Automatic and machine verified documentation</li>
 <li>Improved runtime performance</li>
 <li>Better tooling support</li>
 </ul>
-<p>It might also have one or more of the following drawbacks</p>
+<p>It <strong>might</strong> also have one or more of the following drawbacks</p>
 <ul>
 <li>Increased verbosity or <a href="http://tratt.net/laurie/blog/entries/another_non_argument_in_type_systems.html">reduced expressiveness</a></li>
-<li>Rejection of otherwise correct programs</li>
+<li>Rejection of otherwise correct programs<sup>5</sup></li>
 <li>Slower programmer iteration (possibly lengthy compile/run cycles)</li>
 <li>A need for the developer to learn “static typing” language feature (through she still must understand types to some degree regardless)</li>
 </ul>
@@ -95,8 +99,11 @@
 </blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 <h5 id="notes">Notes</h5>
-<p><sup>1</sup> Pierce, Benjamin C. <em>Types and Programming Languages</em>, p. 2</p>
-<p><sup>2</sup> Harper, Robert <em>Practical Foundations for Programming Languages</em>, 2nd Edition, §21.4</p>
+<p><sup>1</sup> Harper, Robert, <a href="http://www.cs.cmu.edu/~rwh/pfpl.html"><em>Practical Foundations for Programming Languages</em></a>, 2nd Edition, §6.3</p>
+<p><sup>2</sup> Pierce, Benjamin C. <a href="https://www.cis.upenn.edu/~bcpierce/tapl/"><em>Types and Programming Languages</em></a>, p. 2</p>
+<p><sup>3</sup> Harper, §21.4</p>
+<p><sup>4</sup> Harper, §6</p>
+<p><sup>5</sup> Rémy, Didier, <a href="http://gallium.inria.fr/~remy/mpri/cours1.pdf"><em>Type systems for programming languages</em></a>, p. 29</p>
 
 <div class="info">
     
