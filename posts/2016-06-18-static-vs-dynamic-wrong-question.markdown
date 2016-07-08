@@ -137,8 +137,8 @@ from adding a different feature (distinct from "static typing") to the
 language.
 
 For example, "proof that certain kinds of dynamic errors are impossible"
-could come via model checking or formal verification. "Increased
-verbosity" is hardly limited to "static languages"; most "dynamic languages"
+could come via model checking or [formal verification](https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/). 
+"Increased verbosity" is hardly limited to "static languages"; most "dynamic languages"
 are more verbose than SML or Haskell.
 
 Instead of asking, "Should the whole world use a 'statically typed' language?"
