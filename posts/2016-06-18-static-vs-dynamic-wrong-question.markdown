@@ -91,6 +91,9 @@ time and other types of errors at runtime.<sup>1</sup> Which types of errors
 are checked when varies by programming language. For example, Idris can 
 statically prove that a program does not divide by zero, whereas C# cannot. 
 
+Manuel Chakravarty wrote a much more detailed (and technically rigorous) 
+[examination of this idea](http://justtesting.org/post/148297302871/static-versus-dynamic).
+
 ### Well, OK, But Surely There Must Be a _Formal_ Distinction, Right?
 
 Less so than you might think.
