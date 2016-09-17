@@ -42,7 +42,7 @@ Well, that looks really, really efficient, and it typechecks. But is it the corr
 ## The Best of Both Worlds
 
 Is there a solution which is as efficient as just returning 180 but which also proves that 180 is, in fact, the correct solution to the problem? 
-Let's encode the specification for the problem in [a pure specification language, SMT-LIB](http://blogs.teamb.com/craigstuntz/2014/07/07/38818/):
+Let's encode the specification for the problem in [a pure specification language, SMT-LIB](/posts/2014-07-07-test-only-development.html):
 
 ```commonlisp
 (define-fun matches-problem ((n Int)) Bool
