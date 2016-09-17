@@ -438,7 +438,7 @@ puts solution</code></pre></div>
 <span class="kw">end</span></code></pre></div>
 <p>Well, that looks really, really efficient, and it typechecks. But is it the correct answer? Will you know, six months down the road, what question it’s even trying to answer? Tests would help, but the word “smallest” in the problem turns out to be tricky to test well. Do you want methods like this in code you maintain?</p>
 <h2 id="the-best-of-both-worlds">The Best of Both Worlds</h2>
-<p>Is there a solution which is as efficient as just returning 180 but which also proves that 180 is, in fact, the correct solution to the problem? Let’s encode the specification for the problem in <a href="http://blogs.teamb.com/craigstuntz/2014/07/07/38818/">a pure specification language, SMT-LIB</a>:</p>
+<p>Is there a solution which is as efficient as just returning 180 but which also proves that 180 is, in fact, the correct solution to the problem? Let’s encode the specification for the problem in <a href="/posts/2014-07-07-test-only-development.html">a pure specification language, SMT-LIB</a>:</p>
 <div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(define-fun matches-problem ((n Int)) Bool
   (<span class="kw">and</span>
     (<span class="kw">&gt;=</span> n <span class="dv">100</span>)
