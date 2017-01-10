@@ -8,8 +8,34 @@
         <name>Craig Stuntz</name>
         <email></email>
     </author>
-    <updated>2016-07-08T00:00:00Z</updated>
+    <updated>2017-01-09T00:00:00Z</updated>
     <entry>
+    <title>Speaking at CodeMash</title>
+    <link href="http://www.craigstuntz.com/posts/2017-01-09-codemash.html" />
+    <id>http://www.craigstuntz.com/posts/2017-01-09-codemash.html</id>
+    <published>2017-01-09T00:00:00Z</published>
+    <updated>2017-01-09T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on January  9, 2017
+    
+</div>
+
+<p>I’ll be speaking at <a href="http://www.codemash.org/">CodeMash</a>, twice, on Friday the 13th. Wish me luck!</p>
+<h3 id="mashing-up-qa-and-security">Mashing Up QA and Security</h3>
+<p>8:30 a.m., Zambezi Room</p>
+<p>Security is domain specific quality assurance, but developers, testers, and security professionals often don’t work together. When this type of disconnect exists between big groups of people who are very good at their jobs, there is usually a mostly untapped potential for learning. I’ve been exploring this landscape by writing an open source fuzzer aimed at discovering new test cases (not just crashes!) using binary rewriting of managed executables and genetic modification of a test corpus, implemented in F# and using Mono.Cecil. I’ll ontrast the fundamentals of each discipline, demonstrate tools used by experts on both sides of the security and QA fence, and challenge the audience to find new ways to mix them up. Expect to see lots of code and leave with ideas for making entire communities better, not just your own team!</p>
+<h3 id="incredibly-strange-programming-languages">Incredibly Strange Programming Languages</h3>
+<p>12:15 p.m., Cypress Room</p>
+<p>If you’ve ever suspected that “all programming languages are pretty much the same; they just have different syntax,” well, you will never suspect that again! Covering languages from the unusually powerful (Idris) to the illuminated (قلب) to the profoundly limited (BlooP), and all points in between, these languages will help you think differently about approaches to software problems you face in your day job. Of course we’ll have a lot of fun, but these languages are no joke. The practical benefit of an impractical language is the power to find new approaches to common problems.</p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/CodeMash.html">CodeMash</a>, <a href="/tags/presentations.html">presentations</a>, <a href="/tags/F%23.html">F#</a>, <a href="/tags/QA.html">QA</a>, <a href="/tags/security.html">security</a>, <a href="/tags/PLT.html">PLT</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Identity Theft on Upwork</title>
     <link href="http://www.craigstuntz.com/posts/2016-07-08-upwork-identity-theft.html" />
     <id>http://www.craigstuntz.com/posts/2016-07-08-upwork-identity-theft.html</id>
