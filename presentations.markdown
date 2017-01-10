@@ -2,7 +2,26 @@
 title: Presentations
 ---
 
+### Mashing Up QA and Security
+* [CodeMash 2017](http://www.codemash.org/)
+· 13 January 2017
+
+Security is domain specific quality assurance, but developers, testers, and 
+security professionals often don’t work together. When this type of disconnect 
+exists between big groups of people who are very good at their jobs, there is 
+usually a mostly untapped potential for learning. I’ve been exploring this 
+landscape by writing an open source fuzzer aimed at discovering new test cases 
+(not just crashes!) using binary rewriting of managed executables and genetic 
+modification of a test corpus, implemented in F# and using Mono.Cecil. I’ll 
+ontrast the fundamentals of each discipline, demonstrate tools used by experts 
+on both sides of the security and QA fence, and challenge the audience to find 
+new ways to mix them up. Expect to see lots of code and leave with ideas for 
+making entire communities better, not just your own team!
+
+
 ### Incredibly Strange Programming Languages
+* [CodeMash 2017](http://www.codemash.org/)
+· 13 January 2017
 * [Stir Trek](http://stirtrek.com/)
 · 6 May 2016
 · [Slides](https://speakerdeck.com/craigstuntz/incredibly-strange-programming-languages)
