@@ -94,6 +94,15 @@ div.info {
     font-style: italic;
 }
 
+div.profilePic {
+    float: right;
+    width: 25%;
+}
+
+div.profilePic img {
+    width: 100%;
+}
+
 /* Links */
 a[href$='.pdf'] {
     background: transparent url(/images/icon_pdf.gif) center right no-repeat;
