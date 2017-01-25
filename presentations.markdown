@@ -5,6 +5,8 @@ title: Presentations
 ### Mashing Up QA and Security
 * [CodeMash 2017](http://www.codemash.org/)
 · 13 January 2017
+· [Slides](https://speakerdeck.com/craigstuntz/mashing-up-qa-and-security-codemash-2017) 
+  / [Slides with notes](https://speakerdeck.com/craigstuntz/mashing-up-qa-and-security-codemash-2017-with-notes)
 
 Security is domain specific quality assurance, but developers, testers, and 
 security professionals often don’t work together. When this type of disconnect 
@@ -22,6 +24,8 @@ making entire communities better, not just your own team!
 ### Incredibly Strange Programming Languages
 * [CodeMash 2017](http://www.codemash.org/)
 · 13 January 2017
+· [Slides](https://speakerdeck.com/craigstuntz/incredibly-strange-programming-languages-codemash-1) 
+  / [Slides with notes](https://speakerdeck.com/craigstuntz/incredibly-strange-programming-languages-codemash-2017-with-notes)
 * [Stir Trek](http://stirtrek.com/)
 · 6 May 2016
 · [Slides](https://speakerdeck.com/craigstuntz/incredibly-strange-programming-languages)
