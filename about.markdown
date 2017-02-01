@@ -3,8 +3,9 @@ title: About
 ---
 I am a software engineer living software engineer and a lifelong student of
 computer science, with specific interests in programming languages, type
-theory, compilers, and math. I live in Columbus, OH. I work for
-[Improving](http://improving.com/) and co-founded [the Columbus branch of
+theory, compilers, and math. I am Technical Director at 
+[Improving](http://improving.com/) in Columbus, OH and co-founded [the 
+Columbus branch of
 Papers We Love](http://paperswelove.org/chapter/columbus/), a reading group
 for people interested in academic computer science research. You can also
 [read my full résumé](https://stackoverflow.com/cv/craigstuntz) or look at
