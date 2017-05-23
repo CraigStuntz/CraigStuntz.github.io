@@ -138,7 +138,11 @@
 <h2 id="science-cannot-give-us-a-definitive-answer-yet">Science Cannot Give Us a Definitive answer – Yet!</h2>
 <p>Well-designed, peer reviewed research on human interaction with programming languages is <a href="https://jyx.jyu.fi/dspace/handle/123456789/47698">uncommon</a>. Static typing is <a href="https://www.quorumlanguage.com/evidence/evidence.pdf">better studied than most other PL features</a> but <a href="http://danluu.com/empirical-pl/">tends to examine very specific claims with fairly small effects</a>. Good studies which do exist at all, narrow as their findings might be, are <a href="2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html">generally not reproduced by anyone</a>. There is <a href="http://www.cs.cmu.edu/~NatProg/programminglanguageusability/">an effort to fix this</a>, but for now any argument claiming a “scientific” answer to this question is suspect.</p>
 <h2 id="there-arent-two-distinct-buckets-of-languages-named-static-and-dynamic">There Aren’t Two Distinct Buckets of Languages Named Static and Dynamic</h2>
-<p>To be honest, I don’t think this question is answerable. In part this is because, increasingly, I think <strong>the notion of a strict distinction between static and dynamic languages is less than helpful</strong>. From the point of view of the working programmer, it confuses a number of different and important ways that both languages and tooling can vary.</p>
+<p>To be honest, I don’t think this question is answerable. In part this is because, increasingly, I think <strong>the notion of a strict distinction between static and dynamic languages is less than helpful</strong>. It’s somewhat more useful to talk about what sort of features the language’s type system has.</p>
+<blockquote>
+<p>In general, we should strive for strong typing, and adopt static typing whenever possible. –<a href="http://web.cse.ohio-state.edu/~soundarajan.1/courses/788/cardelli85understanding.pdf">Luca Cardelli and Peter Wegner</a></p>
+</blockquote>
+<p>From the point of view of the working programmer, calling a language “statically typed” confuses a number of different and important ways that both languages and tooling can vary.</p>
 <p>Why? Ask yourself these questions:</p>
 <h3 id="what-is-a-statically-typed-language">What Is a Statically Typed Language?</h3>
 <p>Is Elm a statically typed language? Is Java a statically typed language?</p>
