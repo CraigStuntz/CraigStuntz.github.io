@@ -34,8 +34,15 @@ is suspect.
 
 To be honest, I don't think this question is answerable. In part this is
 because, increasingly, I think **the notion of a strict distinction between
-static and dynamic languages is less than helpful**. From the point of view
-of the working programmer, it confuses a number of different and important
+static and dynamic languages is less than helpful**. It's somewhat more
+useful to talk about what sort of features the language's type system has.
+
+> In general, we should strive for strong typing, and adopt static typing 
+> whenever possible.
+> –[Luca Cardelli and Peter Wegner](http://web.cse.ohio-state.edu/~soundarajan.1/courses/788/cardelli85understanding.pdf)
+
+From the point of view of the working programmer, calling a language 
+"statically typed" confuses a number of different and important
 ways that both languages and tooling can vary.
 
 Why? Ask yourself these questions:
@@ -188,6 +195,7 @@ haven't been invented yet.
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ##### Notes
+
 <sup>1</sup> Harper, Robert, [_Practical Foundations for Programming Languages_](http://www.cs.cmu.edu/~rwh/pfpl.html), 2nd Edition, §6.3
 
 <sup>2</sup> Pierce, Benjamin C. [_Types and Programming Languages_](https://www.cis.upenn.edu/~bcpierce/tapl/), p. 2

@@ -47,6 +47,9 @@ In software design we often use analogies:
 Analogies "leak," to use Joel's term, almost by definition. If they didn't,
 they would be indistinguishable, not analogous.
 
+An example can be helpful for understanding a mathematical abstraction, but 
+that is not an analogy.
+
 ## Is Deduplication Abstraction?
 
 Maybe
