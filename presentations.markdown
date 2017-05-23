@@ -2,6 +2,24 @@
 title: Presentations
 ---
 
+### High Speed Bug Discovery with Fuzzing
+* [Stir Trek](http://stirtrek.com/)
+· 5 May 2017
+· [Slides](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing) / [Slides with notes](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing-with-speaker-notes) 
+
+Unit testing is helpful at preventing regressions and guiding design, but it 
+doesn't do a great job of helping you with exploratory testing. How can you 
+find hidden defects in your code without a lot of manual analysis? Fuzzing 
+is a simple but surprisingly effective technique which has been responsible 
+for finding nearly all of the security vulnerabilities uncovered in Flash 
+over the past five years. But it's not just limited to finding security 
+defects! The technique was very successfully used to stabilize the Microsoft 
+document importers for Open Office and check C++ compiler standards compliance. 
+You'll leave this talk knowing when to use fuzzing to test your application, 
+which tools you should use, how to implement a fuzzer from scratch, and when 
+other techniques are a better choice.
+
+
 ### Mashing Up QA and Security
 * [CodeMash 2017](http://www.codemash.org/)
 · 13 January 2017
