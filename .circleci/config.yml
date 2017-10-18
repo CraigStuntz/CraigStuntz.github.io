@@ -11,8 +11,6 @@ jobs:
       - restore_cache:
           key: cache
 
-      - run: stack build --fast
-
       - save_cache:
           paths:
             - ~/.stack
