@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: haskell
+    branches:
+      only: develop
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: cache
+
+      - run: stack build --fast
+
+      - save_cache:
+          paths:
+            - ~/.stack
+          key: cache
+
+      - run: stack exec blog build
