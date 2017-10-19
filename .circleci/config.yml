@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: haskell
+      - image: haskell:7.10.3
     branches:
       only: develop
     steps:
