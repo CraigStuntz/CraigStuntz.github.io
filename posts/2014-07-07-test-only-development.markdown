@@ -1,5 +1,5 @@
 ---
-title: "Test-Only Development" with the Z3 Theorem Prover
+title: '"Test-Only Development" with the Z3 Theorem Prover'
 tags: z3, theorem provers, testing
 ---
 

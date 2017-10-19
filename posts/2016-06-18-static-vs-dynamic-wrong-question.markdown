@@ -1,5 +1,5 @@
 ---
-title: "Static vs. Dynamic" Is the Wrong Question for Working Programmers
+title: '"Static vs. Dynamic" Is the Wrong Question for Working Programmers'
 tags: programming languages
 ---
 

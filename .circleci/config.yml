@@ -16,4 +16,4 @@ jobs:
             - ~/.stack
           key: cache
 
-      - run: stack exec blog build
+      - run: stack exec blog build 
