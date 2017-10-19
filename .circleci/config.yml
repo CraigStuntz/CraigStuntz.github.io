@@ -17,4 +17,5 @@ jobs:
           key: cache
 
       - run: stack setup
+      - run: stack build
       - run: stack exec blog build 
