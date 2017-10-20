@@ -3,6 +3,12 @@ title: Presentations
 ---
 
 ### High Speed Bug Discovery with Fuzzing
+* [Dog Food Conference](http://dogfoodcon.com/)
+· 5 Oct 2017
+· [Slides](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing-dog-food-conference) / [Slides with notes](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing-version-with-presenter-notes-dog-food-conference) 
+* [OWASP Columbus](https://www.meetup.com/Columbus-OWASP/events/239765056/)
+· 24 Aug 2017
+· [Slides](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing-3) 
 * [Stir Trek](http://stirtrek.com/)
 · 5 May 2017
 · [Slides](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing) / [Slides with notes](https://speakerdeck.com/craigstuntz/high-speed-bug-discovery-with-fuzzing-with-speaker-notes) 
