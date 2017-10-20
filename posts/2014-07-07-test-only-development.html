@@ -56,37 +56,37 @@
 (declare-const factor2 Int)</code></pre></div>
 <p>In an S-expression, the first item inside the parentheses is the function, and the remaining items are arguments. So <code>declare-const</code> is the function here and the remaining items are the variable name and its “sort” (type).</p>
 <p>Next, the problem says that <code>product</code> must be the, ahem, product of the two factors:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">=</span> (<span class="kw">*</span> factor1 factor2) product))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))</code></pre></div>
 <p>“<code>assert</code>” sounds like a unit test, doesn’t it? Indeed, many people coming to a theorem prover from a software development background will find that programming them is much more similar to writing tests than writing code. The line above just says that <code>factor1 * factor2 = product</code>. But it’s an assertion, not an assignment; we haven’t specified values for any of these variables.</p>
 <p>The problem statement says that both factors are three digit numbers:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="kw">&lt;=</span> factor1 <span class="dv">999</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="kw">&lt;=</span> factor2 <span class="dv">999</span>)))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;=</span> factor1 <span class="dv">999</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;=</span> factor2 <span class="dv">999</span>)))</code></pre></div>
 <p>Mathematically, what does it mean for a number to be a palindrome? In this case, the largest product of 3 digit numbers is going to be a six digit number of the form <strong>abccba</strong>, so product = 100000<strong>a</strong> + 10000<strong>b</strong> + 1000<strong>c</strong> + 100<strong>c</strong> + 10<strong>b</strong> + <strong>a</strong>. As I noted above, expressing the relationship this way is key to finding a non-brute-force solution using algebra. But you don’t need to know that in order to use Z3, because Z3 knows algebra! All you need to know is that you should express relationships mathematically instead of using string manipulation.</p>
 <div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(declare-const a Int)
 (declare-const b Int)
 (declare-const c Int)
-(<span class="kw">assert</span> (<span class="kw">=</span> product (<span class="kw">+</span> (<span class="kw">*</span> <span class="dv">100000</span> a) (<span class="kw">*</span> <span class="dv">10000</span> b) (<span class="kw">*</span> <span class="dv">1000</span> c) (<span class="kw">*</span> <span class="dv">100</span> c) (<span class="kw">*</span> <span class="dv">10</span> b) a)))</code></pre></div>
+(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))</code></pre></div>
 <p>I implied above that <strong>a</strong>, <strong>b</strong>, and <strong>c</strong> are single-digit numbers, so we need to be specific about that. Also, <strong>a</strong> can’t be 0 or we won’t have a 6 digit number.</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> a <span class="dv">1</span>) (<span class="kw">&lt;=</span> a <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> b <span class="dv">0</span>) (<span class="kw">&lt;=</span> b <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> c <span class="dv">0</span>) (<span class="kw">&lt;=</span> c <span class="dv">9</span>)))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">1</span>) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))</code></pre></div>
 <p>These 4 assertions about a, b, and c are enough to determine that product is a palindrome. We’re not quite done yet, but let’s see how we’re doing so far. <code>(check-sat)</code> asks Z3 if there is a solution to the problem we’ve posed, and <code>(get-model)</code> displays that solution. Here’s the entire script so far:</p>
 <div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(declare-const product Int)
 (declare-const factor1 Int)
 (declare-const factor2 Int)
 
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="kw">&lt;</span> factor1 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="kw">&lt;</span> factor2 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="kw">=</span> (<span class="kw">*</span> factor1 factor2) product))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;</span> factor1 <span class="dv">1000</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;</span> factor2 <span class="dv">1000</span>)))
+(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))
 
 (declare-const a Int)
 (declare-const b Int)
 (declare-const c Int)
 
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> a <span class="dv">1</span>) (<span class="kw">&lt;=</span> a <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> b <span class="dv">0</span>) (<span class="kw">&lt;=</span> b <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> c <span class="dv">0</span>) (<span class="kw">&lt;=</span> c <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">=</span> product (<span class="kw">+</span> (<span class="kw">*</span> <span class="dv">100000</span> a) (<span class="kw">*</span> <span class="dv">10000</span> b) (<span class="kw">*</span> <span class="dv">1000</span> c) (<span class="kw">*</span> <span class="dv">100</span> c) (<span class="kw">*</span> <span class="dv">10</span> b) a)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">1</span>) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))
 
 (check-sat)
 (get-model)</code></pre></div>
@@ -115,11 +115,11 @@
 <p>Z3(15, 10): ERROR: Objective function ‘(* factor1 factor2)’ is not supported</p>
 </blockquote>
 <p>After some fiddling, however, it seems (maximize (+ factor1 factor2)) works, sort of. Adding this to the script above causes Z3 to return:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">+</span> factor1 factor2) |-&gt; [<span class="dv">1282</span>:oo]
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="op">+</span> factor1 factor2) |-&gt; [<span class="dv">1282</span>:oo]
 
 unknown --...</code></pre></div>
 <p>Which is to say, Z3 could not find the maximal value. (“oo” just means ∞, and <code>unknown</code> means it could neither prove nor disprove the theorem.) Guessing that a might be bigger than 1, I can change its range to 8..9 and Z3 arrives at a single solution:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">+</span> factor1 factor2) |-&gt; <span class="dv">1906</span>
+<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="op">+</span> factor1 factor2) |-&gt; <span class="dv">1906</span>
 
 sat
 
@@ -142,20 +142,20 @@ sat
 (declare-const factor1 Int)
 (declare-const factor2 Int)
 
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="kw">&lt;</span> factor1 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="kw">&lt;</span> factor2 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="kw">=</span> (<span class="kw">*</span> factor1 factor2) product))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;</span> factor1 <span class="dv">1000</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;</span> factor2 <span class="dv">1000</span>)))
+(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))
 
 (declare-const a Int)
 (declare-const b Int)
 (declare-const c Int)
 
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> a <span class="dv">8</span> ) (<span class="kw">&lt;=</span> a <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> b <span class="dv">0</span>) (<span class="kw">&lt;=</span> b <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="kw">&gt;=</span> c <span class="dv">0</span>) (<span class="kw">&lt;=</span> c <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">=</span> product (<span class="kw">+</span> (<span class="kw">*</span> <span class="dv">100000</span> a) (<span class="kw">*</span> <span class="dv">10000</span> b) (<span class="kw">*</span> <span class="dv">1000</span> c) (<span class="kw">*</span> <span class="dv">100</span> c) (<span class="kw">*</span> <span class="dv">10</span> b) a)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">8</span> ) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))
+(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))
 
-(maximize (<span class="kw">+</span> factor1 factor2))
+(maximize (<span class="op">+</span> factor1 factor2))
 
 (check-sat)
 (get-model)</code></pre></div>
