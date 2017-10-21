@@ -18,4 +18,6 @@ jobs:
 
       - run: stack setup
       - run: stack build
+      - run: git config --global user.email circleci@circleci
+      - run: git config --global user.name CircleCI
       - run: ./publish.sh
