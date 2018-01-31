@@ -3,7 +3,8 @@ set -ex
 
 stack exec blog build
 git checkout master
-git pull
+git fetch
+git reset --hard origin/master
 cp -a _site/. .
 rm -f posts/*.markdown
 rm -f *.markdown
