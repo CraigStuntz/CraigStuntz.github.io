@@ -53,16 +53,16 @@
 <span class="dt">register</span> count;
 {
     <span class="dt">register</span> n = (count + <span class="dv">7</span>) / <span class="dv">8</span>;
-    <span class="kw">switch</span> (count % <span class="dv">8</span> ) {
-    <span class="kw">case</span> <span class="dv">0</span>: <span class="kw">do</span> { *to = *from++;
-    <span class="kw">case</span> <span class="dv">7</span>:      *to = *from++;
-    <span class="kw">case</span> <span class="dv">6</span>:      *to = *from++;
-    <span class="kw">case</span> <span class="dv">5</span>:      *to = *from++;
-    <span class="kw">case</span> <span class="dv">4</span>:      *to = *from++;
-    <span class="kw">case</span> <span class="dv">3</span>:      *to = *from++;
-    <span class="kw">case</span> <span class="dv">2</span>:      *to = *from++;
-    <span class="kw">case</span> <span class="dv">1</span>:      *to = *from++;
-            } <span class="kw">while</span> (--n &gt; <span class="dv">0</span>);
+    <span class="cf">switch</span> (count % <span class="dv">8</span> ) {
+    <span class="cf">case</span> <span class="dv">0</span>: <span class="cf">do</span> { *to = *from++;
+    <span class="cf">case</span> <span class="dv">7</span>:      *to = *from++;
+    <span class="cf">case</span> <span class="dv">6</span>:      *to = *from++;
+    <span class="cf">case</span> <span class="dv">5</span>:      *to = *from++;
+    <span class="cf">case</span> <span class="dv">4</span>:      *to = *from++;
+    <span class="cf">case</span> <span class="dv">3</span>:      *to = *from++;
+    <span class="cf">case</span> <span class="dv">2</span>:      *to = *from++;
+    <span class="cf">case</span> <span class="dv">1</span>:      *to = *from++;
+            } <span class="cf">while</span> (--n &gt; <span class="dv">0</span>);
     }
 }</code></pre></div>
 <p>This is unreadable to the point that it borders on obfuscation, but is legal C, per the specification, and does perform a useful optimization on a particular case. I bring it up because, as a language implementer, I think it drives home the point that there is no possibility of creating (anywhere near) all of the possible unit tests for all of the possible ways someone might choose to use your language.</p>
@@ -115,7 +115,7 @@ RightParenthesis</code></pre></div>
 | RightParenthesis         -&gt; <span class="st">&quot;)&quot;</span>
 | Identifier    identifier -&gt; identifier
 | LiteralInt    num        -&gt; num.ToString()
-| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">%s</span><span class="ch">\&quot;</span><span class="st">&quot;</span> str
+| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;</span><span class="st">&quot;</span> str
 | Unrecognized  ch         -&gt; ch.ToString()
 
 <span class="kw">let</span> prettyPrint =
@@ -127,26 +127,26 @@ RightParenthesis</code></pre></div>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Compilation phase</th>
-<th align="left">Formalism</th>
+<th>Compilation phase | Fo</th>
+<th>Formalism</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Parsing</td>
-<td align="left">Context free grammar</td>
+<td>Parsing | Cont</td>
+<td>Context free grammar</td>
 </tr>
 <tr class="even">
-<td align="left">Optimization</td>
-<td align="left">Algebra</td>
+<td>Optimization |</td>
+<td>Algebra</td>
 </tr>
 <tr class="odd">
-<td align="left">Type checking</td>
-<td align="left">Logical inference rules</td>
+<td>Type checking</td>
+<td>Logical inference rules</td>
 </tr>
 <tr class="even">
-<td align="left">Code generation</td>
-<td align="left">Denotational semantics</td>
+<td>Code generation | Deno</td>
+<td>Denotational semantics</td>
 </tr>
 </tbody>
 </table>
