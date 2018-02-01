@@ -2,6 +2,28 @@
 title: Presentations
 ---
 
+### Shifting Application Security Left
+* [BSides Columbus 2018](https://bsidescmh2018.busyconf.com) (Accepted)
+· 2 March 2018
+
+Many people agree the best way to avoid security problems in an application is to design security into the architecture from the beginning instead of doing blackbox testing after development is finished. But what does that actually look like in a real-world application development lifecycle? Checklists like the OWASP Top 10 do not tell architects how to best work with infosec professionals or singlehandedly build an application on a secure foundation. Where should a developer even begin? How do you design security into applications based on next week's JavaScript framework, for which no "best practices" exist? The Information Security Practice Principles, developed by Indiana University’s Center for Applied Cybersecurity Research, provide both a foundation for application security independent of specific technology decisions as well as a means for establishing a common language between designers and defenders. We will work through an example of how to apply the principles build a threat model and an application design, and what this looks like in an "agile" software development lifecycle. Security teams can be an enabler for good design, not just a gateway to block mistakes!
+
+### .NET IL: Into the Marianas Trench
+* [CodeMash 2018](http://www.codemash.org/)
+· 12 January 2018
+· [Slides](https://speakerdeck.com/craigstuntz/dot-net-il-into-the-marianas-trench) 
+  / [Slides with notes](https://speakerdeck.com/craigstuntz/dot-net-il-into-the-marianas-trench-with-presenter-notes)
+
+Are you interested in writing compilers, targeting Web Assembly, finding security issues automatically, binary analysis, or understanding performance at a low level? While it’s always good to know how your language works, the benefits of understanding the intermediate language extend to metaprogramming and analysis across multiple source languages. Learning how to work with intermediate languages allows you to write programs which would seem unattainable otherwise. You will learn not only how IL works but how it compares with LLVM IR, Java Bytecode, and other intermediate representations. No mere “deep dive,” you’ll leave this talk really understanding how C# turns into microcode and how to use that information to do “impossible” things.
+
+### Secure Applications, by Design
+* [CodeMash 2018](http://www.codemash.org/)
+· 11 January 2018
+· [Slides](https://speakerdeck.com/craigstuntz/secure-applications-by-design-2) 
+  / [Slides with notes](https://speakerdeck.com/craigstuntz/secure-applications-by-design-2)
+
+There is a lot of good security advice in the world, but checklists like the OWASP Top 10 do not tell you how to design security into your application. Where should a developer even begin? You'll leave this session with a process for building security in depth into your application architecture, using a human-centered user experience design, threat modeling, partitioning, defense in depth, and static analysis in continuous integration. Not yet another checklist, you'll learn how to make security the foundation on which the rest of your application is built.
+
 ### High Speed Bug Discovery with Fuzzing
 * [Dog Food Conference](http://dogfoodcon.com/)
 · 5 Oct 2017
