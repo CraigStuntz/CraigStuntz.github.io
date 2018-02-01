@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: fpco/stack-build
+    branches:
+      only: develop
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: cache
+
+      - run: stack setup
+      - run: stack build
+
+      - save_cache:
+          paths:
+            - ~/.stack
+          key: cache
+
+      - run: git config --global -l #<= totally unnecessary, but "fixes" auth problem?
+      - run: git config --global user.email circleci@circleci
+      - run: git config --global user.name CircleCI
+      - run: ./publish.sh
