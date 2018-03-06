@@ -3,8 +3,10 @@ title: Presentations
 ---
 
 ### Shifting Application Security Left
-* [BSides Columbus 2018](https://bsidescmh2018.busyconf.com) (Accepted)
+* [BSides Columbus 2018](https://bsidescmh2018.busyconf.com)
 · 2 March 2018
+· [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left) 
+· [Video](https://www.youtube.com/watch?v=F47jhkmo5-I) 
 
 Many people agree the best way to avoid security problems in an application is to design security into the architecture from the beginning instead of doing blackbox testing after development is finished. But what does that actually look like in a real-world application development lifecycle? Checklists like the OWASP Top 10 do not tell architects how to best work with infosec professionals or singlehandedly build an application on a secure foundation. Where should a developer even begin? How do you design security into applications based on next week's JavaScript framework, for which no "best practices" exist? The Information Security Practice Principles, developed by Indiana University’s Center for Applied Cybersecurity Research, provide both a foundation for application security independent of specific technology decisions as well as a means for establishing a common language between designers and defenders. We will work through an example of how to apply the principles build a threat model and an application design, and what this looks like in an "agile" software development lifecycle. Security teams can be an enabler for good design, not just a gateway to block mistakes!
 
