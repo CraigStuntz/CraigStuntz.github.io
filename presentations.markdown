@@ -94,6 +94,9 @@ approaches to common problems.
 
 
 ### Programs that Write Programs: How Compilers Work
+* [Momentum 2018](http://momentumdevcon.com/)
+· 19 April 2018
+· [Slides](https://speakerdeck.com/craigstuntz/programs-that-write-programs-how-compilers-work-1)
 * [CodeMash](http://www.codemash.org/)
 · 7 January 2016
 · [Slides](https://speakerdeck.com/craigstuntz/programs-that-write-programs-how-compilers-work)
