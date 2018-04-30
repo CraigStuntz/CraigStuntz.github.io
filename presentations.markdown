@@ -3,6 +3,8 @@ title: Presentations
 ---
 
 ### Shifting Application Security Left
+* [Central Ohio InfoSec Summit](https://www.infosecsummit.com/ehome/2018cbusinfosec/agenda/)
+· 14 May 2018 (accepted)
 * [BSides Columbus 2018](https://bsidescmh2018.busyconf.com)
 · 2 March 2018
 · [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left) 
@@ -19,6 +21,8 @@ Many people agree the best way to avoid security problems in an application is t
 Are you interested in writing compilers, targeting Web Assembly, finding security issues automatically, binary analysis, or understanding performance at a low level? While it’s always good to know how your language works, the benefits of understanding the intermediate language extend to metaprogramming and analysis across multiple source languages. Learning how to work with intermediate languages allows you to write programs which would seem unattainable otherwise. You will learn not only how IL works but how it compares with LLVM IR, Java Bytecode, and other intermediate representations. No mere “deep dive,” you’ll leave this talk really understanding how C# turns into microcode and how to use that information to do “impossible” things.
 
 ### Secure Applications, by Design
+* [Stir Trek](https://stirtrek.com/sessions/session/87/)
+· 4 May 2018 (accepted)
 * [CodeMash 2018](http://www.codemash.org/)
 · 11 January 2018
 · [Slides](https://speakerdeck.com/craigstuntz/secure-applications-by-design-2) 
