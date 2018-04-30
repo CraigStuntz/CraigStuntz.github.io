@@ -7,8 +7,30 @@
         <description><![CDATA[Craig Stuntz's blog]]></description>
         <atom:link href="http://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 09 Jan 2017 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sun, 29 Apr 2018 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Security Talks at Stir Trek and Central Ohio ISSA</title>
+    <link>http://www.craigstuntz.com/posts/2018-04-29-shifting-application-security-left.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on April 29, 2018
+    
+</div>
+
+<p>I’ll present “<a href="https://stirtrek.com/sessions/session/87">Secure Applications, by Design</a>” on Friday 4 May at <a href="https://stirtrek.com/">Stir Trek</a>, and “Shifting Application Security Left on Monday 14 May at the <a href="https://www.infosecsummit.com/ehome/2018cbusinfosec/agenda/">2018 Central Ohio Infosec Summit</a>.</p>
+<p>Both of these talks are about bridging the gap between development and security teams. In fact, they’re almost the same presentation, except that “Secure Applications, by Design” is aimed at developers, and “Shifting Application Security Left” is written for infosec professionals. But the outline of each talk is very similar. The biggest difference between the two is what I <em>don’t</em> say. There are a lot of “security basics” in the former which I skip in the latter.</p>
+<p>If you’re interested in the overall idea of how developers and security professionals can work together to create better applications, but haven’t seen that work well in real world projects, I’d be very pleased if you’d attend one of these and share your feedback with me.</p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/Stir%20Trek.html">Stir Trek</a>, <a href="/tags/Central%20Ohio%20ISSA.html">Central Ohio ISSA</a>, <a href="/tags/presentations.html">presentations</a>, <a href="/tags/security.html">security</a>
+    
+</div>
+]]></description>
+    <pubDate>Sun, 29 Apr 2018 00:00:00 UT</pubDate>
+    <guid>http://www.craigstuntz.com/posts/2018-04-29-shifting-application-security-left.html</guid>
+    <dc:creator>Craig Stuntz</dc:creator>
+</item>
+<item>
     <title>Speaking at CodeMash</title>
     <link>http://www.craigstuntz.com/posts/2017-01-09-codemash.html</link>
     <description><![CDATA[<div class="info">
