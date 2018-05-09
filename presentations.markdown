@@ -27,6 +27,7 @@ Are you interested in writing compilers, targeting Web Assembly, finding securit
 · 11 January 2018
 · [Slides](https://speakerdeck.com/craigstuntz/secure-applications-by-design-2) 
   / [Slides with notes](https://speakerdeck.com/craigstuntz/secure-applications-by-design-2)
+· [Video](https://www.youtube.com/watch?v=6JHZIFRDMnQ)
 
 There is a lot of good security advice in the world, but checklists like the OWASP Top 10 do not tell you how to design security into your application. Where should a developer even begin? You'll leave this session with a process for building security in depth into your application architecture, using a human-centered user experience design, threat modeling, partitioning, defense in depth, and static analysis in continuous integration. Not yet another checklist, you'll learn how to make security the foundation on which the rest of your application is built.
 
