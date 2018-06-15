@@ -4,7 +4,8 @@ title: Presentations
 
 ### Shifting Application Security Left
 * [Central Ohio InfoSec Summit](https://www.infosecsummit.com/ehome/2018cbusinfosec/agenda/)
-· 14 May 2018 (accepted)
+· 14 May 2018
+· [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left-1``) 
 * [BSides Columbus 2018](https://bsidescmh2018.busyconf.com)
 · 2 March 2018
 · [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left) 
@@ -22,7 +23,9 @@ Are you interested in writing compilers, targeting Web Assembly, finding securit
 
 ### Secure Applications, by Design
 * [Stir Trek](https://stirtrek.com/sessions/session/87/)
-· 4 May 2018 (accepted)
+· 4 May 2018
+· [Slides](https://speakerdeck.com/craigstuntz/secure-applications-by-design-3) 
+· [Video](https://youtu.be/j8kEebf_ArM?t=2m7s)
 * [CodeMash 2018](http://www.codemash.org/)
 · 11 January 2018
 · [Slides](https://speakerdeck.com/craigstuntz/secure-applications-by-design-2) 
