@@ -6,6 +6,7 @@ title: Presentations
 * [BSides Columbus 2018](https://bsidescmh2018.busyconf.com)
 · 1 March 2019
 · [Slides](https://speakerdeck.com/craigstuntz/what-on-earth-is-quantum-computing-and-will-it-break-all-my-encryption)
+
 You might have heard that quantum computers can break public key encryption. You might also have heard that you can buy a quantum computer today, or run programs on one via a cloud service. Yet TLS does not seem to be broken! What is going on? It's hard to tell, because most "explanations" of quantum computing are either marketing brochures or written for an audience of physics postdocs. This talk will clearly explain what we know about quantum computing today, and how it is relevant to software professionals now and in the near future. We'll focus on the security space in particular and discuss what quantum computers can do besides factor large integers. Come with questions, leave with a clear vision for how new computing technologies may change your work in the decades to come!
 
 ### Shifting Application Security Left
