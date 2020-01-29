@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ex
 
+stack build
 stack exec blog build
 git checkout master
 git fetch
