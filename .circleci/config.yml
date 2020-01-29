@@ -6,6 +6,8 @@ jobs:
     branches:
       only: develop
     steps:
+      - apt update
+      - apt install -y git
       - checkout
 
       - restore_cache:
