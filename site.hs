@@ -37,6 +37,13 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
 
+    match "drafts/*" $ do
+        route $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
+            >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
+            >>= relativizeUrls
+
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
