@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - Abstractions</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Abstractions</h1>
+
+            <div class="info">
+    Posted on July  7, 2016
+    
+</div>
+
+<p>When we talk about abstraction in programming, we often mean one of two different things:</p>
+<ul>
+<li>Removing relatively unimportant details from a real-world concept, to simplify working with it. For example, we can talk about a “file” without understanding how the bytes are written to a physical disk.</li>
+<li>Abstractions defined by laws. Instead of removing details from a real-world idea, we look for real-world ideas which happen to conform to a set of laws. For example, the addition operation over integers is a <a href="http://mathworld.wolfram.com/Group.html">group</a>.</li>
+</ul>
+<p>For clarity, I’ll call the first a “generalization” and the second a <a href="http://abstractmath.org/MM/MMMathStructure.htm">mathematical structure</a>.</p>
+<p>At first glance, these definitions don’t seem all that different. Both, for example, allow us to write code against the abstraction such that it works with multiple instances of that abstraction. We can write programs which deal with <a href="https://en.wikipedia.org/wiki/Everything_is_a_file">“files” on disk, modems, and keyboards</a>. And we can write mathematical proofs which apply to any group, not just addition over integers.</p>
+<p>But the implications of these definitions diverge widely.</p>
+<p>The “generalization” definition implies Joel Spolsky’s <a href="http://www.joelonsoftware.com/articles/LeakyAbstractions.html">“law” of leaky abstractions</a></p>
+<blockquote>
+<p><strong>All non-trivial abstractions, to some degree, are leaky.</strong></p>
+</blockquote>
+<p>Whereas, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD340.html">as Edsger W. Dijkstra notes</a> the “mathematical structure” definition is just the opposite:</p>
+<blockquote>
+<p>“… the purpose of abstracting is not to be vague, but to create a new semantic level in which one can be absolutely precise.”</p>
+</blockquote>
+<h2 id="abstractions-are-not-analogies">Abstractions Are Not Analogies</h2>
+<p>In software design we often use analogies: “<a href="http://guides.rubyonrails.org/asset_pipeline.html">the asset pipeline</a>,” “<a href="https://en.wikipedia.org/wiki/Trampoline_(computing)">trampolines</a>,”</p>
+<p>Analogies “leak,” to use Joel’s term, almost by definition. If they didn’t, they would be indistinguishable, not analogous.</p>
+<p>An example can be helpful for understanding a mathematical abstraction, but that is not an analogy.</p>
+<h2 id="is-deduplication-abstraction">Is Deduplication Abstraction?</h2>
+<p>Maybe</p>
+<p><a href="http://www.sandimetz.com/blog/2016/1/20/the-wrong-abstraction">duplication is far cheaper than the wrong abstraction</a> –Sandi Metz</p>
+<p>Given the discussion above, the notion of “the wrong abstraction” is curious indeed.</p>
+
+<div class="info">
+    
+    Tags: 
+    
+</div>
+
+        </div>
+    </body>
+</html>
