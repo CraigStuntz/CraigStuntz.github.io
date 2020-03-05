@@ -88,7 +88,7 @@ structural equality, this is trivial:
 [<TestMethod>]
 let ``The result of the calculation is the expected value``() = 
     let expected = { SomeField = "Some value"; SomeOtherField = 15; StillAnotherField = true; ... }
-    let acctual  = calculate()
+    let actual = calculate()
     Assert.AreEqual(expected, actual)
 ```
 
@@ -249,7 +249,7 @@ where aValue = someFunction()
 [congruence](http://mathworld.wolfram.com/Congruence.html). As with all things in math, 
 context matters; you have to carefully consider what `=` might mean in a certain paper or book.)
 
-Why does math not require two separte operators whereas programming languages do? You can tell from
+Why does math not require two separate operators whereas programming languages do? You can tell from
 context which one is intended, and not _all_ programming languages require different operators. F#, 
 for example, uses `=` for both assignment and testing equality. Despite overloading `=`, assignment
 and testing equality are _different_ operations.
@@ -369,7 +369,7 @@ It's not something you can cram into a `==` operator. If you find yourself doing
 might consider using a different data type, such as a fixed precision decimal number. 
 
 So why do programming languages offer `==` comparisons on a type when they can't support it? Well, because 
-they offer `==` on _any_ type, it works on most of them, and they just shrug about the rest and chastize 
+they offer `==` on _every_ type, it works on most of them, and they just shrug about the rest and chastize 
 programmers for not knowing which language feature they should not use. 
 
 Not every programming language, mind you. Standard ML doesn't offer `=` comparisons on reals. It's a compiler
@@ -426,7 +426,7 @@ If you override `.equals()` in Java, it is _your responsibility_ to ensure that 
 It is _very easy_ to implement a comparison which is not symmetric, that is, `a.equals(b) != b.equals(a)`,
 if you're not paying attention.
 
-Even if we remove null from the picture (because it would be a NullReferenceException in one case and the 
+Even if we remove null from the picture (because it would be a `NullPointerException` in one case and the 
 [contract for `.equals()` allows you to do this](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-)), 
 if you subtype a class and override `.equals()` then you had better be careful!
 
@@ -562,6 +562,7 @@ When doing an equality comparison on an existing type, stop and ask yourself:
 * Does it make sense to do an equality comparison at all here?
 * If so, does a structural or a reference comparison make sense?
 * What support does my programming language provide for the appropriate style of comparison?
+* Does my programming language implement equality correctly for this comparison?
 
 You can ask yourself similar questions when designing a custom type:
 
@@ -570,13 +571,22 @@ You can ask yourself similar questions when designing a custom type:
 * Will my type be mutable? How might that affect equality?
 * Would a reference comparison, a structural comparison, or both make sense?
 
+If your type is mutable, consider if you can change it to be immutable. You can do this even in a language which
+is mutable by default! Beyond giving you more options with respect to equality comparisons, there are many other
+benefits of an immutable architecture as well. The C# Roslyn compiler, which uses immutable data structures 
+throughout, is a great example of this:
+
+> _The third attribute of syntax trees is that they are immutable and thread-safe. This means that after a tree is obtained, it is a snapshot of the current state of the code, and never changes. This allows multiple users to interact with the same syntax tree at the same time in different threads without locking or duplication. Because the trees are immutable and no modifications can be made directly to a tree, factory methods help create and modify syntax trees by creating additional snapshots of the tree. The trees are efficient in the way they reuse underlying nodes, so a new version can be rebuilt fast and with little extra memory._
+> from the [.NET Compiler Platform SDK docs](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax)
+
 ## Credits
 
 This post was inspired by Barry Mazur's wonderful math paper, 
 "[When is one thing equal to some other thing?](http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf)" 
 which uses category theory to answer the question for math. 
 
-Thank you to _insert names here_ for reading drafts of this blog post and giving me feedback.
+Thank you to Paul Blasucci, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of 
+this blog post and giving me feedback.
 
 
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
