@@ -1,5 +1,5 @@
 ---
-title: What Is Homomorphic Encryption, and Why Should I Care
+title: What Is Homomorphic Encryption, and Why Should I Care?
 tags: homomorphic encrption, cryptography, Craig Gentry
 ---
 
