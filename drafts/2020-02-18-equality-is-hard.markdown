@@ -166,7 +166,7 @@ var sue  = new Person("Sue",  15, new List<Person> { new Person("John", 15, null
 ...so that Jane and Sue's offspring were reference _unequal_ to each other. So reference equality is a sensible 
 default in a language which supports mutation.
 
-Another example of when reference equality makes sense is when you know it's going to give the same result as
+Another case where reference equality makes sense is when you know it's going to give the same result as
 structural equality anyway. There is a certain performance overhead for testing structural equality, which 
 is reasonable if you _actually need to test structural equality._ But if, for example, you create a large 
 number of objects which you know are all different structually, it doesn't make sense to pay the overhead of
