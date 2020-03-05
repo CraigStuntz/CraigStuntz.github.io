@@ -16,7 +16,7 @@ If you have an ACM membership, or can find the magazine in a library, I recommen
 
 The popular but wildly insecure cipher scheme [rot-13](https://rot13.com/) (a.k.a. "[Caesar cipher](http://en.wikipedia.org/wiki/Caesar_cipher") is partially homomorphic, specifically with respect to the concatenation operation. Imagine we write an Encrypt and Decrypt function using the rot-13 algorithm. The "secret key" will be 13, the number of characters each letter is shifted. Let's encrypt two words and then concatenate the ciphertext, and finally decrypt the result. In psuedocode, this is:
 
-```csharp
+```cs
 var c1 = Encrypt(13, "HELLO");      // c1 = URYYB
 var c2 = Encrypt(13, "WORLD");      // c2 = JBEYQ
 var c3 = Concat (c1, c2);           // c3 = URYYBJBEYQ
