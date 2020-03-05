@@ -71,7 +71,7 @@
 <div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">[&lt;TestMethod&gt;]
 <span class="kw">let</span> ``The result <span class="kw">of</span> the calculation is the expected value``() = 
     <span class="kw">let</span> expected = { SomeField = <span class="st">&quot;Some value&quot;</span>; SomeOtherField = <span class="dv">15</span>; StillAnotherField = <span class="kw">true</span>; ... }
-    <span class="kw">let</span> acctual  = calculate()
+    <span class="kw">let</span> actual = calculate()
     Assert<span class="kw">.</span>AreEqual(expected, actual)</code></pre></div>
 <p>When a language does not have structural equality from the outset, developers will try to build it <em>ad hoc,</em> and you end up with <a href="https://github.com/nunit/nunit/blob/4e10f475d88fec980f080461a64e6fc4b1e54b2b/src/NUnitFramework/framework/Constraints/NUnitEqualityComparer.cs#L133">this horror show</a>, which is now <a href="https://github.com/nunit/nunit/issues/1249">permanently part of the NUnit framework</a>.</p>
 <h3 id="reference-equality">Reference Equality</h3>
@@ -124,7 +124,7 @@
 <div class="sourceCode"><pre class="sourceCode tex"><code class="sourceCode latex">if aValue = 3 ... 
 where aValue = someFunction()</code></pre></div>
 <p>(And <code>=</code> is sometimes used for other relations in math, such as <a href="http://mathworld.wolfram.com/Congruence.html">congruence</a>. As with all things in math, context matters; you have to carefully consider what <code>=</code> might mean in a certain paper or book.)</p>
-<p>Why does math not require two separte operators whereas programming languages do? You can tell from context which one is intended, and not <em>all</em> programming languages require different operators. F#, for example, uses <code>=</code> for both assignment and testing equality. Despite overloading <code>=</code>, assignment and testing equality are <em>different</em> operations.</p>
+<p>Why does math not require two separate operators whereas programming languages do? You can tell from context which one is intended, and not <em>all</em> programming languages require different operators. F#, for example, uses <code>=</code> for both assignment and testing equality. Despite overloading <code>=</code>, assignment and testing equality are <em>different</em> operations.</p>
 <div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> aValue = someFunction(); //<span class="co"> Assignment</span>
 <span class="kw">if</span> aValue = <span class="dv">3</span> <span class="kw">then</span>           //<span class="co"> Test for equality</span></code></pre></div>
 <p>The choice of syntax is partially due to heritage: F# is based on ML, which is based on math, and JavaScript syntax is based on Java -&gt; C -&gt; Algol -&gt; FORTRAN.</p>
@@ -165,7 +165,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <p>I guess many developers are familiar with the problem of comparing IEEE-754 floating point numbers, which are the “float” or “double” implementation for most programming languages. <code>10 * (0.1)</code> does not equal <code>1</code>, because “0.1” is actually equal to <code>0.100000001490116119384765625</code> or <code>0.1000000000000000055511151231257827021181583404541015625</code>. If you’re not familar with this issue, you can <a href="https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/">go read about it</a>, but the point is that it’s rarely safe to do an <code>==</code> comparison on a floating point number at all! You have to ask yourself which digits are significant and compare accordingly.</p>
 <p>(Worse, the float type backs other types, such as <code>TDateTime</code> in <a href="http://docs.embarcadero.com/products/rad_studio/delphiAndcpp2009/HelpUpdate2/EN/html/delphivclwin32/System_TDateTime.html">some languages</a>, so even in cases where equality comparisons might <em>make sense,</em> they don’t necessarily <em>work.</em>)</p>
 <p>The correct method of comparing floating point numbers is to see if they’re “close,” and <a href="https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/">what “close” means varies depending on context</a>. It’s not something you can cram into a <code>==</code> operator. If you find yourself doing this a lot (say, once), you might consider using a different data type, such as a fixed precision decimal number.</p>
-<p>So why do programming languages offer <code>==</code> comparisons on a type when they can’t support it? Well, because they offer <code>==</code> on <em>any</em> type, it works on most of them, and they just shrug about the rest and chastize programmers for not knowing which language feature they should not use.</p>
+<p>So why do programming languages offer <code>==</code> comparisons on a type when they can’t support it? Well, because they offer <code>==</code> on <em>every</em> type, it works on most of them, and they just shrug about the rest and chastize programmers for not knowing which language feature they should not use.</p>
 <p>Not every programming language, mind you. Standard ML doesn’t offer <code>=</code> comparisons on reals. It’s a compiler error if you try!</p>
 <p>The <a href="http://sml-family.org/Basis/real.html">implementation notes</a> state:</p>
 <blockquote>
@@ -184,7 +184,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <h3 id="common-mistake-equality-isnt-symmetric">Common Mistake: Equality Isn’t Symmetric</h3>
 <p>If you override <code>.equals()</code> in Java, it is <em>your responsibility</em> to ensure that the laws of equality hold!</p>
 <p>It is <em>very easy</em> to implement a comparison which is not symmetric, that is, <code>a.equals(b) != b.equals(a)</code>, if you’re not paying attention.</p>
-<p>Even if we remove null from the picture (because it would be a NullReferenceException in one case and the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-">contract for <code>.equals()</code> allows you to do this</a>), if you subtype a class and override <code>.equals()</code> then you had better be careful!</p>
+<p>Even if we remove null from the picture (because it would be a <code>NullPointerException</code> in one case and the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-">contract for <code>.equals()</code> allows you to do this</a>), if you subtype a class and override <code>.equals()</code> then you had better be careful!</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="at">@Override</span>
 <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">equals</span>(<span class="bu">Object</span> o) {
     <span class="kw">if</span> (<span class="kw">this</span> == o)
@@ -242,6 +242,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <li>Does it make sense to do an equality comparison at all here?</li>
 <li>If so, does a structural or a reference comparison make sense?</li>
 <li>What support does my programming language provide for the appropriate style of comparison?</li>
+<li>Does my programming language implement equality correctly for this comparison?</li>
 </ul>
 <p>You can ask yourself similar questions when designing a custom type:</p>
 <ul>
@@ -249,9 +250,13 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <li>Will my type be mutable? How might that affect equality?</li>
 <li>Would a reference comparison, a structural comparison, or both make sense?</li>
 </ul>
+<p>If your type is mutable, consider if you can change it to be immutable. You can do this even in a language which is mutable by default! Beyond giving you more options with respect to equality comparisons, there are many other benefits of an immutable architecture as well. The C# Roslyn compiler, which uses immutable data structures throughout, is a great example of this:</p>
+<blockquote>
+<p><em>The third attribute of syntax trees is that they are immutable and thread-safe. This means that after a tree is obtained, it is a snapshot of the current state of the code, and never changes. This allows multiple users to interact with the same syntax tree at the same time in different threads without locking or duplication. Because the trees are immutable and no modifications can be made directly to a tree, factory methods help create and modify syntax trees by creating additional snapshots of the tree. The trees are efficient in the way they reuse underlying nodes, so a new version can be rebuilt fast and with little extra memory.</em> from the <a href="https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax">.NET Compiler Platform SDK docs</a></p>
+</blockquote>
 <h2 id="credits">Credits</h2>
 <p>This post was inspired by Barry Mazur’s wonderful math paper, “<a href="http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf">When is one thing equal to some other thing?</a>” which uses category theory to answer the question for math.</p>
-<p>Thank you to <em>insert names here</em> for reading drafts of this blog post and giving me feedback.</p>
+<p>Thank you to Paul Blasucci, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of this blog post and giving me feedback.</p>
 <div class="footnotes">
 <hr />
 <ol>
