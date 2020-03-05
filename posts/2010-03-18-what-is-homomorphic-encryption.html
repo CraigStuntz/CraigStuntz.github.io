@@ -35,10 +35,10 @@
 <h2 id="what-is-homomorphic-encryption">What Is Homomorphic Encryption?</h2>
 <p>“Homomorphic” is an adjective which describes a property of an encryption scheme. That property, in simple terms, is the ability to perform computations on the ciphertext without decrypting it first. Because this tends to sound either baffling or miraculous the first time you hear it, let’s begin with a very simple example.</p>
 <p>The popular but wildly insecure cipher scheme <a href="https://rot13.com/">rot-13</a> (a.k.a. “<a href="http://en.wikipedia.org/wiki/Caesar_cipher%22">Caesar cipher</a> is partially homomorphic, specifically with respect to the concatenation operation. Imagine we write an Encrypt and Decrypt function using the rot-13 algorithm. The”secret key&quot; will be 13, the number of characters each letter is shifted. Let’s encrypt two words and then concatenate the ciphertext, and finally decrypt the result. In psuedocode, this is:</p>
-<pre class="csharp"><code>var c1 = Encrypt(13, &quot;HELLO&quot;);      // c1 = URYYB
-var c2 = Encrypt(13, &quot;WORLD&quot;);      // c2 = JBEYQ
-var c3 = Concat (c1, c2);           // c3 = URYYBJBEYQ
-var p  = Decrypt(13, c3);           // p  = HELLOWORLD</code></pre>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> c1 = <span class="fu">Encrypt</span>(<span class="dv">13</span>, <span class="st">&quot;HELLO&quot;</span>);      <span class="co">// c1 = URYYB</span>
+<span class="dt">var</span> c2 = <span class="fu">Encrypt</span>(<span class="dv">13</span>, <span class="st">&quot;WORLD&quot;</span>);      <span class="co">// c2 = JBEYQ</span>
+<span class="dt">var</span> c3 = <span class="fu">Concat</span> (c1, c2);           <span class="co">// c3 = URYYBJBEYQ</span>
+<span class="dt">var</span> p  = <span class="fu">Decrypt</span>(<span class="dv">13</span>, c3);           <span class="co">// p  = HELLOWORLD</span></code></pre></div>
 <p>Because it was not necessary to first decrypt the two fragments of ciphertext before performing the concatenation operation, we can say that rot-13 is homomorphic with respect to concatenation. In other words, it is possible to take two pieces of ciphertext and perform an operation on them which results in the ciphertext of the concatenation of the two respective pieces of plaintext.</p>
 <p>Visually, it looks like this:</p>
 <p><img src="../images/homomorphic.png" alt="Homomorphic concat with Rot-13" /></p>
