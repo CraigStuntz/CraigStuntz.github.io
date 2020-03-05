@@ -65,4 +65,4 @@ Some would say "too big." [Bruce Schneier criticized the IBM press release](http
 
 The second, fully homomorphic scheme proposed by Gentry, et al., and described in the CACM article is simple enough that I decided to implement it myself. I've learned quite a lot in the process of doing this. So in the near future I'll be sharing my code and some of the insights I've made in this process.
 
-Before I can do that, however, I need to describe some of the math involved. And I'd like to elaborate on why two operations is enough to consider a scheme "fully homomorphic."
+Before I can do that, however, [I need to describe some of the math involved](2010-04-08-a-math-primer-for-homomorphic-encryption.html). And I'd like to elaborate on why two operations is enough to consider a scheme "fully homomorphic."
