@@ -39,7 +39,7 @@
 <p>Now I said that we can have different definitions of equality in different contexts, but despite this there are some things which should always be true. These are the laws of equality.</p>
 <p>Equals is a <strong>binary relation</strong><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> that is:</p>
 <ul>
-<li><strong>Reflexive</strong>, so that <code>a = a</code> in for all values of <code>a</code>.</li>
+<li><strong>Reflexive</strong>, so that <code>a = a</code> for all values of <code>a</code>.</li>
 <li><strong>Symmetric</strong>, so that <code>a = b</code> implies <code>b = a</code> and vice versa.</li>
 <li><strong>Transitive</strong>, so that if <code>a = b</code> and <code>b = c</code> then <code>a = c</code></li>
 </ul>
@@ -56,7 +56,7 @@
 <span class="kw">let</span>  a = { SomeField = <span class="st">&quot;Some value&quot;</span> }
 <span class="kw">let</span>  b = { SomeField = <span class="st">&quot;Some value&quot;</span> }
 <span class="kw">if</span> a = b <span class="kw">then</span> //<span class="co"> returns true, enters &quot;then&quot; block</span></code></pre></div>
-<p>This is <em>not</em> true in C#; C# uses <strong>reference equality</strong>. Reference equality asks if the two objects being compared are the same object, regardless of their contents:</p>
+<p>This is <em>not</em> true in C#; C# uses <strong>reference equality</strong>. Reference equality asks if the two objects being compared are the same object. In other words, does the variable point at the same area of memory? A reference to two different blocks of memory will be unequal even if their contents are identical:</p>
 <div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">class</span> MyString {
     <span class="kw">private</span> <span class="kw">readonly</span> <span class="dt">string</span> someField;
     <span class="kw">public</span> <span class="dt">string</span> SomeField { <span class="kw">get</span>; }
@@ -225,7 +225,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <p>Wow, I’ve now written 4000 words about the <code>=</code> operator and I’m not finished yet! That seems, well, out of proportion to the size of the operator. Why is this so complicated? Two reasons, basically:</p>
 <ul>
 <li><em>Inessential complexity:</em> Our programming languages <em>don’t serve us well</em> with equivalence comparisons. They are often entirely broken, and even when they’re not, they don’t make it obvious when, for example, they’ll do a structural comparison vs a reference comparison.</li>
-<li><em>Essential complexity:</em> Equivalence is often <em>genuinely complicated</em> in places where it is needed, such as when comparing floating point numbers.</li>
+<li><em>Essential complexity:</em> Equivalence is often <em>genuinely complicated</em> in places where it is needed, such as when comparing floating point numbers, and it gets even harder in edge cases like comparing functions.</li>
 </ul>
 <p>Another way to divide this up is “stuff which should be fixed by programming language <em>implementors</em>” (the “inessential complexity” above) and “stuff which must be resolved by programming language <em>users.</em></p>
 <h3 id="what-programming-languages-should-do">What Programming Languages Should Do</h3>
