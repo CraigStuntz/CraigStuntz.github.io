@@ -576,7 +576,7 @@ is mutable by default! Beyond giving you more options with respect to equality c
 benefits of an immutable architecture as well. The C# Roslyn compiler, which uses immutable data structures 
 throughout, is a great example of this:
 
-> _The third attribute of syntax trees is that they are immutable and thread-safe. This means that after a tree is obtained, it is a snapshot of the current state of the code, and never changes. This allows multiple users to interact with the same syntax tree at the same time in different threads without locking or duplication. Because the trees are immutable and no modifications can be made directly to a tree, factory methods help create and modify syntax trees by creating additional snapshots of the tree. The trees are efficient in the way they reuse underlying nodes, so a new version can be rebuilt fast and with little extra memory._
+> _The third attribute of syntax trees is that they are immutable and thread-safe. This means that after a tree is obtained, it is a snapshot of the current state of the code, and never changes. This allows multiple users to interact with the same syntax tree at the same time in different threads without locking or duplication. Because the trees are immutable and no modifications can be made directly to a tree, factory methods help create and modify syntax trees by creating additional snapshots of the tree. The trees are efficient in the way they reuse underlying nodes, so a new version can be rebuilt fast and with little extra memory._<br/>
 > from the [.NET Compiler Platform SDK docs](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax)
 
 ## Credits
