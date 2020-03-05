@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - A Math Primer for Gentry’s Fully Homomorphic Encryption</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>A Math Primer for Gentry’s Fully Homomorphic Encryption</h1>
+
+            <div class="info">
+    Posted on April  8, 2010
+    
+</div>
+
+<p>A couple of weeks ago, I wrote <a href="2010-03-18-what-is-homomorphic-encryption.html">What Is Homomorphic Encryption, and Why Should I Care?</a> In that post, I promised to share my C# implementation of the algorithm from Craig Gentry’s CACM article. Before I can do that, though, I need to explain some of the math involved.</p>
+<p>Perhaps surprisingly, it’s actually very simple. (I say “surprisingly” because much of the math and technical papers on encryption is decidedly not simple, including that of <a href="http://crypto.stanford.edu/craig/">Gentry’s first fully homomorphic scheme</a>, which was based on <a href="https://en.wikipedia.org/wiki/Ideal_lattice">ideal lattices</a>.)</p>
+<p>This scheme created by Marten van Dijk, Craig Gentry, Shai Halevi and Vinod Vaikuntanathan, however, uses basic arithmetic operations like division, with a few uncommon, but easy to understand, variations.</p>
+<p>The nature of homomorphic encryption also dictates a programming style which will seem unfamiliar to users of most high-level languages, but very familiar to anyone who has ever taken a digital circuits class.</p>
+<h2 id="integer-division">Integer Division</h2>
+<p>What is the integer quotient of 10 / 6? Most people would probably say “1, remainder 4.” But the exact answer, in the domain of real numbers, is 1.666666 (repeating), which is closer to 2 than the previous answer of 1. So another way we could answer this question is “2, remainder -2.” This quotient is closer to the exact answer, and, correspondingly, has a smaller remainder.</p>
+<p>So which answer is correct? Arguably, both of them. As long as the following rule holds:</p>
+<blockquote>
+<p><code>dividend = divisor * quotient + remainder</code> (the division rule)</p>
+</blockquote>
+<p>…then we have a valid answer.</p>
+<p>Which method should you use? <em>It depends on why you’re doing the division.</em> If you’re computing how many cupcakes each child can have at a birthday party, then you’d better use the answer with the positive remainder. If you’re computing how many panels of fencing you need to surround your yard, then you’d better use the answer with the negative remainder.</p>
+<p>In fact, there are at least <a href="hhttps://www.microsoft.com/en-us/research/publication/division-and-modulus-for-computer-scientists/" title="Division and Modulus for Computer Scientists">five different, valid algorithms</a> for selecting a quotient and remainder for a given integer division problem.</p>
+<p>The homomorphic encryption scheme used in the van Dijk, et. al. paper and in Gentry’s CACM article uses “R-division”:</p>
+<ol style="list-style-type: decimal">
+<li>Compute the real quotient <strong>Q<sub>R</sub></strong>.</li>
+<li>Compute the integer quotient <strong>Q<sub>Z</sub></strong> by rounding <strong>Q<sub>R</sub></strong> to the closest integer.</li>
+<li>Compute the remainder <strong>R = Dividend - Divisor * Q<sub>Z</sub></strong></li>
+</ol>
+<p>This is probably different than the method you learned in elementary school, but both are valid. Importantly, it’s probably different than what the integer division and remainder operators in your favorite programming language do.</p>
+<h2 id="modular-arithmetic">Modular Arithmetic</h2>
+<p>If you’ve ever seen a 12 hour, analog clock, then you’ve worked with modular arithmetic. The time of 10:00 today is the same position on the clock as 10:00 p.m/22:00. Another way to say this is:</p>
+<pre><code>10 ≡ 22 mod 12</code></pre>
+<p>This reads: “10 is congruent to 22 modulo 12.” In other words, we just ignore the “extra” 12 hours in the measurement of 22:00, because it’s the same clock dial position as 22:00, only with a circle around the dial.</p>
+<p>Naturally, we can perform arithmetic operations like addition and subtraction and compare the congruence of the result. I can say “10:00 + 5 hours means that the hour hand will point to 3 on the clock,” or:</p>
+<pre><code>10 + 5 ≡ 3 mod 12</code></pre>
+<h2 id="modulo-2-arithmetic-and-binary-operations">Modulo 2 Arithmetic and Binary Operations</h2>
+<p>You can use any number as the modulus. When we make analog clocks, we use 12. A modulus which is particularly interesting in computer programming is 2. Arithmetic operations mod 2 correspond to binary operations, e.g.:</p>
+<pre><code>0 + 0 ≡ 0 mod 2  
+0 + 1 ≡ 1 mod 2  
+1 + 0 ≡ 1 mod 2  
+1 + 1 ≡ 0 mod 2</code></pre>
+<p>From this example, you can see that addition modulo 2 is the same as the binary operation <code>XOR</code>. It turns out that subtraction is exactly the same thing (for mod 2 only!):</p>
+<pre><code>0 - 0 ≡ 0 mod 2  
+0 - 1 ≡ 1 mod 2  
+1 - 0 ≡ 1 mod 2  
+1 - 1 ≡ 0 mod 2</code></pre>
+<p>Multiplication modulo 2, on the other hand, corresponds to the binary operation <code>AND</code>:</p>
+<pre><code>0 * 0 ≡ 0 mod 2  
+0 * 1 ≡ 0 mod 2  
+1 * 0 ≡ 0 mod 2  
+1 * 1 ≡ 1 mod 2</code></pre>
+<h2 id="mod-in-programming">Mod in Programming</h2>
+<p>This is all very simple. However, a word of caution is in order here for anyone who has used a high-level programming language. Most languages have an operator like <code>mod</code> (in Delphi) or <code>%</code> (in C#, which is commonly pronounced “mod”). However, this operator is not strictly modular congruence. It is more like a remainder, although, as we’ve seen, different people and different programming languages might choose to compute a remainder in different (but hopefully valid) ways.</p>
+<p>Remainders and congruence are often the same. In fact, the congruence relationship and the integer division remainder for the examples above are <em>all</em> the same. For example:</p>
+<pre><code>10 ≡ 22 mod 12  
+22 / 12 = 1 R 10</code></pre>
+<p>However, it’s easy to show examples where this is not true:</p>
+<pre><code>22 ≡ 34              mod 12       (1)
+34 / 12 = 2 R 10                  (2)
+-22 ≡ 2              mod 12       (3)
+-22 / 12 = -1 R -10               (4)</code></pre>
+<p>Probably (1) is not the most common choice; 10 would be a more common answer, as with (2). (1) is nevertheless correct as a statement of congruence. Now compare (3) with (4). The most common way to compute a modulus is to pick the smallest positive number. But the most common way to perform integer division is so-called “T-division”, where you select the quotient closest to zero and then calculate the remainder, resulting in a negative remainder when either the dividend or the divisor is negative.</p>
+<h2 id="programs-as-digital-circuits">Programs as Digital Circuits</h2>
+<p>A homomorphic encryption scheme, in addition to the usual <code>Encrypt</code> and <code>Decrypt</code> and <code>KeyGen</code> functions, has an <code>Evaluate</code> function which performs operations on the ciphertext, resulting in the ciphertext of the result of the function.</p>
+<p>Obviously, this necessitates a different style of programming than that afforded by the typical programming language. In particular, code like this:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">bool</span> a = b ? c : d</code></pre></div>
+<p>…(where <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are all <code>bool</code>s) is impossible, because the value of <code>b</code> is encrypted, so the program cannot know what to assign to <code>a</code>. If, however, we can perform binary operations on the ciphertext of <code>b</code>, then we can rewrite the statement above as:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">bool</span> a = (b &amp; c) | ((!b) &amp; d)</code></pre></div>
+<p>…or its homomorphic encryption equivalent:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">CypherText a = (b h_and c) <span class="fu">h_or</span> (<span class="fu">h_not</span>(b) h_and d)</code></pre></div>
+<p>…where the <code>h_*</code> operators are the homomorphic equivalents of the usual Boolean operations and <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are now of type <code>CypherText</code>.</p>
+<p>Note that the version with the ternary operator and the version with the <code>AND</code> and <code>OR</code> operators are not strictly the same, although their results are; the ternary operator is lazy, whereas the <code>AND</code> and <code>OR</code> version uses complete evaluation. This is necessary when the values are encrypted. It also means that the function may be inefficient.</p>
+<p>Intuitively, it’s easy to see that any <a href="https://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29">referentially transparent</a> function can be reduced to such operations; this is what compilers and operating systems do under the hood anyway. I’m not going to go into any detail on how this is done; get an introduction to digital circuits book if you are interested in the particulars.</p>
+<p>Gentry’s article notes that other changes in programming style are necessary when performing operations within a homomorphic encryption scheme. For example, the size of the output of a function must be set in advance. Even if the plaintext is variable-length, the ciphertext must be of a known length, which corresponds to the number of “wires” in the circuit. The plaintext, therefore, would have “whitespace” at the end or be truncated, depending upon its size.</p>
+<h2 id="minimizing-boolean-functions">Minimizing Boolean Functions</h2>
+<p>In <a href="2010-03-18-what-is-homomorphic-encryption.html">my first post on homomorphic encryption</a>, I mentioned that Gentry’s encryption schemes can be considered fully homomorphic because they support two homomorphic operations, corresponding to Boolean <code>AND</code> and <code>XOR</code>. I’d like to go into a little bit more detail as to why that is true.</p>
+<p>Many combinations of Boolean operations are equivalent. Perhaps the most famous are <a href="https://en.wikipedia.org/wiki/De_Morgan%27s_laws">De Morgan’s laws</a>. There are <a href="https://babbage.cs.qc.cuny.edu/courses/Minimize/" title="Minimizing Boolean Functions">a variety of techniques for converting one function using Boolean operations into an equivalent function with different operations</a>. This is often done in order to produce a <a href="https://www.allaboutcircuits.com/textbook/digital/chpt-7/boolean-rules-for-simplification/" title="Boolean rules for simplification">simpler</a> or more efficient function, but can also be done in order to use a specific type of Boolean gate.</p>
+<p>It is possible to use <a href="http://hyperphysics.phy-astr.gsu.edu/hbase/electronic/nand.html#c4">combinations of <code>NAND</code> or <code>NOR</code> gates, for example, to produce circuits which perform a Boolean AND, OR, NOT, etc.</a> Hence, a cryptosystem which supported a homomorphic <code>NAND</code> operation could be considered “fully homomorphic.”</p>
+<p>Similarly, having both <code>AND</code> and <code>XOR</code> gates available allows you to produce the same outputs as all other Boolean gates, as, for example, <code>NOT p</code> is the same as <code>p XOR 1</code> and we can see by De Morgan’s laws that with <code>NOT</code> and <code>AND</code> we can implement <code>OR</code>.</p>
+<p>Therefore, we can see that a cryptosystem can be considered fully homomorphic if it supports enough homomorphic operations to perform any logical Boolean operation. In particular, a cryptosystem which supports any of the following homomorphic operations would qualify:</p>
+<ul>
+<li>Just <code>NAND</code></li>
+<li>Just <code>NOR</code></li>
+<li>Both <code>XOR</code> and <code>AND</code></li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a href="../tags/math.html">math</a>, <a href="../tags/homomorphic%20encrption.html">homomorphic encrption</a>, <a href="../tags/cryptography.html">cryptography</a>, <a href="../tags/Craig%20Gentry.html">Craig Gentry</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>
