@@ -26,7 +26,7 @@ are some things which should always be true. These are the laws of equality.
 
 Equals is a **binary relation**[^BinaryRelation] that is: 
 
-* **Reflexive**, so that `a = a` in for all values of `a`.
+* **Reflexive**, so that `a = a` for all values of `a`.
 * **Symmetric**, so that `a = b` implies `b = a` and vice versa. 
 * **Transitive**, so that if `a = b` and `b = c` then `a = c`
 
@@ -54,7 +54,8 @@ if a = b then // returns true, enters "then" block
 ```
 
 This is _not_ true in C#; C# uses **reference equality**. Reference equality asks if the two objects being
-compared are the same object, regardless of their contents:
+compared are the same object. In other words, does the variable point at the same area of memory? A 
+reference to two different blocks of memory will be unequal even if their contents are identical:
 
 ```cs
 class MyString {
@@ -510,7 +511,7 @@ proportion to the size of the operator. Why is this so complicated? Two reasons,
   are often entirely broken, and even when they're not, they don't make it obvious when, for example, they'll 
   do a structural comparison vs a reference comparison. 
 * _Essential complexity:_ Equivalence is often _genuinely complicated_ in places where it is needed, such as
-  when comparing floating point numbers.
+  when comparing floating point numbers, and it gets even harder in edge cases like comparing functions.
 
 Another way to divide this up is "stuff which should be fixed by programming language _implementors_" (the
 "inessential complexity" above) and "stuff which must be resolved by programming language _users._
