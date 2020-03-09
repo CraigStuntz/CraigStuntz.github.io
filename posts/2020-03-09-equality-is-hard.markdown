@@ -618,6 +618,7 @@ which uses category theory to answer the question for math.
 Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading 
 drafts of this article and giving me feedback.
 
+Thanks to Tommy Hall, who drew my attention to [this 1993 paper](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.23.9999), which, discusses many of the issues covered in this post and proposes a solution for Common Lisp.
 
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
 
