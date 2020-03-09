@@ -267,6 +267,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <h2 id="credits">Credits</h2>
 <p>This post was inspired by Barry Mazur’s wonderful math paper, “<a href="http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf">When is one thing equal to some other thing?</a>” which uses category theory to answer the question for math.</p>
 <p>Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of this article and giving me feedback.</p>
+<p>Thanks to Tommy Hall, who drew my attention to <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.23.9999">this 1993 paper</a>, which, discusses many of the issues covered in this post and proposes a solution for Common Lisp.</p>
 <div class="footnotes">
 <hr />
 <ol>
