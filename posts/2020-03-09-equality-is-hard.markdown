@@ -620,6 +620,13 @@ drafts of this article and giving me feedback.
 
 Thanks to Tommy Hall, who drew my attention to [this 1993 paper](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.23.9999), which, discusses many of the issues covered in this post and proposes a solution for Common Lisp.
 
+Simon Ochsenreither has a nice series on problems with equality and fixing Haskell. 
+[Overview](https://soc.me/languages/equality-and-identity-part1), 
+[Problems](https://soc.me/languages/equality-and-identity-part2.html), 
+[Solution](https://soc.me/languages/equality-and-identity-part3.html), 
+[Fixing Haskell](https://soc.me/languages/equality-and-identity-part4), 
+[Implementation in Dora](https://soc.me/languages/equality-and-identity-part5.html).
+
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
 
 [^BinaryRelation]: A "binary relation" deserves a little bit of explanation, but this gets into a little math, so
