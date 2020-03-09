@@ -8,8 +8,284 @@
         <name>Craig Stuntz</name>
         <email></email>
     </author>
-    <updated>2020-01-29T00:00:00Z</updated>
+    <updated>2020-03-09T00:00:00Z</updated>
     <entry>
+    <title>Equality Is Hard</title>
+    <link href="http://www.craigstuntz.com/posts/2020-03-09-equality-is-hard.html" />
+    <id>http://www.craigstuntz.com/posts/2020-03-09-equality-is-hard.html</id>
+    <published>2020-03-09T00:00:00Z</published>
+    <updated>2020-03-09T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on March  9, 2020
+    
+</div>
+
+<p>As the joke goes, there are two hard problems in computer science: cache invalidation and naming things.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> But I’d suggest there’s a much harder problem, namely, <code>=</code>. Did you miss it? The equals sign, <code>=</code>, is small, but I’m going to argue that the use and misuse of equals is at the root of a large number of problems in software engineering.</p>
+<h2 id="how-equality-should-work">How Equality Should Work</h2>
+<p>I am going to show how equality in programming languages is often broken. But before I can do that, I have to talk about how it <em>should</em> work, and it turns out that’s not simple! When we talk about how equality “should work,” we have to say what this means in a certain context, because it turns out there are lots of different ways that equality <em>can</em> work, and many of them are valid in different contexts.</p>
+<blockquote>
+<p><em>The heart and soul of mathematics consists of the fact that the “same” objects can be presented to us in different ways.</em> <br/> -Barry Mazur, <a href="http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf">When is one thing equal to some other thing</a></p>
+</blockquote>
+<h3 id="laws">Laws</h3>
+<p>Now I said that we can have different definitions of equality in different contexts, but despite this there are some things which should always be true. These are the laws of equality.</p>
+<p>Equals is a <strong>binary relation</strong><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> that is:</p>
+<ul>
+<li><strong>Reflexive</strong>, so that <code>a = a</code> for all values of <code>a</code>.</li>
+<li><strong>Symmetric</strong>, so that <code>a = b</code> implies <code>b = a</code> and vice versa.</li>
+<li><strong>Transitive</strong>, so that if <code>a = b</code> and <code>b = c</code> then <code>a = c</code></li>
+</ul>
+<p>In the programming world, we need to add a law, because programmers do weird things sometimes:</p>
+<p>Equals must be:</p>
+<ul>
+<li><strong>Consistent</strong>, so that if <code>a = b</code> and no field changes on <code>a</code> or <code>b</code>, <code>a = b</code> will still be true if we check it later on.</li>
+</ul>
+<p>The above seems simple enough, although popular programming languages manage to screw up even those trivial rules. But there are more concerns about equality which are harder to state quite so concisely.</p>
+<h3 id="structural-equality">Structural Equality</h3>
+<p>One difference in how programming languages implement equality is structural equality and reference equality.</p>
+<p><strong>Structural equality</strong> asks if two references are <em>the same value.</em> This is the default in F#:</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> MyString = { SomeField : <span class="dt">string</span> }
+<span class="kw">let</span>  a = { SomeField = <span class="st">&quot;Some value&quot;</span> }
+<span class="kw">let</span>  b = { SomeField = <span class="st">&quot;Some value&quot;</span> }
+<span class="kw">if</span> a = b <span class="kw">then</span> //<span class="co"> returns true, enters &quot;then&quot; block</span></code></pre></div>
+<p>This is <em>not</em> true in C#; C# uses <strong>reference equality</strong>. Reference equality asks if the two objects being compared are the same object. In other words, does the variable point at the same area of memory? A reference to two different blocks of memory will be unequal even if their contents are identical:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">class</span> MyString {
+    <span class="kw">private</span> <span class="kw">readonly</span> <span class="dt">string</span> someField;
+    <span class="kw">public</span> <span class="dt">string</span> SomeField { <span class="kw">get</span>; }
+    <span class="kw">public</span> <span class="fu">MyString</span>(<span class="dt">string</span> someField) =&gt; <span class="kw">this</span>.<span class="fu">someField</span> = someField;
+}
+<span class="dt">var</span> a = <span class="kw">new</span> <span class="fu">MyString</span>(<span class="st">&quot;Some value&quot;</span>);
+<span class="dt">var</span> b = <span class="kw">new</span> <span class="fu">MyString</span>(<span class="st">&quot;Some value&quot;</span>);
+<span class="kw">if</span> (a == b) { <span class="co">// returns false, does not enter block</span></code></pre></div>
+<p>Other languages let you choose. Scheme, for example, provides <code>equal?</code> to check structural equality and <code>eq?</code> to check reference equality. Kotlin provides <code>==</code> for structural equailty and <code>===</code> for reference equality (don’t confuse these with JavaScript’s <code>==</code> and <code>===</code> operators which are… something else entirely).</p>
+<p>When does it make sense to use structural equality in your programs? In the absence of mutation (changing the values of variables), nearly always! Most programming languages that I’m aware of do structural comparisons on value types such as <code>integers</code>. Well, except Java, which has confused generations of programmers with an <code>int</code> value type which does a structural comparison and an <code>Integer</code> reference type which, well, the best thing you can say is <a href="https://stackoverflow.com/questions/1700081/why-is-128-128-false-but-127-127-is-true-when-comparing-integer-wrappers-in-ja">don’t use == on Integer</a>. Python <a href="https://stackoverflow.com/questions/306313/is-operator-behaves-unexpectedly-with-integers">has similar issues with <code>is</code></a>.</p>
+<p>Structural comparison of reference types such as objects makes sense as well. Consider a unit test, where you want to check that the object returned is equal to the value you expected. In a language with structural equality, this is trivial:</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">[&lt;TestMethod&gt;]
+<span class="kw">let</span> ``The result <span class="kw">of</span> the calculation is the expected value``() = 
+    <span class="kw">let</span> expected = { SomeField = <span class="st">&quot;Some value&quot;</span>; SomeOtherField = <span class="dv">15</span>; StillAnotherField = <span class="kw">true</span>; ... }
+    <span class="kw">let</span> actual = calculate()
+    Assert<span class="kw">.</span>AreEqual(expected, actual)</code></pre></div>
+<p>When a language does not have structural equality from the outset, developers will try to build it <em>ad hoc,</em> and you end up with <a href="https://github.com/nunit/nunit/blob/4e10f475d88fec980f080461a64e6fc4b1e54b2b/src/NUnitFramework/framework/Constraints/NUnitEqualityComparer.cs#L133">this horror show</a>, which is now <a href="https://github.com/nunit/nunit/issues/1249">permanently part of the NUnit framework</a>.</p>
+<h3 id="reference-equality">Reference Equality</h3>
+<p>But as I hinted above, there are certainly cases where structural equality does not make sense. One example is with languages which support mutation of variables, which is most of them. When you can change the value of a variable, it probably does not make sense to say that variable is equal to some other variable, <em>in general.</em> Sure, you can say they’re (structurally) equal <em>as of a moment in time,</em> such as in last line of a unit test, but you can’t generally imply that they’re the same. This is a kind of subtle point, so let’s look at an example.</p>
+<p>Let’s say I have an object which represents a person. In F#, with structural equality, I can write:</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> Person = { Name : <span class="dt">string</span>; Age : integer; Offspring : Person list }</code></pre></div>
+<p>Now I have two friends, Jane and Sue. Both have a son named John, who is 15. They’re <em>different</em> people, but the sons have the same name and age. No problem!</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> jane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ { Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }
+<span class="kw">let</span> sue  = { Name = <span class="st">&quot;Sue&quot;</span>;  Age = <span class="dv">35</span>; Offspring = [ { Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }</code></pre></div>
+<p>I could also have written this:</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> john = { Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] };
+<span class="kw">let</span> jane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ john ] }
+<span class="kw">let</span> sue  = { Name = <span class="st">&quot;Sue&quot;</span>;  Age = <span class="dv">35</span>; Offspring = [ john ] }</code></pre></div>
+<p>The behavior of these two blocks is precisely the same. I can’t distinguish the two sons, even though I know they’re different people. That’s OK! If I needed to distinguish them, I could add a hash of their DNA or something to my <code>Person</code> type. But if I just need to know their name and age, it doesn’t matter if I can distinguish the two objects or not, because the values are the same, no matter how you slice it.</p>
+<p>Imagine Jane’s son changes his name to Pat. F# doesn’t support mutating the values of variables, so I need to make a new <code>Person</code> instance for John <em>and Jane:</em></p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> newJane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ { Name = <span class="st">&quot;Pat&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }</code></pre></div>
+<p>It seems weird to have a new variable, <code>newJane</code>, but in practice it doesn’t create a problem. The code above is fine. Now let’s try this in C#, a language which supports mutation:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> john = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>);
+<span class="dt">var</span> jane = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { john });
+<span class="dt">var</span> sue  = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Sue&quot;</span>,  <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { john });</code></pre></div>
+<p>Well, this code is clearly incorrect: If Jane’s son changes his name to “Pat”, I can change the reference directly:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">jane.<span class="fu">Offspring</span>.<span class="fu">First</span>().<span class="fu">Name</span> = <span class="st">&quot;Pat&quot;</span>;</code></pre></div>
+<p>But I’ll find that Sue’s son’s name has changed as well! Therefore, even though the two sons had the same values at the start, before he changed his name, they <em>were not equal!</em> I should have written:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> jane = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>) });
+<span class="dt">var</span> sue  = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Sue&quot;</span>,  <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>) });</code></pre></div>
+<p>…so that Jane and Sue’s offspring were reference <em>unequal</em> to each other. So reference equality is a sensible default in a language which supports mutation.</p>
+<p>Another case where reference equality makes sense is when you know it’s going to give the same result as structural equality anyway. There is a certain performance overhead for testing structural equality, which is reasonable if you <em>actually need to test structural equality.</em> But if, for example, you create a large number of objects which you know are all different structually, it doesn’t make sense to pay the overhead of testing structural equality when you know that testing reference equality alone would give the same result.</p>
+<h3 id="equivalent-representations">Equivalent Representations</h3>
+<p><em>In the real numbers,</em> <a href="https://en.wikipedia.org/wiki/0.999...">.999… (repeating infinitely) equals 1</a>. Note that the “real numbers” here are distinct from the “Real” type in your programming language. Real numbers in math are infinite, and real numbers in your programming language are finite. So there is no notion of .999… in your programming language, but that’s OK, because you can just use 1, which is the same value.</p>
+<p>This is, essentially, a choice that mathematicians made when formulating the real number system. If one <a href="https://betterexplained.com/articles/a-friendly-chat-about-whether-0-999-1/">adds other objects, such as infinitessimals, to the system</a>, then .999… and 1 are not equivalent.</p>
+<blockquote>
+<p><em>However, it is by no means an arbitrary convention, because not adopting it forces one either to invent strange new objects or to abandon some of the familiar rules of arithmetic.</em> <br/> -Timothy Gowers, <em>Mathematics: A Very Short Introduction</em><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+</blockquote>
+<p>Similarly, in the rational numbers, 1/2 and 2/4 represent the same value.</p>
+<p>Do not confuse these equivalances with the “loose” equivalence operator <code>==</code> found in JavaScript and PHP. Unlike those operators, these equivalences follow the laws of equality. It is important to realize that equal objects can be represented differently.</p>
+<p>In IEEE-754 floats, <code>-0 = 0</code>.</p>
+<h3 id="intensional-vs.extensional-equality">Intensional vs. Extensional Equality</h3>
+<p>When is some function equal to some other function? Most programming languages will happily do a reference <code>=</code> comparison, and I suppose that’s fine, but what would a structural equality comparison of a function even mean? Well, if we could use reflection to look into the implementation of the function, and see if it does the same thing? But what is “the same?” Would it have to have the same variable names? Are a quicksort and a merge sort “the same function?”</p>
+<p>Cutting to the chase, we say that functions are extensionally equal if they return the same outputs for the same inputs (regardless of internal implementation), and intensionally equal if their internal definition is the same. Of course, this is context-dependent. There may be a context where I need a constant time function and another context where the speed of the function doesn’t matter. The important point is I need to have some context for equality and use it to compare the two functions.</p>
+<p>I don’t know of any programming language which even attempts to do anything beyond reference equality for functions. But it’s easy to come up with examples where it would be useful! (An optimizer which removes duplicate code, e.g.) You’re on your own if you need this, but I have to say that not shipping an equals comparison is preferable to shipping one that’s broken.</p>
+<h3 id="equality-vs.assignment">Equality vs. Assignment</h3>
+<p>One of the first lessons we learn when becoming a programmer is that there are two different concepts which we both call “equals.” One is assignment, the other is testing equality. In JavaScript, these look like:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> aValue <span class="op">=</span> <span class="at">someFunction</span>()<span class="op">;</span> <span class="co">// Assignment</span>
+<span class="cf">if</span> (aValue <span class="op">===</span> <span class="dv">3</span>) <span class="op">{</span>            <span class="co">// Test for equality</span></code></pre></div>
+<p>These are fundamentally different. Comparison returns a boolean; assignment, in an <a href="https://en.wikipedia.org/wiki/Expression-oriented_programming_language">expression-oriented</a> language such as Ruby, returns the value assigned.</p>
+<p>So we can write Ruby code like this:</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">a = b = c = <span class="dv">3</span></code></pre></div>
+<p>Which does indeed assign 3 to the variables <code>a</code>, <code>b</code>, and <code>c</code>. Don’t try it with a reference type, though; it probably won’t do what you want!<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>In a <a href="https://fsharpforfunandprofit.com/posts/expressions-vs-statements/">non-expression-oriented language like C#</a>, assignment doesn’t return anything.</p>
+<p>In math, we use the equals operator for both assignment and testing equality:</p>
+<div class="sourceCode"><pre class="sourceCode tex"><code class="sourceCode latex">if aValue = 3 ... 
+where aValue = someFunction()</code></pre></div>
+<p>(And <code>=</code> is sometimes used for other relations in math, such as <a href="http://mathworld.wolfram.com/Congruence.html">congruence</a>. As with all things in math, context matters; you have to carefully consider what <code>=</code> might mean in a certain paper or book.)</p>
+<p>Why does math not require two separate operators whereas programming languages do? You can tell from context which one is intended, and not <em>all</em> programming languages require different operators. F#, for example, uses <code>=</code> for both assignment and testing equality. Despite overloading <code>=</code>, assignment and testing equality are <em>different</em> operations.</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> aValue = someFunction(); //<span class="co"> Assignment</span>
+<span class="kw">if</span> aValue = <span class="dv">3</span> <span class="kw">then</span>           //<span class="co"> Test for equality</span></code></pre></div>
+<p>The choice of syntax is partially due to heritage: F# is based on ML, which is based on math, and JavaScript syntax is based on Java -&gt; C -&gt; Algol -&gt; FORTRAN.</p>
+<p>FORTRAN had to compile on <a href="https://en.wikipedia.org/wiki/Fortran#/media/File:IBM_704_mainframe.gif">machines</a> where distinguishing these two cases from code syntax would be genuinely challenging, so it made sense to have two different operators. Then C took this “feature” to a high art, allowing code like:</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> aValue = someFunction(); <span class="co">// Assignment</span>
+<span class="cf">if</span> (aValue = <span class="dv">3</span>) {            <span class="co">// Also assignment!</span></code></pre></div>
+<p>This code, for those without previous C experience, overwrites <code>aValue</code> with <code>3</code> and then, since the expression <code>aValue = 3</code> is equal to 3, the <code>if</code> test returns <code>TRUE</code> and execution continues inside the <code>if</code> block. This is frequently an error, leading many C programmers to reverse the values inside an <code>if</code> block out of habit to avoid making the mistake:</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> aValue = someFunction(); <span class="co">// Assignment</span>
+<span class="cf">if</span> (<span class="dv">3</span> == aValue) {           <span class="co">// Test for equality</span>
+
+<span class="co">// [...]</span>
+
+<span class="cf">if</span> (<span class="dv">3</span> = aValue) {            <span class="co">// Syntax error: Cannot assign aValue to 3.</span></code></pre></div>
+<h2 id="how-equality-should-not-work">How Equality Should Not Work</h2>
+<p>I hope I’ve shown by now that equality is <em>not</em> simple, and that the “correct” implementation of equality can vary depending upon context. Despite that, programming languages often get the simple parts wrong! Very often, this is caused by the <em>combination</em> of equality with other language features, such as implicit type conversion.</p>
+<h3 id="common-mistake-equality-isnt-reflexive">Common Mistake: Equality Isn’t Reflexive</h3>
+<p>Recall that the reflexive law of equals requires all values to be equal to themselves, <code>a = a</code>.</p>
+<p>In .NET, if you call <code>Object.ReferenceEquals()</code> on a value type, the arguments are <em>separately</em> boxed before the method runs, so it returns false even if you pass <em>the same instance:</em></p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/api/system.object.referenceequals?view=netframework-4.8">From the docs</a>:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">int</span> int1 = <span class="dv">3</span>;
+Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEquals</span>(int1, int1)); <span class="co">// Prints False</span></code></pre></div>
+<p>This means it is not necessarily true that <code>a = a</code> in any .NET language, so the reflexive law is broken.</p>
+<p>In SQL, <code>NULL</code> is not equal to itself, so the expression <code>NULL = NULL</code> (or, more probably, <code>SOME_EXPRESSION = SOME_OTHER_EXPRESSION</code> when both of them might be <code>null</code>) will return false. This leads to messes like:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">WHERE</span> (SOME_EXPRESSION = SOME_OTHER_EXPRESSION)
+  <span class="kw">OR</span> (SOME_EXPRESSION <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">AND</span> SOME_OTHER_EXPRESSION <span class="kw">IS</span> <span class="kw">NULL</span>)</code></pre></div>
+<p>Or, more likely, just a bug where the developer forgot about the special rules for <code>NULL</code>. If your DB server’s SQL dialect supports <a href="https://modern-sql.com/feature/is-distinct-from"><code>IS NOT DISTINCT FROM</code></a> then this does what <code>=</code> should do. (Or should I say it does <code>NOT</code> not do what <code>=</code> should do?) Otherwise you’ll just have to live with SQL like the above. The best fix is to make your columns non-nullable when possible.</p>
+<p>This is <a href="https://stackoverflow.com/a/1573715/7714">also true of IEEE-754 floats</a>; the standard states that <code>NaN != NaN</code>. A different explanation than the one given in the link for this is that “NaN” represents some unspecified “non-number” result, not necessarily the <em>same</em> unspecified non-number result as that of a different calculation, so it’s incorrect to compare them. For example, <code>square_root(-2)</code> and <code>infinity/infinity</code> are both <code>NaN</code>, but they’re clearly not the same! Similar explanations are given for SQL’s <code>NULL</code> sometimes. One problem with this is that it makes the term very overloaded: Is <code>NaN</code> and <code>NULL</code> an <em>unknown</em> or <em>imprecise</em> value or the known <em>absence</em> of a value?</p>
+<p>One way of handling such situations, which do not occur in routine floating point calculations, would be a <a href="https://en.wikipedia.org/wiki/Union_type">union type</a>. In F#, one could write:</p>
+<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> MaybeFloat = 
+    | Float          <span class="kw">of</span> <span class="dt">float</span>
+    | Imaginary      <span class="kw">of</span> real: <span class="dt">float</span> * imaginary: <span class="dt">float</span>
+    | Indeterminate
+    | //<span class="co">/ ...    </span></code></pre></div>
+<p>… and then you could handle these terms appropriately in calculations which needed them. Use a <a href="https://en.wikipedia.org/wiki/NaN#Signaling_NaN"><em>signaling</em> NaN</a> to throw an exception in calculations which you don’t expect will have NaNs at all.</p>
+<p>Rust offers the <a href="https://doc.rust-lang.org/std/cmp/trait.Eq.html">Eq</a> and <a href="https://doc.rust-lang.org/std/cmp/trait.PartialEq.html">PartialEq</a> traits. Not implementing <code>Eq</code> is supposed to be a signal that <code>==</code> is not reflexive, and floating point types in Rust do not implement it. But if you don’t implement <code>Eq</code>, you can still call <code>==</code> in your code. Implementing <code>Eq</code> allows your object to be used as a key in a hash map and possibly results in behavior changes in other places as well.</p>
+<p>But there are even more significant problems with <code>=</code> and floats.</p>
+<h3 id="common-mistake-equals-is-too-precise">Common Mistake: Equals Is <em>Too</em> Precise</h3>
+<p>I guess many developers are familiar with the problem of comparing IEEE-754 floating point numbers, which are the “float” or “double” implementation for most programming languages. <code>10 * (0.1)</code> does not equal <code>1</code>, because “0.1” is actually equal to <code>0.100000001490116119384765625</code> or <code>0.1000000000000000055511151231257827021181583404541015625</code>. If you’re not familar with this issue, you can <a href="https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/">go read about it</a>, but the point is that it’s rarely safe to do an <code>==</code> comparison on a floating point number at all! You have to ask yourself which digits are significant and compare accordingly.</p>
+<p>(Worse, the float type backs other types, such as <code>TDateTime</code> in <a href="http://docs.embarcadero.com/products/rad_studio/delphiAndcpp2009/HelpUpdate2/EN/html/delphivclwin32/System_TDateTime.html">some languages</a>, so even in cases where equality comparisons might <em>make sense,</em> they don’t necessarily <em>work.</em>)</p>
+<p>The correct method of comparing floating point numbers is to see if they’re “close,” and <a href="https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/">what “close” means varies depending on context</a>. It’s not something you can cram into a <code>==</code> operator. If you find yourself doing this a lot (say, once), you might consider using a different data type, such as a fixed precision decimal number.</p>
+<p>So why do programming languages offer <code>==</code> comparisons on a type when they can’t support it? Well, because they offer <code>==</code> on <em>every</em> type, it works on most of them, and they just shrug about the rest and chastize programmers for not knowing which language feature they should not use.</p>
+<p>Not every programming language, mind you. Standard ML doesn’t offer <code>=</code> comparisons on reals. It’s a compiler error if you try!</p>
+<p>The <a href="http://sml-family.org/Basis/real.html">implementation notes</a> state:</p>
+<blockquote>
+<p>Deciding if <code>real</code> should be an equality type, and if so, what should equality mean, was also problematic. IEEE specifies that the sign of zeros be ignored in comparisons, and that equality evaluate to false if either argument is NaN. These constraints are disturbing to the SML programmer. The former implies that <code>0 = ~0</code> is true while <code>r/0 = r/~0</code><a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> is false. The latter implies such anomalies as <code>r = r</code> is false, or that, for a <code>ref cell rr</code>, we could have <code>rr = rr</code> but not have <code>!rr = !rr</code>. We accepted the unsigned comparison of zeros, but felt that the reflexive property of equality, structural equality, and the equivalence of <code>&lt;&gt;</code> and <code>not o =</code> ought to be preserved. Additional complications led to the decision to not have <code>real</code> be an equality type.</p>
+</blockquote>
+<p>By blocking <code>=</code> for reals, SML forces the developer to think about what kind of comparison they actually need, which is a great feature, I think!</p>
+<p>F# offers the <code>[&lt;NoEquality&gt;]</code> attribute to mark custom types where <code>=</code> should not be used. Pity they didn’t mark the <code>float</code> type with it!</p>
+<h3 id="common-mistake-equals-isnt">Common Mistake: “Equals” Isn’t</h3>
+<p>PHP has two separate operators, <code>==</code> and <code>===</code>. The <a href="https://www.php.net/manual/en/language.operators.comparison.php">documentation for <code>==</code></a>, which is named “Equal,” states, “<strong>TRUE</strong> if <code>$a</code> is equal to <code>$b</code> after type juggling.” Unfortunately, this means that the <code>==</code> operator is unreliable:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+  <span class="fu">var_dump</span><span class="ot">(</span><span class="st">&quot;608E-4234&quot;</span> == <span class="st">&quot;272E-3063&quot;</span><span class="ot">);</span> <span class="co">// true</span>
+<span class="kw">?&gt;</span></code></pre></div>
+<p>Although we’re comparing <em>strings</em> here, PHP sees that they can be converted to a number, so it does. The numbers turn out to be very small (the first argument, for example, is 608<sup>-4234</sup>), and, as we’ve already discussed, comparing floating point numbers is hard. Casting both of these to a <code>float(0)</code> results in rounding them to equal values, so the comparison returns true.</p>
+<p>Note this is different than the behavior of JavaScript, which also has similar (but not the same!) <code>==</code> and <code>===</code> operators; JavaScript would see that both sides are strings and return false for this comparison.</p>
+<p>Fortunately, PHP has the <code>===</code> (“Identical”) operator, which behaves correctly in this case. I would say never use <code>==</code>, but <code>==</code> <a href="https://www.php.net/manual/en/language.oop5.object-comparison.php">does a structural comparison on objects</a>, which might be something you want! Instead, I’ll say: Use extreme caution with <code>==</code>, because it’s broken on primitive types.</p>
+<h3 id="common-mistake-equality-isnt-symmetric">Common Mistake: Equality Isn’t Symmetric</h3>
+<p>If you override <code>.equals()</code> in Java, it is <em>your responsibility</em> to ensure that the laws of equality hold!</p>
+<p>It is <em>very easy</em> to implement a comparison which is not symmetric, that is, <code>a.equals(b) != b.equals(a)</code>, if you’re not paying attention.</p>
+<p>Even if we remove null from the picture (because it would be a <code>NullPointerException</code> in one case and the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-">contract for <code>.equals()</code> allows you to do this</a>), if you subtype a class and override <code>.equals()</code> then you had better be careful!</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="at">@Override</span>
+<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">equals</span>(<span class="bu">Object</span> o) {
+    <span class="kw">if</span> (<span class="kw">this</span> == o)
+        <span class="kw">return</span> <span class="kw">true</span>;
+    <span class="kw">if</span> (o == <span class="kw">null</span>)
+        <span class="kw">return</span> <span class="kw">false</span>;
+    <span class="kw">if</span> (!o.<span class="fu">getClass</span>().<span class="fu">isAssignableFrom</span>(<span class="fu">getClass</span>())) <span class="co">// Danger! This is a mistake!</span>
+        <span class="kw">return</span> <span class="kw">false</span>;
+    ThisClass thisClass = (ThisClass) o;
+    <span class="co">// field comparison</span>
+    <span class="co">// ...</span>
+}</code></pre></div>
+<p>If <code>ThisClass</code> and <code>ASubtypeOfThisClass</code> both override <code>.equals()</code> with code like this, <code>a.equals(b)</code> may not equal <code>b.equals(a)</code>! The correct comparison would be:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">    <span class="kw">if</span> (<span class="fu">getClass</span>() != o.<span class="fu">getClass</span>())
+        <span class="kw">return</span> <span class="kw">false</span>;</code></pre></div>
+<p>This is not just my opinion; the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-">contract for <code>Object.equals()</code> requires it</a>.</p>
+<h3 id="common-mistake-equality-isnt-transitive">Common Mistake: Equality Isn’t Transitive</h3>
+<p>Remember one of the laws for equals comparisons is that they should be transitive; if <code>a = b</code> and <code>b = c</code> then <code>a = c</code>. Unfortunately, when coupled with type coersion, languages often fail at this.</p>
+<p>In JavaScript,</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="st">&#39;&#39;</span> <span class="op">==</span> <span class="dv">0</span><span class="op">;</span>      <span class="co">// true</span>
+<span class="dv">0</span>  <span class="op">==</span> <span class="st">&#39;0&#39;</span><span class="op">;</span>    <span class="co">// true</span>
+<span class="st">&#39;&#39;</span> <span class="op">==</span> <span class="st">&#39;0&#39;</span><span class="op">;</span>    <span class="co">// false!</span></code></pre></div>
+<p>Never use <code>==</code> in JavaScript. Use <code>===</code> instead.</p>
+<h3 id="common-mistake-equality-is-inconsistent">Common Mistake: Equality Is Inconsistent</h3>
+<p>In Kotlin, <code>==</code> returns different values depending on the type of the variable, even for the same variable:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">fun</span> <span class="fu">equalsFloat</span>(<span class="va">a</span>: <span class="dt">Float</span>, <span class="va">b</span>: <span class="dt">Float</span>) {
+  println(a == b);
+}
+
+<span class="kw">fun</span> <span class="fu">equalsAny</span>(<span class="va">a</span>: <span class="dt">Any</span>, <span class="va">b</span>: <span class="dt">Any</span>) {
+  println(a == b);
+}
+
+<span class="kw">fun</span> <span class="fu">main</span>(<span class="va">args</span>: <span class="dt">Array</span>&lt;<span class="va">String</span>&gt;) {
+  <span class="kw">val</span> <span class="va">a</span> = <span class="kw">Float</span>.NaN;
+  <span class="kw">val</span> <span class="va">b</span> = <span class="kw">Float</span>.NaN;
+  equalsFloat(a, b);
+  equalsAny(a, b);
+}
+<span class="co">// prints false, true</span></code></pre></div>
+<p>This is <a href="https://kotlinlang.org/docs/reference/basic-types.html#floating-point-numbers-comparison">an unfortunate combination of language features</a> which results in some pretty unintuitive behavior.</p>
+<h3 id="common-mistake-using-reference-equality-when-structural-equality-is-needed">Common Mistake: Using Reference Equality When Structural Equality Is Needed</h3>
+<p>Consider the following <a href="https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest">MSTest</a> unit test in C#:</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">[TestMethod] 
+<span class="kw">public</span> <span class="dt">void</span> <span class="fu">Calculation_Is_Correct</span>() {
+    <span class="dt">var</span> expected = <span class="kw">new</span> <span class="fu">Result</span>(SOME_EXPECTED_VALUE);
+
+    <span class="dt">var</span> actual = _service.<span class="fu">DoCalculation</span>(SOME_INPUT);
+
+    Assert.<span class="fu">AreEqual</span>(expected, actual);
+}</code></pre></div>
+<p>Does this work? We can’t tell! <code>Assert.AreEqual()</code> will eventually call <code>Object.Equals()</code>, which does a reference comparison by default. Unless you’ve overridden <code>Result.Equals()</code> to do a structural comparison instead, the unit test is broken. The contract for <code>Object.Equals()</code> says that you <a href="https://docs.microsoft.com/en-us/dotnet/api/system.object.equals?view=netframework-4.8">should not override it at all if your type is mutable</a>, which is reasonable in general but probably not what you want for a unit test. (This is because <code>.Equals()</code> is expected to match <code>.GetHashCode()</code>, and <a href="https://docs.microsoft.com/en-us/dotnet/api/system.object.gethashcode?view=netframework-4.8">the hash code is expected not to change</a> over the lifetime of the object.) The closest thing the .NET framework has to a “guaranteed structural” comparison for reference types is <code>IEquatable&lt;T&gt;</code>, which <code>Assert.AreEqual()</code> doesn’t use, even if it’s implemented.</p>
+<p>It’s <a href="https://github.com/nunit/nunit/issues/1249">worse if you use NUnit</a>.</p>
+<p>(Java’s <code>Object.hashCode</code>, by contrast, is <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html#hashCode()">allowed to change when the object’s fields change</a>.)</p>
+<h2 id="how-to-think-about-equality">How to Think About Equality</h2>
+<p>Wow, I’ve now written 4000 words about the <code>=</code> operator and I’m not finished yet! That seems, well, out of proportion to the size of the operator. Why is this so complicated? Two reasons, basically:</p>
+<ul>
+<li><em>Inessential complexity:</em> Our programming languages <em>don’t serve us well</em> with equivalence comparisons. They are often entirely broken, and even when they’re not, they don’t make it obvious when, for example, they’ll do a structural comparison vs a reference comparison.</li>
+<li><em>Essential complexity:</em> Equivalence is often <em>genuinely complicated</em> in places where it is needed, such as when comparing floating point numbers, and it gets even harder in edge cases like comparing functions.</li>
+</ul>
+<p>Another way to divide this up is “stuff which should be fixed by programming language <em>implementors</em>” (the “inessential complexity” above) and “stuff which must be resolved by programming language <em>users.</em></p>
+<h3 id="what-programming-languages-should-do">What Programming Languages Should Do</h3>
+<p>With regards to inessential complexity, the situation we find ourselves in today, with mostly-broken implementations of equivalence in nearly every mainstream programming language is just a crying shame. This “simple operation which must obey certain laws” is <em>exactly</em> the sort of thing we depend on programming languages to get right! But it appears to me that only SML has really considered having a lawful equality in both its semantics and its runtime/standard library, and SML isn’t entirely mainstream.</p>
+<p>First, programming languages should make it simple to create types where equality comparison is disabled because it makes no sense (like <a href="https://msdn.microsoft.com/en-us/visualfsharpdocs/conceptual/core.noequalityattribute-class-%5bfsharp%5d"><code>[&lt;NoEquality&gt;]</code> in F#</a>) and they should use this feature in their standard library where needed, such as on floating point types.</p>
+<p>Programming languages must make the difference between structural equality and reference equality crystal clear. There should never be a case where it’s unclear what you’re doing. Most programming lanuages overload <code>==</code> to mean both structural equality or reference equality depending on the type of reference, most commonly value types vs. reference types, and this is guaranteed to confuse developers.</p>
+<p>Kotlin comes very close to getting this right with its <code>===</code> for reference equality and <code>==</code> for structural equality, although for some reason it translates <code>===</code> to <code>==</code> for value types, instead of just failing to compile for that. The goal should be reducing developer confusion. You want the developer to see <code>===</code> and think “reference equality,” not “more equals signs is better.”</p>
+<p>F# mostly gets this right by <a href="https://msdn.microsoft.com/en-us/visualfsharpdocs/conceptual/languageprimitives.physicalequality%5B&#39;t%5D-function-%5Bfsharp%5D">making reference equality very hard to use</a>.</p>
+<p>I don’t know of any language which has mutable by default variables which handles structural comparsions in a non-confusing way. But it’s easy to imagine what it might look like! Have a reference equals and structural equals operator which is only supported in contexts where the language can reasonably expect to support it. For example, if .NET did not do the boxing funkiness with <code>Object.ReferenceEquals</code> and value types (it could just fail to compile if you tried) and had something akin to <code>IEquatable&lt;T&gt;</code> which would allow you to use a structural comparison operator, that seems like a pretty good solution to making it clear to developers which is which.</p>
+<h3 id="what-programmers-should-do">What Programmers Should Do</h3>
+<p>One might look at the length of this post and say, “Wow, equality is really complicated! I’m going to give up coding and become a soybean farmer.” But this post is as long as it is mostly because so many languages do equality <em>wrong.</em> Doing equality correctly does requre some thought, but not <em>too much</em> though. Certainly less than soybean farming.</p>
+<p>When doing an equality comparison on an existing type, stop and ask yourself:</p>
+<ul>
+<li>Does it make sense to do an equality comparison at all here?</li>
+<li>If so, does a structural or a reference comparison make sense?</li>
+<li>What support does my programming language provide for the appropriate style of comparison?</li>
+<li>Does my programming language implement equality correctly for this comparison?</li>
+</ul>
+<p>You can ask yourself similar questions when designing a custom type:</p>
+<ul>
+<li>Should my type support equality comparisons at all? Or do they need a more complicated comparison, as with a float?</li>
+<li>Will my type be mutable? How might that affect equality?</li>
+<li>Would a reference comparison, a structural comparison, or both make sense?</li>
+</ul>
+<p>If your type is mutable, consider if you can change it to be immutable. You can do this even in a language which is mutable by default! Beyond giving you more options with respect to equality comparisons, there are many other benefits of an immutable architecture as well. The C# Roslyn compiler, which uses immutable data structures throughout, is a great example of this:</p>
+<blockquote>
+<p><em>The third attribute of syntax trees is that they are immutable and thread-safe. This means that after a tree is obtained, it is a snapshot of the current state of the code, and never changes. This allows multiple users to interact with the same syntax tree at the same time in different threads without locking or duplication. Because the trees are immutable and no modifications can be made directly to a tree, factory methods help create and modify syntax trees by creating additional snapshots of the tree. The trees are efficient in the way they reuse underlying nodes, so a new version can be rebuilt fast and with little extra memory.</em><br/> from the <a href="https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax">.NET Compiler Platform SDK docs</a></p>
+</blockquote>
+<h2 id="credits">Credits</h2>
+<p>This post was inspired by Barry Mazur’s wonderful math paper, “<a href="http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf">When is one thing equal to some other thing?</a>” which uses category theory to answer the question for math.</p>
+<p>Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of this article and giving me feedback.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This is <a href="https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science">probably attributable to Phil Karlson</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>A “binary relation” deserves a little bit of explanation, but this gets into a little math, so feel free to ignore if it doesn’t help you. We have two sets <em>A</em> and <em>B</em>. (They might be the same set.) For any two members <em>a</em> and <em>b</em> of the sets, we want a rule which says whether they’re in the relation or not. So if <em>A</em> and <em>B</em> are the integers, the ordered pair <em>(1, 2)</em> is not in the relation “is equal to” but the ordered pair <em>(5, 5)</em> is in the relation. A relation is a subset of the cross product of the sets.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Gowers, Timothy, <em>Mathematics: A Very Short Introduction</em>, p. 60<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><code>a = b = c = []</code> in Ruby assigns <em>the same reference</em> to <code>a</code>, <code>b</code>, and <code>c</code>. So if you mutate <code>a</code>, you’ll mutate <code>b</code> and <code>c</code> at the same time. That’s probably not what you wanted, otherwise what would be the point of having three separate references? In contrast, with a value type like <code>Integer</code>, mutating <code>a</code> will <em>not</em> change the value of <code>b</code> or <code>c</code>.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p><code>~</code> is the SML operator for unary negation, so <code>~0</code> should be read as “negative zero.”<a href="#fnref5">↩</a></p></li>
+</ol>
+</div>
+
+<div class="info">
+    
+    Tags: <a href="/tags/mathematics.html">mathematics</a>, <a href="/tags/computer%20science.html">computer science</a>, <a href="/tags/plt.html">plt</a>, <a href="/tags/equality.html">equality</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Gray Failure</title>
     <link href="http://www.craigstuntz.com/posts/2020-01-29-gray-failure.html" />
     <id>http://www.craigstuntz.com/posts/2020-01-29-gray-failure.html</id>
@@ -550,158 +826,6 @@ puts solution</code></pre></div>
 <div class="info">
     
     Tags: <a href="/tags/z3.html">z3</a>, <a href="/tags/theorem%20provers.html">theorem provers</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>"Test-Only Development" with the Z3 Theorem Prover</title>
-    <link href="http://www.craigstuntz.com/posts/2014-07-07-test-only-development.html" />
-    <id>http://www.craigstuntz.com/posts/2014-07-07-test-only-development.html</id>
-    <published>2014-07-07T00:00:00Z</published>
-    <updated>2014-07-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on July  7, 2014
-    
-</div>
-
-<p>In this post I’ll introduce a style of programming which may be totally unfamiliar and perhaps a bit magical to many readers. What if you could write a unit test for a problem and have your compiler automatically return a correct implementation? Call it “test only” instead of “test first.” I’m going to translate the problem itself into a specification language and use Microsoft Research’s <a href="http://rise4fun.com/z3">Z3 theorem prover</a> to find a solution. I won’t write any implementation code at all!</p>
-<h2 id="a-simple-problem">A Simple Problem</h2>
-<p>Here’s the problem I’ll use as an example, which is <a href="https://projecteuler.net/problem=4">problem #4 from Project Euler</a>:</p>
-<blockquote>
-<p>A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.</p>
-</blockquote>
-<p>Find the largest palindrome made from the product of two 3-digit numbers.</p>
-<p>The usual approach is to use brute force. Here’s a C# example, which I suspect is similar to what many people do:</p>
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">(from    factor1 <span class="kw">in</span> Enumerable.<span class="fu">Range</span>(<span class="dv">100</span>, <span class="dv">899</span>)
- from    factor2 <span class="kw">in</span> Enumerable.<span class="fu">Range</span>(<span class="dv">100</span>, <span class="dv">899</span>)
- let     product = factor1 * factor2
- where   <span class="fu">IsPalindrome</span>(product) <span class="co">// defined elsewhere</span>
- orderby product descending
- select  <span class="kw">new</span> { Factor1 = factor1, Factor2 = factor2, Product = product}).<span class="fu">First</span>()</code></pre></div>
-<p>This is not a terrible solution. It runs pretty quickly and returns the correct solution, and we can see opportunities for making it more efficient. I suspect most people would declare the problem finished and move on.</p>
-<p>However, the LINQ syntax may obscure the fact that this is still a brute force solution. Any time we have to think about how to instruct a computer to find the answer to the problem instead of the characteristics of the problem itself, we add cognitive overhead and increase the chances of making a mistake.</p>
-<p>Also, what is that <code>IsPalindrome(product)</code> hiding? Most people implement this by converting the number to a string, and comparing it with the reversed value. But it turns out that the mathematical properties of a palindromic number are critical to finding an efficient solution.</p>
-<p>Indeed, you can solve this problem fairly quickly with pencil and paper so long as you don’t do <code>IsPalindrome</code> this way! (It would probably double the length of this post to explain how, so I’ll skip that. If there’s demand in comments I can explain, otherwise just read on.)</p>
-<h2 id="solving-with-pure-specification">Solving with Pure Specification</h2>
-<p>For my purely declarative solution, I’m going to use the language <a href="http://smt-lib.org/">SMT-LIB</a>. As a pure specification language, it doesn’t allow me to define an implementation at all! Instead, I’ll use it to express the constraints of the problem, and then use MSR’s Z3 solver to find a solution. SMT-LIB uses Lisp-like S-expressions, so, yes Virginia, there will be parentheses, but don’t let that scare you off. It’s always worthwhile to learn languages which make you think about problems differently, and I think you’ll find SMT-LIB really delivers!</p>
-<p>Since this language will seem unusual to many readers, let’s walk through the problem step by step.</p>
-<p>First, we need to declare some of the variables used in the problem. I use “variable” here in the mathematical, rather than software, sense: A placeholder for an unknown, but not something to which I’ll be assigning varying values. So here are three variables roughly equivalent to the corresponding C# vars above:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(declare-const product Int)
-(declare-const factor1 Int)
-(declare-const factor2 Int)</code></pre></div>
-<p>In an S-expression, the first item inside the parentheses is the function, and the remaining items are arguments. So <code>declare-const</code> is the function here and the remaining items are the variable name and its “sort” (type).</p>
-<p>Next, the problem says that <code>product</code> must be the, ahem, product of the two factors:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))</code></pre></div>
-<p>“<code>assert</code>” sounds like a unit test, doesn’t it? Indeed, many people coming to a theorem prover from a software development background will find that programming them is much more similar to writing tests than writing code. The line above just says that <code>factor1 * factor2 = product</code>. But it’s an assertion, not an assignment; we haven’t specified values for any of these variables.</p>
-<p>The problem statement says that both factors are three digit numbers:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;=</span> factor1 <span class="dv">999</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;=</span> factor2 <span class="dv">999</span>)))</code></pre></div>
-<p>Mathematically, what does it mean for a number to be a palindrome? In this case, the largest product of 3 digit numbers is going to be a six digit number of the form <strong>abccba</strong>, so product = 100000<strong>a</strong> + 10000<strong>b</strong> + 1000<strong>c</strong> + 100<strong>c</strong> + 10<strong>b</strong> + <strong>a</strong>. As I noted above, expressing the relationship this way is key to finding a non-brute-force solution using algebra. But you don’t need to know that in order to use Z3, because Z3 knows algebra! All you need to know is that you should express relationships mathematically instead of using string manipulation.</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(declare-const a Int)
-(declare-const b Int)
-(declare-const c Int)
-(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))</code></pre></div>
-<p>I implied above that <strong>a</strong>, <strong>b</strong>, and <strong>c</strong> are single-digit numbers, so we need to be specific about that. Also, <strong>a</strong> can’t be 0 or we won’t have a 6 digit number.</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">1</span>) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))</code></pre></div>
-<p>These 4 assertions about a, b, and c are enough to determine that product is a palindrome. We’re not quite done yet, but let’s see how we’re doing so far. <code>(check-sat)</code> asks Z3 if there is a solution to the problem we’ve posed, and <code>(get-model)</code> displays that solution. Here’s the entire script so far:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(declare-const product Int)
-(declare-const factor1 Int)
-(declare-const factor2 Int)
-
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;</span> factor1 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;</span> factor2 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))
-
-(declare-const a Int)
-(declare-const b Int)
-(declare-const c Int)
-
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">1</span>) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))
-
-(check-sat)
-(get-model)</code></pre></div>
-<p>When you run this through Z3 (<a href="http://rise4fun.com/z3">try it yourself!</a>), the solver responds:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">sat
-
-(model
-  (define-fun c () Int
-    <span class="dv">1</span>)
-  (define-fun b () Int
-    <span class="dv">0</span>)
-  (define-fun a () Int
-    <span class="dv">1</span>)
-  (define-fun product () Int
-    <span class="dv">101101</span>)
-  (define-fun factor2 () Int
-    <span class="dv">143</span>)
-  (define-fun factor1 () Int
-    <span class="dv">707</span>)
-)</code></pre></div>
-<p>That’s pretty good! <code>sat</code>, here, means that Z3 found a solution (it would have displayed <code>unsat</code> if it hadn’t). Eliding some of the syntax, the solution it found was 143 * 707 = 101101. Not bad for zero implementation code, but also not the answer to the Project Euler problem, which asks for the largest product.</p>
-<h2 id="optimization">Optimization</h2>
-<p>“Optimization,” in Z3 parlance, refers to finding the “best” proof for the theorem, not doing it as quickly as possible. But how do we tell Z3 to find the largest product?</p>
-<p>Z3 has a function called <code>maximize</code>, but it’s a bit limited. If I try adding <code>(maximize product)</code>, Z3 complains:</p>
-<blockquote>
-<p>Z3(15, 10): ERROR: Objective function ‘(* factor1 factor2)’ is not supported</p>
-</blockquote>
-<p>After some fiddling, however, it seems (maximize (+ factor1 factor2)) works, sort of. Adding this to the script above causes Z3 to return:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="op">+</span> factor1 factor2) |-&gt; [<span class="dv">1282</span>:oo]
-
-unknown --...</code></pre></div>
-<p>Which is to say, Z3 could not find the maximal value. (“oo” just means ∞, and <code>unknown</code> means it could neither prove nor disprove the theorem.) Guessing that a might be bigger than 1, I can change its range to 8..9 and Z3 arrives at a single solution:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="op">+</span> factor1 factor2) |-&gt; <span class="dv">1906</span>
-
-sat
-
-(model
-  (define-fun b () Int
-    <span class="dv">0</span>)
-  (define-fun c () Int
-    <span class="dv">6</span>)
-  (define-fun factor1 () Int
-    <span class="dv">913</span>)
-  (define-fun factor2 () Int
-    <span class="dv">993</span>)
-  (define-fun a () Int
-    <span class="dv">9</span>)
-  (define-fun product () Int
-    <span class="dv">906609</span>)
-)</code></pre></div>
-<p>The final script is:</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(declare-const product Int)
-(declare-const factor1 Int)
-(declare-const factor2 Int)
-
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;</span> factor1 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;</span> factor2 <span class="dv">1000</span>)))
-(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))
-
-(declare-const a Int)
-(declare-const b Int)
-(declare-const c Int)
-
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">8</span> ) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))
-(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))
-
-(maximize (<span class="op">+</span> factor1 factor2))
-
-(check-sat)
-(get-model)</code></pre></div>
-<p>This bothers me just a little, since I had to lie ever so slightly about my objective, even though I did end up with the right answer.</p>
-<p>That’s just a limitation of Z3, and it may be fixed some day; Z3 is under active development, and <a href="http://rise4fun.com/Z3/tutorial/optimization">the optimization features are not even in the unstable or master branches</a>. But think about what has been achieved here: We’ve solved a problem with nothing but statements about the properties of the correct answer, and without any “implementation” code whatsoever. Also, using this technique forced me to think deeply about what the problem actually meant. Can This Be Real?</p>
-<p>At this point, you may have questions about doing software development in this way. Sure, it works fine for this trivial problem, but can you solve real-world problems this way? Is it fast? Are there any other tools with similar features? What are the downsides of working in this way? You may find the answers to these questions as surprising as the code above. Stay tuned!</p>
-
-<div class="info">
-    
-    Tags: <a href="/tags/z3.html">z3</a>, <a href="/tags/theorem%20provers.html">theorem provers</a>, <a href="/tags/testing.html">testing</a>
     
 </div>
 ]]></summary>

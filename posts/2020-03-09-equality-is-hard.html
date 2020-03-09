@@ -25,7 +25,7 @@
             <h1>Equality Is Hard</h1>
 
             <div class="info">
-    Posted on February 18, 2020
+    Posted on March  9, 2020
     
 </div>
 
@@ -65,8 +65,8 @@
 <span class="dt">var</span> a = <span class="kw">new</span> <span class="fu">MyString</span>(<span class="st">&quot;Some value&quot;</span>);
 <span class="dt">var</span> b = <span class="kw">new</span> <span class="fu">MyString</span>(<span class="st">&quot;Some value&quot;</span>);
 <span class="kw">if</span> (a == b) { <span class="co">// returns false, does not enter block</span></code></pre></div>
-<p>Other languages let you choose. Scheme, for example, provides <code>equal?</code> to check structural equality and <code>eq?</code> to check reference equality. Kotlin provides <code>==</code> for structural equailty and <code>===</code> for reference equality (don’t confuse these with JavaScript’s <code>==</code> and <code>===</code> operators which are… something else entirely).[^kotlinFloat]</p>
-<p>When does it make sense to use structural equality in your programs? In the absence of mutation (changing the values of variables), nearly always! Most programming languages that I’m aware of do structural comparisons on value types such as <code>integers</code>. Well, except Java, which has confused generations of programmers with an <code>int</code> value type which does a structural comparison and an <code>Integer</code> reference type which, well, the best thing you can say is <a href="https://stackoverflow.com/questions/1700081/why-is-128-128-false-but-127-127-is-true-when-comparing-integer-wrappers-in-ja">don’t use == on Integer</a>. <a href="https://stackoverflow.com/questions/306313/is-operator-behaves-unexpectedly-with-integers">Python has similar issues with <code>is</code></a>.</p>
+<p>Other languages let you choose. Scheme, for example, provides <code>equal?</code> to check structural equality and <code>eq?</code> to check reference equality. Kotlin provides <code>==</code> for structural equailty and <code>===</code> for reference equality (don’t confuse these with JavaScript’s <code>==</code> and <code>===</code> operators which are… something else entirely).</p>
+<p>When does it make sense to use structural equality in your programs? In the absence of mutation (changing the values of variables), nearly always! Most programming languages that I’m aware of do structural comparisons on value types such as <code>integers</code>. Well, except Java, which has confused generations of programmers with an <code>int</code> value type which does a structural comparison and an <code>Integer</code> reference type which, well, the best thing you can say is <a href="https://stackoverflow.com/questions/1700081/why-is-128-128-false-but-127-127-is-true-when-comparing-integer-wrappers-in-ja">don’t use == on Integer</a>. Python <a href="https://stackoverflow.com/questions/306313/is-operator-behaves-unexpectedly-with-integers">has similar issues with <code>is</code></a>.</p>
 <p>Structural comparison of reference types such as objects makes sense as well. Consider a unit test, where you want to check that the object returned is equal to the value you expected. In a language with structural equality, this is trivial:</p>
 <div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">[&lt;TestMethod&gt;]
 <span class="kw">let</span> ``The result <span class="kw">of</span> the calculation is the expected value``() = 
@@ -88,7 +88,7 @@
 <p>The behavior of these two blocks is precisely the same. I can’t distinguish the two sons, even though I know they’re different people. That’s OK! If I needed to distinguish them, I could add a hash of their DNA or something to my <code>Person</code> type. But if I just need to know their name and age, it doesn’t matter if I can distinguish the two objects or not, because the values are the same, no matter how you slice it.</p>
 <p>Imagine Jane’s son changes his name to Pat. F# doesn’t support mutating the values of variables, so I need to make a new <code>Person</code> instance for John <em>and Jane:</em></p>
 <div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> newJane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ { Name = <span class="st">&quot;Pat&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }</code></pre></div>
-<p>It seems weird to have a new variable, <code>newJane</code>, but in practice it doesn’t create a problem. The code above is fine. Now let’s try this in a language which supports mutation:</p>
+<p>It seems weird to have a new variable, <code>newJane</code>, but in practice it doesn’t create a problem. The code above is fine. Now let’s try this in C#, a language which supports mutation:</p>
 <div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> john = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>);
 <span class="dt">var</span> jane = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { john });
 <span class="dt">var</span> sue  = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Sue&quot;</span>,  <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { john });</code></pre></div>
@@ -111,6 +111,7 @@
 <h3 id="intensional-vs.extensional-equality">Intensional vs. Extensional Equality</h3>
 <p>When is some function equal to some other function? Most programming languages will happily do a reference <code>=</code> comparison, and I suppose that’s fine, but what would a structural equality comparison of a function even mean? Well, if we could use reflection to look into the implementation of the function, and see if it does the same thing? But what is “the same?” Would it have to have the same variable names? Are a quicksort and a merge sort “the same function?”</p>
 <p>Cutting to the chase, we say that functions are extensionally equal if they return the same outputs for the same inputs (regardless of internal implementation), and intensionally equal if their internal definition is the same. Of course, this is context-dependent. There may be a context where I need a constant time function and another context where the speed of the function doesn’t matter. The important point is I need to have some context for equality and use it to compare the two functions.</p>
+<p>I don’t know of any programming language which even attempts to do anything beyond reference equality for functions. But it’s easy to come up with examples where it would be useful! (An optimizer which removes duplicate code, e.g.) You’re on your own if you need this, but I have to say that not shipping an equals comparison is preferable to shipping one that’s broken.</p>
 <h3 id="equality-vs.assignment">Equality vs. Assignment</h3>
 <p>One of the first lessons we learn when becoming a programmer is that there are two different concepts which we both call “equals.” One is assignment, the other is testing equality. In JavaScript, these look like:</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> aValue <span class="op">=</span> <span class="at">someFunction</span>()<span class="op">;</span> <span class="co">// Assignment</span>
@@ -208,6 +209,24 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <span class="dv">0</span>  <span class="op">==</span> <span class="st">'0'</span><span class="op">;</span>    <span class="co">// true</span>
 <span class="st">''</span> <span class="op">==</span> <span class="st">'0'</span><span class="op">;</span>    <span class="co">// false!</span></code></pre></div>
 <p>Never use <code>==</code> in JavaScript. Use <code>===</code> instead.</p>
+<h3 id="common-mistake-equality-is-inconsistent">Common Mistake: Equality Is Inconsistent</h3>
+<p>In Kotlin, <code>==</code> returns different values depending on the type of the variable, even for the same variable:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">fun</span> <span class="fu">equalsFloat</span>(<span class="va">a</span>: <span class="dt">Float</span>, <span class="va">b</span>: <span class="dt">Float</span>) {
+  println(a == b);
+}
+
+<span class="kw">fun</span> <span class="fu">equalsAny</span>(<span class="va">a</span>: <span class="dt">Any</span>, <span class="va">b</span>: <span class="dt">Any</span>) {
+  println(a == b);
+}
+
+<span class="kw">fun</span> <span class="fu">main</span>(<span class="va">args</span>: <span class="dt">Array</span>&lt;<span class="va">String</span>&gt;) {
+  <span class="kw">val</span> <span class="va">a</span> = <span class="kw">Float</span>.NaN;
+  <span class="kw">val</span> <span class="va">b</span> = <span class="kw">Float</span>.NaN;
+  equalsFloat(a, b);
+  equalsAny(a, b);
+}
+<span class="co">// prints false, true</span></code></pre></div>
+<p>This is <a href="https://kotlinlang.org/docs/reference/basic-types.html#floating-point-numbers-comparison">an unfortunate combination of language features</a> which results in some pretty unintuitive behavior.</p>
 <h3 id="common-mistake-using-reference-equality-when-structural-equality-is-needed">Common Mistake: Using Reference Equality When Structural Equality Is Needed</h3>
 <p>Consider the following <a href="https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest">MSTest</a> unit test in C#:</p>
 <div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">[TestMethod] 
@@ -256,9 +275,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 </blockquote>
 <h2 id="credits">Credits</h2>
 <p>This post was inspired by Barry Mazur’s wonderful math paper, “<a href="http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf">When is one thing equal to some other thing?</a>” which uses category theory to answer the question for math.</p>
-<p>Thank you to Paul Blasucci, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of this article and giving me feedback.</p>
-<p>[^kotlinFloat] This seems mostly good, but it has some surprising side effects! Kotlin’s <code>==</code> comparison for Floats follows the IEEE-754 standard, <em>unless</em> your floats cannot be statically known to be of the <code>Float</code> type (for example, if they’re typed as <code>Any</code>), in which case Kotlin will call the <code>.equals()</code> method, which, on a Java Platform Float,<br />
-<a href="https://kotlinlang.org/docs/reference/basic-types.html#floating-point-numbers-comparison">violates the standard in a couple of places</a>. I understand <em>why</em> this happens, but the amount of thought it requires from the programmer in order to get correct behavior is far too high. I think we should demand more from our programming languages!</p>
+<p>Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of this article and giving me feedback.</p>
 <div class="footnotes">
 <hr />
 <ol>
@@ -272,7 +289,7 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 
 <div class="info">
     
-    Tags: 
+    Tags: <a href="../tags/mathematics.html">mathematics</a>, <a href="../tags/computer%20science.html">computer science</a>, <a href="../tags/plt.html">plt</a>, <a href="../tags/equality.html">equality</a>
     
 </div>
 
