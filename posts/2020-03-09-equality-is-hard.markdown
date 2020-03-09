@@ -100,7 +100,7 @@ and you end up with [this horror show](https://github.com/nunit/nunit/blob/4e10f
 ### Reference Equality
 
 But as I hinted above, there are certainly cases where structural equality does not make sense. One example 
-is with languages which support mutation of variables, which is most of them. When you can change the value
+is with languages which support mutation of variables, which is most of them.[^mutation] When you can change the value
 of a variable, it probably does not make sense to say that variable is equal to some other variable, _in
 general._ Sure, you can say they're (structurally) equal _as of a moment in time,_ such as in last line of a 
 unit test, but you can't generally imply that they're the same. This is a kind of subtle point, so let's look 
@@ -644,6 +644,9 @@ not. So if _A_ and _B_ are the integers, the ordered pair _(1, 2)_ is not in the
 ordered pair _(5, 5)_ is in the relation. A relation is a subset of the cross product of the sets.
 
 [^Gowers]: Gowers, Timothy, _Mathematics: A Very Short Introduction_, p. 60
+
+[^Mutation]: Phil Hagelberg [tells me](https://lobste.rs/s/vpfpyk/equality_is_hard#c_hxunkw) the problem isn't
+mutation of _variables_ but _data structures,_ which is a subtle but fair distinction.
 
 [^RubyValue]: `a = b = c = []` in Ruby assigns _the same reference_ to `a`, `b`, and `c`. So if you mutate
 `a`, you'll mutate `b` and `c` at the same time. That's probably not what you wanted, otherwise what would
