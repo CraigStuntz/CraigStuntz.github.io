@@ -78,7 +78,8 @@ the values of variables), nearly always! Most programming languages that I'm awa
 comparisons on value types such as `integers`. Well, except Java, which has confused generations of 
 programmers with an `int` value type which does a structural comparison and an `Integer` reference type which, 
 well, the best thing you can say is 
-[don't use == on Integer](https://stackoverflow.com/questions/1700081/why-is-128-128-false-but-127-127-is-true-when-comparing-integer-wrappers-in-ja).
+[don't use == on Integer](https://stackoverflow.com/questions/1700081/why-is-128-128-false-but-127-127-is-true-when-comparing-integer-wrappers-in-ja). 
+Python [has similar issues with `is`](https://stackoverflow.com/questions/306313/is-operator-behaves-unexpectedly-with-integers).
 
 Structural comparison of reference types such as objects makes sense as well. Consider a unit test, where
 you want to check that the object returned is equal to the value you expected. In a language with 
@@ -140,7 +141,7 @@ let newJane = { Name = "Jane"; Age = 47; Offspring = [ { Name = "Pat"; Age = 15;
 ```
 
 It seems weird to have a new variable, `newJane`, but in practice it doesn't create a problem. The code above
-is fine. Now let's try this in a language which supports mutation:
+is fine. Now let's try this in C#, a language which supports mutation:
 
 ```cs
 var john = new Person("John", 15, null);
@@ -208,7 +209,12 @@ Cutting to the chase, we say that functions are extensionally equal if they retu
 same inputs (regardless of internal implementation), and intensionally equal if their internal definition is 
 the same. Of course, this is context-dependent. There may be a context where I need a constant time function 
 and another context where the speed of the function doesn't matter. The important point is I need to have some 
-context for equality and use it to compare the two functions. 
+context for equality and use it to compare the two functions.
+
+I don't know of any programming language which even attempts to do anything beyond reference equality for 
+functions. But it's easy to come up with examples where it would be useful! (An optimizer which removes
+duplicate code, e.g.) You're on your own if you need this, but I have to say that not shipping an equals 
+comparison is preferable to shipping one that's broken.
 
 ### Equality vs. Assignment
 
@@ -471,6 +477,30 @@ In JavaScript,
 
 Never use `==` in JavaScript. Use `===` instead.  
 
+### Common Mistake: Equality Is Inconsistent
+
+In Kotlin, `==` returns different values depending on the type of the variable, even for the same variable:
+
+```kotlin
+fun equalsFloat(a: Float, b: Float) {
+  println(a == b);
+}
+
+fun equalsAny(a: Any, b: Any) {
+  println(a == b);
+}
+
+fun main(args: Array<String>) {
+  val a = Float.NaN;
+  val b = Float.NaN;
+  equalsFloat(a, b);
+  equalsAny(a, b);
+}
+// prints false, true
+```
+
+This is [an unfortunate combination of language features](https://kotlinlang.org/docs/reference/basic-types.html#floating-point-numbers-comparison) which results in some pretty unintuitive behavior.
+
 ### Common Mistake: Using Reference Equality When Structural Equality Is Needed
 
 Consider the following [MSTest](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest) 
@@ -585,8 +615,8 @@ This post was inspired by Barry Mazur's wonderful math paper,
 "[When is one thing equal to some other thing?](http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf)" 
 which uses category theory to answer the question for math. 
 
-Thank you to Paul Blasucci, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading drafts of 
-this blog post and giving me feedback.
+Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading 
+drafts of this article and giving me feedback.
 
 
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
