@@ -411,7 +411,7 @@ that the `==` operator is unreliable:
 ```
 
 Although we're comparing _strings_ here, PHP sees that they can be converted to a number, so it does.
-The numbers turn out to be very small (the first argument, for example, is 6.08 * 10<sup>-4234</sup>), 
+The numbers turn out to be very small (the first argument, for example, is 608 * 10<sup>-4234</sup>), 
 and, as we've already discussed, comparing floating point numbers is hard. Casting both of these to
 a `float(0)` results in rounding them to equal values, so the comparison returns true. 
 
