@@ -411,7 +411,7 @@ that the `==` operator is unreliable:
 ```
 
 Although we're comparing _strings_ here, PHP sees that they can be converted to a number, so it does.
-The numbers turn out to be very small (the first argument, for example, is 608<sup>-4234</sup>), 
+The numbers turn out to be very small (the first argument, for example, is 6.08 * 10<sup>-4234</sup>), 
 and, as we've already discussed, comparing floating point numbers is hard. Casting both of these to
 a `float(0)` results in rounding them to equal values, so the comparison returns true. 
 
@@ -611,12 +611,14 @@ throughout, is a great example of this:
 
 ## Credits
 
+Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading 
+drafts of this article and giving me feedback.
+
+### References
+
 This post was inspired by Barry Mazur's wonderful math paper, 
 "[When is one thing equal to some other thing?](http://people.math.harvard.edu/~mazur/preprints/when_is_one.pdf)" 
 which uses category theory to answer the question for math. 
-
-Thank you to Paul Blasucci, Jeremy Loy, Bud Marrical, Michael Perry, Skyler Tweedie, and Thomas Wheeler for reading 
-drafts of this article and giving me feedback.
 
 Thanks to Tommy Hall, who drew my attention to [this 1993 paper](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.23.9999), which, discusses many of the issues covered in this post and proposes a solution for Common Lisp.
 
@@ -626,6 +628,12 @@ Simon Ochsenreither has a nice series on problems with equality and fixing Haske
 [Solution](https://soc.me/languages/equality-and-identity-part3.html), 
 [Fixing Haskell](https://soc.me/languages/equality-and-identity-part4), 
 [Implementation in Dora](https://soc.me/languages/equality-and-identity-part5.html).
+
+Hillel Wayne pointed me to this great essay, ["The Semantics of Object Identity"](https://www.bkent.net/Doc/semobjid.htm).
+
+Brandon Bloom provided a link to the paper ["The Left Hand of Equals"](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45576.pdf) 
+which "takes a reflexive journey through fifty years of identity and equality in object-oriented languages, and
+ends somewhere we did not expect: a “left-handed” equality relying on trust and grace.
 
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
 
