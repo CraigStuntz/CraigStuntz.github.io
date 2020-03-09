@@ -100,7 +100,7 @@ and you end up with [this horror show](https://github.com/nunit/nunit/blob/4e10f
 ### Reference Equality
 
 But as I hinted above, there are certainly cases where structural equality does not make sense. One example 
-is with languages which support mutation of variables, which is most of them.[^mutation] When you can change the value
+is with languages which support mutation of variables, which is most of them.[^Mutation] When you can change the value
 of a variable, it probably does not make sense to say that variable is equal to some other variable, _in
 general._ Sure, you can say they're (structurally) equal _as of a moment in time,_ such as in last line of a 
 unit test, but you can't generally imply that they're the same. This is a kind of subtle point, so let's look 
@@ -629,7 +629,7 @@ Simon Ochsenreither has a nice series on problems with equality and fixing Haske
 [Fixing Haskell](https://soc.me/languages/equality-and-identity-part4), 
 [Implementation in Dora](https://soc.me/languages/equality-and-identity-part5.html).
 
-Hillel Wayne pointed me to this great essay, ["The Semantics of Object Identity"](https://www.bkent.net/Doc/semobjid.htm).
+Hillel Wayne pointed me to this great essay, ["The Semantics of Object Identity."](https://www.bkent.net/Doc/semobjid.htm)
 
 Brandon Bloom provided a link to the paper ["The Left Hand of Equals"](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45576.pdf) 
 which "takes a reflexive journey through fifty years of identity and equality in object-oriented languages, and
