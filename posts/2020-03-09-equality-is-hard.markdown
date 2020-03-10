@@ -141,7 +141,7 @@ let newJane = { Name = "Jane"; Age = 47; Offspring = [ { Name = "Pat"; Age = 15;
 ```
 
 It seems weird to have a new variable, `newJane`, but in practice it doesn't create a problem. The code above
-is fine. Now let's try this in C#, a language which supports mutation:
+is fine. Now let's try this in C#, a language which is mutable by default:
 
 ```cs
 var john = new Person("John", 15, null);
@@ -633,7 +633,7 @@ Hillel Wayne pointed me to this great essay, ["The Semantics of Object Identity.
 
 Brandon Bloom provided a link to the paper ["The Left Hand of Equals"](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45576.pdf) 
 which "takes a reflexive journey through fifty years of identity and equality in object-oriented languages, and
-ends somewhere we did not expect: a “left-handed” equality relying on trust and grace.
+ends somewhere we did not expect: a 'left-handed' equality relying on trust and grace."
 
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
 
