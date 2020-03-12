@@ -314,7 +314,7 @@ Console.WriteLine(Object.ReferenceEquals(int1, int1)); // Prints False
 
 This means it is not necessarily true that `a = a` in any .NET language, so the reflexive law is broken.
 
-In SQL, `NULL` is not equal to itself, so the expression `NULL = NULL` (or, more probably, `SOME_EXPRESSION = SOME_OTHER_EXPRESSION` when both of them might be `null`) will return false. This leads to messes like:
+In SQL, `NULL` is not equal to itself, so the expression `NULL = NULL` (or, more probably, `SOME_EXPRESSION = SOME_OTHER_EXPRESSION` when both of them might be `null`) will return `NULL`, which is falsy. This leads to messes like:
 
 ```sql
 WHERE (SOME_EXPRESSION = SOME_OTHER_EXPRESSION)
