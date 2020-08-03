@@ -1,5 +1,5 @@
 ---
-title: Telling the Turth About Security
+title: Telling the Truth About Security
 tags: human factors, James Morrow, security
 ---
 
