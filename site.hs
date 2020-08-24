@@ -21,6 +21,12 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
+    match (fromList ["resume.markdown"]) $ do
+        route   $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/resume.html" defaultContext
+            >>= relativizeUrls
+
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     tagsRules tags $ \tag pattern -> do
