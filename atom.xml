@@ -8,8 +8,71 @@
         <name>Craig Stuntz</name>
         <email></email>
     </author>
-    <updated>2020-08-03T00:00:00Z</updated>
+    <updated>2020-11-30T00:00:00Z</updated>
     <entry>
+    <title>Presentation by D. Richard Hipp, "SQLite: The World's Most Widely Used Database Engine"</title>
+    <link href="http://www.craigstuntz.com/posts/2020-11-30-richard-hipp.html" />
+    <id>http://www.craigstuntz.com/posts/2020-11-30-richard-hipp.html</id>
+    <published>2020-11-30T00:00:00Z</published>
+    <updated>2020-11-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on November 30, 2020
+    
+</div>
+
+<p>On 10 October 2017, I attended a presentation by D. Richard Hipp, called, “SQLite: The World’s Most Widely Used Database Engine,” and live-tweeted it. Twitter broke the thread in several distinct ways, so the following is a lightly edited version of my Twitter thread.</p>
+<h2 id="sqlite">SQLite</h2>
+<p>He pronounces it “ess queue ell ite,” FWIW.</p>
+<p><img class="autowidth" src="/images/SQLite.jpg" alt="D. Richard Hipp with title slide for SQLite presentation." width="2048" height="1536" loading="lazy" /></p>
+<p>“If you’re not writing SQL statements which look like this, you’re not doing it right.”</p>
+<p><img class="autowidth" src="/images/SQLite-complicated-query.jpeg" "A fairly complex SQL statement with subqueries, function calls, and COALESCEs" width="2048" height="1536" loading="lazy"></p>
+<p>By this, I think he meant: SQLite is a SQL DB engine, not a document DB. It has features such as JOINs, functions, and subqueries which you should use in your code.</p>
+<h2 id="history-and-impact">History and Impact</h2>
+<p>2000-05-29: “It’s just a database. How hard can that be? I’ll write my own.” Posted it online, then got support calls from Motorola.</p>
+<p>He thinks there are more than one trillion SQLite databases in use. More copies of the library than there are people on earth. There might be more copies of zlib, but not certain. Probably no other program is more common.</p>
+<p>Why was SQLite successful? Single file library, open file format, backwards compatible back to 2004, reading data from SQLite is faster than reading individual files on filesystem.</p>
+<h2 id="team-and-coding-practices">Team and Coding Practices</h2>
+<p>SQLite uses DO-178B development process for safety critical software. Tests analyze ASM to verify all branches taken in both directions.</p>
+<p>Two people work full time on SQLite. “We change the code aggressively.” He contrasts this with Postgres, which is stable due to low code churn (he says).</p>
+<h2 id="using-it-in-your-code">Using It In Your Code</h2>
+<p>Which DB should I use? (Ed. note: Not Oracle.)</p>
+<p><img class="autowidth" src="/images/SQLite-storage-decision.jpeg" alt="SQLite storage decision checklist. Choose SQLite if you're not doing remote data, big data, concurrent writers, or gazillion transactions/sec." width="2048" height="1536" loading="lazy"></p>
+<p>“90% of data storage problems don’t have any of these constraints. Where people make mistakes is storing locally as JSON/XML.” (Paraphrased)</p>
+<p><img class="autowidth" src="/images/SQLite-data-container.jpeg" alt="SQLite data container. 1. Gather data from the cloud. 2. Transmit SQLite database files to the device. 3. Use locally" width="2048" height="1536" loading="lazy"></p>
+<h2 id="future-plans">Future Plans</h2>
+<p>Next release of SQLite will use F2FS (if in use) for atomic writes, doubling write performance.</p>
+<p>Using EXPLAIN keyword, you can see the bytecode for your query</p>
+<p><img class="autowidth" src="/images/SQLite-explain.jpeg" alt="EXPLAIN output for simple SQL query" width="2048" height="1536" loading="lazy"></p>
+<p>“Because the query planner is an AI, we’re never finished with it.”</p>
+<p>SQLite 4 will retire the B-tree storage engine and replace it with an LSM (log structured merge) storage engine engine.</p>
+<p>Pros and cons of LSM:</p>
+<p><img class="autowidth" src="/images/SQLite-LSM.jpeg" alt="Pros and cons of LSM. Good: Faster writes, reduced write amplification, linear writes, less SSD wear. Bad: Slower reads, background merge process, more space on disk, greater complexity" width="2048" height="1536" loading="lazy"></p>
+<p>Performance of LSM was bad enough that they abandoned SQLite 4 project. v5 will use some new, maybe NVRAM optimized storage, not sure which. As of 30 November 2020, the current production verion of SQLite was <a href="https://www.sqlite.org/releaselog/3_33_0.html">3.33.0</a>.</p>
+<p>SQLite supports B-tree indices only in order to keep the library small</p>
+<h2 id="he-doesnt-like-git">He Doesn’t Like Git</h2>
+<p>Things that are hard to compute in git because it uses key/value DAG instead of relations</p>
+<p><img class="autowidth" src="/images/SQLite-git-bad.jpeg" alt="Some things Git Does Not Compute Because Of Its Use Of Key/Value" width="2048" height="1536" loading="lazy"></p>
+<p>SQLite sources are managed using <a href="https://www.fossil-scm.org/">Fossil</a>, a distributed version control system that was specifically designed and written to support SQLite development</p>
+<h2 id="q-a">Q &amp; A</h2>
+<p>On formal methods, “I’m interested in anything that will make the code better. Bring as many tools to the table as you can.”</p>
+<p>They’re starting to use mutation testing. Not using formal verification per se at the moment.</p>
+<p>(Ed. note: Fuzz testing has been a productive way to find bugs in SQLite and is now <a href="https://www.sqlite.org/testing.html">an official part of the SQLite test plan</a>.)</p>
+<p>Any design regrets? “One of the most important things a project manager can do is to say no.” Features added for clients he regrets: Shared cache and auto vacuum. “I have to support these through 2050!”</p>
+<p>After the talk I asked him about his reaction to this John Regehr quote:</p>
+<blockquote>
+<p>“Unfortunately, C and C++ are mostly taught the old way, as if programming in them isn’t like walking in a minefield.”</p>
+</blockquote>
+<p>I wasn’t taking notes at this point so I can’t do justice to his answer but he said he knows John and has spoken w/ him, but never in person. He said they disagree about what to do about undefined behavior, although it sounded to me more like a disagreement on tactics than strategy.</p>
+<p>I’d really enjoy hearing a panel with these two some day.</p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/SQLite.html">SQLite</a>, <a href="/tags/Richard%20Hipp.html">Richard Hipp</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Telling the Truth About Security</title>
     <link href="http://www.craigstuntz.com/posts/2020-08-03-telling-the-truth-about-security.html" />
     <id>http://www.craigstuntz.com/posts/2020-08-03-telling-the-truth-about-security.html</id>
@@ -706,151 +769,6 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="info">
     
     Tags: <a href="/tags/Hakyll.html">Hakyll</a>, <a href="/tags/GitHub.html">GitHub</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Designing for Problems Too Big to Test</title>
-    <link href="http://www.craigstuntz.com/posts/2015-12-23-Designing-for-Problems-Too-Big-to-Test.html" />
-    <id>http://www.craigstuntz.com/posts/2015-12-23-Designing-for-Problems-Too-Big-to-Test.html</id>
-    <published>2015-12-23T00:00:00Z</published>
-    <updated>2015-12-23T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on December 23, 2015
-    
-</div>
-
-<p>In this post, I will show an example of where using unit testing as a design methodology does not work, and how to produce a design for correct code anyway. There is no single design methodology which works for all problems, so it’s useful to have a variety of tools at your disposal.</p>
-<p>This post is my contribution to the <a href="https://sergeytihon.wordpress.com/2015/10/25/f-advent-calendar-in-english-2015/">2015 F# Advent Calendar</a>.</p>
-<p>I’m implementing a compiler for a tiny language without use of external libraries for things like parsing and code generation. The idea is to produce a minimal example of a purely functional compiler. This is an ongoing project, and some parts are further along than others, but you can see the source code as I work, and it does produce working EXEs today.</p>
-<p>Designing a compiler is harder than many problems in programming, because they do something difficult: A compiler must be able to accept any string and either produce an equivalent program or explain clearly to a human being why this is string is not a valid program. And there are a lot of possible strings!</p>
-<p>Designing a compiler is also easier than many problems in programming, because there exist formal methods for solving many of the harder sub-problems in the design. You can think of “formal methods,” here, as recipes for a solution, but very special recipes which guarantee that you’ll touch all possible cases in the problem space.</p>
-<h3 id="design-methodologies">Design Methodologies</h3>
-<p>Over the years, programmers have used a number of different methodologies when approaching program design. These include:</p>
-<ul>
-<li><strong>The Big Ball of Mud.</strong> Arguably the most common methodology, this involves just poking at the problem until things seem to work for the most common case, maybe.</li>
-<li><strong>Big Design Up Front.</strong> In this methodology, a full specification for the implementation of the system is developed before coding begins. Many people consider this obsolete or, at best, wildly inefficient.</li>
-<li><strong>Test Driven Design.</strong> I’m going to distinguish this from test driven development, because tests are useful both as a methodology for program design and for implementing a program design. In practice, people tend to combine these. As a design methodology, the general idea is that you start with either high or low level simple cases, and continue working until a design evolves. Some people divide this into sub-schools of test driven design. Despite its ubiquity, few defend the big ball of mud as a design practice. Big design up front is widely ridiculed. That leaves TDD as the most prevalent design methodology that people are willing to publicly defend. Unfortunately, testing, while useful, is fundamentally limited.</li>
-</ul>
-<blockquote>
-<p>“…program testing can be a very effective way to show the presence of bugs, but is hopelessly inadequate for showing their absence.” Edsger Dijkstra</p>
-</blockquote>
-<p>In cases where “the happy path” is far more prevalent than “edge cases,” this might not seem to be a show-stopping limitation, and test driven design works OK in many cases.</p>
-<h3 id="there-are-no-edge-cases-in-programming-languages">There Are No Edge Cases In Programming Languages</h3>
-<p>As noted above, a compiler must be able to accept any string and either produce an equivalent program or explain clearly to a human being why this is string is not a valid program. A compiler designer cannot predict the valid programs people may write, nor the errors they may create.</p>
-<p>For example, let’s consider <a href="https://en.wikipedia.org/wiki/Duff%27s_device">Duff’s Device</a>. It’s safe to presume that Brian Kernighan and Dennis Ritchie did not have this in mind when they designed the C programming language. For the uninitiated, Duff’s Device nests a while loop inside of a switch statement:</p>
-<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c">send(to, from, count)
-<span class="dt">register</span> <span class="dt">short</span> *to, *from;
-<span class="dt">register</span> count;
-{
-    <span class="dt">register</span> n = (count + <span class="dv">7</span>) / <span class="dv">8</span>;
-    <span class="cf">switch</span> (count % <span class="dv">8</span> ) {
-    <span class="cf">case</span> <span class="dv">0</span>: <span class="cf">do</span> { *to = *from++;
-    <span class="cf">case</span> <span class="dv">7</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">6</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">5</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">4</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">3</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">2</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">1</span>:      *to = *from++;
-            } <span class="cf">while</span> (--n &gt; <span class="dv">0</span>);
-    }
-}</code></pre></div>
-<p>This is unreadable to the point that it borders on obfuscation, but is legal C, per the specification, and does perform a useful optimization on a particular case. I bring it up because, as a language implementer, I think it drives home the point that there is no possibility of creating (anywhere near) all of the possible unit tests for all of the possible ways someone might choose to use your language.</p>
-<h3 id="different-tasks-different-design-methodologies">Different Tasks, Different Design Methodologies</h3>
-<p>In many programming tasks, the number of “happy path” cases are similar to the number of edge and error cases. At least within the same order of magnitude. In these cases it’s probably possible to exhaustively test the system, even if people don’t usually bother to do so.</p>
-<p>For other tasks, however, the number of “edge cases” is uncountably large. I gave a programming language example above, but there are others, such as designing an API for a cloud service. In these cases, we need a design methodology which gives us some assurance that our design will work with cases that we did not and could not possibly produce tests for, because real-world use cases will vastly outnumber our test cases.</p>
-<h3 id="formal-methods">Formal Methods</h3>
-<p>The solution to this problem is to break the problem space into a countable number of conditions. This is only effective if those countable conditions represent all possible states in the problem space. For example, for a programming language, we divide the task of compilation into small phases such as lexing, parsing, etc., and within each phase we use a formalism which guarantees that we cover the entire possible range of conditions within that phase.</p>
-<p>This will make more sense if I give an example.</p>
-<h3 id="lexing-and-regular-expressions">Lexing and Regular Expressions</h3>
-<p>In many compilers, the first phase of compilation is lexing, where the string representing the program source code is split into tokens. The token list will be passed to the parser, which attempts to match them up with the grammar of the programming language. As a practical example, consider the following expression from a Lisp-like language, which increments the number 1, resulting in the value 2.</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(inc <span class="dv">1</span>)</code></pre></div>
-<p>Lexing divides this source code into a stream of tokens, like this:</p>
-<pre><code>LeftParenthesis
-Identifier &quot;inc&quot;
-LiteralInt 1
-RightParenthesis</code></pre>
-<p>These tokens will be consumed by the parser to produce and abstract syntax tree, type checked, optimized, etc., but let’s just look at lexing for now.</p>
-<p>Substrings of the input source code are mapped to tokens using regular expressions. Not <a href="http://www.regular-expressions.info/quickstart.html">the PCRE type with zillions of features</a> you might be familiar with, but <a href="https://en.wikipedia.org/wiki/Lexical_grammar">a far simpler version</a> with only a few rules. The lexical grammar for this language looks something like this:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">leftParenthesis  = <span class="ch">&#39;(&#39;</span>
-rightParenthesis = <span class="ch">&#39;)&#39;</span>
-letter           = <span class="ch">&#39;A&#39;</span> | <span class="ch">&#39;B&#39;</span> | <span class="ch">&#39;C&#39;</span> | …
-digit            = <span class="ch">&#39;0&#39;</span> | <span class="ch">&#39;1&#39;</span> | <span class="ch">&#39;2&#39;</span> | …
-number           = (<span class="ch">&#39;+&#39;</span>digit|<span class="ch">&#39;-&#39;</span>digit|digit) digit*
-alphanumeric     = letter | number
-//<span class="co"> …</span></code></pre></div>
-<p>You don’t use <code>System.Text.RegularExpressions.Regex</code> for this; it’s slow, and has features you won’t need.</p>
-<p>How can we guarantee that we can tokenize any possible string? We don’t need to; as long as we explicitly handle the case of strings we can’t tokenize, we’re covered. I do this by having an extra token type for unrecognized characters. These are eventually mapped into errors the user sees.</p>
-<p>How can we guarantee that we can tokenize any string representing a valid program without seeing an unrecognizable character? Because the parser is designed around a formalism (a context free grammar) which maps lexemes to abstract syntax trees, and the only valid programs are those which can be constructed from repeated applications of the production rules in the parser’s grammar. We have changed the scope of the problem from “any possible string” to “any possible sequence of lexemes.”</p>
-<p>Right away we have a big win in the number of test cases. Any “character” in a string could be one of 2^16 UTF-16 code points, but the number of possible lexemes is considerably smaller. A real language would have <a href="https://github.com/whitequark/parser/blob/master/lib/parser/lexer.rl">maybe 10 times more</a>, but that’s still better than testing an input of any possible Unicode code point:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> Lexeme =
-    | LeftParenthesis
-    | RightParenthesis
-    | Identifier    <span class="kw">of</span> <span class="dt">string</span>
-    | LiteralInt    <span class="kw">of</span> <span class="dt">int</span>
-    | LiteralString <span class="kw">of</span> <span class="dt">string</span>
-    | Unrecognized  <span class="kw">of</span> <span class="dt">char</span></code></pre></div>
-<p>We can test the lexer in isolation with a much smaller number of test cases.</p>
-<p>The example I gave was a very simple expression, but real-world programs obviously contain more complicated expressions. Also, real-world code is often invalid and must be rejected by the compiler. Some coding errors cannot be detected until further on in the compilation pipeline, but there are possible errors at the lexing stage. For example, in my language, identifiers must begin with a letter, so the expression</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(| <span class="dv">1</span>)</code></pre></div>
-<p>…maps to:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">LeftParenthesis
-Unrecognized <span class="ch">&#39;|&#39;</span>
-LiteralInt <span class="dv">1</span>
-RightParenthesis</code></pre></div>
-<p>Importantly, we should be able to examine any character of a real-world string, and map it into one of these types. The <code>Unrecognized</code> type serves as a kind of fall through for characters which do not fit into the types in the union.</p>
-<p>F#’s exhaustiveness checking ensures that we cannot forget to handle a particular case even if we add additional lexemes to the language specification later. As a simple example, consider this pretty print function which takes a list of lexemes and produces a string similar to the originally parsed source code:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> <span class="kw">private</span> prettyPrintLexeme = <span class="kw">function</span>
-| LeftParenthesis          -&gt; <span class="st">&quot;(&quot;</span>
-| RightParenthesis         -&gt; <span class="st">&quot;)&quot;</span>
-| Identifier    identifier -&gt; identifier
-| LiteralInt    num        -&gt; num.ToString()
-| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;</span><span class="st">&quot;</span> str
-| Unrecognized  ch         -&gt; ch.ToString()
-
-<span class="kw">let</span> prettyPrint =
-    List<span class="kw">.</span>map prettyPrintLexeme
-    &gt;&gt; String<span class="kw">.</span>concat <span class="st">&quot; &quot;</span></code></pre></div>
-<p>If we were to, after the fact, add an additional type of lexeme, but forgot to modify the <code>prettyPrint</code> function, we would receive a compiler warning since the function would no longer be exhaustive.</p>
-<h3 id="the-rest-of-the-pipeline">The Rest of the Pipeline</h3>
-<p>What about parsing, type checking, and the rest of the compilation pipeline? Formalisms exist for those, as well.</p>
-<table>
-<thead>
-<tr class="header">
-<th>Compilation phase | Fo</th>
-<th>Formalism</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Parsing | Cont</td>
-<td>Context free grammar</td>
-</tr>
-<tr class="even">
-<td>Optimization |</td>
-<td>Algebra</td>
-</tr>
-<tr class="odd">
-<td>Type checking</td>
-<td>Logical inference rules</td>
-</tr>
-<tr class="even">
-<td>Code generation | Deno</td>
-<td>Denotational semantics</td>
-</tr>
-</tbody>
-</table>
-<h3 id="isnt-this-just-big-design-up-front">Isn’t This Just Big Design Up Front?</h3>
-<p>The idea of basing your implementation design around in an exhaustive specification might sound like a big design up front, but there is an important difference. The formalisms used in implementing a compiler are “off the shelf.” Nobody has to sit down and create them, because they have been refined over decades of compiler implementations. You simply need to know that they exist.</p>
-<p>If “formal methods” sounds too snobby for your taste, you can simply call this “programming with proven recipes.”</p>
-<p>And of this downside of this methodology is that it becomes big design up front in those cases when there is not an off the shelf formalism available for your use. That’s OK! The important thing is to know when these formalisms exist in how to use them, when necessary.</p>
-<p>The <a href="https://github.com/craigstuntz/TinyLanguage">full source code for this post</a> is available.</p>
-
-<div class="info">
-    
-    Tags: <a href="/tags/F%23.html">F#</a>, <a href="/tags/compilers.html">compilers</a>, <a href="/tags/testing.html">testing</a>, <a href="/tags/formal%20methods.html">formal methods</a>
     
 </div>
 ]]></summary>
