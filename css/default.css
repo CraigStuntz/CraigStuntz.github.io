@@ -109,6 +109,12 @@ a[href$='.pdf'] {
     padding-right: 18px;
 }
 
+img.autowidth {
+    width: 100%;
+    height: auto;
+    aspect-ratio: attr(width) / attr(height);
+}
+
 /* Source code */
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre
    {

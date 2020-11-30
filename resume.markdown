@@ -30,12 +30,13 @@ WillowTree, formerly Dynamit
 <td>
 * Led a team which did a complete rewrite of a major utility's web site and 
   middle tier after two teams had tried and failed
-* Did .NET optimization, and a lot of Java back end development
+* Azure and AWS infrastructure with Terraform
+* Did .NET optimization, and a lot of Java back end development in Spring Boot and vert.x
 * Wrote a SalesForce to Tableau data synchronizer 
-* Wrote an Android application for Village, an employee and customer engagement application
+* Wrote an Android application and Java server for Village, an employee and customer engagement application
 </td>
 <td class="right">
-C#, Java, JavaScript, MySQL, Scala, SQL Server
+C#, Java, JavaScript, MySQL, Scala, SQL Server, Terraform, vert.x
 </td>
 </tr>
 
