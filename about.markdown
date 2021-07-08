@@ -1,9 +1,9 @@
 ---
 title: About
 ---
-I am a software engineer living software engineer and a lifelong student of
+I am a software engineer and a lifelong student of
 computer science, with specific interests in programming languages, type
-theory, compilers, and math. I am Technical Director at 
+theory, compilers, and math. I am Director of Consulting at 
 [Improving](http://improving.com/) in Columbus, OH and co-founded [the 
 Columbus branch of
 Papers We Love](http://paperswelove.org/chapter/columbus/), a reading group
