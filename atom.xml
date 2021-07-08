@@ -8,8 +8,89 @@
         <name>Craig Stuntz</name>
         <email></email>
     </author>
-    <updated>2020-11-30T00:00:00Z</updated>
+    <updated>2021-07-08T00:00:00Z</updated>
     <entry>
+    <title>How I Made a Giant Mistake with Terraform (and How Azure Made It Worse)</title>
+    <link href="http://www.craigstuntz.com/posts/2021-07-08-how-i-made-a-giant-mistake-with-terraform.html" />
+    <id>http://www.craigstuntz.com/posts/2021-07-08-how-i-made-a-giant-mistake-with-terraform.html</id>
+    <published>2021-07-08T00:00:00Z</published>
+    <updated>2021-07-08T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on July  8, 2021
+    
+</div>
+
+<p>I made a huge mistake a while back, resulting in all preproduction environments being deleted from a client’s Azure subscription. That’s actually not so bad – we use terraform to create the environments, so we could just run the terraform again to put them back. And better preproduction than production, right? But Azure quirks and client rules made this considerably worse.</p>
+<p>This was complicated by the fact that I used the terraform to provision two different Azure subscriptions, with entirely different security policies. In “Subscription A” which I provisioned first, I could do more or less anything. “Subscription B” which I provisioned second was far more locked down. Of note, in Subscription B I couldn’t create an Azure Resource Group. Instead, I had to open a ticket with the client’s cloud team.</p>
+<p>I had terraform like:</p>
+<pre class="terraform"><code>resource &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
+    name     = var.resource_group_name
+    location = var.resource_group_location
+}</code></pre>
+<p>…which ran fine on Subscription A, but which I could not run at all on Subscription B. There were actually two different resource groups in Subscription B, one for preproduction and one for production.</p>
+<p>Good terraform code is idempotent, which means that if you run it in an environment which already matches the script you supply, it won’t make any changes at all; it will just report that everything is up to date.</p>
+<h2 id="terraform-state">Terraform State</h2>
+<p>In a perfect world, you would never have to think about <a href="https://www.terraform.io/docs/language/state/index.html">terraform state</a>. You would just run terraform and it would provision resources and everything would be lovely. Alas, this is not that perfect world, and anyone who maintains terraform must think about state when they get up in the morning, when they’re working, and when they’re lying in bed at night.</p>
+<p>The terraform docs say:</p>
+<blockquote>
+<p>This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.</p>
+</blockquote>
+<p>This should set off alarm bells, because that’s three entirely separate problems which got shoehorned into one hairy feature. I may have more to say about this at a later time, but let’s get back to the mistake I made.</p>
+<p>Because I couldn’t create the Azure Resource Group in Subscription B, I ran the following command:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">terraform</span> import module_name.azurerm_resource_group.resource_group <span class="op">&lt;</span>id_of_resource_group<span class="op">&gt;</span></code></pre></div>
+<p>…for the preproduction resource group. That linked (in the terraform state file for the preproduction environment) the Resource Group in my terraform script with the Resource Group created by the client’s team in Azure.</p>
+<p><em>Months later,</em> while creating the production resources, I ran into the same issue (can’t create resource groups at all in Subscription B). Since Subscription B was the one we’d be taking to production, I decided that a better reflection of the actual environment would be to change the resource group to a data provider, so I edited the terraform script quoted above to read:</p>
+<pre class="terraform"><code>data &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
+    name     = var.resource_group_name
+    location = var.resource_group_location
+}</code></pre>
+<p>(I’ve just changed the word <code>resource</code> to <code>data</code>. In terraform, a <code>resource</code> is something that terraform might create, whereas a <code>data</code> is something that terraform will <em>never</em> create; it must already exist in the environment. But you might need to refer to properties of the <code>data</code> so it will appear in your script.)</p>
+<p>I ran the terraform and of course it worked fine and I didn’t need to do the <code>terraform import</code>.</p>
+<h2 id="terraform-plan-and-apply">Terraform <code>plan</code> and <code>apply</code></h2>
+<p>If you’ve worked with terraform before you’ll know that there are two different things you can do when creating resources:</p>
+<ul>
+<li><code>terraform plan</code> shows what the tool will do, (more or less) nondestructively</li>
+<li><code>terraform apply</code> destructively makes changes to your environment</li>
+</ul>
+<p>The usual strategy is to use <code>terraform plan</code> to make sure that what terraform proposes to do is correct and then <code>terraform apply</code> to destructively make changes. But another quirk of Subscription B is that for complicated reasons that I won’t get into here, I can’t run terraform interactively through the command line. Instead I have to push the script to GitHub and run it with Azure DevOps. That’s why Subscription A exists; I can test my changes out using the CLI there and rapidly iterate, and then push to GitHub and run terraform on Subscription B with ADO.</p>
+<p>I say “the usual strategy” because occasionally when I’m provisioning multiple environments – say, development, uat, production, etc. – I will cut corners and do a <code>terraform plan</code> on just one of these environments and then <code>terraform apply</code> on all of the others.</p>
+<h2 id="destroying-preproduction">Destroying Preproduction</h2>
+<p>Now you have all of the information to see the mistake that I made. Here’s what happened:</p>
+<ol style="list-style-type: decimal">
+<li>I was working on creating the production environment, which didn’t exist at all. That’s when I made the edit referenced above, from <code>resource</code> to <code>data</code></li>
+<li>I ran <code>terraform plan</code> and then <code>terraform apply</code> on production and everything worked fine. No changes were made at all.</li>
+<li>A while later, I wanted to add additional resources, so I added them and then ran <code>terraform apply</code> on preproduction.</li>
+<li>Terraform removed the entire preproduction environment</li>
+</ol>
+<p>Wait, what?!?</p>
+<p>Well, I had <em>removed</em> a terraform <code>resource</code> for the Azure Resource Group. Yes, I replaced it with a <code>data</code>, but terraform still counts that as removing it. So terraform deleted the resource group. And Azure counts deleting the resource group as meaning delete the resource group <em>and everything in it.</em> Apparently, and to my great surprise, even though I didn’t have permission to <em>create</em> Azure Resource Groups in Subscription B, I did have permission to <em>delete</em> them.</p>
+<p>So that’s bad, but surely I could just run terraform again to recreate the resources I removed, right? Well, almost. Creating Azure Resource Groups means opening a support ticket with the client, but that’s not a problem. The bigger problem is that Azure SQL Server database backups are stored… in the resource group.</p>
+<h2 id="a-terrible-horrible-no-good-very-bad-azure-feature">A Terrible, Horrible, No-Good, Very Bad Azure Feature</h2>
+<p>Now I know that readers of this blog are smart, competent engineers, so you probably are very careful about where you store your backups! Well, Azure SQL Server does back up your databases, automatically, so full marks for that, but if you inadvertently destroy a SQL Server it takes the backups with it! Also, there is, as far as I can tell, no option in the Portal or terraform to put the backups elsewhere. (This is in contrast to running an <a href="https://docs.microsoft.com/en-us/azure/azure-sql/database/features-comparison">Azure SQL Managed Instance, which is… something else entirely</a>.)</p>
+<p>Of course recreating the database is an option; we create database metadata using migrations, and it’s just preproduction, so we can pretty much create the data that we need, but now the restore plan looks like:</p>
+<ol style="list-style-type: decimal">
+<li>Open ticket to get Azure Resource Group created</li>
+<li>Run terraform to create rest of Azure resources</li>
+<li>Run DB migrations to create DB schema</li>
+<li>Run lengthy import process to pull MBs of data out of Salesforce and other sources</li>
+</ol>
+<p>If this was production, however, we would have a much harder problem on our hands. The only places where data created by users of the system exists are in the DB and backups of same.</p>
+<p>In the end, what we did was <em>not</em> do any of the above and instead immediately raise a ticket with Azure Support, who were able to grab the resources from “somewhere” (I guess when you delete a resource in Azure, it’s still on a disk somewhere, for a while), and we got our database and backups back. Not every resource could be correctly restored, but the database was the only one I cared about.</p>
+<p>So in the end we got our environments back, and it “only” took a couple of days of work, what with Azure and client support tickets. But a weekend intervened, so we had several days of downtime in preproduction, and this of course had a large impact on the testers and other teams who depend on our software.</p>
+<h2 id="some-lessons-learned">Some Lessons Learned</h2>
+<p>Just in case I’ve left any ambiguity above, the root cause in this incident was me. I ran the <code>terraform apply</code>, and to whatever extent the “real” problem was “I shouldn’t have been able to do that,” it was probably on me for not checking that there was, in fact, a lock on the Azure Resource Group.</p>
+<p>One of the things I did right in this incident was to <em>immediately</em> report the problem. I posted an “I just made a giant mistake” message before the delete was even complete, before we had even considered the database. This is of course just polite, but moving quickly turned out to be the key to recovering a deleted Azure resource. Another key to recovering the deleted resource was not creating new resources with the same name before opening the ticket with Microsoft, so I give myself credit for getting Microsoft support involved before just “trying stuff” to see if I could restore it on my own before we realized that the database backups were an issue.</p>
+<p>I guess I knew that there was the possibility that I would inadvertently destroy something when I skipped a plan, but the sheer magnitude of carnage resulting from a <em>one word change</em> in terraform was surprising.</p>
+<p>As far as SQL Server backups go, it’s obviously totally unacceptable that a backup could be blown away so easily. I don’t have a better option to suggest besides putting a lock on the Resource Group.</p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/azure.html">azure</a>, <a href="/tags/devops.html">devops</a>, <a href="/tags/mistakes.html">mistakes</a>, <a href="/tags/sql%20server.html">sql server</a>, <a href="/tags/terraform.html">terraform</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Presentation by D. Richard Hipp, "SQLite: The World's Most Widely Used Database Engine"</title>
     <link href="http://www.craigstuntz.com/posts/2020-11-30-richard-hipp.html" />
     <id>http://www.craigstuntz.com/posts/2020-11-30-richard-hipp.html</id>
@@ -738,37 +819,6 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="info">
     
     Tags: <a href="/tags/Andreas%20Stefik.html">Andreas Stefik</a>, <a href="/tags/programming%20languages.html">programming languages</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Hosting a Hakyll Blog On GitHub With a Custom Domain</title>
-    <link href="http://www.craigstuntz.com/posts/2016-06-14-hakyll.html" />
-    <id>http://www.craigstuntz.com/posts/2016-06-14-hakyll.html</id>
-    <published>2016-06-14T00:00:00Z</published>
-    <updated>2016-06-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on June 14, 2016
-    
-</div>
-
-<ol style="list-style-type: decimal">
-<li>Create a <a href="https://pages.github.com/">GitHub user page</a>. Follow the directions there to create a “Hello world” site. Don’t proceed until that works.</li>
-<li>Register a domain.</li>
-<li><a href="https://help.github.com/articles/setting-up-your-pages-site-repository/">Point your domain at your GitHub user pages site</a>. It may take 3+ hours before your domain propagates. Don’t continue until this works.</li>
-<li>Install <a href="http://www.haskellstack.org">stack</a></li>
-<li>Install hakyll via <a href="https://jaspervdj.be/hakyll/tutorials/01-installation.html"><code>stack install hakyll</code></a></li>
-<li>Follow <a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">this tutorial</a>. <em>However!</em> You already have a <code>master</code> branch. That’s OK. But you do want to have a <code>CNAME</code> file (see step 3 in this list) in your <code>develop</code> branch. Ensure your site looks good before proceeding.</li>
-<li>You might want to look at some <a href="http://katychuang.com/hakyll-cssgarden/gallery/">sample themes</a>.</li>
-<li>If you want code syntax highlighting, you need some <a href="https://www.jdreaver.com/posts/2014-06-22-math-programming-blog-hakyll.html">additional CSS</a>. A list of supported languages can be found in the <a href="https://github.com/jgm/highlighting-kate/tree/master/xml">highlighting-kate</a> source code.</li>
-<li>You might also want an <a href="https://thibaud.dauce.fr/posts/2015-11-15-rss-feed-with-hakyll.html">RSS feed</a>.</li>
-<li>You might also want <a href="http://javran.github.io/posts/2014-03-01-add-tags-to-your-hakyll-blog.html">tags</a>.</li>
-</ol>
-
-<div class="info">
-    
-    Tags: <a href="/tags/Hakyll.html">Hakyll</a>, <a href="/tags/GitHub.html">GitHub</a>
     
 </div>
 ]]></summary>
