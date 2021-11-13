@@ -18,7 +18,7 @@ You might have heard that quantum computers can break public key encryption. You
 ### Shifting Application Security Left
 * [Central Ohio InfoSec Summit](https://www.infosecsummit.com/ehome/2018cbusinfosec/agenda/)
 · 14 May 2018
-· [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left-1``) 
+· [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left-1) 
 * [BSides Columbus 2018](https://bsidescmh2018.busyconf.com)
 · 2 March 2018
 · [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left) 
