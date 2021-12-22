@@ -3,7 +3,11 @@ title: Craig Stuntz's Résumé
 ---
 
 # Craig Stuntz
-[https://www.craigstuntz.com](https://www.craigstuntz.com)
+Columbus, OH
+
+<img src="images/ea.png" height="20em" />
+
+[https://www.craigstuntz.com](https://www.craigstuntz.com) 
 
 My interests are math, compilers, provers, fuzzers, security, formal methods, 
 quantum computing, and homomorphic encryption
@@ -22,19 +26,27 @@ Jan 2014 - Current
 </th>
 </tr>
 
+<tr>
+<td>
+At Improving, I both consult for our clients and I take direct reports (typically 2-4 people, though it has been as high as 8).
+I am on the leadership team in the Ohio office and also do sales engineering.
+</td>
+</tr>
+
 <tr class="client">
 <td>
-WillowTree, formerly Dynamit
+for WillowTree (formerly Dynamit)
 </td>
 </tr>
 <td>
+* Wrote Terraform, TypeScript AWS Lambda functions, and C# (Optimizely CMS) code
 * Implemented a custom Kafka Connect Sink to replicate data from Kafka to segment.io. Hosted this on AWS EKS with Helm
 * Wrote Azure Functions in TypeScript to import data from Salesforce to SQL Server Azure
 * Led a team which did a complete rewrite of a major utility's web site and 
   middle tier after two teams had tried and failed
 * Azure and AWS infrastructure with Terraform and Ansible
 * Did .NET optimization, and a lot of Java back end development in Spring Boot and vert.x
-* Wrote a SalesForce to Tableau data synchronizer 
+* Wrote a Salesforce to Tableau data synchronizer 
 * Wrote an Android application and Java server for Village, an employee and customer engagement application
 </td>
 <td class="right">
@@ -44,7 +56,7 @@ Ansible, C#, Java, JavaScript, Kafka, Kubernetes, MySQL, Scala, SQL Server, Terr
 
 <tr class="client">
 <td>
-Grange Insurance
+for Grange Insurance
 </td>
 </tr>
 <td>
