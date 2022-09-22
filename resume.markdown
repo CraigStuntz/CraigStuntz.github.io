@@ -42,8 +42,7 @@ for WillowTree (formerly Dynamit)
 * Wrote Terraform, TypeScript AWS Lambda functions, and C# (Optimizely CMS) code
 * Implemented a custom Kafka Connect Sink to replicate data from Kafka to segment.io. Hosted this on AWS EKS with Helm
 * Wrote Azure Functions in TypeScript to import data from Salesforce to SQL Server Azure
-* Led a team which did a complete rewrite of a major utility's web site and 
-  middle tier after two teams had tried and failed
+* Did a complete rewrite of a major utility's web site/middle tier after two other organizations had tried and failed
 * Azure and AWS infrastructure with Terraform and Ansible
 * Did .NET optimization, and a lot of Java back end development in Spring Boot and vert.x
 * Wrote a Salesforce to Tableau data synchronizer 
