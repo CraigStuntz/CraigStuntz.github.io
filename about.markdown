@@ -19,7 +19,7 @@ Email:
 
 <img src="images/ea.png" />
 
-<a href="https://twitter.com/craigstuntz">Follow me on Twitter</a>
+<a href="https://types.pl/web/@CraigStuntz">Follow me on Mastodon</a>
 
 <a href="https://github.com/CraigStuntz">My open source code</a>
 
