@@ -8,10 +8,10 @@ theory, compilers, and math. I am Director of Consulting at
 Columbus branch of
 Papers We Love](http://paperswelove.org/chapter/columbus/), a reading group
 for people interested in academic computer science research. You can also
-[read my full résumé](https://stackoverflow.com/cv/craigstuntz) or look at
+[read my full résumé](/resume.html) or look at
 some of [my open source code](https://github.com/craigstuntz/). In my spare
 time, [I play Irish traditional music on the wooden flute and tin
-whistle](http://learningtowhistle.blogspot.com/).
+whistle](https://learningtowhistle.blogspot.com/).
 
 ### Connect
 
@@ -19,7 +19,7 @@ Email:
 
 <img src="images/ea.png" />
 
-<a href="https://types.pl/web/@CraigStuntz">Follow me on Mastodon</a>
+<a rel="me" href="https://types.pl/web/@CraigStuntz">Follow me on Mastodon</a>
 
 <a href="https://github.com/CraigStuntz">My open source code</a>
 
