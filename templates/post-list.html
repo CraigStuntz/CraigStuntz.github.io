@@ -1,7 +1,16 @@
 <ul>
     $for(posts)$
         <li>
-            <a href="$url$">$title$</a> - $date$
+            $if(series)$
+                <em>$series$:</em>
+                $if(chapterName)$
+                    <a href="$url$">$chapterName$</a> - $date$
+                $else$
+                    <a href="$url$">$title$</a> - $date$
+                $endif$
+            $else$ 
+                <a href="$url$">$title$</a> - $date$
+            $endif$
         </li>
     $endfor$
 </ul>

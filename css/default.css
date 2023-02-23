@@ -8,6 +8,14 @@ body {
     font-size: 16px;
 }
 
+h1.chapterName {
+    margin-block-start: 0;
+}
+
+h3.series {
+    margin-block-end: 0;
+}
+
 div#header {
     margin-bottom: 0px;
     padding: 10px 50px 10px 50px;
@@ -115,6 +123,41 @@ img.autowidth {
     aspect-ratio: attr(width) / attr(height);
 }
 
+div.toc {
+    float: right;
+    width: 25%;
+    border: solid;
+    margin: 0.5em;
+}
+
+div.toc ul {
+    list-style: none;
+    margin: 0.5em;
+    padding: 0;
+}
+
+figure.inlineLeft {
+    display: table;
+    float: left;
+    margin: 16px;
+}
+
+figure.inlineLeft > figcaption {
+    display: table-caption; 
+    caption-side: bottom;
+}
+
+figure.inlineRight {
+    display: table;
+    float: right;
+    margin: 16px;
+}
+
+figure.inlineRight > figcaption {
+    display: table-caption; 
+    caption-side: bottom;
+}
+
 /* Source code */
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode, table.sourceCode pre
    {
@@ -144,3 +187,13 @@ td.sourceCode { padding-left: 5px; }
 .sourceCode span.fu { color: #06287e; }
 .sourceCode span.re { }
 .sourceCode span.er { color: red; font-weight: bold; }
+
+table:not(.sourceCode) {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 3px solid;
+}
+  
+th:not(.sourceCode), td:not(.sourceCode) {
+    border: solid;
+}

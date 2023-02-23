@@ -24,8 +24,20 @@
         </div>
 
         <div id="content">
-            <h1>$title$</h1>
-
+            $if(series)$
+                <h3 class="series">
+                    $series$$if(chapter)$,
+                        $chapter$
+                    $endif$
+                </h3>
+            $endif$
+            $if(chapterName)$
+                <h1 class="chapterName">
+                    $chapterName$
+                </h1>
+            $else$
+                <h1>$title$</h1>
+            $endif$
             $body$
         </div>
     </body>
