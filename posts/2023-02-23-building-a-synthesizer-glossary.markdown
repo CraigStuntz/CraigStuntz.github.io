@@ -52,7 +52,7 @@ networking protocol which was designed to be the cheapest possible solution to
 a particular problem in the 1980s: How to play one polyphonic synthesizer using 
 an external keyboard or sequencer. At one point in time (also during the 80s), 
 it was accurately described as "the local area network with the world's larget 
-installed user base. It's hard to overstate the effect that MIDI had on music.
+installed user base." It's hard to overstate the effect that MIDI had on music.
 For many, it made "home studios" _possible._ Today it's _still_ in use, almost 
 entirely unchanged, although it's being ever-so-gradually edged out by USB. 
 
@@ -125,6 +125,13 @@ Gate outputs from your keyboard, and three separate oscillators on your modular
 synth. I've never seen a keyboard with three CV outputs, although you can buy 
 [a MIDI-to-CV interface which has more](https://six4pix.net/product/cvocd/).
 
+[In 1968, Wendy Carlos released the album _[Switched-On Bach,](https://www.wendycarlos.com/+sob.html)_ 
+where she played
+many of Bach's (very much polyphonic) compositions on the (very much monophonic)
+Moog synthesizer. How did she do this? Simple, she played one voice at a time
+into an 8-track tape recorder. It's an incredible feat of musicianship that the
+result sounds so good!]
+
 #### Mod
 
 It's not uncommon for keyboards to have an output or two called "Mod." Mod is 
@@ -172,9 +179,9 @@ outputs instead of or in addition to Gate; trigger is a short pulse which
 happens at the start of a note and returns quickly to zero, in contrast to 
 Gate which stays high as long as the note is played.
 
-Why not put ptich CV and Gate on the same signal? One reason is because CV goes 
+Why not put pitch CV and Gate on the same signal? One reason is because CV goes 
 down to 0. Another reason is that you might want to send them to different 
-modules, say, an pitch CV to an oscillator and gate to an envelope generator.
+modules, say, a pitch CV to an oscillator and gate to an envelope generator.
 
 ## <a name="eurorack"></a>Eurorack
 
