@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - Building a Synthesizer: Glossary and Electrical Connections</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://types.pl/@CraigStuntz">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    Building a Synthesizer,
+                        Glossary
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    Glossary and Electrical Connections
+                </h1>
+            
+            <div class="info">
+    Posted on January 23, 2023
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-01-22-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-01-29-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-01-29-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-01-29-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li>Glossary and Electrical Connections</li>
+</ul>
+</div>
+<p>If you play synths, are quite familiar with modular synths, and already understand why you can’t just plug a keyboard into a modular synth and expect stuff to work, or if you don’t care much about how modular synths work then feel free to skip this article.</p>
+<h2 id="a-glossary">A Glossary</h2>
+<p><strong>DIY</strong> stands for “Do It Yourself,” and, in this context, refers to building synths either from a kit or from just plain electronic components.</p>
+<p>A <strong>modular</strong> synth is one which is comprised of separate modules, such as oscillators and filters, which can usually be purchased separately and interconnected using patch cables. Most big-name synths that you buy from Roland, Korg, Yamaha, etc., today are <em>not</em> modular. Modular does not mean “any synth with patch cables,” however. There are synths called “<strong>semimodular</strong>” synths which can be patched but are part of a single, inseparable case and which are typically “normalled” together (that is, the synth will make a sound without any patch cables, and then you can change the sound via patching). A modular synthesizer is distinguished by the ability to mix and match modules from various manufacturers to produce a tone.</p>
+<p>A <strong>monophonic</strong> synth can only play one note at a time, like a trumpet. A <strong>polyphonic</strong> synth can play multiple notes at a time, like a piano. Polyphonic synths have a limited number of “voices,” which is very roughly the number of notes they can play at once. Polyphonic synths can usually play more than one preset at a time, perhaps splitting the keyboard between two or more instruments.</p>
+<p>Modular synths are monophonic, for the most part, because each module <em>usually</em> handles a single sound at a time. A polyphonic synth, on the other hand, will generally allow the player to create a preset once and play chords with it, by default. It’s pretty common to use multiple modules to make multiple sounds, concurrently, but this is closer to having multiple monophonic synths than to having a single, polyphonic synth.</p>
+<p><strong>MIDI</strong> stands for Musical Instrument Digital Interface. It’s an old, slow networking protocol which was designed to be the cheapest possible solution to a particular problem in the 1980s: How to play one polyphonic synthesizer using an external keyboard or sequencer. At one point in time (also during the 80s), it was accurately described as “the local area network with the world’s larget installed user base. It’s hard to overstate the effect that MIDI had on music. For many, it made”home studios&quot; <em>possible.</em> Today it’s <em>still</em> in use, almost entirely unchanged, although it’s being ever-so-gradually edged out by USB.</p>
+<p>An <strong>analog synthesizer</strong> makes sounds using analog circuitry, as opposed to a <strong>digital synthesizer</strong>, which makes sounds using digital signal processing. Modular synth components <em>tend</em> to be analog, but there’s no rule which says they have to be, and digital modules do exist. I mention this because it’s orthogonal to the interface. In other words, MIDI is a digital interface which can be used to control either analog or digital synths. Voltage control is an analog interface which can be used to control either analog or digital synths or modules.</p>
+<h2 id="voltage-control">Voltage Control</h2>
+<p>Most commercial synths include a MIDI interface, with the exception of modular gear which more often uses an <em>even older…</em> well… “standard” is not quite the right word. Anyway, you can connect modules together using an analog protocol called “Voltage Control” (or “CV/Gate” after the specific connections). You can also connect a keyboard or sequencer to a modular synth using the same connections, which might be useful if your keyboard or hardware sequencer has CV/Gate outputs (some do, some don’t) and your modular synth does not have a MIDI interface… module.</p>
+<p>These are analog signals, and will allow you, if you plan carefully, to connect two modules together and probably control them with a keyboard or external sequencer, although with greatly limited features in comparsion with a keyboard-to-synth MIDI connection. “Greatly limited” here means that features of MIDI such as support for chords, multiple channels over a single wire, and such niceties as keyboard velocity and aftertouch, either don’t exist at all or require additional work to support.</p>
+<p>Taking a simple example, where you want to plug a keyboard into a modular synth, well, you have to look and consider your options. If your keyboard has only a MIDI output, then you must use a MIDI-to-CV module. If your keyboard has outputs labeled “CV,” “Gate,” “Pitch,” “Trigger,” “Mod,” or similar, then you can probably connect these directly to some modules on a modular synth. However, the signals carried on these outputs can vary, depending upon who implemented them.</p>
+<figure>
+<a href="../images/synth/NovationSLMKIIIBackPanel.png"> <img src="../images/synth/NovationSLMKIIIBackPanel.png" width="786px" loading="lazy" alt="The back panel of a Novation SL MkIII, showing CV, Gate, and Mod outputs"> </a>
+<figcaption>
+The back panel of a Novation SL MkIII, including CV outputs
+</figcaption>
+</figure>
+<p>On a modular synthesizer, there are three general kinds of signals: CV/pitch, gate/trigger, and audio. Although note that it’s generally fine, encouraged, even to plug, say, the CV output of one module into the audio input of another module, or whatever. <em>In general</em> you can plug anything into anything, although there is no guarantee it will make a pleasing sound!</p>
+<h3 id="cv-or-pitch">CV (or Pitch)</h3>
+<p>A pitch Control Voltage (CV) is expected, in the <a href="#eurorack">Eurorack</a> world (although not necessarily in modular synthesis in general), to be 1V per octave. This mostly means that an A1 (the note “A” in the second octave of a standard, 88 key piano) is 1V and an A5 is 5V. Mostly! You may encounter other “encodings” of pitch, such as those where the voltage goes into the negative. But 1V/octave, starting at 0V is the system most commonly used and that’s what the mks x es.EDU modules use.</p>
+<p>Given that the CV will have a voltage corresponding to the note that you’re playing, you might ask, “But what if I play a chord?” Simple! You don’t get to encode chords with CV. Most keyboards will just choose the highest or most recent note that you’ve played and set the CV to that. The expectation is that you’re going to use this connection with a monophonic synthesizer or with a single modular “voice.” If you wanted to play a three-note chord on a keyboard and have that voiced by a modular synth, you would need three separate CV and Gate outputs from your keyboard, and three separate oscillators on your modular synth. I’ve never seen a keyboard with three CV outputs, although you can buy <a href="https://six4pix.net/product/cvocd/">a MIDI-to-CV interface which has more</a>.</p>
+<h4 id="mod">Mod</h4>
+<p>It’s not uncommon for keyboards to have an output or two called “Mod.” Mod is electrically the same as CV/Pitch, but instead of sending pitch there the keyboard can translate some other MIDI <a href="https://www.whippedcreamsounds.com/midi-cc-list/">continous controller</a> to a voltage sent to that jack. Judging by the name I guess the expectation is that you’ll assign the mod wheel, but it could be set to anything. From there it translates whatever you’ve set it to a 0-5V output on the Mod jack.</p>
+<figure class="inlineRight">
+<a href="../images/synth/MoogLittlePhattyCVInputs.png"> <img src="../images/synth/MoogLittlePhattyCVInputs.png" width="180px" loading="lazy" alt="The CV inputs of a Moog Litte Phatty synthesizer, showing Pitch CV, Vol CV, Filter CV, and KB Gate jacks"> </a>
+<figcaption>
+Moog Little Phatty CV inputs
+</figcaption>
+</figure>
+<h4 id="other-cv">Other CV</h4>
+<p>If you just say “CV” and don’t say anything else, people will tend to presume you are talking about pitch CV (e.g., on the Novation back panel above the “CV” jack carries pitch information). But as seen with “Mod,” other information can be carried using a Control Voltage as well. The Moog Little Phatty seen at right will take Volume and Filter controls as well as pitch and gate over its CV inputs.</p>
+<div style="clear: both;">
+
+</div>
+<figure class="inlineRight">
+<a href="../images/synth/MoogModelDCVOuts.png"> <img src="../images/synth/MoogModelDCVOuts.png" width="213px" loading="lazy" alt="The CV outputs of a Minimoog synthesizer, showing After Pressure, Pitch, V-Trig, and Velocity jacks"> </a>
+<figcaption>
+Minimoog CV Outputs
+</figcaption>
+</figure>
+<h3 id="gate-or-trigger">Gate or Trigger</h3>
+<p>In addition to Control Voltage you may have noticed a “Gate” output. This is a simple on and off, binary signal (where “on” might be anywhere between 5V and 10V, and “off” is 0V), representing whether the key is pressed/on or released/off. A few devices, such as the Minimoog, have “<a href="https://noiseengineering.us/blogs/loquelic-literitas-the-blog/getting-started-gates-vs-triggers">Trigger</a>” outputs instead of or in addition to Gate; trigger is a short pulse which happens at the start of a note and returns quickly to zero, in contrast to Gate which stays high as long as the note is played.</p>
+<p>Why not put ptich CV and Gate on the same signal? One reason is because CV goes down to 0. Another reason is that you might want to send them to different modules, say, an pitch CV to an oscillator and gate to an envelope generator.</p>
+<h2 id="eurorack"><a name="eurorack"></a>Eurorack</h2>
+<p>Not all modules play nicely together, but a plurality of modules sold today follow the <strong>Eurorack,</strong> um, again, not “standard,” exactly. Suffice it to say that if you buy two Eurorack modules and play with them enough, you can probably get them to do something interesting. Anyhow, Eurorack includes both a common physical form factor, CV voltage (mostly!), and power requirements. Usually.</p>
+<p>In the absence of a “Eurorack standard,” most makers take a “look at what Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar” approach. “Eurorack compatible” synth modules tend to follow the following conventions:</p>
+<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are (mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are “quantized” by “HP,” or Horizontal Pitch units. This means they are usually some multiple of 5.08 mm wide.</p>
+<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each module. However, it’s very, very common for modules to not use the first 6 pins and only have a 10-pin connector on the “module” end of the power cable.</p>
+<p><a href="../images/synth/EurorackPowerPinout.png"><img src="../images/synth/EurorackPowerPinout.png" width="151px" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a> <a href="../images/synth/EurorackPowerConnector.png"><img src="../images/synth/EurorackPowerConnector.png" width="112px" alt="A Eurorack power connector socket" style="float: right;"></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
+<p>The first thing you’ll notice is there’s a lot of redundancy there. The connectors are 16 pins, organized into two columns of eight pins each. Each two-pin “row” carries exactly the same signal; they are connected together. Furthermore, there are three rows (six pins total) of ground pins, which, again, are connected together.</p>
+<p>The power provided by the bus is +12 and -12 VDC. Some have argued that it would have been better if it specified ±15VDC, but Eurorack really was aligned to the specific needs of one system, the Doepfer A-100, not modular synths in general.</p>
+<p>Finally, there are CV, Gate, and +5V power wires. Most modules do not use, and don’t even include wires for, the Gate and CV on the bus (expecting you to instead connect Gate and CV via jacks on the front of a module), and +5V connections. I guess the idea behind the Gate and CV connections is you could plug a keyboard or MIDI interface into these and then have the signal “normalled” (connected by default, until you plugged a patch cable in elsewhere) to the CV/gate input on some modules. At any rate, not many modules use this feature at all, requiring you to connect the Gate/CV through the front panel of the module. Similarly, +5V power is simply not needed by most modules.</p>
+<p>There is a <a href="http://www.elby-designs.com/webtek/documents/eurosynth-specification.htm">EuroSynth</a> specification which attempts to take the mishmash of Eurorack informal specs and formalize them. Needless to say, essentially no manufacturers have adopted this spec.</p>
+<p>In the <a title="Chapter 1: The mki x es.EDU DIY System" href="2023-01-29-building-a-synthesizer-1.html">next post</a> we will look at the mki x es.EDU DIY System in more detail.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li>The <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document on Doepfer’s site gives information about the physical form factor of Eurorack.</li>
+<li>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on Doepfer’s site is a good overview of volatage control in general. It’s also informative if you’d like to know more about the A-100, which other “Eurorack” manufacturers are using as an example.</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>

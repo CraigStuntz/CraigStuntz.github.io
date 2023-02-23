@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - Building a Synthesizer, Chapter 4: The Digital Circuits Model of Computation</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://types.pl/@CraigStuntz">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    Building a Synthesizer,
+                        4
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    The Digital Circuits Model of Computation
+                </h1>
+            
+            <div class="info">
+    Posted on February 18, 2023
+    
+</div>
+
+<p>I’m going to step aside from circuit building to talk about the digital circuits model of computation. This may surprise you, reader, as it would at first seem to have nothing to do with building an analog synthesizer. I have a few reasons for doing so. One is that I’ll be talking about analog computers in a future post, so think of this post as a gentle introduction to the topic of alternative computing models. The second is that we can see a synthesizer, whether digital or analog, as a dedicated piece of hardware which can solve a restricted set of computing problems (producing sounds), and I find it interesting to look at a synth from a computing point of view. But analog synthesizers, anyway, are not engineered like most computers!</p>
+<p>If you’re strictly interested in synthesis or electrical engineering, then you might want to skip ahead to the next chapter, but if you’re reading my blog then you migth find the following interesting!</p>
+<h2 id="von-neumann-machines">Von Neumann Machines</h2>
+<p>One model of computation, which we’re all very familar with, though perhaps not by this name, is the <a href="https://en.wikipedia.org/wiki/Von_Neumann_machine">Von Neumann machine</a>. You are reading this post on a Von Neumann machine right now. It’s so common that we generally just call it a “computer.” Nearly all “computers” produced today are Von Neumann machines, because they are digital computers with a processor, a control unit, memory, mass storage, and I/O. But other computing architectures are possible, and occasionally even useful!</p>
+<h2 id="turing-machines">Turing Machines</h2>
+<p>As a kind of a mental warm-up, consider the <a href="https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/turing-machine/one.html">Turing machine</a>. The Turing machine was invented years before the Von Neumann machine, and it was not intended to be constructed. Rather, it was a system for modeling computations which we might otherwise think about in our heads. It uses a different system for computation (see the link for details), without memory or random-access storage, but it’s provably equivalent to Von Neumann machines in terms of its computing capabilities. So in this case we have two different models of computation which can solve the same problems, at least if you ignore performance.</p>
+<h2 id="digital-circuits">Digital Circuits</h2>
+<p>Another model, which used to be somewhat common, but is far less so given that powerful CPUs can be had for pennies these days, is the digital circuits model. In this case instead of a CPU with an instruction pointer which goes through a list of instructions, fetches data from memory, operates on that data, saves it back to memory, etc., we have a far simpler device which is just a bunch of digital logic gates. This is so simple, in fact, that it can be efficiently simulated on a Von Neumann machine, so we can either build a digital circuit from raw gates or we can simulate it on a general purpose computer; the result of the computation will be the same either way.</p>
+<p>Having said that, it’s still an interesting model, and it still has applications today. So let’s give a quick example. Consider the following function in TypeScript:</p>
+<pre class="typescript"><code>function doTheThing(a: boolean, b: boolean, c: boolean): boolean {
+    if (c) {
+        return a &amp;&amp; b;
+    } else {
+        return a || b;
+    }
+}</code></pre>
+<p>This function is of questionable utility, but will serve as a simple example which we can easily translate to a circuits model. It uses a control boolean, <code>c</code> to decide whether to do a boolean <code>AND</code> operation or an <code>OR</code> operation on its other two inputs.</p>
+<p>What would a circuits model of this function look like? Well, we have <code>AND</code> and <code>OR</code> as fundamental operators in a circuit, so we can just use those:</p>
+<figure>
+<a href="../images/synth/2Gates.png"> <img src="../images/synth/2Gates.png" loading="lazy" alt="An AND and an XOR gate."> </a>
+<figcaption>
+A good start!
+</figcaption>
+</figure>
+<p>So far, so good, but how do we handle the if/then logic? One way is to compute both values, and then decide on which one to use based on the <code>c</code> value:</p>
+<figure>
+<a href="../images/synth/DigitalCircuit.png"> <img src="../images/synth/DigitalCircuit.png" loading="lazy" alt="A digital circuit equivalent to the TypeScript code above."> </a>
+<figcaption>
+Logically correct
+</figcaption>
+</figure>
+<p>Progress! We have a working circuit. From left to right, we compute both the <code>AND</code> and <code>OR</code>ed values, then look at <code>c</code>. We put it directly into one <code>AND</code> gate, and also into another <code>AND</code> gate after first passing it through a <code>NOT</code> gate. Finally we take the <code>OR</code> of both <code>AND</code> gates to see if the output should be high/on/true.</p>
+<p>We can prove this works via the following truth table:</p>
+<table>
+<thead>
+<tr class="header">
+<th>a</th>
+<th>b</th>
+<th>c</th>
+<th>output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr class="odd">
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr class="odd">
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+</tr>
+<tr class="odd">
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+</tbody>
+</table>
+<p>You can take a moment and work through the truth table for both the original TypeScript code and the circuit above to prove that they’re the same in all cases. We could leave it at that and be done with it, but looking at the truth table we can see that a somewhat simpler circuit would do:</p>
+<figure>
+<a href="../images/synth/EquivalentDigitalCircuit.png"> <img src="../images/synth/EquivalentDigitalCircuit.png" loading="lazy" alt="An equivalent digital circuit to the circuit above, but with five gates instead of six."> </a>
+<figcaption>
+Same output, fewer gates
+</figcaption>
+</figure>
+<p>This circuit uses only five gates, instead of six in the original. If you like, you can take a second to convince yourself that the circuit above returns the same values as the truth table, the first circuit, and the TypeScript code. They’re all equivalent.</p>
+<p>So even though it might <em>seem</em> inefficient to compute both branches of the <code>if</code> and then pick one, appearances can be deceiving. In general, I worry far more about whether my programs are <em>correct</em> than I do if they are performing as fast as possible (but possibly returning an incorrect result!). If you do need to optimize some routine, it is important to compare the optimized versions in a profiler, not just squint at the code.</p>
+<h2 id="applications-of-the-digital-circuits-model">Applications of the Digital Circuits Model</h2>
+<p>This is sort of intellectually interesting, but is there any point in the equivalences above? Why would we bother doing this when general-purpose CPUs are so cheap? It would literally cost more to build a non-trivial circuit with distinct gates than it would to build it on an Arduino or similar, so why am I bothering explaining all of this?</p>
+<p>Aside from, you know, building digital circuits, which is sometimes a thing that people do, there are a few cases I can think of where thinking in this model is directly useful:</p>
+<h3 id="compiler-optimizations">Compiler Optimizations</h3>
+<p>If you’re writing a compiler optimizer, you might directly use boolean equivalences such as <a href="https://en.wikipedia.org/wiki/De_Morgan%27s_laws">DeMorgan’s laws</a> to rewrite boolean expressions to other expressions which are guaranteed to return the same result.</p>
+<h3 id="gpu-programming">GPU Programming</h3>
+<p><a href="https://developer.nvidia.com/gpugems/gpugems2/part-iv-general-purpose-computation-gpus-primer/chapter-34-gpu-flow-control-idioms">In GPU programming, you often need to write branch-free code whenever possible.</a> Note that the circuits model in the above example was branch-free, whereas the <code>if</code>/<code>then</code> in the TypeScript code was a branch.</p>
+<h3 id="homomorphic-encryption">Homomorphic Encryption</h3>
+<p><a href="2010-03-18-what-is-homomorphic-encryption.html">Homomorphic encryption</a> refers to performing a computation on encrypted data, resulting in the cyphertext of the result of the computation, without ever decrypting the data. It sounds impossible, but turns out to be merely very difficult. With a little thought you will see that if you can’t decrypt the data, then you can’t do a conditinal branch based on some intermediate value (because that would require you to know what the value is, and you don’t; it’s encrypted).</p>
+<p>So homomorphic encryption systems often use a digital circuits model of computation, which can be branch free, as shown above.</p>
+<h3 id="mental-exercise">Mental Exercise</h3>
+<p>My real agenda here is to get you thinking about different kinds of computing models, because next we’re going to talk about analog computers, and they’re far weirder than digital circuits!</p>
+
+<div class="info">
+    
+    Tags: <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>, <a href="../tags/computer%20science.html">computer science</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>

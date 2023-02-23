@@ -8,8 +8,316 @@
         <name>Craig Stuntz</name>
         <email></email>
     </author>
-    <updated>2021-07-08T00:00:00Z</updated>
+    <updated>2023-02-23T00:00:00Z</updated>
     <entry>
+    <title>Building a Synthesizer: Glossary and Electrical Connections</title>
+    <link href="http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html" />
+    <id>http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</id>
+    <published>2023-02-23T00:00:00Z</published>
+    <updated>2023-02-23T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on February 23, 2023
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li>Glossary and Electrical Connections</li>
+</ul>
+</div>
+<p>If you play synths, are quite familiar with modular synths, and already understand why you can’t just plug a keyboard into a modular synth and expect stuff to work, or if you don’t care much about how modular synths work then feel free to skip this article.</p>
+<h2 id="a-glossary">A Glossary</h2>
+<p><strong>DIY</strong> stands for “Do It Yourself,” and, in this context, refers to building synths either from a kit or from just plain electronic components.</p>
+<p>A <strong>modular</strong> synth is one which is comprised of separate modules, such as oscillators and filters, which can usually be purchased separately and interconnected using patch cables. Most big-name synths that you buy from Roland, Korg, Yamaha, etc., today are <em>not</em> modular. Modular does not mean “any synth with patch cables,” however. There are synths called “<strong>semimodular</strong>” synths which can be patched but are part of a single, inseparable case and which are typically “normalled” together (that is, the synth will make a sound without any patch cables, and then you can change the sound via patching). A modular synthesizer is distinguished by the ability to mix and match modules from various manufacturers to produce a tone.</p>
+<p>A <strong>monophonic</strong> synth can only play one note at a time, like a trumpet. A <strong>polyphonic</strong> synth can play multiple notes at a time, like a piano. Polyphonic synths have a limited number of “voices,” which is very roughly the number of notes they can play at once. Polyphonic synths can usually play more than one preset at a time, perhaps splitting the keyboard between two or more instruments.</p>
+<p>Modular synths are monophonic, for the most part, because each module <em>usually</em> handles a single sound at a time. A polyphonic synth, on the other hand, will generally allow the player to create a preset once and play chords with it, by default. It’s pretty common to use multiple modules to make multiple sounds, concurrently, but this is closer to having multiple monophonic synths than to having a single, polyphonic synth.</p>
+<p><strong>MIDI</strong> stands for Musical Instrument Digital Interface. It’s an old, slow networking protocol which was designed to be the cheapest possible solution to a particular problem in the 1980s: How to play one polyphonic synthesizer using an external keyboard or sequencer. At one point in time (also during the 80s), it was accurately described as “the local area network with the world’s larget installed user base. It’s hard to overstate the effect that MIDI had on music. For many, it made”home studios&quot; <em>possible.</em> Today it’s <em>still</em> in use, almost entirely unchanged, although it’s being ever-so-gradually edged out by USB.</p>
+<p>An <strong>analog synthesizer</strong> makes sounds using analog circuitry, as opposed to a <strong>digital synthesizer</strong>, which makes sounds using digital signal processing. Modular synth components <em>tend</em> to be analog, but there’s no rule which says they have to be, and digital modules do exist. I mention this because it’s orthogonal to the interface. In other words, MIDI is a digital interface which can be used to control either analog or digital synths. Voltage control is an analog interface which can be used to control either analog or digital synths or modules.</p>
+<h2 id="voltage-control">Voltage Control</h2>
+<p>Most commercial synths include a MIDI interface, with the exception of modular gear which more often uses an <em>even older…</em> well… “standard” is not quite the right word. Anyway, you can connect modules together using an analog protocol called “Voltage Control” (or “CV/Gate” after the specific connections). You can also connect a keyboard or sequencer to a modular synth using the same connections, which might be useful if your keyboard or hardware sequencer has CV/Gate outputs (some do, some don’t) and your modular synth does not have a MIDI interface… module.</p>
+<p>These are analog signals, and will allow you, if you plan carefully, to connect two modules together and probably control them with a keyboard or external sequencer, although with greatly limited features in comparsion with a keyboard-to-synth MIDI connection. “Greatly limited” here means that features of MIDI such as support for chords, multiple channels over a single wire, and such niceties as keyboard velocity and aftertouch, either don’t exist at all or require additional work to support.</p>
+<p>Taking a simple example, where you want to plug a keyboard into a modular synth, well, you have to look and consider your options. If your keyboard has only a MIDI output, then you must use a MIDI-to-CV module. If your keyboard has outputs labeled “CV,” “Gate,” “Pitch,” “Trigger,” “Mod,” or similar, then you can probably connect these directly to some modules on a modular synth. However, the signals carried on these outputs can vary, depending upon who implemented them.</p>
+<figure>
+<a href="/images/synth/NovationSLMKIIIBackPanel.png"> <img src="/images/synth/NovationSLMKIIIBackPanel.png" width="786px" loading="lazy" alt="The back panel of a Novation SL MkIII, showing CV, Gate, and Mod outputs"> </a>
+<figcaption>
+The back panel of a Novation SL MkIII, including CV outputs
+</figcaption>
+</figure>
+<p>On a modular synthesizer, there are three general kinds of signals: CV/pitch, gate/trigger, and audio. Although note that it’s generally fine, encouraged, even to plug, say, the CV output of one module into the audio input of another module, or whatever. <em>In general</em> you can plug anything into anything, although there is no guarantee it will make a pleasing sound!</p>
+<h3 id="cv-or-pitch">CV (or Pitch)</h3>
+<p>A pitch Control Voltage (CV) is expected, in the <a href="#eurorack">Eurorack</a> world (although not necessarily in modular synthesis in general), to be 1V per octave. This mostly means that an A1 (the note “A” in the second octave of a standard, 88 key piano) is 1V and an A5 is 5V. Mostly! You may encounter other “encodings” of pitch, such as those where the voltage goes into the negative. But 1V/octave, starting at 0V is the system most commonly used and that’s what the mks x es.EDU modules use.</p>
+<p>Given that the CV will have a voltage corresponding to the note that you’re playing, you might ask, “But what if I play a chord?” Simple! You don’t get to encode chords with CV. Most keyboards will just choose the highest or most recent note that you’ve played and set the CV to that. The expectation is that you’re going to use this connection with a monophonic synthesizer or with a single modular “voice.” If you wanted to play a three-note chord on a keyboard and have that voiced by a modular synth, you would need three separate CV and Gate outputs from your keyboard, and three separate oscillators on your modular synth. I’ve never seen a keyboard with three CV outputs, although you can buy <a href="https://six4pix.net/product/cvocd/">a MIDI-to-CV interface which has more</a>.</p>
+<h4 id="mod">Mod</h4>
+<p>It’s not uncommon for keyboards to have an output or two called “Mod.” Mod is electrically the same as CV/Pitch, but instead of sending pitch there the keyboard can translate some other MIDI <a href="https://www.whippedcreamsounds.com/midi-cc-list/">continous controller</a> to a voltage sent to that jack. Judging by the name I guess the expectation is that you’ll assign the mod wheel, but it could be set to anything. From there it translates whatever you’ve set it to a 0-5V output on the Mod jack.</p>
+<figure class="inlineRight">
+<a href="/images/synth/MoogLittlePhattyCVInputs.png"> <img src="/images/synth/MoogLittlePhattyCVInputs.png" width="180px" loading="lazy" alt="The CV inputs of a Moog Litte Phatty synthesizer, showing Pitch CV, Vol CV, Filter CV, and KB Gate jacks"> </a>
+<figcaption>
+Moog Little Phatty CV inputs
+</figcaption>
+</figure>
+<h4 id="other-cv">Other CV</h4>
+<p>If you just say “CV” and don’t say anything else, people will tend to presume you are talking about pitch CV (e.g., on the Novation back panel above the “CV” jack carries pitch information). But as seen with “Mod,” other information can be carried using a Control Voltage as well. The Moog Little Phatty seen at right will take Volume and Filter controls as well as pitch and gate over its CV inputs.</p>
+<div style="clear: both;">
+
+</div>
+<figure class="inlineRight">
+<a href="/images/synth/MoogModelDCVOuts.png"> <img src="/images/synth/MoogModelDCVOuts.png" width="213px" loading="lazy" alt="The CV outputs of a Minimoog synthesizer, showing After Pressure, Pitch, V-Trig, and Velocity jacks"> </a>
+<figcaption>
+Minimoog CV Outputs
+</figcaption>
+</figure>
+<h3 id="gate-or-trigger">Gate or Trigger</h3>
+<p>In addition to Control Voltage you may have noticed a “Gate” output. This is a simple on and off, binary signal (where “on” might be anywhere between 5V and 10V, and “off” is 0V), representing whether the key is pressed/on or released/off. A few devices, such as the Minimoog, have “<a href="https://noiseengineering.us/blogs/loquelic-literitas-the-blog/getting-started-gates-vs-triggers">Trigger</a>” outputs instead of or in addition to Gate; trigger is a short pulse which happens at the start of a note and returns quickly to zero, in contrast to Gate which stays high as long as the note is played.</p>
+<p>Why not put ptich CV and Gate on the same signal? One reason is because CV goes down to 0. Another reason is that you might want to send them to different modules, say, an pitch CV to an oscillator and gate to an envelope generator.</p>
+<h2 id="eurorack"><a name="eurorack"></a>Eurorack</h2>
+<p>Not all modules play nicely together, but a plurality of modules sold today follow the <strong>Eurorack,</strong> um, again, not “standard,” exactly. Suffice it to say that if you buy two Eurorack modules and play with them enough, you can probably get them to do something interesting. Anyhow, Eurorack includes both a common physical form factor, CV voltage (mostly!), and power requirements. Usually.</p>
+<p>In the absence of a “Eurorack standard,” most makers take a “look at what Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar” approach. “Eurorack compatible” synth modules tend to follow the following conventions:</p>
+<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are (mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are “quantized” by “HP,” or Horizontal Pitch units. This means they are usually some multiple of 5.08 mm wide.</p>
+<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each module. However, it’s very, very common for modules to not use the first 6 pins and only have a 10-pin connector on the “module” end of the power cable.</p>
+<p><a href="/images/synth/EurorackPowerPinout.png"><img src="/images/synth/EurorackPowerPinout.png" width="151px" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a> <a href="/images/synth/EurorackPowerConnector.png"><img src="/images/synth/EurorackPowerConnector.png" width="112px" alt="A Eurorack power connector socket" style="float: right;"></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
+<p>The first thing you’ll notice is there’s a lot of redundancy there. The connectors are 16 pins, organized into two columns of eight pins each. Each two-pin “row” carries exactly the same signal; they are connected together. Furthermore, there are three rows (six pins total) of ground pins, which, again, are connected together.</p>
+<p>The power provided by the bus is +12 and -12 VDC. Some have argued that it would have been better if it specified ±15VDC, but Eurorack really was aligned to the specific needs of one system, the Doepfer A-100, not modular synths in general.</p>
+<p>Finally, there are CV, Gate, and +5V power wires. Most modules do not use, and don’t even include wires for, the Gate and CV on the bus (expecting you to instead connect Gate and CV via jacks on the front of a module), and +5V connections. I guess the idea behind the Gate and CV connections is you could plug a keyboard or MIDI interface into these and then have the signal “normalled” (connected by default, until you plugged a patch cable in elsewhere) to the CV/gate input on some modules. At any rate, not many modules use this feature at all, requiring you to connect the Gate/CV through the front panel of the module. Similarly, +5V power is simply not needed by most modules.</p>
+<p>There is a <a href="http://www.elby-designs.com/webtek/documents/eurosynth-specification.htm">EuroSynth</a> specification which attempts to take the mishmash of Eurorack informal specs and formalize them. Needless to say, essentially no manufacturers have adopted this spec.</p>
+<p>In the <a title="The mki x es.EDU DIY System" href="2023-02-21-building-a-synthesizer-1.html">next post</a> we will look at the mki x es.EDU DIY System in more detail.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li>The <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document on Doepfer’s site gives information about the physical form factor of Eurorack.</li>
+<li>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on Doepfer’s site is a good overview of volatage control in general. It’s also informative if you’d like to know more about the A-100, which other “Eurorack” manufacturers are using as an example.</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/diy.html">diy</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>Building a Synthesizer, Chapter 2: Building the Power Supply</title>
+    <link href="http://www.craigstuntz.com/posts/2023-02-22-building-a-synthesizer-2.html" />
+    <id>http://www.craigstuntz.com/posts/2023-02-22-building-a-synthesizer-2.html</id>
+    <published>2023-02-22T00:00:00Z</published>
+    <updated>2023-02-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on February 22, 2023
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li>2: Building the Power Supply</li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>I decided to build the power supply first, so that I could use it when building the other modules. That’s not strictly necessary; you can power them with a pair of 9V batteries (while building) if you like, but I was going to want a functional enclosure and power supply eventually anyway, so this seemed like a good place to start.</p>
+<p>Unlike most of the other kits in the series, Moritz Klein did not write the manuals (or design the circuit, I think), and this manual, unlike most of the others, is a “solder everything onto the board” affair instead of a “here are the tradeoffs with different components” and encouraging you to experiment around with a breadboard. Understandable (especially considering there is less “room for experimentation” when dealing with power), but probably not the most compelling introduction to the series.</p>
+<p>However, I do think we can learn about (modular) synths from building this project!</p>
+<h2 id="eurorack-format">Eurorack Format</h2>
+<p>As I metioned in the <a href="2023-02-23-building-a-synthesizer-glossary.html">glossary</a>, there isn’t really a “<a href="https://en.wikipedia.org/wiki/Eurorack">Eurorack</a> standard.” It’s more like, “look at what Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar.” If we want to build a “Eurorack compatible” enclosure and power supply, there are a few things to consider.</p>
+<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are (mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are “quantized” by “HP,” or Horizontal Pitch units. This means they are usually some multiple of 5.08 mm wide. The mks x es.EDU modules range from 4 to 10 HP. See the <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document on Doepfer’s site for the closest thing there is to a standard.</p>
+<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each module. However, it’s very, very common for modules to not use the first 6 pins and only have a 10-pin connector on the “module” end of the power cable.</p>
+<p><a href="/images/synth/EurorackPowerPinout.png"><img src="/images/synth/EurorackPowerPinout.png" width="151px" loading="lazy" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a> <a href="/images/synth/EurorackPowerConnector.png"><img src="/images/synth/EurorackPowerConnector.png" width="112px" loading="lazy" alt="A Eurorack power connector socket" style="float: right;"></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
+<p>The first thing you’ll notice is there’s a lot of redundancy there. The connectors are 16 pins, organized into two columns of eight pins each. Each two-pin “row” carries exactly the same signal; they are connected together. Furthermore, there are three rows (six pins total) of ground pins, which, again, are connected together.</p>
+<p>Most modules do not use, and don’t even include wires for, the Gate and CV on the bus, requiring you to connect the Gate/CV through the front panel of the module. Similarly, +5V power is simply not needed by most modules.</p>
+<p>So when on <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/">the order page for the case</a> it says:</p>
+<blockquote>
+<p><strong>NB! The enclosure &amp; PSU are designed specifically to accommodate DIY modules from mki x es.edu series and are not compatible with other eurorack modules.</strong></p>
+</blockquote>
+<p>I think it means two things:</p>
+<ol style="list-style-type: decimal">
+<li>The case is pre-drilled to accomodate modules of certain widths in a specific order. Nothing you couldn’t fix with a drill and a tap, but worth noting.</li>
+<li>The kit doesn’t include components for the +5V power, although it does have space/holes for them on the PCB and most modules don’t need +5V anyway.</li>
+</ol>
+<p>Other than those two <em>caveats</em> I think this case would work fine for most 3U Eurorack modules.</p>
+<p>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on Doepfer’s site is informative if you’d like to know more about the system which other “Eurorack” manufacturers are using as an example.</p>
+<div style="clear: both;">
+
+</div>
+<h2 id="building-the-power-supply"><a name="building"></a>Building the Power Supply</h2>
+<p>I’ll be perfectly frank that this kit is not the one which is going to teach you much about electronics.</p>
+<p>It would be closer to the truth to say that this one will help teach you patience! There are, for example, 14*16=224 solder joints to connect the power cable adaptors alone. After soldering these, I tested them with both a digital multimeter in continuity mode and by putting cables repeatedly into and out of the adaptors. I did not solder every single joint perfectly on the first try (surprise!), so I fixed those which didn’t work.</p>
+<p>Throughout assembling this kit, I had problems with soldering connections to ground; the ground inside the PC board is apparently a large chunk of copper and it was challenging to get it hot enough to melt solder even when the component you were soldering to it was plenty hot and at risk of cooking. It took a lot of patience and mostly a lot of testing to make sure that everything worked.</p>
+<p>The instructions said to increase your soldering iron temperature to 400℃ to solder wires to the power plug. I left it there when soldering the switch and melted something inside the switch. I bought a new switch and some spade connectors, and soldered the switch wires to the spade connectors instead and then pushed the spade connectors onto the (new) switch, which worked quite well.</p>
+<p>One minor challenge is that the +/- leads of the LEDs were not, as far as I could make out, indicated on the PCB; I had to refer to the schematic to figure out which way to put the LEDs into the board.</p>
+<h2 id="building-the-5v-power-supply">Building the +5V Power Supply</h2>
+<figure class="inlineRight">
+<a href="/images/synth/5VPowerSupply.jpg"> <img src="/images/synth/5VPowerSupply.jpg" width="400px" alt="You can see that the voltage regulator is pushed aside by the module power connector and there is no room for the capacitor."> </a>
+<figcaption>
+What’s wrong with this power supply?
+</figcaption>
+</figure>
+<p>The PCB comes drilled for parts for a +5V power supply (to pins 11 and 12 of the power sockets), but does not include parts for this. Wanting “the full experience” I sourced the parts from a local supplier (details below) and built this as well. Despite some vagueries about precisely which parts to buy, everything worked, except for the LED. I eventually figured out that the problem was getting the ground connection on the PCB hot enough to really melt solder; I had been hesitant to hold the soldering iron to the LED for the 30+ seconds it took to heat up the connection inside the board. But in the end it worked fine and now the LED lights up indicating +5V power is on.</p>
+<p>However, there is another problem with the +5V power supply, and it’s not me this time. Some of the holes for the +5V components fall under the power sockets for modules! I ended up soldering a capacitor to the bottom of the board, and the power regulator is not quite squarely mounted. (See photo at right; there are two capacitors visible on top of the board and a third which is immediately above them mounted under the board; you can see one of the two pins just peeking out from under the black module power connection, immediately above the power regulator pins. Note also that the power regulator is being somewhat pushed off of its heatsink pad by the module power connector above it.) It works fine, but I feel like I’m probably the first person to ever assemble this.</p>
+<h2 id="additional-supplies-needed">Additional Supplies Needed</h2>
+<p>If you want to add +5V power to your power supply, you will need to buy:</p>
+<ul>
+<li>2 0.1 µF capacitors, non-polarized (voltage and type unspecified; I used 50V mylar capacitors)</li>
+<li>1 10 µF polarized capacitor, 16 V (I used a 50V capacitor because that’s all my supplier had)</li>
+<li>1 1k Ohm resistor (wattage unspecified, I used a 1/2 W, which ended up being slightly too long for the pre-drilled holes in the PCB, so I’m guessing it was designed for a 1/4 W resistor?)</li>
+<li>1 5V LED (I used a green 4V LED as that’s what my supplier had)</li>
+<li>1 78M05 5V voltage regulator, or equivalent (the current is unspecified; my supplier had a 1A in stock, so that’s what I used)</li>
+</ul>
+<p>All together this cost me about $10.</p>
+<p>As you will see, there is <em>considerable</em> vagueness in the bill of materials above! I listed what I used, and these values seem to work, although I haven’t tried putting any real load on the circuit. One suggestion I would make for this kit is to fill in the missing values here!</p>
+<p>In the next installment of this series I’ll breadboard the VCO.</p>
+<h2 id="resources">Resources</h2>
+<h3 id="instructions">Instructions</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/media/instrukcija_2.pdf">mki x es.EDU Eurorack Case User Manual</a></li>
+</ul>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=pQKN30Mzi2g">DIY SYNTH PSU: How to design a simple dual power supply</a> by Moritz Klein (26:03). Note that this is for a different design than the one included in the kit! It’s sort of useful, although you can skip this video if you want to.</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/diy.html">diy</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>Building a Synthesizer, Chapter 1: The mki x es.EDU DIY System</title>
+    <link href="http://www.craigstuntz.com/posts/2023-02-21-building-a-synthesizer-1.html" />
+    <id>http://www.craigstuntz.com/posts/2023-02-21-building-a-synthesizer-1.html</id>
+    <published>2023-02-21T00:00:00Z</published>
+    <updated>2023-02-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on February 21, 2023
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li>1: The mki x es.EDU DIY System</li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>This post will be a brief oveview of the mki x es.EDU DIY System. I’ll get to actual construction in <a href="2023-02-22-building-a-synthesizer-2.html">the next post</a>.</p>
+<p>Including the power supply, there are 11 modules in the full system, but two of them are the same.</p>
+<p>I personally think that the single greatest thing you get with the kits is something which doesn’t ship in the box: The instructions. They are generally excellent, and most of them were written by Mortiz Klein, who did most of the circuit design. If you’re seriously considering building these (or any other synth kits), I’d suggest sitting down with one of the manuals – <a href="https://www.ericasynths.lv/media/VCO_MANUAL_v2.pdf">here is the VCO manual</a>, for example – as they will not only teach you about electronics and synthesizers but also about how to teach such concepts.</p>
+<p>The full system includes:</p>
+<ul>
+<li>A <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/">combination enclosure and power supply</a>.</li>
+<li>A <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vco/">VCO</a> (Voltage Controlled Oscillator) which produces either a sawtooth wave or a <a href="https://www.yamahasynth.com/learn/synth-programming/synth-basics-all-squares-pulse" title="Synth Basics: All Squares are Pulse">pulse</a> (a generalized square wave with variable width). This is one of two oscillators in the full system. An oscillator is a “thing which produces sound” which can be filtered and combined by other modules.</li>
+<li>Two <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-eg/">envelope generators</a> which produce, well, envelopes. Think of an envelope as the volume over time of a particular note. If you were making an organ sound, you would want the volume of a note to immediately drop to nothing when you took your finger off of a key. If you were making a xylophone sound, on the other hand, you would want the sound to slowly fade out. The envelope generator produces a voltage which corresponds to this desired change in volume. However, actually affecting the sound produced by an oscillator with this envelope will require another module, the VCA. The full system includes two identical EGs modules, presumably because there are two oscillator modules and two VCAs (on one single module).</li>
+<li>A <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vca/">dual VCA</a> (Voltage Controlled Amplifier). The primary use case for this module is taking as inputs the sound produced by the oscillator and the envelope produced by the envelope generator and producing as an output a sound which follows the envelope in volume and has a tone produced by the oscillator. There are other ways to use it, but this is the most common thing to do.</li>
+<li>A <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-sequencer/">five-note sequencer</a> which produces a 3, 4, or 5 note sequence, such as an arpeggio. What if your compositions require more than 5 notes? Well, you might need a different sequencer! This is just to learn how they work. But, as it’s a modular system, you can also do things like clock the sequencer at an audio rate and use it as a waveshaper.</li>
+<li>A <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vcf/">VCF</a> (Voltage Controlled Filter). This changes the sound of the oscillator like an equalizer does. This VCF is just a low-pass (removes higher frequencies). It also has resonance, which is a signal boost at the cutoff frequency, which gives the user of the filter more options for the sound they produce.</li>
+<li>A <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-noisesh/">noise and sample and hold</a> module. Noise is simple enough to explain; it’s just a different sort of oscillator which produces <a href="https://en.wikipedia.org/wiki/White_noise">white noise</a> or <a href="https://en.wikipedia.org/wiki/Pink_noise">pink noise</a> instead of a “cleaner” waveform such as a pulse. Sample and hold is much trickier to explain! In fact, I think I will defer discussion of how sample and hold works until I look at this module in depth in a future post, so that I don’t totally derail this post.</li>
+<li>The <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-wavefolder/">wavefolder</a> is a module that takes, for example, a triangle wave and quite literally folds the wave over on itself, turning the peak of the triangle upside down and resulting in a jagged edge. In contrast to the rest of the modules, this is a feature which isn’t found on many synthesizers, although some modern synths will allow you to begin with an already-folded oscillator by playing back a sample.</li>
+<li>The <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-mixer/">mixer</a> combines up to three input signals as a single output, and also has a distoration feature which can make (possibly) pleasing changes to your signal by clipping it. You don’t have to distort your sounds if you don’t want to, though.</li>
+<li>The <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-output/">output</a> module is a different kind of mixer than the mixer above. It will take either one or two inputs and produce a stereo ouput by panning them right or left. It has a headphone amplifier and a line level output.</li>
+</ul>
+<p>Although the instructions are <em>very</em> good, as I work through each kit I am finding that I often want additional information, such as more explanation of what certain components do or additional schematic diagrams. I will share that information in the post for each kit I build.</p>
+<p>That’s the whole system! I will discuss each module in more detail when I write about building them in future posts. The <a title="Building the Power Supply" href="2023-02-22-building-a-synthesizer-2.html">next post</a> in this series discusses building the power supply.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=8JuYLLpZzBs">Introducing the mki x es.edu DIY VCO kit</a> by Moritz Klein (7:23). Although billed as an intro to the VCO kit, the latter half of the video is a demo of the full system, if you’d like to hear it bleep and bloop.</li>
+<li><a href="https://www.youtube.com/watch?v=vHNQQ6yUGyo">Designing a simple 5-step sequencer from scratch</a> by Moritz Klein (32:07) A nice example of the step-by-step, breadboard-based approach to understanding how the circuit works which is used throughout the entire Erica Synths EDU series.</li>
+</ul>
+<p><img src="/images/synth/DIY_System_web_5.jpg" width="80%" loading="lazy" alt="The mki x es.EDU DIY System -- the entire, complete system in its enclosure"></p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/diy.html">diy</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>Building a Synthesizer, Introduction: The World of DIY Synthesizers</title>
+    <link href="http://www.craigstuntz.com/posts/2023-02-20-building-a-synthesizer-0.html" />
+    <id>http://www.craigstuntz.com/posts/2023-02-20-building-a-synthesizer-0.html</id>
+    <published>2023-02-20T00:00:00Z</published>
+    <updated>2023-02-20T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on February 20, 2023
+    
+</div>
+
+<div class="toc">
+<ul>
+<li>Introduction: The World of DIY Synthesizers</li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>I’m building a synthesizer. I like synths and I like electrical engineering, so it seemed like a natural fit. But I’m not at the point where I’m ready to take on the design from scratch, so I wanted to find a kit. There are a lot of choices! In this post I’ll review some of the options and explain how I settled on a kit to buy.</p>
+<p>A synthesizer is a function which computes an audio signal over time, given some (usually keyboard) input. Sometimes, as with a modern digital synthesizer which contains a general-purpose CPU, it does this using the standard model of computation which we programmers are all very familiar with. But in an analog synthesizer, it does this computation using an analog computer, which is a different model of computation that is not so common today. So over the course of this series I will also look into alternate computational models and think about what we can learn about computation from them.</p>
+<p>I’m also going to be writing what amounts to a laboratory notebook as I work. The point of building this kit for me is to learn about electrical engineering in general and the construction of analog synthesizers in particular, not to get soldering practice. This may be more detail than many readers want! But I do think that for people who are building these kits it can be really helpful to hear what others discovered while building them, so I have a lot of detail and digressions in the series.</p>
+<h2 id="modular-synthesis">Modular Synthesis</h2>
+<p>From a DIY synth-builder’s point of view, a modular synth (see <a href="2023-02-23-building-a-synthesizer-glossary.html">the glossary</a> for a definition of “modular” in this context) makes sense because they keep the various parts of the circuitry well-segregated; instead of a big mass of ICs which are used for multiple different features within a synth, each module stands alone, which means that you can understand how each part works more easily.</p>
+<p>From a musician’s point of view, modular synthesis may or may not be your thing. It’s certainly not mine! Programming a sound on a modular synthesizer is roughly equivalent to <a href="https://computerhistory.org/blog/programming-the-eniac-an-example-of-why-computer-history-is-hard/">programming on the ENIAC</a>:</p>
+<blockquote>
+<p>The initial design of the ENIAC did not use anything like the software we know today. It was basically an assembly of “functional units” that were wired together in a particular way for each new problem. If you wanted to do a multiplication after an addition, you would run a wire from the multiplier to the adder.</p>
+</blockquote>
+<p>As a musician, I far prefer playing software instruments. I have the musical attention span of a <a href="https://journals.le.ac.uk/ojs1/index.php/pst/article/view/3739">squirrel on “Mach 6”</a>, and I like to be able to change from song to song at a whim. But as an (amateur!) electrical engineer, I can learn a lot from building hardware, <em>especially</em> if the circuits are fairly easy to understand. So a modular synth is a good fit for this project.</p>
+<h2 id="some-options-for-synth-kits"><a name="options"></a>Some Options for Synth Kits</h2>
+<p>There are, thankfully, a number of choices of synth kits on the market, and there is a lot of variety in terms of what you’re building, what techniques you’ll use to assemble it, and what you’ll learn in the process. Here are some kits that I considered.</p>
+<ul>
+<li><strong>mki x es.EDU DIY</strong> Analog, modular, CV, <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">the full kit</a> includes 9 different modules + power supply rack. You can also buy the modules individually. The instructions are easy to read and fun, there are YouTube videos to go along with many of them, and most of the modules start with some breadboarding exercises so that you can really understand why the circuits are designed the way they are. The modules you will build are… OK. They will sound decent, but have very few features.</li>
+<li><strong><a href="https://paia.com/fatman/">PAiA FatMan</a></strong> Analog, MIDI/CV, fairly simple. Too simple for what I was after, but if you’re looking for a project you can do over a weekend it might be right for you?</li>
+<li><strong>North Coast Synthesis</strong> has <a href="https://northcoastsynthesis.com/synth-diy-projects/">a number of DIY kits</a>. They’ve put a lot of work into their instructions, with an emphasis on learning electronics, and the intent is to build modules that you’re going to want to keep and play, moreso than the two options above.</li>
+<li><strong>Dreadbox</strong> has, occasionally, <a href="https://www.dreadbox-fx.com/diy-kits/">a kit or two in stock</a>. These are kit versions of the commercial synths they sell, which are mostly desktop units which play nicely with Eurorack modular synths. The instructions are quite good, but don’t have the emphasis on learning electronics that you’ll find in mki x es.EDU DIY or North Coast manuals; they’re “solder this resistor here” sort of instructions.</li>
+<li><strong>Black Corporation</strong> has <a href="https://black-corporation.com/">some phenomenally complicated kits</a> for polyphonic MIDI synthesizers, which feature minimal documentation and typically involve soldering hundreds of surface-mount components onto many boards. Minimal instructions, and you may have to make modificatsion to the circuits to work around issues, although there is some community documentation.</li>
+<li>There are many other options! I’ve tried to give a good range above, but if you’d like to see a much longer list, you could do worse than browsing <a href="https://synthcube.com/cart/diy-kits#/availability=1/sort=p.sort_order/order=ASC/limit=20">the DIY section of synthCube</a>. synthCube is a bit more than just another online retailer. Besides carrying a very large assortment of DIY parts and kits, they have purchased <a href="http://musicfromouterspace.com/">Ray Wilson’s</a> hardware and business, which probably kept his site from going to spammers after his death and certainly resulted in his PC boards and kits remaining available.</li>
+</ul>
+<p>It would be a mistake to buy one of these kits based solely on the features of the synth. As I noted above, I am more interested (for this project) in learning about electronics than ending up with a synth I want to play every day. So I spent some time reviewing the manuals, which are mostly available online, and seeing which had the most engaging documentation. There is a wide range between “barely documented” and “a mini-course in electrical engineering” represented here.</p>
+<p>Moreover, there are many resources which could make a “make or break” difference in terms of whether or not you’re able to successfully complete the kit, especially if you take on one of the more challenging kits. These include message boards and YouTube channels. It’s worth spending a little time to review what resources will be available to you should you need a “lifeline.”</p>
+<p>At any rate, I ended up choosing the mks x es.EDU for a couple of reasons. First, my desire to learn about how the underlying electronics worked really narrowed the choice down to “those kits with the best manuals,” and that meant either mks x es.EDU or North Coast. Second, the mks x es.EDU system is just that: A complete set of modules designed to work well together.</p>
+<p>The North Coast modules, by contrast, are better in terms of the number of features they provide, but are much more expensive (the <a href="https://northcoastsynthesis.com/products/msk-013-middle-path-vco-sdiy-kit.html">oscillator module</a> alone lists at US $342, whereas an entire <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">mks x es.EDU system</a> goes for €630.00) and are not designed to be purchased as a “system” which you can assemble and play. They’re modules, which you might want to use with other DIY modules or with modules you buy from other vendors. They are probably a better fit for people who want to build the synthesizers for music that they play, rather than people are primarily interested in building a synth to learn about electronics and synthesis, although I think both groups would enjoy them.</p>
+<h2 id="ordering-from-latvia">Ordering from Latvia</h2>
+<p>Although there are US dealers for the Erica Synths gear, they seemed to be out of stock of the entire mks x es.EDU system when I looked, so I bought mine directly from Erica Synths in Latvia. To my surprise and delight, my credit card company did not immediately reject the order. Everything went through, and shipping was quite fast! In less than a week, the box was at my door, in good condition and ready for assembly.</p>
+<p><img src="../images/synth/Box.jpg" alt="A box containing the synth kits" loading="lazy"></p>
+<p><img src="../images/synth/Boxes.jpg" alt="Little boxes containing each module kit" loading="lazy"></p>
+<h2 id="what-youll-need-besides-the-kits">What You’ll Need, Besides the Kits</h2>
+<p>Although the mks x es.EDU kits are “complete” insofar as they include printed cirucit boards, components, panels, and (optionally), an enclosure, you will need additional tools and materials to assemble them.</p>
+<ul>
+<li>A temperature controlled soldering station</li>
+<li>Solder, desoldering braid</li>
+<li>Some tools: Wire cutters, a good wire stripper, helping hands</li>
+<li>A multimeter</li>
+<li>An oscilliscope of some sort. Audio signals are pretty low frequency, however, and you’re only going to need a single channel for the most part, so feel free to go cheap in this deparment if you don’t already have one. Really, any barely functional scope is OK.</li>
+<li>A breadboard. This is really important. If you’re not going to bother breadboarding the circuits first, then I would question if the mks x es.EDU kits are really right for you. <em>The whole point</em> of these kits is that you should breadboard first to understand what each components is doing, not just solder stuff to a pre-printed board.</li>
+<li>Some means of audio amplification – whatever you would normally plug a synth into is fine, although you might want to choose some cheap headphones or something which you won’t get too sad about if you inadvertently destroy it with a strong signal.</li>
+</ul>
+<p>Also, there will be additional parts and materials necessary for some of the individual kits; I’ll discuss those in later posts.</p>
+<p>In the <a href="2023-02-23-building-a-synthesizer-glossary.html">glossary</a> I will explain some of the specific terminology and technology common in the modular synthesis world. If you already know about all of that, you might want to skip ahead to <a href="2023-02-21-building-a-synthesizer-1.html">The mki x es.EDU DIY System</a></p>
+<h2 id="resources">Resources</h2>
+<p>Each post in this series will include a “Resources” section with some useful links to places to learn more about the material discussed within the post.</p>
+<h3 id="print">Print</h3>
+<ul>
+<li><a href="https://synthcube.com/cart/ray-wilson-make-analogue-synthesizers">Make: Analog Synthesizers</a> A book by Ray Wilson, from O’Reilly’s now-shuttered Make: division. Worthwhile and still in print. Roughly half this book is a general introduction to electronics with a particular focus on analog synthesis, and the other half is instructions for and explanation of one particular DIY synth, the “<a href="http://musicfromouterspace.com/analogsynth_new/NOISETOASTER/NOISETOASTER.php">Noise Toaster</a>” synthesizer. At about 160 pages, this is a considerably more approachable read than…</li>
+<li><em>Musical Applications of Microprocessors,</em> by Hal Wilson. Now out of print, and used copies are rather expensive. A great book, though, and worth keeping an eye out for. 800+ pages, covers analog and digital synths (ca. 1985), and despite the title, is as much about discrete components as microprocessors.</li>
+<li><a href="https://files.northcoastsynthesis.com/msk-013.pdf">MSK 013 Middle Path Voltage-Controlled Oscillator</a> The instructions for a VCO by North Coast Synthesis, which is an example of a “differently excellent” bit of manual writing.</li>
+</ul>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=8JuYLLpZzBs">Introducing the mki x es.edu DIY VCO kit</a> by Moritz Klein (7:23)</li>
+<li><a href="https://www.youtube.com/watch?v=XpMZoR3fgd0">Complete beginner’s guide to using a breadboard</a> by Moritz Klein (21:22). The first half is an intro to using a breadboard, which isn’t very complicated, but they tend to come without instructions, so it’s still useful. The second half begins to introduce audio circuits, and might be helpful even if you already know how to use a breadboard.</li>
+<li><a href="https://www.youtube.com/watch?v=vy5F__2bnlo">My collaboration with Erica Synths | Sunday Livestream</a> by Moritz Klein (1:36:49) Useful, but the length is a bit of a trial and most of the technical material is covered elsewhere. Watch this one if you want to hear the “behind the scenes story” of bringing the kits to market.</li>
+<li><a href="https://www.youtube.com/playlist?list=PLOunECWxELQS5bMdWo9VhmZtsCjhjYNcV">ECE4450 Analog Circuits for Music Synthesis</a> by Aaron Lanterman (32 video playlist). These are lectures for an undergrad course at Georgia Tech which presumes some exposure to analog circuits and analysis. If you’ve had first year EE then you should be good. This is a long series of videos, and it references still other videos. I really, really like these videos; there’s nothing else out there that I’ve seen which compares in both the sophistication of the material taught as well as the specific focus on vintage synthesis. However, the length alone is kind of imposing, so these videos are more of a “if you just can’t get enough” option.</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/diy.html">diy</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>How I Made a Giant Mistake with Terraform (and How Azure Made It Worse)</title>
     <link href="http://www.craigstuntz.com/posts/2021-07-08-how-i-made-a-giant-mistake-with-terraform.html" />
     <id>http://www.craigstuntz.com/posts/2021-07-08-how-i-made-a-giant-mistake-with-terraform.html</id>
@@ -571,254 +879,6 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="info">
     
     Tags: <a href="/tags/Stir%20Trek.html">Stir Trek</a>, <a href="/tags/Central%20Ohio%20ISSA.html">Central Ohio ISSA</a>, <a href="/tags/presentations.html">presentations</a>, <a href="/tags/security.html">security</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Speaking at CodeMash</title>
-    <link href="http://www.craigstuntz.com/posts/2017-01-09-codemash.html" />
-    <id>http://www.craigstuntz.com/posts/2017-01-09-codemash.html</id>
-    <published>2017-01-09T00:00:00Z</published>
-    <updated>2017-01-09T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on January  9, 2017
-    
-</div>
-
-<p>I’ll be speaking at <a href="http://www.codemash.org/">CodeMash</a>, twice, on Friday the 13th. Wish me luck!</p>
-<h3 id="mashing-up-qa-and-security">Mashing Up QA and Security</h3>
-<p>8:30 a.m., Zambezi Room</p>
-<p>Security is domain specific quality assurance, but developers, testers, and security professionals often don’t work together. When this type of disconnect exists between big groups of people who are very good at their jobs, there is usually a mostly untapped potential for learning. I’ve been exploring this landscape by writing an open source fuzzer aimed at discovering new test cases (not just crashes!) using binary rewriting of managed executables and genetic modification of a test corpus, implemented in F# and using Mono.Cecil. I’ll ontrast the fundamentals of each discipline, demonstrate tools used by experts on both sides of the security and QA fence, and challenge the audience to find new ways to mix them up. Expect to see lots of code and leave with ideas for making entire communities better, not just your own team!</p>
-<h3 id="incredibly-strange-programming-languages">Incredibly Strange Programming Languages</h3>
-<p>12:15 p.m., Cypress Room</p>
-<p>If you’ve ever suspected that “all programming languages are pretty much the same; they just have different syntax,” well, you will never suspect that again! Covering languages from the unusually powerful (Idris) to the illuminated (قلب) to the profoundly limited (BlooP), and all points in between, these languages will help you think differently about approaches to software problems you face in your day job. Of course we’ll have a lot of fun, but these languages are no joke. The practical benefit of an impractical language is the power to find new approaches to common problems.</p>
-
-<div class="info">
-    
-    Tags: <a href="/tags/CodeMash.html">CodeMash</a>, <a href="/tags/presentations.html">presentations</a>, <a href="/tags/F%23.html">F#</a>, <a href="/tags/QA.html">QA</a>, <a href="/tags/security.html">security</a>, <a href="/tags/PLT.html">PLT</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Identity Theft on Upwork</title>
-    <link href="http://www.craigstuntz.com/posts/2016-07-08-upwork-identity-theft.html" />
-    <id>http://www.craigstuntz.com/posts/2016-07-08-upwork-identity-theft.html</id>
-    <published>2016-07-08T00:00:00Z</published>
-    <updated>2016-07-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on July  8, 2016
-    
-</div>
-
-<ul>
-<li>21 June 2016: A stranger reaches out to me on Twitter and Facebook and asks, “Did we just chat on Upwork?” I reply, “Nope, it wasn’t me,” and she responds, “there is someone impersonating you.”</li>
-</ul>
-<p>Crap.</p>
-<p><a href="/images/Screen%20Shot%202016-07-05%20at%2011.06.31%20PM.png"><img src="/images/Screen Shot 2016-07-05 at 11.06.31 PM small.png" alt="Fake profile on upwork.com" /></a></p>
-<p>Yes, that’s my name and my picture, and most of the text is plagiarized from <a href="https://stackoverflow.com/jobs/cv/employer/12943">my résumé</a>, but I don’t even have an Upwork account. According to the site, the scammers have done two paid assignments while posing as me.</p>
-<p>The scammers were trying to solicit work from her, using my identity and experience.</p>
-<ul>
-<li>21 June 2016: Both I and the woman who contacted me report the fake profile to Upwork.</li>
-<li>22 June 2016: Upwork support responds:</li>
-</ul>
-<blockquote>
-<p>Hello Craig,</p>
-<p>Please be informed that we are alreadyinvestigating your report. Rest assured that we will take appropriateaction according to our policies and processes.</p>
-<p>We do appreciate your effort in keeping theintegrity, safety and quality of the Upwork Marketplace and we wish you successin your endeavors.</p>
-<p>We will now close this Support ticket. Pleaselet us know if we can be of any additional help.</p>
-</blockquote>
-<p>But they don’t close the account. They do, however, send me a “satisfaction survey” for the support ticket.</p>
-<p>I do a bit of looking around, and it unsurprisingly turns out this happens a lot.</p>
-<p><a href="http://www.vandelaydesign.com/designers-beware-upwork-scam/">Designers Beware of the Latest Upwork Scam</a></p>
-<blockquote class="twitter-tweet" data-lang="en">
-<p lang="en" dir="ltr">
-<a href="https://twitter.com/JuliaEMcCoy"><span class="citation">@JuliaEMcCoy</span></a> fyi - there are 5+ accnts spamming <a href="https://twitter.com/Upwork"><span class="citation">@Upwork</span></a> using this pic for skype &amp; sending malware 2 applicants <a href="https://t.co/QXnQ67A4eu">pic.twitter.com/QXnQ67A4eu</a>
-</p>
-— Rebecca Gatesman (<span class="citation">@BeccaGatesman</span>) <a href="https://twitter.com/BeccaGatesman/status/738876245035896836">June 3, 2016</a>
-</blockquote>
-<blockquote class="twitter-tweet" data-lang="en">
-<p lang="en" dir="ltr">
-.<a href="https://twitter.com/Upwork"><span class="citation">@Upwork</span></a> Someone else is freelancing as me on your site 🤔 — I never signed up &amp; I don't freelance. Pls fix <a href="https://t.co/xuWZ4e6hHi">https://t.co/xuWZ4e6hHi</a>
-</p>
-— Ben Cline (<span class="citation">@yocline</span>) <a href="https://twitter.com/yocline/status/734870368586850304">May 23, 2016</a>
-</blockquote>
-<p>After I responded in the last thread, their social media folks reach out and offer to expedite the case. The fake profile is hidden from anonymous users, but if you create an account and log in to upwork.com, it’s still there. This is not progress.</p>
-<ul>
-<li>23 June 2016: I email support again and note they’ve hidden the profile from anonymous users only.</li>
-<li>23 June 2016: Support responds:</li>
-</ul>
-<blockquote>
-<p>Thanks for your response. Kindly be assured that the the reported freelancer is already under review and necessary action would be taken on the user for fake account creation once proved.</p>
-<p>Thanks for your cooperation &amp; support.</p>
-</blockquote>
-<ul>
-<li>23 June 2016: I contact their social media folks again.</li>
-<li>23 June 2016: They respond:</li>
-</ul>
-<blockquote>
-<p>Hi Craig, sorry for any confusion this has caused. Our Team is still currently investigating this. Once their investigation is complete, they will update you via your ticket. We appreciate your continued patience and hope to get this resolved soon!</p>
-</blockquote>
-<ul>
-<li>5 July 2016: It’s now been two weeks since I first reported the scammers. I email support again.</li>
-<li>6 July 2016: Support responds:</li>
-</ul>
-<blockquote>
-<p>Thank you for patiently awaiting our response and please accept our apologies for the late response as we have received high volume of requests recently and we are trying our best to address all concerns as promptly as possible.</p>
-<p>Please be assured that appropriate action has already been taken on the reported fake profile as defined in our Terms of Service. Again, our sincerest apologies for your inconvenience.</p>
-<p>Please feel free to contact us if you need further assistance.</p>
-</blockquote>
-<p>I’n not sure what “appropriate action” is supposed to mean, but the fake profile is still live on their site. Upwork is making money using an identity they know to be stolen.</p>
-<ul>
-<li>5 July 2016: I lose patience with their support team altogether and <a href="http://sarafhawkins.com/how-to-file-dmca-takedown/">send a DMCA takedown</a> to their <a href="http://www.copyright.gov/onlinesp/agents/u/upwork_global_inc.pdf">legally registered contact</a>. I can do this because the scammers copied text that I wrote.</li>
-<li>5 July 2016: A member of their legal team acknowledges receipt of the request in less than half an hour.</li>
-<li>7 July 2016: Approximately 40 hours later, she writes back:</li>
-</ul>
-<blockquote>
-<p>I am following-up to inform you that we have removed the profile in question. Thanks for your patience.</p>
-</blockquote>
-<p>I verify that this is true and thank her.</p>
-<h2 id="dmca">DMCA?</h2>
-<p>The DMCA is really not the right tool to protect your identity. I probably couldn’t have used it if the scammers hadn’t stolen my writing as well as my identity. But it does have a strong requirement that the online service provider must “expeditiously” remove the copyrighted material. They are not allowed to just send assurances that they’re “investigating” it for weeks on end while profiting off of the scam.</p>
-<p>And, yes, <a href="http://www.pcworld.co.nz/article/483729/google_submission_hammers_section_92a/">DMCA takedowns are frequently abused</a>.</p>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<div class="info">
-    
-    Tags: <a href="/tags/identity%20theft.html">identity theft</a>, <a href="/tags/DMCA.html">DMCA</a>, <a href="/tags/Upwork.html">Upwork</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>"Static vs. Dynamic" Is the Wrong Question for Working Programmers</title>
-    <link href="http://www.craigstuntz.com/posts/2016-06-18-static-vs-dynamic-wrong-question.html" />
-    <id>http://www.craigstuntz.com/posts/2016-06-18-static-vs-dynamic-wrong-question.html</id>
-    <published>2016-06-18T00:00:00Z</published>
-    <updated>2016-06-18T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on June 18, 2016
-    
-</div>
-
-<p>It’s common to ask, <em>“Is there evidence that programmers write safer code or are more productive when using a static or a dynamic language?”</em> It’s also common to write really terrible blog post answers to this question. I’m not going to link to examples, but let’s just say that general comparisons of “mainstream dynamic language A” with “mainstream static language B” don’t give a lot of insight into the broader question.</p>
-<p>Programmers who say they prefer static or dynamic languages are <a href="https://www.ics.uci.edu/~lopes/teaching/inf212W12/readings/rdl04meijer.pdf">often interested in specific language features</a> rather than static or dynamic type systems, <em>per se.</em></p>
-<p>Yet <a href="http://rundis.github.io/blog/2016/type_confused.html">reasonable people do want to know the answer</a>. Can we shed more light on the topic?</p>
-<h2 id="science-cannot-give-us-a-definitive-answer-yet">Science Cannot Give Us a Definitive answer – Yet!</h2>
-<p>Well-designed, peer reviewed research on human interaction with programming languages is <a href="https://jyx.jyu.fi/dspace/handle/123456789/47698">uncommon</a>. Static typing is <a href="https://www.quorumlanguage.com/evidence/evidence.pdf">better studied than most other PL features</a> but <a href="http://danluu.com/empirical-pl/">tends to examine very specific claims with fairly small effects</a>. Good studies which do exist at all, narrow as their findings might be, are <a href="2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html">generally not reproduced by anyone</a>. There is <a href="http://www.cs.cmu.edu/~NatProg/programminglanguageusability/">an effort to fix this</a>, but for now any argument claiming a “scientific” answer to this question is suspect.</p>
-<h2 id="there-arent-two-distinct-buckets-of-languages-named-static-and-dynamic">There Aren’t Two Distinct Buckets of Languages Named Static and Dynamic</h2>
-<p>To be honest, I don’t think this question is answerable. In part this is because, increasingly, I think <strong>the notion of a strict distinction between static and dynamic languages is less than helpful</strong>. It’s somewhat more useful to talk about what sort of features the language’s type system has.</p>
-<blockquote>
-<p>In general, we should strive for strong typing, and adopt static typing whenever possible. –<a href="http://web.cse.ohio-state.edu/~soundarajan.1/courses/788/cardelli85understanding.pdf">Luca Cardelli and Peter Wegner</a></p>
-</blockquote>
-<p>From the point of view of the working programmer, calling a language “statically typed” confuses a number of different and important ways that both languages and tooling can vary.</p>
-<p>Why? Ask yourself these questions:</p>
-<h3 id="what-is-a-statically-typed-language">What Is a Statically Typed Language?</h3>
-<p>Is Elm a statically typed language? Is Java a statically typed language?</p>
-<ul>
-<li><a href="http://elm-lang.org/blog/compilers-as-assistants">Elm’s type system acts as a coach</a> to help the programmer complete her work, but doesn’t really affect performance.</li>
-<li>Java’s type system is a <a href="http://openjdk.java.net/jeps/286">verbose</a> impediment to code readers and writers, but <a href="http://cr.openjdk.java.net/~jrose/values/values-0.html">improves performance</a> by, for example, supporting many different primitive numeric types.</li>
-</ul>
-<p>Elm’s type system is substantially more powerful than Java’s, and eliminates entire classes of bugs which plague Java applications such as dereferencing null pointers and inexhaustive <code>switch</code> blocks.</p>
-<p>If both languages are called “statically typed” and yet the two languages’ type systems do such different things, then how much value is there in lumping them into the same specific bucket?</p>
-<p>Indeed, even the <a href="https://www.cl.cam.ac.uk/~srk31/research/papers/kell14in-author-version.pdf">word “type” itself is used in multiple, not entirely compatible senses</a> in computer science.</p>
-<p>Tomas Petricek <a href="http://tomasp.net/blog/2015/against-types/">argues</a>:</p>
-<blockquote>
-<p>Rather than seeking the elusive definition of what is a type (which does not exist), I believe that we should look for innovative ways to think about and work with types that do not require an exact formal definition.</p>
-</blockquote>
-<h3 id="what-is-a-dynamic-language">What Is a Dynamic Language?</h3>
-<p>Is Erlang a statically typed language? Many would say no, but what if I run <a href="http://erlang.org/doc/man/dialyzer.html">Dialyzer</a> first? Sure, I’m not getting the runtime performance benefits static typing can bring, but if types are inferred statically at build time and can fail the build, then I’m getting at least some help from static typing. So in this case the distinction between statically and dynamically typed has more to do with the tooling I might be using than the language itself. That’s interesting!</p>
-<p>You can even <a href="https://github.com/frenchy64/ambrosebs.com/blob/gh-pages/talks/dynamic%20inference%20boston%20pi%202016.pdf">infer static types from unit tests instead of code itself</a>!</p>
-<h3 id="whatever-static-and-dynamic-are-production-languages-often-have-both">Whatever “Static” and “Dynamic” Are, Production Languages Often Have Both</h3>
-<p>C# has <code>dynamic</code>. Racket has <a href="https://docs.racket-lang.org/ts-guide/">Typed Racket</a>. Java has reflection. Clojure has <code>core.typed</code>.</p>
-<p>Statically typed languages typically check certain types of errors at compile time and other types of errors at runtime.<sup>1</sup> Which types of errors are checked when varies by programming language. For example, Idris can statically prove that a program does not divide by zero, whereas C# cannot.</p>
-<p>Manuel Chakravarty wrote a much more detailed (and technically rigorous) <a href="http://justtesting.org/post/148297302871/static-versus-dynamic">examination of this idea</a>.</p>
-<h3 id="well-ok-but-surely-there-must-be-a-formal-distinction-right">Well, OK, But Surely There Must Be a <em>Formal</em> Distinction, Right?</h3>
-<p>Less so than you might think.</p>
-<blockquote>
-<p>Terms like “dynamically typed” are arguably misnomers and should probably be replaced by “dynamically checked,” but the usage is standard.<br/> – Benjamin C. Pierce, <em>Types and Programming Languages</em><sup>2</sup></p>
-</blockquote>
-<blockquote>
-<p>Thus we see that the canonical untyped language, <strong>Λ</strong> [the untyped lambda calculus], which by dint of terminology stands in opposition to typed languages, turns out to be but a typed language after all. Rather than eliminating types, an untyped language consolidates an infinite collection of types into a single recursive type. Doing so renders static type checking trivial, at the cost of incurring dynamic overhead to coerce values to and from the recursive type.<br/> - Robert Harper, <em>Practical Foundations for Programming Languages</em><sup>3</sup></p>
-</blockquote>
-<p>One can consider a “dynamic language” as a language which has fewer statically checked types (namely, one) than a “static language.”</p>
-<h2 id="what-does-static-typing-really-do">What Does Static Typing Really Do?</h2>
-<p>Given some programming language, you can imagine “static typing” as a feature (or, more properly, a family of features) the language designer could add to an otherwise untyped or dynamic language which <strong>might</strong> deliver one or more of the following benefits:</p>
-<ul>
-<li>Proof that certain kinds of dynamic errors are impossible<sup>4</sup></li>
-<li>Automatic and machine verified documentation</li>
-<li>Improved runtime performance</li>
-<li>Better tooling support</li>
-</ul>
-<p>It <strong>might</strong> also have one or more of the following drawbacks</p>
-<ul>
-<li>Increased verbosity or <a href="http://tratt.net/laurie/blog/entries/another_non_argument_in_type_systems.html">reduced expressiveness</a></li>
-<li>Rejection of otherwise correct programs<sup>5</sup></li>
-<li>Slower programmer iteration (possibly lengthy compile/run cycles)</li>
-<li>A need for the developer to learn “static typing” language feature (through she still must understand types to some degree regardless)</li>
-</ul>
-<p>However, every single one of these benefits and drawbacks could also come from adding a different feature (distinct from “static typing”) to the language.</p>
-<p>For example, “proof that certain kinds of dynamic errors are impossible” could come via model checking or <a href="https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/">formal verification</a>. “Increased verbosity” is hardly limited to “static languages”; most “dynamic languages” are more verbose than SML or Haskell.</p>
-<p>Instead of asking, “Should the whole world use a ‘statically typed’ language?” we could ask “In which cases would it make sense to write formal proofs of (at least some parts of) our programs?”</p>
-<h2 id="if-static-vs.dynamic-is-the-wrong-question-then-what-is-the-right-question">If “Static vs. Dynamic” Is the Wrong Question, Then What Is the Right Question?</h2>
-<p>If you’re a working programmer, then the right question is:</p>
-<blockquote>
-<p><strong>How can my languages and tooling help me be a better programmer?</strong></p>
-</blockquote>
-<p>Follow-up questions might be:</p>
-<ul>
-<li>If I care about verification of correctness properties above and beyond what I can do with simple tests, what are my choices, in terms of language features and tooling?</li>
-<li>What are the properties which are difficult or impossible to verify?</li>
-<li>Do the features and tooling of the language steer you towards great solutions to problems, provide you little guidance, or get in your way? Does the answer vary depending on which kind of problem?</li>
-<li>What compromises does the language I’m using now make?</li>
-<li>Can I use tools to fill in some of the shortcomings?</li>
-<li>How do other languages and systems address my pain points?</li>
-<li>Given some correct program I want to be the output of my process, how do I arrive at that program? Do I start by writing a specification (possibly in the form of types), or by writing tests, or by writing code, or a mix of these?</li>
-</ul>
-<p>These are difficult questions, because you can’t really answer them without experience with diverse languages, programming communities, and ecosystems. Zealots need not apply, but be kind to excited newbies!</p>
-<p>Importantly, programming is still in its infancy. We are still discovering new methods of designing code. We must keep an open mind, because programmers 50 years from now will laugh at whatever we choose. Today, you can design your code using top-down, bottom-up, test-first, <a href="https://www.manning.com/books/type-driven-development-with-idris">type-driven</a>, or a multitude of other techniques. The design methodologies of the next decade probably haven’t been invented yet.</p>
-<blockquote class="twitter-tweet" data-lang="en">
-<p lang="en" dir="ltr">
-<a href="https://twitter.com/raichoo"><span class="citation">@raichoo</span></a> <a href="https://twitter.com/kamatsu8"><span class="citation">@kamatsu8</span></a> let's have some imagination about where languages and tools might go if we let go of how current tools trade things off
-</p>
-— Edwin Brady (<span class="citation">@edwinbrady</span>) <a href="https://twitter.com/edwinbrady/status/743865720912609280">June 17, 2016</a>
-</blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-<h5 id="notes">Notes</h5>
-<p><sup>1</sup> Harper, Robert, <a href="http://www.cs.cmu.edu/~rwh/pfpl.html"><em>Practical Foundations for Programming Languages</em></a>, 2nd Edition, §6.3</p>
-<p><sup>2</sup> Pierce, Benjamin C. <a href="https://www.cis.upenn.edu/~bcpierce/tapl/"><em>Types and Programming Languages</em></a>, p. 2</p>
-<p><sup>3</sup> Harper, §21.4</p>
-<p><sup>4</sup> Harper, §6</p>
-<p><sup>5</sup> Rémy, Didier, <a href="http://gallium.inria.fr/~remy/mpri/cours1.pdf"><em>Type systems for programming languages</em></a>, p. 29</p>
-
-<div class="info">
-    
-    Tags: <a href="/tags/programming%20languages.html">programming languages</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Andreas Stefik on Programming Language Human Factors Research</title>
-    <link href="http://www.craigstuntz.com/posts/2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html" />
-    <id>http://www.craigstuntz.com/posts/2016-06-17-Andreas-Stefik-on-PL-Human-Factors.html</id>
-    <published>2016-06-17T00:00:00Z</published>
-    <updated>2016-06-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on June 17, 2016
-    
-</div>
-
-<p><a href="https://www.functionalgeekery.com/episode-55-andreas-stefik/">This interview</a> with <a href="http://web.cs.unlv.edu/stefika/">Andreas Stefik</a> on empirical studies of human productivity with PL features is fascinating. In short: There aren’t many.</p>
-<p>Very few randomized, controlled experiments in the field have ever been performed. <a href="https://jyx.jyu.fi/dspace/handle/123456789/47698">This 2015 thesis</a> found only 22!</p>
-<p>Much if not most PL human factors research is <a href="http://www.dictionary.com/browse/anecdata">anecdata</a>. Even the few randomized, controlled experiments which have been performed have never been reproduced.</p>
-<p>CS folks who have ever looked down their noses at social sciences for soft research standards should be mortified.</p>
-<p>Never take blog posts or tweets claiming: “&lt;study&gt; found &lt;author’s pet PL feature&gt; boosts productivity by &lt;x&gt;” at face value. Conclusive, reproduced results on such a thing would be unprecedented in CS research.</p>
-
-<div class="info">
-    
-    Tags: <a href="/tags/Andreas%20Stefik.html">Andreas Stefik</a>, <a href="/tags/programming%20languages.html">programming languages</a>
     
 </div>
 ]]></summary>
