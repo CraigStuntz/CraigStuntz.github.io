@@ -38,18 +38,18 @@ The full system includes:
   oscillators in the full system. An oscillator is a "thing which produces 
   sound" which can be filtered and combined by other modules.
 * Two [envelope generators](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-eg/)
-  which produce, well, envelopes. Think of an envelope as the volume over time of
+  which produce, well, envelopes. Think of an envelope as (for example) the volume over time of
   a particular note. If you were making an organ sound, you would want the volume
   of a note to immediately drop to nothing when you took your finger off of a 
   key. If you were making a xylophone sound, on the other hand, you would want 
   the sound to slowly fade out. The envelope generator produces a voltage which
   corresponds to this desired change in volume. However, actually affecting the 
   sound produced by an oscillator with this envelope will require another module,
-  the VCA. The full system includes two identical EGs modules, presumably 
-  because there are two oscillator modules and two VCAs (on one single module).
+  the VCA. The full system includes two identical EGs modules. Envelopes are 
+  also useful for controlling things besides volume, such as filters. 
 * A [dual VCA](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vca/) (Voltage
   Controlled Amplifier). The primary use case for this module is taking as inputs
-  the sound produced by the oscillator and the envelope produced by the envelope
+  the sound produced by the oscillator and the envelope produced by an envelope
   generator and producing as an output a sound which follows the envelope in 
   volume and has a tone produced by the oscillator. There are other ways to use
   it, but this is the most common thing to do.
