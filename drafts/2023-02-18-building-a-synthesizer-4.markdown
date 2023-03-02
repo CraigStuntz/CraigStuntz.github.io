@@ -1,12 +1,12 @@
 ---
-title: "Building a Synthesizer, Chapter 4: The Digital Circuits Model of Computation"
+title: "Building a Synthesizer, Chapter 4: The Logic Circuits Model of Computation"
 series: Building a Synthesizer
 chapter: "4"
-chapterName: The Digital Circuits Model of Computation
+chapterName: The Logic Circuits Model of Computation
 tags: diy, electrical engineering, computer science, homomorphic encryption
 ---
 
-I'm going to step aside from circuit building to talk about the digital circuits
+I'm going to step aside from circuit building to talk about the logic circuits
 model of computation. This may surprise you, reader, as it would at first seem
 to have nothing to do with building an analog synthesizer. I have a few 
 reasons for doing so. One is that I'll be talking about analog computers in a 
@@ -44,17 +44,19 @@ terms of its computing capabilities. So in this case we have two different
 models of computation which can solve the same problems, at least if you ignore 
 performance. 
 
-## Digital Circuits
+## Logic Circuits
 
 Another model, which used to be somewhat common, but is far less so given that 
-powerful CPUs can be had for pennies these days, is the digital circuits model.
+powerful CPUs can be had for pennies these days, is the logic circuits model.
 In this case instead of a CPU with an instruction pointer which goes through a
 list of instructions, fetches data from memory, operates on that data, saves it
 back to memory, etc., we have a far simpler device which is just a bunch of 
-digital logic gates. This is so simple, in fact, that it can be efficiently 
-simulated on a Von Neumann machine, so we can either build a digital circuit 
+logic gates. This is so simple, in fact, that it can be efficiently 
+simulated on a Von Neumann machine, so we can either build a logic circuit 
 from raw gates or we can simulate it on a general purpose computer; the result
 of the computation will be the same either way.
+
+### An Example Circuit
 
 Having said that, it's still an interesting model, and it still has applications
 today. So let's give a quick example. Consider the following function in 
@@ -89,8 +91,8 @@ So far, so good, but how do we handle the if/then logic? One way is to compute
 both values, and then decide on which one to use based on the `c` value:
 
 <figure>
-<a href="/images/synth/DigitalCircuit.png">
-<img src="/images/synth/DigitalCircuit.png" loading="lazy" alt="A digital circuit equivalent to the TypeScript code above.">
+<a href="/images/synth/LogicCircuit.png">
+<img src="/images/synth/LogicCircuit.png" loading="lazy" alt="A logic circuit equivalent to the TypeScript code above.">
 </a>
 <figcaption>Logically correct</figcaption>
 </figure>
@@ -120,8 +122,8 @@ cases. We could leave it at that and be done with it, but looking at
 the truth table we can see that a somewhat simpler circuit would do:
 
 <figure>
-<a href="/images/synth/EquivalentDigitalCircuit.png">
-<img src="/images/synth/EquivalentDigitalCircuit.png" loading="lazy" alt="An equivalent digital circuit to the circuit above, but with five gates instead of six.">
+<a href="/images/synth/EquivalentLogicCircuit.png">
+<img src="/images/synth/EquivalentLogicCircuit.png" loading="lazy" alt="An equivalent logic circuit to the circuit above, but with five gates instead of six.">
 </a>
 <figcaption>Same output, fewer gates</figcaption>
 </figure>
@@ -139,7 +141,7 @@ returning an incorrect result!). If you do need to optimize some routine, it is
 important to compare the optimized versions in a profiler, not just squint at 
 the code.
 
-## Applications of the Digital Circuits Model
+### Applications of the Logic Circuits Model
 
 This is sort of intellectually interesting, but is there any point in the 
 equivalences above? Why would we bother doing this when general-purpose CPUs are
@@ -147,24 +149,24 @@ so cheap? It would literally cost more to build a non-trivial circuit with
 distinct gates than it would to build it on an Arduino or similar, so why am I 
 bothering explaining all of this?
 
-Aside from, you know, building digital circuits, which is sometimes a thing that
+Aside from, you know, building logic circuits, which is sometimes a thing that
 people do, there are a few cases I can think of where thinking in this model is 
 directly useful:
 
-### Compiler Optimizations
+#### Compiler Optimizations
 
 If you're writing a compiler optimizer, you might directly use boolean 
 equivalences such as [DeMorgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
 to rewrite boolean expressions to other expressions which are guaranteed to 
 return the same result.
 
-### GPU Programming
+#### GPU Programming
 
 [In GPU programming, you often need to write branch-free code whenever possible.](https://developer.nvidia.com/gpugems/gpugems2/part-iv-general-purpose-computation-gpus-primer/chapter-34-gpu-flow-control-idioms) 
 Note that the circuits model in the above example was branch-free, whereas the 
 `if`/`then` in the TypeScript code was a branch.
 
-### Homomorphic Encryption
+#### Homomorphic Encryption
 
 [Homomorphic encryption](2010-03-18-what-is-homomorphic-encryption.html) refers 
 to performing a computation on encrypted data, resulting in the cyphertext of 
@@ -174,11 +176,13 @@ will see that if you can't decrypt the data, then you can't do a conditinal
 branch based on some intermediate value (because that would require you to know
 what the value is, and you don't; it's encrypted). 
 
-So homomorphic encryption systems often use a digital circuits model of 
-computation, which can be branch free, as shown above.
+So homomorphic encryption systems often use a logic circuits model of 
+computation, which can be branch free, as shown above. In particular, 
+[Craig Gentry's 2010 thesis](https://crypto.stanford.edu/craig/), which 
+introduced the first fully homomorphic cryptosystem, used this model.
 
-### Mental Exercise
+## Mental Exercise
 
 My real agenda here is to get you thinking about different kinds of computing 
 models, because next we're going to talk about analog computers, and they're far
-weirder than digital circuits!
+weirder than logic circuits!

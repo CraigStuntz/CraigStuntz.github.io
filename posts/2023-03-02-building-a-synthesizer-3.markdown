@@ -7,11 +7,11 @@ tags: synthesis, diy, electrical engineering
 ---
 
 <div class="toc">
-* [Introduction: The World of DIY Synthesizers](2023-01-22-building-a-synthesizer-0.html)
-* [1: The mki x es.EDU DIY System](2023-01-29-building-a-synthesizer-1.html)
-* [2: Building the Power Supply](2023-01-29-building-a-synthesizer-2.html)
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
 * 3: Breadboarding the VCO
-* [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
 Having previously [built the power supply](2023-01-29-building-a-synthesizer-2.html),
@@ -439,6 +439,7 @@ Here's my final physical circuit:
 <a href="/images/synth/VCOCoreBreadboardFinal.jpg">
 <img src="/images/synth/VCOCoreBreadboardFinal.jpg" width="100%" loading="lazy" alt="The full VCO on a breadboard">
 </a>
+<figcaption>I'm going to need a bigger breadboard</figcaption>
 </figure>
 
 Also, I made [a simulation of the full VCO](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l5YCsA2ATIkrqIOwE5IBmQvPMHMPQyZZEHAFhA0UmYFMBaMMAKDAAchEJ1Q5U4ZHBFgpk6WxgYw0WiELRizKLwAmMuUlRtR48ImOZwAOQZgGA3gHcDbWdO6GLi5yLET3E39zS0heAGM-M0CogOQBRUxoY3hUtKIuPCSKOwQhQUJ0VGRhGDg+AHNYyQTq2Tw6HxdTOI9iOhiw5uCYzzd4ptcakzBUAWGdAEMZMclkJk55uaZx0ZnwdOz7SEZkMkgBFCQMLBywPMICopKN1N9Fplklh8lZHWal2TfuWa-G+9Gq2Q30BkgcOkiLyeTH6S0UsFSECwVCEhVQDBIqAI5CgCL4ACcoMsieRZm40rwqm5xONqQwYe8SbQmODoToAC4iQgWV50TjtXkkvzJISQRCIBg4ARS-CIN4wDHnBglRDUem4BgoW4gXTsABmkwArgAbdmUrmEDolCT8y2SBpEsKczh2K2FLkCR7WonccAqPBy0aUQgUHDiHYiBX4PDouyIATIHCWpPa3UGk1m5qET2C-k8v46Qn8nMF4uPbwk9K8ABKHvLljL5kgDLYDDcEkSShrdbB40b5DWiTb6072F4RblcXdnEn9saTa6IlnsmnDn67rC5AWy72fOXNPAt3hcAwADEAJYAO3Y5pdDoHNoY95wch8E7WK5ty4r5LuW5EUhAh4gG9oe5wKAiGAAMIAPaTPiADON5FiBvSoaq87gfA44AQcxKLHhpK0uo1BwN2BGrAeFHgC+nYgMOPyOriiDkehdrUUgzZMcOg6OmO75Tl+MaSBuR5kdMbj0mwtT2MOqw2h+mwKqgxiurgcCKkQkbJOi6A4OKYwYm2YDulhZEuJJWqwjC-CMDIH4hny96SgEYnwoUgjpOkwgAAomkhIAAOrnro7IABY4ZwznolyAQMDFv7YbW3AOS+9kBJadE8R2fEsclPBxWYKVxQIxGtiMOXwixWZxTFnjgPFNlFqZjWxQ1pUkm2ZFVPyJV9qZrAtgCHStZJCW8NM5AjVq6DTXQWRIDIyibC60CHBQqltgIBVYiIDBrbg9QIMYSAlDgbkTfRQIyb8AwgAtGDcMtaTaSp8WsKqBBPngmpZJwMBvXpBmeoQxmmRSLhTQ10RpZxNmQ7Dg2YFqcOMrNTZMOj9hWb4rK7ldNFkjhrIHqCRGVnckO-KTt21GEhIk7MJPCa2ODYVUzMSKyCRlbwqA8OAtNuMJsh04eCTSASIAyVJgurLLiVkYSZOy2TBlEgM5lyw1PGwwrfMC1jmp0GqDVWeL8CYOaav5r8KC86SS4fhWM7O1xbDnSoEgYKO0EAGogD557suEYUgAAkpeAAOhpms1tULKZmUaxLm52b14DJxnJkfsjqS4vYdo+YFACyIBQQHAAy7AAG7sMatk2qZWJ8s3cL0ESPu5YHgXl379ysoUfaD6+A+rFnSej80a4iY+eMbgP8+Pm8n46AAHku+YOI9v3teMmNMEHIdhQAOghFe2Qs9KrBhe14yvbnHmKICniXA8DTmLqmcC-zT9-3zX0FPTO+N92KAPsB1RWac57yw6i6VkxsiSezWtoX2L8y4Xw3i6YEOtzoujEGbVsmAmCv14Fg+Mgs0AkmKBgA+Pc34wXolkYibZSCoIRHAPAL4UDoCJFzLIhBeCMPFNLahWI2AaDwAmZUrBID8ykQ0H6uJ4AQFUbwIAA) 
