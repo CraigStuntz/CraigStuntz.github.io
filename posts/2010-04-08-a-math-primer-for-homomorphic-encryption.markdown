@@ -23,7 +23,7 @@ So which answer is correct? Arguably, both of them. As long as the following rul
 
 Which method should you use? _It depends on why you’re doing the division._ If you’re computing how many cupcakes each child can have at a birthday party, then you’d better use the answer with the positive remainder. If you’re computing how many panels of fencing you need to surround your yard, then you’d better use the answer with the negative remainder.
 
-In fact, there are at least [five different, valid algorithms](hhttps://www.microsoft.com/en-us/research/publication/division-and-modulus-for-computer-scientists/ "Division and Modulus for Computer Scientists") for selecting a quotient and remainder for a given integer division problem.
+In fact, there are at least [five different, valid algorithms](https://www.microsoft.com/en-us/research/publication/division-and-modulus-for-computer-scientists/ "Division and Modulus for Computer Scientists") for selecting a quotient and remainder for a given integer division problem.
 
 The homomorphic encryption scheme used in the van Dijk, et. al. paper and in Gentry’s CACM article uses "R-division":
 
