@@ -14,6 +14,26 @@ the resistors, R11, was never shown assembled in the photos. Looking at the
 schematic it's certainly needed, and an appropriate resistor is included with 
 the kit. 
 
+## Test Point Voltages
+
+Someone was asking for this data, so here are the voltages I measured at the 
+various test points on the PCB with the completed kit.
+
+For test points A-C, I moved the large coarse tuning potentiometer when taking
+measurements. For test point D, I moved the PWM Width potentiometer when taking
+measurements. In all cases I took these measurements without connecting any kind
+of external CV signal, which might have changed the "DC" signals into something
+else entirely.
+
+|              |    A  |       B       |       C       |    D   |
+| -------------| ----- | ------------- | ------------- | ------ |
+| Signal type* | DC    | Saw           | Saw           | DC     |
+| Pots at 0%   | 0.37V | 3Vpp, 8.92 Hz | 3Vpp, 8.92 Hz | -1.39V |
+| Pots at 50%  | 0.46V | 3Vpp, 273 Hz  | 3Vpp, 273 Hz  | 0.08V  |
+| Pots at 100% | 0.52V | 3Vpp, 3905 Hz | 3Vpp, 3905 Hz | 1.39V  |
+
+*The signal type when no CVs are connected to the input jacks.
+
 ## "Extra" Parts
 
 * Capacitors across op amp, Schmitt trigger power

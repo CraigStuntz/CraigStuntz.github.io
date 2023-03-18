@@ -14,7 +14,7 @@ tags: synthesis, diy, electrical engineering
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
-Having previously [built the power supply](2023-01-29-building-a-synthesizer-2.html),
+Having previously [built the power supply](2023-02-22-building-a-synthesizer-2.html),
 it's now time to go on to building actual synth modules. Yay!
 
 There doesn't seem to be any proscribed order to build the mks x es.EDU modules 
