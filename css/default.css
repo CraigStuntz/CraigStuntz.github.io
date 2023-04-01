@@ -196,4 +196,5 @@ table:not(.sourceCode) {
   
 th:not(.sourceCode), td:not(.sourceCode) {
     border: solid;
+    padding: 0.5em;
 }

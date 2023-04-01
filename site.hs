@@ -125,5 +125,5 @@ myFeedConfiguration = FeedConfiguration
     , feedDescription = "Craig Stuntz's blog"
     , feedAuthorName  = "Craig Stuntz"
     , feedAuthorEmail = ""
-    , feedRoot        = "http://www.craigstuntz.com"
+    , feedRoot        = "https://www.craigstuntz.com"
     }

@@ -11,6 +11,7 @@ tags: synthesis, diy, electrical engineering
 * 1: The mki x es.EDU DIY System
 * [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
 * [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 

@@ -1,10 +1,19 @@
 ---
-title: "Building a Synthesizer, Chapter 8: A Gentle Introduction to Op Amps"
+title: "Building a Synthesizer, Chapter 4: A Gentle Introduction to Op Amps"
 series: Building a Synthesizer
-chapter: "8"
+chapter: "4"
 chapterName: A Gentle Introduction to Op Amps
 tags: synthesis, diy, electrical engineering
 ---
+
+<div class="toc">
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
+* [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* 4: A Gentle Introduction to Op Amps
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
+</div>
 
 There are approximately 11868 op amp tutorials on the web. I'm going to add the 
 11869th one, because op amps are really important, and because I don't think 
@@ -372,6 +381,13 @@ In electronics, it's pretty common to describe components in terms of ideals.
 We commonly say that a certain circuit contains a "100k Ohm resistor," and only 
 occasionally do we note that the resistor is a 1% tolerance model and might be 
 anywhere between 99k and 101k Ohms. 
+
+<figure class="inlineRight">
+<a href="/images/synth/d0014a.png">
+<img src="/images/synth/d0014a.png" loading="lazy" width="300px" alt="A photo of the TI TL074 op amp in an integrated circuit package.">
+</a>
+<figcaption>A Non-Ideal Op Amp</figcaption>
+</figure>
 
 Op amps are more complicated than resistors, and we often talk about the notion 
 of an "ideal op amp" explicitly. An "ideal op amp" has infinite gain, infinite 
@@ -781,7 +797,7 @@ it. In other words, it will try to supply the same 1V for any current you
 attempt to draw. 
 
 Let's say the output load is a 10k ohm resistor. Then the op amp will emit 1V 
-at a current of 100 µA (because of Ohm's law). Similarly, if you change the 
+at a current of 100 µA (because of [Ohm's Law](https://www.allaboutcircuits.com/textbook/direct-current/chpt-2/voltage-current-resistance-relate/)). Similarly, if you change the 
 output load to a 1k resistor, then the op amp will emit 1V at 1 mA. 
 
 Again, real op amps are not ideal, and of course the current a real op amp can emit
@@ -1068,7 +1084,8 @@ any obvious errors you'd like to point out!
 ## Glossary
 
 Closed loop gain
-: The closed loop gain is the gain of an entire op amp circuit when wired in a feedback (that's
+: We've just been calling this the "gain" so far in this article.
+  The closed loop gain is the gain of an entire op amp circuit when wired in a feedback (that's
   the "closed loop") configuration. For example, if you use two resistors of the
   same value in an amplifier configuration, then the op amp has a closed loop 
   gain of 2. 

@@ -11,3 +11,4 @@ Use a schematic
 Break it down into smaller parts (when possible, impedance)
 You're going to fail at soldering
 Oscilliscope tips: Remember DC coupling
+We haven't learned lessons about modularity yet -- small vs. trusted, composed
