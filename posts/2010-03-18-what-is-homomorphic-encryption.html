@@ -3,10 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - 2010-03-18-what-is-homomorphic-encryption</title>
+        <title>Craig Stuntz - What Is Homomorphic Encryption, and Why Should I Care?</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://types.pl/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -22,38 +29,25 @@
         </div>
 
         <div id="content">
-            <h1>2010-03-18-what-is-homomorphic-encryption</h1>
-
+            
+            
+                <h1>What Is Homomorphic Encryption, and Why Should I Care?</h1>
+            
             <div class="info">
     Posted on March 18, 2010
     
 </div>
 
-<div id="header">
-<div id="logo">
-<a href="../">Craig Stuntz</a>
-</div>
-<div id="navigation">
-<a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
-</div>
-</div>
-<div id="content">
-<h1 id="what-is-homomorphic-encryption-and-why-should-i-care">What Is Homomorphic Encryption, and Why Should I Care?</h1>
-<div class="info">
-Posted on March 18, 2010
-</div>
 <p>The <a href="https://cacm.acm.org/magazines/2010/3">March 2010 issue of the Communications of the ACM</a> includes a technical paper with an introduction entitled “<a href="https://cacm.acm.org/magazines/2010/3/76275-technical-perspective-a-first-glimpse-of-cryptographys-holy-grail/fulltext">A First Glance of Cryptography’s Holy Grail</a>” (ACM subscription required). That’s enough to catch my attention. The paper itself, <a href="Computing%20Arbitrary%20Functions%20of%20Encrypted%20Data">Computing Arbitrary Functions of Encrypted Data</a>, describes a relatively new algorithm for homomorphic encryption.</p>
 <p>Although these words may be unfamiliar to many, the subject matter is terribly important, because, like public-key encryption, which paved the way for secure transactions over the web, an efficient and fully homomorphic encryption scheme would enable new kinds of distributed computing. I’ll explain more about this in a little bit.</p>
 <p>If you have an ACM membership, or can find the magazine in a library, I recommend the article. It is far and away more readable than the technical papers on the same subject which are available on the web. The article uses a running analogy of a jeweler who doesn’t quite trust her employees in order to help the reader understand the design of the system.</p>
 <h2 id="what-is-homomorphic-encryption">What Is Homomorphic Encryption?</h2>
 <p>“Homomorphic” is an adjective which describes a property of an encryption scheme. That property, in simple terms, is the ability to perform computations on the ciphertext without decrypting it first. Because this tends to sound either baffling or miraculous the first time you hear it, let’s begin with a very simple example.</p>
 <p>The popular but wildly insecure cipher scheme <a href="https://rot13.com/">rot-13</a> (a.k.a. “<a href="http://en.wikipedia.org/wiki/Caesar_cipher%22">Caesar cipher</a> is partially homomorphic, specifically with respect to the concatenation operation. Imagine we write an Encrypt and Decrypt function using the rot-13 algorithm. The”secret key&quot; will be 13, the number of characters each letter is shifted. Let’s encrypt two words and then concatenate the ciphertext, and finally decrypt the result. In psuedocode, this is:</p>
-<div class="sourceCode">
 <div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> c1 = <span class="fu">Encrypt</span>(<span class="dv">13</span>, <span class="st">&quot;HELLO&quot;</span>);      <span class="co">// c1 = URYYB</span>
 <span class="dt">var</span> c2 = <span class="fu">Encrypt</span>(<span class="dv">13</span>, <span class="st">&quot;WORLD&quot;</span>);      <span class="co">// c2 = JBEYQ</span>
 <span class="dt">var</span> c3 = <span class="fu">Concat</span> (c1, c2);           <span class="co">// c3 = URYYBJBEYQ</span>
 <span class="dt">var</span> p  = <span class="fu">Decrypt</span>(<span class="dv">13</span>, c3);           <span class="co">// p  = HELLOWORLD</span></code></pre></div>
-</div>
 <p>Because it was not necessary to first decrypt the two fragments of ciphertext before performing the concatenation operation, we can say that rot-13 is homomorphic with respect to concatenation. In other words, it is possible to take two pieces of ciphertext and perform an operation on them which results in the ciphertext of the concatenation of the two respective pieces of plaintext.</p>
 <p>Visually, it looks like this:</p>
 <p><img src="../images/homomorphic.png" alt="Homomorphic concat with Rot-13" /></p>
@@ -78,14 +72,10 @@ Posted on March 18, 2010
 <h2 id="lets-code-it">Let’s Code It!</h2>
 <p>The second, fully homomorphic scheme proposed by Gentry, et al., and described in the CACM article is simple enough that I decided to implement it myself. I’ve learned quite a lot in the process of doing this. So in the near future I’ll be sharing my code and some of the insights I’ve made in this process.</p>
 <p>Before I can do that, however, <a href="2010-04-08-a-math-primer-for-homomorphic-encryption.html">I need to describe some of the math involved</a>. And I’d like to elaborate on why two operations is enough to consider a scheme “fully homomorphic.”</p>
-<div class="info">
-Tags: <a href="../tags/homomorphic%20encrption.html">homomorphic encrption</a>, <a href="../tags/cryptography.html">cryptography</a>, <a href="../tags/Craig%20Gentry.html">Craig Gentry</a>
-</div>
-</div>
 
 <div class="info">
     
-    Tags: 
+    Tags: <a href="../tags/homomorphic%20encrption.html">homomorphic encrption</a>, <a href="../tags/cryptography.html">cryptography</a>, <a href="../tags/Craig%20Gentry.html">Craig Gentry</a>
     
 </div>
 
