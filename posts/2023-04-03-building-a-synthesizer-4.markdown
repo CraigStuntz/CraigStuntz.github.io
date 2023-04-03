@@ -33,10 +33,6 @@ self-contained, which is to say that if you read to Level 2 and you don't want
 to read any further, that's fine; I've tried not to spread important concepts
 across multiple levels.
 
-> "I have made this longer than usual because I have not had time to make it 
-> shorter."<br/>
-> -[Blaise Pascal](https://quoteinvestigator.com/2012/04/28/shorter-letter/)
-
 Feel free to [reach out](/about.html) if something doesn't make sense to you.
 
 ## Level 0: What Is an Op Amp?
@@ -373,7 +369,7 @@ So a "complete" circuit might look like:
 
 In this example, the input to the op amp is a 40Hz sawtooth oscillator, and the 
 load is represented by a 1k resistor, which would probably be something more 
-interesting in a "real" circuit.
+interesting in a "real" circuit. 
 
 ## Level 3: The "Ideal Op Amp"
 
@@ -1080,6 +1076,10 @@ I will also reiterate that if you've read this far, then you are certainly on my
 A-list of favorite people in the world, and you should feel free to 
 [reach out](/about.html) if something doesn't make sense to you or if I've made
 any obvious errors you'd like to point out!
+
+> "I have made this longer than usual because I have not had time to make it 
+> shorter."<br/>
+> -[Blaise Pascal](https://quoteinvestigator.com/2012/04/28/shorter-letter/)
 
 ## Glossary
 

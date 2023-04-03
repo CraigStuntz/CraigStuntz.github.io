@@ -392,7 +392,8 @@ really fitting into the breadboard well as usual, this step went fairly easily.
 <figcaption>Op amp comparitor, from the directions to the VCO kit</figcaption>
 </figure>
 
-The general idea of this step is to use an op amp wired as a comparitor: a 
+The general idea of this step is to use an op amp wired as a 
+[comparator](2023-04-03-building-a-synthesizer-4.html#comparator): a 
 circuit which returns a high voltage if the `+` input is higher than the `-` input
 and a low voltage otherwise. Sending the sawtooth wave through such a circuit
 results in a pulse wave which we can vary the width of by adjusting the voltage 
