@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - Telling the Turth About Security</title>
+        <title>Craig Stuntz - 2020-07-25-telling-the-truth-about-security</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -22,19 +22,32 @@
         </div>
 
         <div id="content">
-            <h1>Telling the Turth About Security</h1>
+            <h1>2020-07-25-telling-the-truth-about-security</h1>
 
             <div class="info">
     Posted on July 25, 2020
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="telling-the-turth-about-security">Telling the Turth About Security</h1>
+<div class="info">
+Posted on July 25, 2020
+</div>
 <p>In James Morrow’s wonderful novella <em>City of Truth,</em> people in the city of Veritas have been conditioned to tell the full, unvarnished truth in every situation. They drive a “Renaut Adequate,” send their children to Camp Ditch-the-Kids, and always pay their bar tabs. The warning on cigarette packs reads:</p>
 <blockquote>
-<p><font style="font-variant: small-caps">WARNING: The Surgeon General’s crusade against this product may distract you from the myriad ways your govenrment fails to protect your health.</font></p>
+<p>WARNING: The Surgeon General’s crusade against this product may distract you from the myriad ways your govenrment fails to protect your health.</p>
 </blockquote>
 <p>I think about this often in the context of security messaging for people who use the software we produce. Real warnings on cigarette packs are one of the few examples of honesty in packaging we have today, but that’s not good enough for Veritas.</p>
-<p>What is the right amount of honesty for messaging to the end user? Clearly <em>dis</em>honesty is bad, but so is a dissertation-length discussion of encryption parameters. If our assessment of real-world threats creates an excessive paranoia in end users, convincing them that <abbr title="Advanced Persistent Threat">APT</abbr> crews are coming for their kids, then our “honesty” becomes dishonest. I would assert, without a lot of evidence to back me up, that the right amount of honesty is that which enables the user to make good decisions about their behaviors, <em>within the application’s threat model.</em></p>
+<p>What is the right amount of honesty for messaging to the end user? Clearly <em>dis</em>honesty is bad, but so is a dissertation-length discussion of encryption parameters. If our assessment of real-world threats creates an excessive paranoia in end users, convincing them that APT crews are coming for their kids, then our “honesty” becomes dishonest. I would assert, without a lot of evidence to back me up, that the right amount of honesty is that which enables the user to make good decisions about their behaviors, <em>within the application’s threat model.</em></p>
 <p>That “within the application’s threat model” hanging off the end is what allows me to say that things which are true but distracting should not be included in security messaging.</p>
 <h2 id="want-to-start-an-email-service">Want to Start an Email Service?</h2>
 <p>I was thinking about this in the context of some <a href="https://twitter.com/i/status/1286700216742293505">tweets from Nathan Buuck. He wrote</a>:</p>
@@ -44,11 +57,12 @@
 <li>you can’t trust anything you see in email at face value</li>
 <li>your digital identity will grow to depend existentially on this email account</li>
 </ul>
-<p>And the litany of other concerns.<br /> Failing to prepare new users by not illustrating to them the potential scope of the risks <em>we know</em> they may face is just negligence.</p>
+<p>And the litany of other concerns.<br />
+Failing to prepare new users by not illustrating to them the potential scope of the risks <em>we know</em> they may face is just negligence.</p>
 </blockquote>
-<p>Well, you can tell that these are good questions because there’s a ton to unpack here.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>Well, you can tell that these are good questions because there’s a ton to unpack here.<a href="#fn1" id="fnref1" class="footnoteRef"><sup>1</sup></a></p>
 <p>One thing that’s interesting to me here is the difference between Nathan’s two bullet points. To whatever extent the first point is correct, it means that the security of the <em>email</em> service has failed. Whereas to whatever extent the second point is correct, it represents a failure of security that’s the fault of nearly everyone <em>but</em> the email service. I’ll explain more below.</p>
-<p>Because the risk of compromise through email is so high, we’re at a real risk of erring on the side of over-explanation, especially if we try to explain it all at once, but even if we don’t. If we consider only email, only security, and only the items which all users need to understand,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> that’s at least:</p>
+<p>Because the risk of compromise through email is so high, we’re at a real risk of erring on the side of over-explanation, especially if we try to explain it all at once, but even if we don’t. If we consider only email, only security, and only the items which all users need to understand,<a href="#fn2" id="fnref2" class="footnoteRef"><sup>2</sup></a> that’s at least:</p>
 <ul>
 <li>Basic scam detection — if it looks too good to be true…</li>
 <li>Phishing, credential harvesting</li>
@@ -68,14 +82,15 @@
 <p>Indeed, nearly every company has people in HR who must click on PDF files attached to emails from random strangers on the Internet as an essential function of their job! We can’t tell people “Hey, don’t do your job; it’s not safe.” We have to give them an email client where this mundane action is safe.</p>
 <h4 id="example-phishing-simulations">Example: Phishing Simulations</h4>
 <p>Implicit in the notion of what an email service should disclose to / train users about is the presumption that we even know what to tell them at all. Unfortunately, we cannot take this as a given.</p>
-<p>Phishing simulation has become fairly big business these days. It makes sense, as phishing is often the attacker’s first foothold into an enterprise. It’s important to have clear goals for the phishing simulation, since, like a red team test, the attackers always win.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> If you conduct a phishing simulation and nobody is fooled, then your simulation was unlike an actual phish, which will probably result in users being deceived.</p>
+<p>Phishing simulation has become fairly big business these days. It makes sense, as phishing is often the attacker’s first foothold into an enterprise. It’s important to have clear goals for the phishing simulation, since, like a red team test, the attackers always win.<a href="#fn3" id="fnref3" class="footnoteRef"><sup>3</sup></a> If you conduct a phishing simulation and nobody is fooled, then your simulation was unlike an actual phish, which will probably result in users being deceived.</p>
 <p>Therefore, if the purpose of your simulation is to determine if anyone will fall for a good phish, I can save you the money: Yes, they will. If you fire everyone who falls for the first phish, like some perverse form of stack ranking, then you’ll have more people who are taken in by the second. However, phishing simulations can be useful if you have constructive goals in mind.</p>
 <blockquote>
-<p>“Lets be honest with each other. Phishing simulations aren’t just about training. They are also popular because they produce a metric (e.g. ‘Last week 60% of people fell for our phish, this week only 35% fell for it’). It appears really positive and encouraging, since it appears to show that something is being achieved, but unless you’re careful you might just end up wasting time and effort.”<br /> <a href="https://www.ncsc.gov.uk/blog-post/trouble-phishing"><em>“The Trouble with Phishing,”</em></a> Kate R, National Cyber Security Centre, UK</p>
+<p>“Lets be honest with each other. Phishing simulations aren’t just about training. They are also popular because they produce a metric (e.g. ‘Last week 60% of people fell for our phish, this week only 35% fell for it’). It appears really positive and encouraging, since it appears to show that something is being achieved, but unless you’re careful you might just end up wasting time and effort.”<br />
+<a href="https://www.ncsc.gov.uk/blog-post/trouble-phishing"><em>“The Trouble with Phishing,”</em></a> Kate R, National Cyber Security Centre, UK</p>
 </blockquote>
 <p>Here are some constructive goals we might set for a phishing simulation:</p>
 <ul>
-<li>Train users to send phishes to the <abbr title="Security Operations Center">SOC</abbr>, giving the blue team a heads up on what’s in the field</li>
+<li>Train users to send phishes to the SOC, giving the blue team a heads up on what’s in the field</li>
 <li>Train users how to respond if they click on a phish and enter their credentials. If we can train users to call the SOC immediately instead of keeping quiet and hoping nobody notices, that’s a big win!</li>
 <li>Increase the level of end user skepticism about what’s in email. I feel a little weird about including this, since, as I said, the phishers will always win. But we can certainly make them win less if we treat this as proactive training, not punishment for people who click on a phish.</li>
 </ul>
@@ -98,15 +113,28 @@
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>I do think advertising is a red herring here. The two points in the tweets, while really worth discussing, don’t change with or without ads. Indeed, a very well-known email service with ads also does a better than average job identifying what you can or cannot trust in email. I think ads are orthogonal to these questions.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>By “only email” I mean to exclude things like encryption which are security-related but not directly relevant to basic email use. By “only security” I’m excluding things like how to compose and send emails, which are really important for new users, but out of scope for this article. By “only the items which all users need to understand” I’m excluding things such as nation state attacks, which are security related and relevant to email, but not something that the average user needs to think about.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>Nobody, and I mean nobody, is immune to phishing. The organizer of the DEFCON Social Engineering Village recently <a href="https://youtu.be/9e6k_PtEXdM?t=566">shared his story of getting phished</a>.<a href="#fnref3">↩</a></p></li>
+<li><div id="fn1">
+
+</div>
+<p>I do think advertising is a red herring here. The two points in the tweets, while really worth discussing, don’t change with or without ads. Indeed, a very well-known email service with ads also does a better than average job identifying what you can or cannot trust in email. I think ads are orthogonal to these questions.<a href="#fnref1">↩</a></p></li>
+<li><div id="fn2">
+
+</div>
+<p>By “only email” I mean to exclude things like encryption which are security-related but not directly relevant to basic email use. By “only security” I’m excluding things like how to compose and send emails, which are really important for new users, but out of scope for this article. By “only the items which all users need to understand” I’m excluding things such as nation state attacks, which are security related and relevant to email, but not something that the average user needs to think about.<a href="#fnref2">↩</a></p></li>
+<li><div id="fn3">
+
+</div>
+<p>Nobody, and I mean nobody, is immune to phishing. The organizer of the DEFCON Social Engineering Village recently <a href="https://youtu.be/9e6k_PtEXdM?t=566">shared his story of getting phished</a>.<a href="#fnref3">↩</a></p></li>
 </ol>
+</div>
+<div class="info">
+Tags: <a href="../tags/security.html">security</a>
+</div>
 </div>
 
 <div class="info">
     
-    Tags: <a href="../tags/security.html">security</a>
+    Tags: 
     
 </div>
 

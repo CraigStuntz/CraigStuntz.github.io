@@ -8,6 +8,12 @@
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
         <link rel="me" href="https://types.pl/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -42,6 +48,51 @@
 
 <p>Much easier to solder than the power supply. ##</p>
 <p>One kind of funny ommission from the instructions: For whatever reason, one of the resistors, R11, was never shown assembled in the photos. Looking at the schematic it’s certainly needed, and an appropriate resistor is included with the kit.</p>
+<h2 id="test-point-voltages">Test Point Voltages</h2>
+<p>Someone was asking for this data, so here are the voltages I measured at the various test points on the PCB with the completed kit.</p>
+<p>For test points A-C, I moved the large coarse tuning potentiometer when taking measurements. For test point D, I moved the PWM Width potentiometer when taking measurements. In all cases I took these measurements without connecting any kind of external CV signal, which might have changed the “DC” signals into something else entirely.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Signal type*</td>
+<td>DC</td>
+<td>Saw</td>
+<td>Saw</td>
+<td>DC</td>
+</tr>
+<tr class="even">
+<td>Pots at 0%</td>
+<td>0.37V</td>
+<td>3Vpp, 8.92 Hz</td>
+<td>3Vpp, 8.92 Hz</td>
+<td>-1.39V</td>
+</tr>
+<tr class="odd">
+<td>Pots at 50%</td>
+<td>0.46V</td>
+<td>3Vpp, 273 Hz</td>
+<td>3Vpp, 273 Hz</td>
+<td>0.08V</td>
+</tr>
+<tr class="even">
+<td>Pots at 100%</td>
+<td>0.52V</td>
+<td>3Vpp, 3905 Hz</td>
+<td>3Vpp, 3905 Hz</td>
+<td>1.39V</td>
+</tr>
+</tbody>
+</table>
+<p>*The signal type when no CVs are connected to the input jacks.</p>
 <h2 id="extra-parts">“Extra” Parts</h2>
 <ul>
 <li>Capacitors across op amp, Schmitt trigger power</li>

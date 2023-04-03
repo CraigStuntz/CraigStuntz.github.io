@@ -8,6 +8,12 @@
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
         <link rel="me" href="https://types.pl/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -46,10 +52,11 @@
 <li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
 <li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
 <li>3: Breadboarding the VCO</li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
-<p>Having previously <a href="2023-01-29-building-a-synthesizer-2.html">built the power supply</a>, it’s now time to go on to building actual synth modules. Yay!</p>
+<p>Having previously <a href="2023-02-22-building-a-synthesizer-2.html">built the power supply</a>, it’s now time to go on to building actual synth modules. Yay!</p>
 <p>There doesn’t seem to be any proscribed order to build the mks x es.EDU modules in. But it makes sense to start with a Voltage Controlled Oscillator (VCO), so that the other modules will have some sound to modify when built, and the sawtooth/Pulse Width Modulation (PWM) VCO is the most generally useful oscillator in the series, so I started with that kit.</p>
 <h2 id="on-making-mistakes">On Making Mistakes</h2>
 <p>I’m going to describe the whole build process, with a particular focus on the mistakes I made. This is partly to help others fix similar problems they might have, but mostly it’s because I think that this is where the real learning happens.</p>
@@ -252,7 +259,7 @@ VCO at the end of this stage
 Op amp comparitor, from the directions to the VCO kit
 </figcaption>
 </figure>
-<p>The general idea of this step is to use an op amp wired as a comparitor: a circuit which returns a high voltage if the <code>+</code> input is higher than the <code>-</code> input and a low voltage otherwise. Sending the sawtooth wave through such a circuit results in a pulse wave which we can vary the width of by adjusting the voltage going to the <code>-</code> input of the op amp.</p>
+<p>The general idea of this step is to use an op amp wired as a <a href="2023-04-03-building-a-synthesizer-4.html#comparator">comparator</a>: a circuit which returns a high voltage if the <code>+</code> input is higher than the <code>-</code> input and a low voltage otherwise. Sending the sawtooth wave through such a circuit results in a pulse wave which we can vary the width of by adjusting the voltage going to the <code>-</code> input of the op amp.</p>
 <p>I do find the explanation of using an op amp as a comparitor in the directions a bit confusing, however. I much prefer this version, from <em>Make: Analog Synthesizers,</em> by Ray Wilson:</p>
 <blockquote>
 <p>Here we are applying a… voltage to the inverting input [<code>-</code>] of the op amp, and the noninverting input [<code>+</code>] is the input to the comparator. If we apply a [lower voltage] to the noninverting input, the output of the op amp will go as low as it can. The op amp really wants to pump current away from the inverting input through the nonexistent feedback resistor. As long as the voltage on the noninverting input is lower than the voltage on the inverting input, the op amp’s output will remain saturated low (stuck at its maximum negative output voltage). If the voltage on the noninverting input goes above [the voltage on the inverting input], the output of the op amp will become saturated high (stuck at its maximum positive output voltage) again in a vain effort to pump current to the inverting input through the nonexistent feedback resistor.</p>

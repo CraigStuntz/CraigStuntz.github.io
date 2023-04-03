@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - Presentation by D. Richard Hipp, "SQLite: The World's Most Widely Used Database Engine"</title>
+        <title>Craig Stuntz - 2020-11-30-richard-hipp</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -22,19 +22,32 @@
         </div>
 
         <div id="content">
-            <h1>Presentation by D. Richard Hipp, "SQLite: The World's Most Widely Used Database Engine"</h1>
+            <h1>2020-11-30-richard-hipp</h1>
 
             <div class="info">
     Posted on November 30, 2020
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="presentation-by-d.-richard-hipp-sqlite-the-worlds-most-widely-used-database-engine">Presentation by D. Richard Hipp, “SQLite: The World’s Most Widely Used Database Engine”</h1>
+<div class="info">
+Posted on November 30, 2020
+</div>
 <p>On 10 October 2017, I attended a presentation by D. Richard Hipp, called, “SQLite: The World’s Most Widely Used Database Engine,” and live-tweeted it. Twitter broke the thread in several distinct ways, so the following is a lightly edited version of my Twitter thread.</p>
 <h2 id="sqlite">SQLite</h2>
 <p>He pronounces it “ess queue ell ite,” FWIW.</p>
-<p><img class="autowidth" src="../images/SQLite.jpg" alt="D. Richard Hipp with title slide for SQLite presentation." width="2048" height="1536" loading="lazy" /></p>
+<p><img src="../images/SQLite.jpg" alt="D. Richard Hipp with title slide for SQLite presentation." class="autowidth" width="2048" height="1536" /></p>
 <p>“If you’re not writing SQL statements which look like this, you’re not doing it right.”</p>
-<p><img class="autowidth" src="../images/SQLite-complicated-query.jpeg" "A fairly complex SQL statement with subqueries, function calls, and COALESCEs" width="2048" height="1536" loading="lazy"></p>
+<p><img src="../images/SQLite-complicated-query.jpeg" class="autowidth" width="2048" height="1536" /></p>
 <p>By this, I think he meant: SQLite is a SQL DB engine, not a document DB. It has features such as JOINs, functions, and subqueries which you should use in your code.</p>
 <h2 id="history-and-impact">History and Impact</h2>
 <p>2000-05-29: “It’s just a database. How hard can that be? I’ll write my own.” Posted it online, then got support calls from Motorola.</p>
@@ -45,22 +58,22 @@
 <p>Two people work full time on SQLite. “We change the code aggressively.” He contrasts this with Postgres, which is stable due to low code churn (he says).</p>
 <h2 id="using-it-in-your-code">Using It In Your Code</h2>
 <p>Which DB should I use? (Ed. note: Not Oracle.)</p>
-<p><img class="autowidth" src="../images/SQLite-storage-decision.jpeg" alt="SQLite storage decision checklist. Choose SQLite if you're not doing remote data, big data, concurrent writers, or gazillion transactions/sec." width="2048" height="1536" loading="lazy"></p>
+<p><img src="../images/SQLite-storage-decision.jpeg" alt="SQLite storage decision checklist. Choose SQLite if you're not doing remote data, big data, concurrent writers, or gazillion transactions/sec." class="autowidth" width="2048" height="1536" /></p>
 <p>“90% of data storage problems don’t have any of these constraints. Where people make mistakes is storing locally as JSON/XML.” (Paraphrased)</p>
-<p><img class="autowidth" src="../images/SQLite-data-container.jpeg" alt="SQLite data container. 1. Gather data from the cloud. 2. Transmit SQLite database files to the device. 3. Use locally" width="2048" height="1536" loading="lazy"></p>
+<p><img src="../images/SQLite-data-container.jpeg" alt="SQLite data container. 1. Gather data from the cloud. 2. Transmit SQLite database files to the device. 3. Use locally" class="autowidth" width="2048" height="1536" /></p>
 <h2 id="future-plans">Future Plans</h2>
 <p>Next release of SQLite will use F2FS (if in use) for atomic writes, doubling write performance.</p>
 <p>Using EXPLAIN keyword, you can see the bytecode for your query</p>
-<p><img class="autowidth" src="../images/SQLite-explain.jpeg" alt="EXPLAIN output for simple SQL query" width="2048" height="1536" loading="lazy"></p>
+<p><img src="../images/SQLite-explain.jpeg" alt="EXPLAIN output for simple SQL query" class="autowidth" width="2048" height="1536" /></p>
 <p>“Because the query planner is an AI, we’re never finished with it.”</p>
 <p>SQLite 4 will retire the B-tree storage engine and replace it with an LSM (log structured merge) storage engine engine.</p>
 <p>Pros and cons of LSM:</p>
-<p><img class="autowidth" src="../images/SQLite-LSM.jpeg" alt="Pros and cons of LSM. Good: Faster writes, reduced write amplification, linear writes, less SSD wear. Bad: Slower reads, background merge process, more space on disk, greater complexity" width="2048" height="1536" loading="lazy"></p>
+<p><img src="../images/SQLite-LSM.jpeg" alt="Pros and cons of LSM. Good: Faster writes, reduced write amplification, linear writes, less SSD wear. Bad: Slower reads, background merge process, more space on disk, greater complexity" class="autowidth" width="2048" height="1536" /></p>
 <p>Performance of LSM was bad enough that they abandoned SQLite 4 project. v5 will use some new, maybe NVRAM optimized storage, not sure which. As of 30 November 2020, the current production verion of SQLite was <a href="https://www.sqlite.org/releaselog/3_33_0.html">3.33.0</a>.</p>
 <p>SQLite supports B-tree indices only in order to keep the library small</p>
 <h2 id="he-doesnt-like-git">He Doesn’t Like Git</h2>
 <p>Things that are hard to compute in git because it uses key/value DAG instead of relations</p>
-<p><img class="autowidth" src="../images/SQLite-git-bad.jpeg" alt="Some things Git Does Not Compute Because Of Its Use Of Key/Value" width="2048" height="1536" loading="lazy"></p>
+<p><img src="../images/SQLite-git-bad.jpeg" alt="Some things Git Does Not Compute Because Of Its Use Of Key/Value" class="autowidth" width="2048" height="1536" /></p>
 <p>SQLite sources are managed using <a href="https://www.fossil-scm.org/">Fossil</a>, a distributed version control system that was specifically designed and written to support SQLite development</p>
 <h2 id="q-a">Q &amp; A</h2>
 <p>On formal methods, “I’m interested in anything that will make the code better. Bring as many tools to the table as you can.”</p>
@@ -73,6 +86,10 @@
 </blockquote>
 <p>I wasn’t taking notes at this point so I can’t do justice to his answer but he said he knows John and has spoken w/ him, but never in person. He said they disagree about what to do about undefined behavior, although it sounded to me more like a disagreement on tactics than strategy.</p>
 <p>I’d really enjoy hearing a panel with these two some day.</p>
+<div class="info">
+Tags:
+</div>
+</div>
 
 <div class="info">
     

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - How I Made a Giant Mistake with Terraform (and How Azure Made It Worse)</title>
+        <title>Craig Stuntz - 2021-07-07-how-i-made-a-giant-mistake-with-terraform</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -22,13 +22,26 @@
         </div>
 
         <div id="content">
-            <h1>How I Made a Giant Mistake with Terraform (and How Azure Made It Worse)</h1>
+            <h1>2021-07-07-how-i-made-a-giant-mistake-with-terraform</h1>
 
             <div class="info">
     Posted on July  7, 2021
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="how-i-made-a-giant-mistake-with-terraform-and-how-azure-made-it-worse">How I Made a Giant Mistake with Terraform (and How Azure Made It Worse)</h1>
+<div class="info">
+Posted on July 7, 2021
+</div>
 <p>I made a huge mistake a while back, resulting in all preproduction environments being deleted from a client’s Azure subscription. That’s actually not so bad – we use terraform to create the environments, so we could just run the terraform again to put them back. And better preproduction than production, right? But Azure quirks and client rules made this considerably worse.</p>
 <p>This was complicated by the fact that I used the terraform to provision two different Azure subscriptions, with entirely different security policies. In “Subscription A” which I provisioned first, I could do more or less anything. “Subscription B” which I provisioned second was far more locked down. Of note, in Subscription B I couldn’t create an Azure Resource Group. Instead, I had to open a ticket with the client’s cloud team.</p>
 <p>I had terraform like:</p>
@@ -41,7 +54,9 @@
 <h2 id="terraform-state">Terraform State</h2>
 <p>In a perfect world, you would never have to think about terraform state. You would just run terraform and it would provision resources and everything would be lovely. Alas, this is not that perfect world, and anyone who maintains terraform must think about state when they get up in the morning, when they’re working, and when they’re lying in bed at night. I may have more to say about this at a later time, but let’s get back to the mistake I made.</p>
 <p>Because I couldn’t create the Azure Resource Group in Subscription B, I ran the following command:</p>
+<div class="sourceCode">
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">terraform</span> import module_name.azurerm_resource_group.resource_group <span class="op">&lt;</span>id_of_resource_group<span class="op">&gt;</span></code></pre></div>
+</div>
 <p>…for the preproduction resource group. That linked the Resource Group in my terraform script with the Resource Group created by the client’s team in Azure.</p>
 <p><em>Months later,</em> while creating the production resources, I ran into the same issue (can’t create resource groups at all in Subscription B). Since Subscription B was the one we’d be taking to production, I decided that a better reflection of the actual environment would be to change the resource group to a data provider, so I edited the terraform script quoted above to read:</p>
 <pre class="terraform"><code>data &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
@@ -86,10 +101,14 @@
 <p>One of the things I did right in this incident was to <em>immediately</em> report the problem. I posted an “I just made a giant mistake” message before the delete was even complete, before we had even considered the database. This is of course just polite, but moving quickly turned out to be the key to recovering a deleted Azure resource. Another key to recovering the deleted resource was not creating new resources with the same name before opening the ticket with Microsoft, so I give myself credit for getting Microsoft support involved before just “trying stuff” to see if I could restore it on my own before we realized that the database backups were an issue.</p>
 <p>I guess I knew that there was the possibility that I would inadvertently destroy something when I skipped a plan, but the sheer magnitude of carnage resulting from a <em>one word change</em> in terraform was surprising.</p>
 <p>As far as SQL Server backups go, it’s obviously totally unacceptable that a backup could be blown away so easily. I don’t have a better option to suggest besides putting a lock on the Resource Group.</p>
+<div class="info">
+Tags: <a href="../tags/azure.html">azure</a>, <a href="../tags/devops.html">devops</a>, <a href="../tags/mistakes.html">mistakes</a>, <a href="../tags/sql%20server.html">sql server</a>, <a href="../tags/terraform.html">terraform</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a href="../tags/azure.html">azure</a>, <a href="../tags/devops.html">devops</a>, <a href="../tags/mistakes.html">mistakes</a>, <a href="../tags/sql%20server.html">sql server</a>, <a href="../tags/terraform.html">terraform</a>
+    Tags: 
     
 </div>
 
