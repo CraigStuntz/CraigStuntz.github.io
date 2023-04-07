@@ -17,7 +17,7 @@ tags: synthesis, diy, electrical engineering
 
 There are approximately 11868 op amp tutorials on the web. I'm going to add the 
 11869th one, because op amps are really important, and because I don't think 
-most of the existing explanations are as clear as the could be. I think I can 
+most of the existing explanations are as clear as they could be. I think I can 
 improve on these in two ways:
 
 * By <s>telling you a bunch of lies</s> explaining concepts in terms of gross but 
