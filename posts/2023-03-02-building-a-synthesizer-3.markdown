@@ -460,8 +460,9 @@ oscillator by pressing the two "Play Audio" buttons.
 
 Having built a working circuit, it's now time to rip all of the components out 
 of the breadboard and solder them (plus a few extras) onto the PC board. But 
-before I do that, I'm going to take some time to talk about alternate computing 
-models. Sorry, folks, that's about as much of a cliffhanger as I can manage.
+before I do that, I'm going to take some time to 
+[explain how op amps work](2023-04-03-building-a-synthesizer-4.html). Sorry, 
+folks, that's about as much of a cliffhanger as I can manage.
 
 ## Resources
 
