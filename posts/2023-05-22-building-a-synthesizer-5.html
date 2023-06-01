@@ -42,19 +42,45 @@
                 </h1>
             
             <div class="info">
-    Posted on February 20, 2023
+    Posted on May 22, 2023
     
 </div>
 
-<figure class="inlineRight">
-<a href="../images/synth/VCOPCBack.jpg"> <img src="../images/synth/VCOPCBack.jpg" loading="lazy" width="200px" alt="The back of the VCO, which is a PC board with two ICS and a number of discrete resistors and capacitors"> </a>
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
+<li>5: Building the VCO</li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>Actually building the <abbr title="Printed Circuit">PC</abbr> board incarnation of the VCO was quite a bit easier than <a href="2023-03-02-building-a-synthesizer-3.html">getting it to work on the breadboard</a>. Really there was nothing tricky about it; I just soldered it together and it worked well the first time. I don’t really remember how long it took; I’m thinking 2-3 hours? It was certainly much easier to solder than <a href="2023-02-22-building-a-synthesizer-2.html">the power supply</a>, where the large ground traces made getting the solder joints hot enough difficult.</p>
+<p>This once again reinforces my feeling that I made the right decision getting the mki x es.EDU kits instead of some of the other synthesizer kits on the market. The emphasis on breadboarding allows me to make and fix mistakes, and that’s the best way to learn. When you connect components to labeled holes on a PC board, well, there’s not a ton of opportunity to screw things up.</p>
+<p>When I was in high school I occasionally built <a href="https://www.heathkit.com">Heathkit</a> electronics kits. I still have my Heathkit DMM that I built decades ago. Their motto was, “We won’t let you fail.” Now I am thinking it would have been better if they did let me fail, just a little!</p>
+<figure class="horizontalTiles">
+<a href="../images/synth/VCOFrontPanel.jpg"> <img src="../images/synth/VCOFrontPanel.jpg" loading="lazy" height="300px" alt="The front of the VCO, which is a PC board with two ICS and a number of discrete resistors and capacitors"> </a>
 <figcaption>
-The Back of the VCO
+VCO Front
 </figcaption>
 </figure>
-<p>Actually building the <abbr title="Printed Circuit">PC</abbr> board incarnation of the VCO was quite a bit easier than <a href="../posts/2023-03-02-building-a-synthesizer-3.html">getting it to work on the breadboard</a>. Really there was nothing tricky about it; I just soldered it together and it worked well the first time. I don’t really remember how long it took; I’m thinking 2-3 hours? It was certainly much easier to solder than <a href="../posts/2023-02-22-building-a-synthesizer-2.html">the power supply</a>, where the large ground traces made getting the solder joints hot enough difficult.</p>
-<p>This once again reinforces my feeling that I made the right decision getting the mki x es.EDU kits instead of some of the other synthesizer kits on the market. The emphasis on breadboarding allows me to make and fix mistakes, and that’s the best way to learn. When you connect components to labeled holes on a PC board, well, there’s not a ton of opportunity to screw things up.</p>
-<p>When I was in high school I occasionally built <a href="https://www.heathkit.com">Heathkit</a> electronics kits. I still have my Heath DMM that I built decades ago. Their motto was, “We won’t let you fail.” Now I am thinking it would have been better if they did let me fail, just a little!</p>
+<figure class="horizontalTiles">
+<a href="../images/synth/VCOPCBack.jpg"> <img src="../images/synth/VCOPCBack.jpg" loading="lazy" height="300px" alt="The back of the VCO, which is a PC board with two ICS and a number of discrete resistors and capacitors"> </a>
+<figcaption>
+VCO Back
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="../images/synth/HeathDMM.jpg"> <img src="../images/synth/HeathDMM.jpg" loading="lazy" height="300px" alt="A Heathkit IM-2320 DMM"> </a>
+<figcaption>
+My Venerable Heathkit DMM
+</figcaption>
+</figure>
+<div style="clear:both  ;">
+
+</div>
 <h2 id="differences-between-the-breadboarded-vco-and-the-pc-board-version">Differences Between the Breadboarded VCO and the PC Board Version</h2>
 <p>The PC board version has some extra components which are not used when you build the VCO on the breadboard. These are mostly discussed in <a href="https://www.ericasynths.lv/media/VCO_MANUAL_v2.pdf">the instructions</a> in the section entitled “Module Assembly Appendix,” so I’ll refer you there for an explanation of what they do.</p>
 <p>The is a component which is added to the PC board version and which is not mentioned in the “Module Assembly Appendix.” The PC board version adds 1k resistors in front of the two output jacks. Presumably this is to protect the circuit if the output is accidentally shorted to ground while plugging in a patch cable. Putting a 1k resistor here ensures that there is always some resistance on the output, even if the patch cable momentarily joins the output with ground while plugging it in/out</p>
@@ -150,6 +176,8 @@ Note 4 thermistors directly above the trimpot
 FFT
 </figcaption>
 </figure>
+<h2 id="whats-next">What’s Next?</h2>
+<p>In keeping with the semirandom nature of the posts in this series, I will have a few things to say about alternate models of computation. Stay tuned!</p>
 <h2 id="resources">Resources</h2>
 <h3 id="instructions">Instructions</h3>
 <ul>
