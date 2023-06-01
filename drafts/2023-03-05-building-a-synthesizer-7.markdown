@@ -1,5 +1,5 @@
 ---
-title: "Building a Synthesizer, Chapter 7: Building the VCO"
+title: "Building a Synthesizer, Chapter 7: Building the Mixer"
 series: Building a Synthesizer
 chapter: "7"
 chapterName: Building the Mixer

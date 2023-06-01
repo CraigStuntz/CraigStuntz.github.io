@@ -12,6 +12,7 @@ tags: synthesis, diy, electrical engineering
 * [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
 * [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
 * 4: A Gentle Introduction to Op Amps
+* [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
@@ -1076,6 +1077,9 @@ I will also reiterate that if you've read this far, then you are certainly on my
 A-list of favorite people in the world, and you should feel free to 
 [reach out](/about.html) if something doesn't make sense to you or if I've made
 any obvious errors you'd like to point out!
+
+Next time we will return to synth construction and 
+[build the VCO on a PC board](2023-05-22-building-a-synthesizer-5.html).
 
 > "I have made this longer than usual because I have not had time to make it 
 > shorter."<br/>

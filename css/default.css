@@ -136,8 +136,20 @@ div.toc ul {
     padding: 0;
 }
 
+figure.horizontalTiles {
+    display: table;
+    float: left;
+    margin: 16px;
+}
+
+figure.horizontalTiles > figcaption {
+    display: table-caption; 
+    caption-side: bottom;
+}
+
 figure.inlineLeft {
     display: table;
+    clear: left;
     float: left;
     margin: 16px;
 }
@@ -149,6 +161,7 @@ figure.inlineLeft > figcaption {
 
 figure.inlineRight {
     display: table;
+    clear: right;
     float: right;
     margin: 16px;
 }
