@@ -119,7 +119,7 @@ manual.
 
 ### Instructions
 
-* [mki x es.EDU Mixer User Manual](https://www.ericasynths.lv/media/VCO_MANUAL_v2.pdf)
+* [mki x es.EDU Mixer User Manual](https://www.ericasynths.lv/media/MIXER_MANUAL.pdf)
 
 ### Simulations
 
