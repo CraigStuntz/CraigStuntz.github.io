@@ -13,6 +13,7 @@ tags: synthesis, diy, electrical engineering
 * [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
 * [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
 * [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
+* [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 

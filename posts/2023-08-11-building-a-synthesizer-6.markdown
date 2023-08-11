@@ -1,10 +1,21 @@
 ---
-title: "Building a Synthesizer, Chapter 4: The Logic Circuits Model of Computation"
+title: "Building a Synthesizer, Chapter 6: The Logic Circuits Model of Computation"
 series: Building a Synthesizer
-chapter: "4"
+chapter: "6"
 chapterName: The Logic Circuits Model of Computation
 tags: diy, electrical engineering, computer science, homomorphic encryption
 ---
+
+<div class="toc">
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
+* [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
+* [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
+* 6: The Logic Circuits Model of Computation
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
+</div>
 
 I'm going to step aside from circuit building to talk about the logic circuits
 model of computation. This may surprise you, reader, as it would at first seem
@@ -157,7 +168,7 @@ directly useful:
 
 If you're writing a compiler optimizer, you might directly use boolean 
 equivalences such as [DeMorgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
-to rewrite boolean expressions to other expressions which are guaranteed to 
+to rewrite expressions into other expressions which are guaranteed to 
 return the same result.
 
 #### GPU Programming
@@ -186,3 +197,10 @@ introduced the first fully homomorphic cryptosystem, used this model.
 My real agenda here is to get you thinking about different kinds of computing 
 models, because next we're going to talk about analog computers, and they're far
 weirder than logic circuits!
+
+## References
+
+* [Models of Computation: Exploring the Power of Computing](https://cs.brown.edu/people/jsavage//book/home.html), 
+  chapter 2: 
+  [Logic Circuits](https://cs.brown.edu/people/jsavage//book/pdfs/ModelsOfComputation_Chapter2.pdf), 
+  Savage, John E., Addison-Wesley, 1998
