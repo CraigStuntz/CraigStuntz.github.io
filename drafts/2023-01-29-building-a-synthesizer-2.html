@@ -3,17 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter 2: Building the Power Supply</title>
+        <title>Craig Stuntz - 2023-01-29-building-a-synthesizer-2</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -29,23 +22,27 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        2
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the Power Supply
-                </h1>
-            
+            <h1>2023-01-29-building-a-synthesizer-2</h1>
+
             <div class="info">
     Posted on January 29, 2023
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 id="building-a-synthesizer-2" class="series">Building a Synthesizer, 2</h3>
+<h1 id="building-the-power-supply" class="chapterName">Building the Power Supply</h1>
+<div class="info">
+Posted on January 29, 2023
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-01-22-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -62,7 +59,7 @@
 <p>As I metioned in the <a href="2023-01-23-building-a-synthesizer-glossary.html">glossary</a>, there isn’t really a “<a href="https://en.wikipedia.org/wiki/Eurorack">Eurorack</a> standard.” It’s more like, “look at what Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar.” If we want to build a “Eurorack compatible” enclosure and power supply, there are a few things to consider.</p>
 <p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are (mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are “quantized” by “HP,” or Horizontal Pitch units. This means they are usually some multiple of 5.08 mm wide. The mks x es.EDU modules range from 4 to 10 HP. See the <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document on Doepfer’s site for the closest thing there is to a standard.</p>
 <p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each module. However, it’s very, very common for modules to not use the first 6 pins and only have a 10-pin connector on the “module” end of the power cable.</p>
-<p><a href="../images/synth/EurorackPowerPinout.png"><img src="../images/synth/EurorackPowerPinout.png" width="151px" loading="lazy" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a> <a href="../images/synth/EurorackPowerConnector.png"><img src="../images/synth/EurorackPowerConnector.png" width="112px" loading="lazy" alt="A Eurorack power connector socket" style="float: right;"></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
+<p><a href="../images/synth/EurorackPowerPinout.png"><img src="../images/synth/EurorackPowerPinout.png" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" width="151" /></a> <a href="../images/synth/EurorackPowerConnector.png"><img src="../images/synth/EurorackPowerConnector.png" alt="A Eurorack power connector socket" width="112" /></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
 <p>The first thing you’ll notice is there’s a lot of redundancy there. The connectors are 16 pins, organized into two columns of eight pins each. Each two-pin “row” carries exactly the same signal; they are connected together. Furthermore, there are three rows (six pins total) of ground pins, which, again, are connected together.</p>
 <p>Most modules do not use, and don’t even include wires for, the Gate and CV on the bus, requiring you to connect the Gate/CV through the front panel of the module. Similarly, +5V power is simply not needed by most modules.</p>
 <p>So when on <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/">the order page for the case</a> it says:</p>
@@ -79,19 +76,15 @@
 <div style="clear: both;">
 
 </div>
-<h2 id="building-the-power-supply"><a name="building"></a>Building the Power Supply</h2>
+<h2 id="building-the-power-supply"><a href></a>Building the Power Supply</h2>
 <p>I’ll be perfectly frank that this kit is not the one which is going to teach you much about electronics.</p>
 <p>It would be closer to the truth to say that this one will help teach you patience! There are, for example, 14*16=224 solder joints to connect the power cable adaptors alone. After soldering these, I tested them with both a digital multimeter in continuity mode and by putting cables repeatedly into and out of the adaptors. I did not solder every single joint perfectly on the first try (surprise!), so I fixed those which didn’t work.</p>
 <p>Throughout assembling this kit, I had problems with soldering connections to ground; the ground inside the PC board is apparently a large chunk of copper and it was challenging to get it hot enough to melt solder even when the component you were soldering to it was plenty hot and at risk of cooking. It took a lot of patience and mostly a lot of testing to make sure that everything worked.</p>
 <p>The instructions said to increase your soldering iron temperature to 400℃ to solder wires to the power plug. I left it there when soldering the switch and melted something inside the switch. I bought a new switch and some spade connectors, and soldered the switch wires to the spade connectors instead and then pushed the spade connectors onto the (new) switch, which worked quite well.</p>
 <p>One minor challenge is that the +/- leads of the LEDs were not, as far as I could make out, indicated on the PCB; I had to refer to the schematic to figure out which way to put the LEDs into the board.</p>
 <h2 id="building-the-5v-power-supply">Building the +5V Power Supply</h2>
-<figure class="inlineRight">
-<a href="../images/synth/5VPowerSupply.jpg"> <img src="../images/synth/5VPowerSupply.jpg" width="400px" alt="You can see that the voltage regulator is pushed aside by the module power connector and there is no room for the capacitor."> </a>
-<figcaption>
+<a href="../images/synth/5VPowerSupply.jpg"><img src="../images/synth/5VPowerSupply.jpg" alt="You can see that the voltage regulator is pushed aside by the module power connector and there is no room for the capacitor." width="400" /></a>
 What’s wrong with this power supply?
-</figcaption>
-</figure>
 <p>The PCB comes drilled for parts for a +5V power supply (to pins 11 and 12 of the power sockets), but does not include parts for this. Wanting “the full experience” I sourced the parts from a local supplier (details below) and built this as well. Despite some vagueries about precisely which parts to buy, everything worked, except for the LED. I eventually figured out that the problem was getting the ground connection on the PCB hot enough to really melt solder; I had been hesitant to hold the soldering iron to the LED for the 30+ seconds it took to heat up the connection inside the board. But in the end it worked fine and now the LED lights up indicating +5V power is on.</p>
 <p>However, there is another problem with the +5V power supply, and it’s not me this time. Some of the holes for the +5V components fall under the power sockets for modules! I ended up soldering a capacitor to the bottom of the board, and the power regulator is not quite squarely mounted. (See photo at right; there are two capacitors visible on top of the board and a third which is immediately above them mounted under the board; you can see one of the two pins just peeking out from under the black module power connection, immediately above the power regulator pins. Note also that the power regulator is being somewhat pushed off of its heatsink pad by the module power connector above it.) It works fine, but I feel like I’m probably the first person to ever assemble this.</p>
 <h2 id="additional-supplies-needed">Additional Supplies Needed</h2>
@@ -105,7 +98,7 @@ What’s wrong with this power supply?
 </ul>
 <p>All together this cost me about $10.</p>
 <p>As you will see, there is <em>considerable</em> vagueness in the bill of materials above! I listed what I used, and these values seem to work, although I haven’t tried putting any real load on the circuit. One suggestion I would make for this kit is to fill in the missing values here!</p>
-<p>In the <a title="Chapter 3: VCO" href="2023-01-29-building-a-synthesizer-3.html">next installment</a> of this series I’ll breadboard the VCO.</p>
+<p>In the <a href="2023-01-29-building-a-synthesizer-3.html" title="Chapter 3: VCO">next installment</a> of this series I’ll breadboard the VCO.</p>
 <h2 id="resources">Resources</h2>
 <h3 id="instructions">Instructions</h3>
 <ul>
@@ -115,10 +108,14 @@ What’s wrong with this power supply?
 <ul>
 <li><a href="https://www.youtube.com/watch?v=pQKN30Mzi2g">DIY SYNTH PSU: How to design a simple dual power supply</a> by Moritz Klein (26:03). Note that this is for a different design than the one included in the kit! It’s sort of useful, although you can skip this video if you want to.</li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+    Tags: 
     
 </div>
 

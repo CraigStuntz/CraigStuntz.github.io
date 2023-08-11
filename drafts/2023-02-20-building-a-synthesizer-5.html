@@ -3,17 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter 5: Building the VCO</title>
+        <title>Craig Stuntz - 2023-02-20-building-a-synthesizer-5</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -29,60 +22,48 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        5
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the VCO
-                </h1>
-            
+            <h1>2023-02-20-building-a-synthesizer-5</h1>
+
             <div class="info">
     Posted on February 20, 2023
     
 </div>
 
-<figure class="inlineRight">
-<a href="../images/synth/VCOPCBack.jpg"> <img src="../images/synth/VCOPCBack.jpg" loading="lazy" width="200px" alt="The back of the VCO, which is a PC board with two ICS and a number of discrete resistors and capacitors"> </a>
-<figcaption>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 id="building-a-synthesizer-5" class="series">Building a Synthesizer, 5</h3>
+<h1 id="building-the-vco" class="chapterName">Building the VCO</h1>
+<div class="info">
+Posted on February 20, 2023
+</div>
+<a href="../images/synth/VCOPCBack.jpg"><img src="../images/synth/VCOPCBack.jpg" alt="The back of the VCO, which is a PC board with two ICS and a number of discrete resistors and capacitors" width="200" /></a>
 The Back of the VCO
-</figcaption>
-</figure>
-<p>Actually building the <abbr title="Printed Circuit">PC</abbr> board incarnation of the VCO was quite a bit easier than <a href="../posts/2023-03-02-building-a-synthesizer-3.html">getting it to work on the breadboard</a>. Really there was nothing tricky about it; I just soldered it together and it worked well the first time. I don’t really remember how long it took; I’m thinking 2-3 hours? It was certainly much easier to solder than <a href="../posts/2023-02-22-building-a-synthesizer-2.html">the power supply</a>, where the large ground traces made getting the solder joints hot enough difficult.</p>
+<p>Actually building the PC board incarnation of the VCO was quite a bit easier than <a href="../posts/2023-03-02-building-a-synthesizer-3.html">getting it to work on the breadboard</a>. Really there was nothing tricky about it; I just soldered it together and it worked well the first time. I don’t really remember how long it took; I’m thinking 2-3 hours? It was certainly much easier to solder than <a href="../posts/2023-02-22-building-a-synthesizer-2.html">the power supply</a>, where the large ground traces made getting the solder joints hot enough difficult.</p>
 <p>This once again reinforces my feeling that I made the right decision getting the mki x es.EDU kits instead of some of the other synthesizer kits on the market. The emphasis on breadboarding allows me to make and fix mistakes, and that’s the best way to learn. When you connect components to labeled holes on a PC board, well, there’s not a ton of opportunity to screw things up.</p>
 <p>When I was in high school I occasionally built <a href="https://www.heathkit.com">Heathkit</a> electronics kits. I still have my Heath DMM that I built decades ago. Their motto was, “We won’t let you fail.” Now I am thinking it would have been better if they did let me fail, just a little!</p>
 <h2 id="differences-between-the-breadboarded-vco-and-the-pc-board-version">Differences Between the Breadboarded VCO and the PC Board Version</h2>
 <p>The PC board version has some extra components which are not used when you build the VCO on the breadboard. These are mostly discussed in <a href="https://www.ericasynths.lv/media/VCO_MANUAL_v2.pdf">the instructions</a> in the section entitled “Module Assembly Appendix,” so I’ll refer you there for an explanation of what they do.</p>
 <p>The is a component which is added to the PC board version and which is not mentioned in the “Module Assembly Appendix.” The PC board version adds 1k resistors in front of the two output jacks. Presumably this is to protect the circuit if the output is accidentally shorted to ground while plugging in a patch cable. Putting a 1k resistor here ensures that there is always some resistance on the output, even if the patch cable momentarily joins the output with ground while plugging it in/out</p>
 <h2 id="tuning">Tuning</h2>
-<figure class="inlineRight">
-<a href="../images/synth/NovationPitchCVCalibration.png"> <img src="../images/synth/NovationPitchCVCalibration.png" loading="lazy" width="400px" alt="CV calibration instructions for the Novation SL MkIII keyboard"> </a>
-<figcaption>
+<a href="../images/synth/NovationPitchCVCalibration.png"><img src="../images/synth/NovationPitchCVCalibration.png" alt="CV calibration instructions for the Novation SL MkIII keyboard" width="400" /></a>
 Pitch CV Calibration Instructions
-</figcaption>
-</figure>
 <p>Nothing takes the romance out of analog synthesizers faster than tuning. When you play a note, let’s say middle C, on a keyboard, you would ideally like the VCO to oscillate at a corresponding value of 261.63 Hz. Many things have to be set correctly for this to happen!</p>
 <p>Let’s start with the keyboard: It will emit a pitch control voltage when you play a key, but will it be the “correct” voltage for the modules you use? My keyboard has a “CV Calibration” feature which allows you to change the pitch CV emitted when you press a key.</p>
 <p>So my first task was to connect the keyboard’s pitch CV output to a voltmeter and adjust this signal to the expected values. What are those? <a href="https://notebook.zoeblade.com/Pitches.html">this list</a> seems fairly standard. (The <a href="https://en.wikipedia.org/w/index.php?title=CV/gate&amp;oldid=1093674895#CV">list of voltages currently on Wikipedia</a> sets 0V = A instead of C. There has been disagreement on which note 0V should correspond to over the years, but for Eurorack you’ll want it to be C.) I <em>do not</em> recommend doing this by connecting to a sound device and tuning it by ear, as the instructions suggest, because the sound device itself might be out of tune. One thing at a time!</p>
-<figure class="inlineLeft">
-<a href="../images/synth/VCOTuning.jpg"> <img src="../images/synth/VCOTuning.jpg" loading="lazy" width="400px" alt="The VCO during tuning. A digital tuner is shown on a computer screen in the background of the image, as well as the right side of an oscilliscope. The digital tuner shows that the VCO is about 9 cents sharp."> </a>
-<figcaption>
+<a href="../images/synth/VCOTuning.jpg"><img src="../images/synth/VCOTuning.jpg" alt="The VCO during tuning. A digital tuner is shown on a computer screen in the background of the image, as well as the right side of an oscilliscope. The digital tuner shows that the VCO is about 9 cents sharp." width="400" /></a>
 Almost, but not quite!
-</figcaption>
-</figure>
 <p>Unfortunately, I found a firmware bug while doing this! Adjusting the “CV 1 Low” and “CV 1 High” dials didn’t change the pitch or produce any visual indication that they were doing anything. I eventually figured out that although they were adjusting the pitch I couldn’t hear the change until I pressed another button to change to the other control. I guess I will report that to Novation. At any rate, I was eventually able to get the output voltage correct.</p>
 <p>That sorted, I could then connect the keyboard’s pitch CV to the VCO’s “1V/oct” input and tune the VCO. There’s <a href="https://www.youtube.com/watch?v=dd1dws6pSNo&amp;t=1253s">a video of Moritz Klein tuning the breadboarded version of an early version of this project</a> which you can watch to see the project. I do think he makes this process seem a bit easier than it actually is, though!</p>
 <p>When you’re first tuning the VCO, it might be <em>way</em> out of tune. Here are some tips for tuning the VCO:</p>
-<figure class="inlineRight">
-<a href="../images/synth/VCOCompleteBack.jpg"> <img src="../images/synth/VCOCompleteBack.jpg" loading="lazy" width="300px" alt="A photo of the back of the completed VCO"> </a>
-<figcaption>
+<a href="../images/synth/VCOCompleteBack.jpg"><img src="../images/synth/VCOCompleteBack.jpg" alt="A photo of the back of the completed VCO" width="300" /></a>
 Note 4 thermistors directly above the trimpot
-</figcaption>
-</figure>
 <ul>
 <li>Warm up the VCO by powering it on for 15 minutes or so before you start</li>
 <li>Try to avoid handling the module too much (although it’s difficult to avoid!), and especially don’t touch the temperature-sensitive components such as the thermistors and transistors</li>
@@ -144,12 +125,8 @@ Note 4 thermistors directly above the trimpot
 <p>*The signal type when no CVs are connected to the input jacks.</p>
 <h3 id="after-tuning">After Tuning</h3>
 <p>I also measured the voltage out of the oscillator from the PWM jack after tuning and with a “C3” (one octave below middle C) CV voltage on the 1V/Oct jack. This is an <a href="https://www.edn.com/ffts-and-oscilloscopes-a-practical-guide/">FFT</a> of the square wave which you can see in yellow. It’s cool because you can see the <a href="https://www.prosoundtraining.com/2010/03/13/square-waves-and-dc-content/">harmonics</a> in the FFT chart.</p>
-<figure>
-<a href="../images/synth/SDS00001.png"> <img src="../images/synth/SDS00001.png" loading="lazy" width="600px" alt="FFT of voltage measured from output of the VCO"> </a>
-<figcaption>
+<a href="../images/synth/SDS00001.png"><img src="../images/synth/SDS00001.png" alt="FFT of voltage measured from output of the VCO" width="600" /></a>
 FFT
-</figcaption>
-</figure>
 <h2 id="resources">Resources</h2>
 <h3 id="instructions">Instructions</h3>
 <ul>
@@ -169,10 +146,14 @@ FFT
 <li><a href="https://www.youtube.com/watch?v=8JuYLLpZzBs">Introducing the mki x es.edu DIY VCO kit</a> by Moritz Klein (7:23). This is a super-short overview with a demo of the full system.</li>
 <li><a href="https://www.youtube.com/watch?v=MMif8sz_6Cc">Erica Synths .EDU VCO - Building, tuning, playing</a> by Synth Diy Guy (17:53)</li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+    Tags: 
     
 </div>
 
