@@ -19,8 +19,8 @@ tags: synthesis, diy, electrical engineering
 * [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
 </div>
 
-At this point, I've built an oscillator, which makes sound, but the issue is 
-that it never _stops_ making sound. It just runs forever, and that makes it 
+At this point, I've built an oscillator, which makes sound, but one issue it has 
+is that it never _stops_ making sound. It just runs forever, and that makes it 
 difficult to play music. Playing distinct notes is going to require two more 
 modules: An Envelope Generator and a Voltage Controlled Amplifier. 
 
@@ -36,29 +36,37 @@ really they can vary any parameter of a synth. As noted above, without an
 envelope your oscillator will just run forever, which most people don't find
 musically pleasing!
 
-Here's an envelope from the Logic Pro Vintage Synth plugin:
+Here's an envelope from the Logic Pro Retro Synth plugin, which is similar to 
+the envelopes you'll find on many non-modular keyboard synthesizers:
 
 <figure class="">
 <a href="/images/synth/LogicProVintageSynthAmpEG.png">
 <img src="/images/synth/LogicProVintageSynthAmpEG.png" loading="lazy" width="400px" alt="The AMP ENV from Logic Pro. We can see an attack, decay, sustain, and release setting on a visual graph. There is a volume slider to the right.">
 </a>
-<figcaption>Vintage Synth Amp Env</figcaption>
+<figcaption>Retro Synth Amp Env</figcaption>
 </figure>
 
-This looks superficially similar to the VCA that we'll be building, but it 
-differs in some important aspects:
+This looks superficially similar to the envelope generator that we'll be 
+building, but it differs in some important aspects:
 
-* The Vintage Synth "envelope" is really more equivalent to a modular EG, VCA, 
+* The Retro Synth "envelope" is really more equivalent to a modular EG, VCA, 
   and Mixer all wired together. There is some complexity hidden here. 
-* The Vintage Synth envelope shown here is for amplitude (note volume) control
-  _only._ (Vintage Synth has a separate envelope which is hard-wired to filter
+* The Retro Synth envelope shown here is for amplitude (note volume) control
+  _only._ (Retro Synth has a separate envelope which is hard-wired to filter
   cutoff or VCO pitch.) If you wanted to use an EG to modulate some other 
-  control, such as the effect mix, well, you can't do that in Vintage Synth. 
-* It's possible to have a slow attack followed by a slow decay. As we'll see, 
-  the mki x es.EDU module can't do this, because it would have made the circuit
-  substantially more complex.
+  control, such as the effect mix, well, you can't do that in Retro Synth. The
+  EG module, on the other hand, can be connected to any other module with a 
+  CV input.
+* With the Retro Synth envelope i's possible to have a slow attack followed by 
+  a slow decay. As we'll see, the mki x es.EDU module can't do this, because it 
+  would have made the circuit more complex.
+* The Retro Synth envelope's attack, decay, and release rate controls are 
+  linear; the attack, for example, increases as a straight line. The 
+  mki x es.EDU envelope generator, on the other hand, follows a curve, which 
+  looks approximately logarithmic. Both sound fine, but you'll hear the 
+  difference, especially with a slow setting.
 
-I chose this comparison because Vintage Synth is a very simple plugin. Other 
+I chose this comparison because Retro Synth is a very simple plugin. Other 
 plugins such as Alchemy allow you to add an arbitrary number of envelopes routed
 to any parameter on the synth, having very complex shapes. That would be a huge
 digression here.
@@ -82,21 +90,21 @@ turns the note off when you release it:
 <a href="/images/synth/VintageSynthOrganEnv.png">
 <img src="/images/synth/VintageSynthOrganEnv.png" loading="lazy" width="400px" alt="An organ has a very short attack, no decay, sustain at 100%, and a very short release.">
 </a>
-<figcaption>Vintage Synth Organ Envelope</figcaption>
+<figcaption>Retro Synth Organ Envelope</figcaption>
 </figure>
 
 ...or a piano, where the note spikes briefly to full volume and then fades, 
 eventually to nothing, as you hold the key. If you release the key during the 
-fade the volume will of course drop immediately to nothing:
+decay the volume will of course drop immediately to nothing:
 
 <figure class="">
 <a href="/images/synth/VintageSynthPianoEnv.png">
 <img src="/images/synth/VintageSynthPianoEnv.png" loading="lazy" width="400px" alt="A piano has a very short attack, a slow decay, sustain at 0%, and an instant release.">
 </a>
-<figcaption>Vintage Synth Piano Envelope</figcaption>
+<figcaption>Retro Synth Piano Envelope</figcaption>
 </figure>
 
-A real piano has a somewhat more complex decay, but the vintage synth envelope
+A real piano has a somewhat more complex decay, but the Retro Synth envelope
 can only do a linear decay. Other synths can do an exponential or arbitrary 
 decay shape which will more accurately model a piano. 
 
@@ -108,10 +116,10 @@ slow decay, sustain at 75%, and a slow release:
 <a href="/images/synth/VintageSynthPadEnv.png">
 <img src="/images/synth/VintageSynthPadEnv.png" loading="lazy" width="400px" alt="A pad envelope">
 </a>
-<figcaption>Vintage Synth Pad Envelope</figcaption>
+<figcaption>Retro Synth Pad Envelope</figcaption>
 </figure>
 
-As noted, this is one of two envelopes in the Vintage Synth plugin, which is 
+As noted, this is one of two envelopes in the Retro Synth plugin, which is 
 quite simple and lacks a modulation matrix. Other synth
 plugins have additional envelopes which can be arbitrarily routed to modulate
 any parameter on the synth via a modulation matrix. 
@@ -129,6 +137,14 @@ On a standard synthesizer you might have a separate envelope for each of these,
 a switch on the envelope, or a modulation matrix to choose between these 
 functions. With a modular syntesizer, there is "just" an envelope generator, but
 you need to connect it to some other module to get it to do anything useful. 
+
+(In this sense the EG module is more like the envelopes in Alchemy, which can be 
+used to modulate literally any knob on the soft synth, than the envelopes in 
+Retro Synth, which are "hard-wired" to just three parameters. Logic Pro also has 
+a "Modulator" Midi Effects plugin, which is a bit more like
+the envelope generator we'll be building here in that it can be connected to 
+nearly any plugin parameter, and functions both as an envelope generator and an
+LFO.)
 
 ## Modular Envelope Generators
 
@@ -175,7 +191,8 @@ resistors conveniently at hand" is as good of a reason as any, and meets the
 Doepfer requirements.
 
 I measured the output of my Novation SL MkIII's Gate output, and it's 5 V. People
-on the thread I linked claim that the B\*hr\*ng\*r Neutron is only 3.3 V. Which 
+on the thread I linked claim that the <a href="https://www.youtube.com/watch?v=p5RSIWbZ6Vc" 
+title="B*hr*ng*r: The Edgelords Of Music Production">B\*hr\*ng\*r</a> Neutron is only 3.3 V. Which 
 "kind of almost" conforms to the Doepfer text ("usually/about"!), but is 
 apparently low enough to cause some heartache with this kit. 
 
@@ -261,7 +278,12 @@ sustain level instead of all the way to 100%.
 <figcaption>Passive trace</figcaption>
 </figure>
 
-If you look at the figure on the right, the yellow trace is the square wave I
+We start by building a passive EG, but as you can't hook it up to anything which
+draws more current than an oscilloscope without changing the envelope, that's 
+really only good for demonstrating the principle of operation of the EG. 
+Building a "useful" EG will require some op amps. 
+
+If you look at the "Passive trace" figure on the right, the yellow trace is the square wave I
 am using as the input to the EG, and the purple trace is the output of the EG.
 As you can see, the output of the passive circuit is limited to the voltage of
 the input to the EG. Also, the output impedance would not be handled well; the 
@@ -274,11 +296,23 @@ shape of the waveform would change depending upon what you connected to the EG.
 <figcaption>Active trace</figcaption>
 </figure>
 
-With the active EG, on the other hand, the output voltage is now independent of
+With the active EG the output voltage (see the "Active trace" figure) is now independent of
 the input voltage, and the impedance would be better handled, due to the use
-of a buffer op amp. 
+of a buffer op amp. Here's what that looks like on the breadboard:
+
+<figure>
+<a href="/images/synth/EGBreadboard.jpg">
+<img src="/images/synth/EGBreadboard.jpg" loading="lazy" width="800px" alt="Breadboarded simple EG with attack and decay pots">
+</a>
+<figcaption>Two pots and counting..."</figcaption>
+</figure>
+
+(If you look _really closely_ at this photo you'll notice an extra resistor I've
+added to bring the voltage threshold down to about 2 V to start the EG. As noted
+above, my function generator has a limited voltage range.)
 
 <div style="clear: both;"></div>
+
 ### Attack, Decay/Release, Sustain Controls
 
 <figure class="inlineRight">
@@ -322,9 +356,8 @@ does not go to 100% as a standard synthesizer attack would do.
 the attack only goes to the "sustain" level of the "ADSR trace" in the 
 "ADSR trace with slow attack" example.)
 
-This is because of how the EG works. The attack and the decay start _at the same
-time._ If you look at the figure to the right called "ADSR trace with slow 
-attack," you can see a third, blue trace. The blue
+This is because of how the EG works. If you look at the figure to the right 
+called "ADSR trace with slow attack," you can see a third, blue trace. The blue
 trace is a pulse which is fired when the input goes high. As you can see, the 
 pulse is pretty short. One way to think about the duration of the pulse is that
 it's the maximum length of time your attack can be for there to still have a
@@ -337,9 +370,20 @@ One way to think about the mki x es.EDU EG is that it's _a low-pass filter_ on
 the gate signal. The input is a square wave and hence has lots of harmonics.
 To turn the hard corner of the input into a gentle attack, the EG uses a filter.
 
-
 <div style="clear: both;"></div>
-## Inversion
+
+### LED
+
+I added an LED, and a transistor to drive it. 
+
+<figure>
+<a href="/images/synth/EGWithLED.jpg">
+<img src="/images/synth/EGWithLED.jpg" loading="lazy" width="800px" alt="Breadboarded EG with LED light shining">
+</a>
+<figcaption>The "LED Moment"</figcaption>
+</figure>
+
+### Inversion
 
 <figure class="inlineRight">
 <a href="/images/synth/EGInverted.png">
@@ -354,14 +398,15 @@ there; it uses
 to produce this output.
 
 <div style="clear: both;"></div>
-## Looping the Envelope
+
+### Looping the Envelope
 
 I found this section somewhat hard to understand, not least because the 
 directions lead off with a confusing bit of language:
 
 <figure>
-<a href="/images/synth/EGManualError.png">
-<img src="/images/synth/EGManualError.png" loading="lazy" width="800px" alt="Screenshot of the Looping the Envelope section of the manual, with a looping circuit diagram and the text &quot;You just patch it in between output (on the right) and input (on the left) &quot;">
+<a href="/images/synth/EGManualConfusion.png">
+<img src="/images/synth/EGManualConfusion.png" loading="lazy" width="800px" alt="Screenshot of the Looping the Envelope section of the manual, with a looping circuit diagram and the text &quot;You just patch it in between output (on the right) and input (on the left) &quot;">
 </a>
 <figcaption>It's your other left...</figcaption>
 </figure>
@@ -380,8 +425,11 @@ In the end the way that this produces a loop is pretty simple, and here's how
 I would explain it:
 
 First, this circuit produces a _specific type of loop._ Namely, it loops 
-whenever the envelope output goes to zero. This is not an LFO-style of loop 
-which will always happen on a certain timeframe.  Given that requirement, then we just
+whenever the envelope output goes to zero. This is not the sort of loop which 
+you would get if you connected an LFO to the gate input of the EG, which would 
+always happen on a certain timeframe regardless of where the envelope
+is in its cycle. The EG's loop circuit always happens after the release.  
+Given that requirement, then we just
 need a circuit which will make the input go high whenever the output goes low.
 That sounds like a Schmitt trigger inverter, something which you'll be familiar 
 with if you've previously build the mki x es.EDU VCO, and the circuit shown is 
@@ -410,6 +458,45 @@ off" in this version), and in the breadboard version the resistor goes to the
 negative rail instead of ground. That last bit just seems like an error to me
 &ndash; the full schematic and the PC board layout later in the directions match
 the schematic here. So I ended up not doing this part. 
+
+### The Mistake I Made
+
+The video about why this is a bad idea is literally called 
+[How NOT To Blow Up Your Oscilloscope!](https://www.youtube.com/watch?v=xaELqAo4kkQ)
+
+## Modifications: Can We Fix the Limitation on the Attack?
+
+The limitation to very short attack times is somewhat less than ideal, so could
+we fix it? The "pulse" used to generate the attack is set to a pretty short 
+duration, and it's not adjustable. What if it were adjustable? That's not so
+hard. We could replace the attack potentiometer with a stereo potentiometer 
+(which is really just two separate potentiometers with a single shaft to adjust
+them). Then we could use one of these for the attack time, as before, and the 
+second for adjusting the width of the pulse. 
+
+So [I tried this out in the circuit simulator](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcAmALNZA2VAOMmB2SBVATlIQJAMxCVQGY6BTAWjDACgAlEd5HHVSo+YAXTFQpqSCimyYCTgHMpJEbISYFUTgCc+2ISP6D1UsPDj7DI85uHSi1gO62QjZO-ucAhu9R8EAYvQNpSOX5wKzhg6BwGQgZUTFIGHAICBAQwKhh8UkwBRgJSUuQKiMsrG0KPILrsHWr4TgATYNCG2jCQLzAAOUDcTgB5EEIvdJEiEWn5GwRSKZwRSeDVi1b-Mlp5pZWRQUkolvgoDFQBLKv8MBzEC7RrghwESES0-EJomrdd4KYQQAkIKTj-OqgujLTpgtwHWHQw66NxgGEyWQVEQYlHgGEMRJ40KxSDgkCQwloqaE0luSGbCm0Un+Oo4qkeWLHLynGKyVgweA4DJFd4lbDCSBUfmwOBCmgE5ZwMC4V5MM6k3isZCQMyOLUELz2PoePrQJDIM3yM1krEczFoQGCWl9B0422eXQdW2JQQCQQ+42DYY4dp9IUeEIu7GR-pDZUh3IiP2OjZzIFbGIXR4AQQAKrnswBhADSnETYeBkYDwidvysWeIIAAIgBRQvZgCaAHpuC2ADIt7MAZRbZIJewQ1L22tx48R8yhzoXM4X6aXhJrwQ3ODhW56O9THgPS82uFk8w9J7TwKCAavEa6PUjzt6HtfJLJvWrQRxL5-sRSbEPwAYw8IwcUAo8dAFKwIBgZ4Mled5PgYb48hlLhVEgs8wOxOowQAD2CDgOT2TAIBkCIjhAAA1ABJbMAB0AGchzo1sACFs24TgiNQuYymCBBgQAkBBGzJsACkAFUh1zFjZN44IIiwWQZCYLAmCTQQAAUR2kptRlYCSh24FiWwGGj+1GHTRwhHoAPAj83FYJy+Q4YkwVUdhJEgnzQmPXF2EcHF2G0O1PVEcK-PwNTYljYMVCitSjDCtTAtJUC0oirUdQihQZXgODoAKIpVgYUpykqBsuBc7VdRMer8rJVy1gNPgmvWUkOkjTAtAmNZ+oS+M-HcPrpwmfquVEfpeTiBIkhSNJEOyXIM1aFyjHMVqBt3XKGo6vKurLAg1kG2gPMmpk6xJaAz21XkYioIdZILOiBiS5VzvARwgVrZ0xEEcafu+0kiJoCZXhQCAgQosSQAkmS5JYgBZUdwaYIEqDETHSDU+H6KY1j2JbLieIAIz4OcmtKCBTqZE6TEuzd-PqC6boK8h3ke2CEYAFz53xgIAaxAZiAAcAEtheYFrmaCVnfzl3zcFEXyjGdYKgPc8QlZcwGcuZ5yZpEnXKy8UkAHtwHNfq4vIPoCqsMpxuQJBMRt4JOGt307fqSAvBnfJwHATggA), 
+and it seems to work, for the 
+most part. (Except that the falstad.com simulator has no stereo potentiometers; 
+I had to use two mono pots with separate adjustments.) But I can certainly make
+the attack longer by increasing the resistance of what used to be a single 10k
+resistor and is now a potentiometer. Overall it feels like an improvement. 
+
+<figure>
+<a href="/images/synth/EGSimulatorFixedAttack.png">
+<img src="/images/synth/EGSimulatorFixedAttack.png" loading="lazy" width="800px" alt="A schematic of the envelope generator in a circuit simulator with the modification described in the text.">
+</a>
+<figcaption>Improved Attack</figcaption>
+</figure>
+
+Actually including it in the final project would require changes in packaging
+since the stereo pot is larger than a mono pot, and changes to the circuit.
+More importantly, I would need to tweak the resistor/capacitor values in the 
+lowpass filter at the input so that the range of the pot was correct for both 
+the pulse length and the attack curve across the full range of the stereo pot.
+
+## Building the PC Board
+
+I mixed up a 100 k and a 100 ohm resistor. These two are very different!
 
 ## Resources
 

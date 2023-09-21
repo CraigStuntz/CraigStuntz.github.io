@@ -3,3 +3,4 @@
 * [The Unbelievable Zombie Comeback of Analog Computing](https://archive.is/ZMTku)
 U.S. Navy Basic Mechanisms of Fire Control Computers (film, 1953)
 * [Unconventional Computing](https://www.youtube.com/watch?v=szTtg302Hic)
+* Analog maze solving: https://www.youtube.com/watch?v=C3gnNpYK3lo

@@ -14,6 +14,7 @@ tags: diy, electrical engineering, computer science, homomorphic encryption
 * [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
 * [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
 * 6: The Logic Circuits Model of Computation
+* [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
@@ -197,6 +198,8 @@ introduced the first fully homomorphic cryptosystem, used this model.
 My real agenda here is to get you thinking about different kinds of computing 
 models, because next we're going to talk about analog computers, and they're far
 weirder than logic circuits!
+
+In the next post in this series I'll [building the Mixer module](2023-09-21-building-a-synthesizer-7.html).
 
 ## References
 

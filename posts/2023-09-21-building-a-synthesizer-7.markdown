@@ -7,13 +7,13 @@ tags: synthesis, diy, electrical engineering
 ---
 
 <div class="toc">
-* [Introduction: The World of DIY Synthesizers](2023-01-22-building-a-synthesizer-0.html)
-* [1: The mki x es.EDU DIY System](2023-01-29-building-a-synthesizer-1.html)
-* [2: Building the Power Supply](2023-01-29-building-a-synthesizer-2.html)
-* [3: Breadboarding the VCO](2023-01-29-building-a-synthesizer-3.html)
-* [4: The Logic Circuits Model of Computation](2023-02-18-building-a-synthesizer-4.html)
-* [5: Building the VCO](2023-02-20-building-a-synthesizer-5.html)
-* [6: Debugging Circuits](2023-02-26-building-a-synthesizer-6.html)
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
+* [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
+* [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
+* [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
 * 7: Building the Mixer
 * [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
 </div>
@@ -23,19 +23,42 @@ the "Output" module. Both can combine multiple audio signals into one, but they
 do it somewhat differently and the use cases are different. This "Mixer" module
 will combine up to three mono signals into a single mono output, and it can also
 optinally clip or invert the signal. The "Output" module will combine up to two
-mono signals into a stereo line level and headphones output, with panning. A 
-mixer is a pretty handy module to have, and there are different reasons to use a 
-mixer!
+mono signals into a stereo line level and headphones output, with panning. 
+
+A mixer is a pretty handy module to have, and there are different reasons to use 
+a mixer, hence different mixers. You can obviously use this one to blend the 
+two oscillators in the kit, making a hybrid sound with toth a PWM and noise 
+sound. But you can also use it, for example, to combine the two different 
+envelope generators, producing one envelope which is far more complex than you 
+could make with just one envelope generator. You could combine a key-triggered
+and a looped envelope, for example.
 
 Another big difference between the two modules is the directions. The directions
 for the "Mixer" module were written by Moritz Klein and very much follow the 
 style set out in most of the rest of the mki x es.EDU modules, with an emphasis
-on breadboarding before soldering, and a folksy, style. Moritz frequently says, 
+on breadboarding before soldering, and a folksy style. Moritz frequently says, 
 in both the printed directions and his videos, approximately, "you could use 
 math to calculate these values, but I prefer to use trial and error."
-
 I'll discuss the Output module in a future post, but for now let's just say that
-the directions are day-and-night different. 
+the directions are day-and-night different. The Output module directions were 
+not written by Moritz and there is math involved. Good thing I enjoy that sort 
+of thing.
+
+This module, however, has directions written by Moritz Klein in his usual style.
+I like that, too!
+
+## It's All About the Op Amps
+
+It might seem like I don't have much to say about this kit. You'll note that 
+this post is far shorter than many of the others in the series. In truth, 
+however, building this kit inspired me to write 
+[the chapter on op amps](2023-04-03-building-a-synthesizer-4.html), which is
+by far the longest post I've written. So there is a lot to say, so much so that 
+it took an extra post.
+
+The mixer module is a very simple introduction to op amps, which gives just a 
+couple of use cases. If you'd like to know more, 
+<a href="2023-04-03-building-a-synthesizer-4.html" title="A Gentle Introduction to Op Amps">I've got you covered</a>.
 
 ## Passive vs. Active Mixing
 
@@ -59,6 +82,10 @@ mixer is that if you have a musical signal connected to one of the inputs and
 then you connect a 0V signal into another input, the level of the music on the 
 output changes! 
 
+Also about that output: Due to the lack of any kind of buffer, the amount of 
+current in this circuit will change quite a lot depending upon what you have
+connected to it. 
+
 It's even worse when you have more than two inputs. If you have three inputs, 
 and you have two of them connected to music inputs, and you set the levels 
 appropriately, then you will be very surprised when you plug in a third input
@@ -70,28 +97,111 @@ ground is a voltage divider, whereas the same circuit with the same input entire
 disconnected is just a single resistor. End users of your mixer will not expect
 this behavior.
 
+Still, you will sometimes see passive mixers advertised as "summing mixers" and
+all sorts of audio fairy dust attributed to them, at a price.
+
 ### "Active" Mixers (with Scare Quotes)
+
+<figure class="inlineRight">
+<a href="/images/synth/OpAmpPassiveMixer.png">
+<img src="/images/synth/OpAmpPassiveMixer.png" loading="lazy" width="300px" alt="Schematic diagram of an op amp in a non-inverting configuration with two inputs with a 100k resistor on each input">
+</a>
+<figcaption>A Passive Mixer and a Buffer</figcaption>
+</figure>
 
 Klein introduces the notion of an "active" mixer by putting a op amp buffer in
 non-inverting mode after the passive mixer. While this is "active" in the sense
 that it contains active components, namely the op amp, it's not what most people
 would consider an active mixer, because the mixer itself is still passive.
 
-To be honest I'm not sure why you would use this configuration, because it 
-doesn't fix the problem with the volume _or_ the problem with a 0V signal and 
-an entirely disconnected mixer input resulting in two different behaviors when
-connecting a real signal to some other input.
+In other words, using a non-inverting op amp configuration passively mixes the 
+two (or more) signals, and then actively buffers the result using the op amp.
 
+To be honest I'm not sure why you would use this configuration, because it 
+doesn't fix the problems caused by the passive mixer. But it does provide one
+advantage, namely that plugging in a random module to the output can't change
+the behavior of the mixer, due to the op amp acting as a buffer.
+
+<div style="clear: both;"></div>
 ### Active Mixers (No Scare Quotes)
+
+<figure class="inlineRight">
+<a href="/images/synth/OpAmpActiveMixerWithPots.png">
+<img src="/images/synth/OpAmpActiveMixerWithPots.png" loading="lazy" width="300px" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k potentiometer and a 100k resistor on each input">
+</a>
+<figcaption>Passive Mixer + Inverting Amplifier = Active Mixer</figcaption>
+</figure>
 
 When you swap the non-inverting op amp for an op amp in an inverting 
 configuration, however, things change. Naïvely, this shouldn't make a 
-difference, because what good does inverting the signal do? But we're not just
-inverting the signal, we are also moving the feedback signal from the op amp 
-input which doesn't take the mix output to the one which does. And _that_ is 
-what makes the difference. 
+difference, because what good does inverting the signal do? 
 
-## Weirdness
+But we're not just inverting the signal, we are also moving the op amp's 
+feedback signal from the op amp 
+input which doesn't take the mix output to the one which does. And _that_ is 
+what makes the difference. In an inverting configuration the op amp must emit
+a voltage to bring its `-` input down to zero, hence the opposite voltage as its 
+input(s). Because the op amp is always working to keep its `-` input at zero, it
+exactly balances the signal from all of its inputs (labeled $V1$ and $V2$ in 
+the schematic at right).
+
+This means that if you have just one input connected at $V1$ then the op amp 
+will emit at its output the exact opposite of that signal; it's an inverter. 
+It will do this whether you have no connection at all at $V2$ or if you have 
+a wire connected at ground level, carrying no audio signal. If you have two or
+more inputs connected, say an audio signal on $V1$ and $V2$, then the op amp 
+will emit exactly the opposite of their sum. 
+
+[I wrote about this in my op amps post](2023-04-03-building-a-synthesizer-4.html#level-10-passive-and-active-mixers).
+
+However, although the inversion is inaudible with audio signals, if you're using
+the mixer with a lower-frequency signal such as an LFO or some envelope 
+generators then you might notice the inversion. So the next step is to add 
+another inverting op amp to fix the inversion. Klein also adds an ouput for the
+inverted signal in case you want that. 
+
+## Distortion
+
+The last bit added to the circuit is a diode distortion circuit, which adds a 
+small bit of distortion to a dedicated output in case you want that. The 
+circuit is essentially two diodes and a trimpot, and there's an op amp to bring
+the level back up to match the other outputs.
+
+We think of diodes as "one way valves" for current, but they don't open linearly,
+and the distortion circuit exploits this nonlinearity to produce a distorted 
+sound that can be pleasing in some cases.
+
+I'm not sure why the distortion level is set with a trimpot instead of a 
+regular front-panel potentiometer; this is the sort of control which you might
+want to change for different synthesizer sounds, and having to remove the 
+module from the rack and adjust the clip threshold with a screwdriver is going 
+to discourage that. 
+
+## Building the PC Board
+
+Well there was no drama here at all. I soldered on the components and everything 
+just worked. No complaints there!
+
+<figure class="horizontalTiles">
+<a href="/images/synth/MixerFaceplate.jpg">
+<img src="/images/synth/MixerFaceplate.jpg" loading="lazy" height="300px" alt="The faceplate of the Mixer module. It has three potentiometer knobs and six jack sockets">
+</a>
+<figcaption>Mixer Front</figcaption>
+</figure>
+
+<figure class="horizontalTiles">
+<a href="/images/synth/MixerBackPCBoard.jpg">
+<img src="/images/synth/MixerBackPCBoard.jpg" loading="lazy" height="300px" alt="The back of the Mixer module, which is a PC board with two ICS and a number of discrete resistors and capacitors">
+</a>
+<figcaption>Mixer Back</figcaption>
+</figure>
+
+<div style="clear:both  ;"></div>
+
+
+But there was...
+
+### That One Weird Thing With the Zero Ohm Resistors
 
 <figure class="inlineRight">
 <a href="/images/synth/MixerOptionalOpAmp.png">
@@ -100,20 +210,35 @@ what makes the difference.
 <figcaption>Huh?</figcaption>
 </figure>
 
-The kit includes two [zero Ohm resistors, which really are a thing](https://en.wikipedia.org/wiki/Zero-ohm_link). They are totally unmentioned in the manual, and omitted from the 
-bill of materials, but are in the schematic and the pictures of the completed 
-board. They are part of an "optional inverting/noninverting op amp circuit" which 
+The kit includes two [zero Ohm resistors, which really are a thing](https://en.wikipedia.org/wiki/Zero-ohm_link). 
+That's a little unusual, but what's truly strange is that they're totally 
+unmentioned in the manual, and omitted from the 
+bill of materials, but they are are in the schematic (see image at right) and 
+in the pictures of the completed board in the directions. They are part of an 
+"optional inverting/noninverting op amp circuit" which 
 is not in the signal path of the rest of the mixer. (See schematic at right; 
 R12 and R14 are zero Ohms. The remaining resistors should not be 
 installed at all; "DNM" means "Do Not Mount.")
 
 Installing the two zero-Ohm resistors puts the second op amp in the second TL072
-into a buffer configuration, with the noninverting input set to ground. So it
-buffers ground? I guess this circuit is "reserved for future expansion."
+into a buffer configuration, with the noninverting input set to ground. This is
+<a href="https://www.youtube.com/watch?v=WnDju2TwN5I" title="Handling Unused 
+Operational Amplifiers (ECE Design Fundamentals)">the correct way 
+to set up an unused op amp</a>. 
 
-Perhaps the (currently unused) op amp wants to be grounded to avoid noise 
-problems? The data sheet doesn't mention this. It's a weird omission from the 
-manual.
+I think the purpose of the zero Ohm resistors is they could be removed and 
+replaced with a different value resistor, along with mounting additional 
+resistors in the "DNM" positions, if you later decided to use the additional 
+op amp for... something. 
+
+<figure>
+<a href="/images/synth/Mixer0Ohm.jpg">
+<img src="/images/synth/Mixer0Ohm.jpg" width="300px" loading="lazy" alt="A close-up of the 0 Ohm resistors">
+</a>
+<figcaption>Close-up of 0 Ohm resistors</figcaption>
+</figure>
+
+Thanks for reading! 
 
 ## Resources
 
@@ -135,6 +260,9 @@ All of these simulations are by Moritz Klein
 
 * [Introducing the mki x es.edu DIY S&H/Noise and Mixer kits](https://www.youtube.com/watch?v=_vrc4qgBqbA),
   by Moritz Klein (3:57)
+* [Designing a 3-channel mixer with diode distortion from scratch](https://www.youtube.com/watch?v=q8tmUgaXrEQ)
+  by Moritz Klein (26:38)
+
 ### Web Sites
 
 * [Mod Wiggler thread](https://modwiggler.com/forum/viewtopic.php?t=263624) (Pretty empty when I looked)
