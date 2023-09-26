@@ -27,7 +27,7 @@ mono signals into a stereo line level and headphones output, with panning.
 
 A mixer is a pretty handy module to have, and there are different reasons to use 
 a mixer, hence different mixers. You can obviously use this one to blend the 
-two oscillators in the kit, making a hybrid sound with toth a PWM and noise 
+two oscillators in the kit, making a hybrid sound with both a PWM and noise 
 sound. But you can also use it, for example, to combine the two different 
 envelope generators, producing one envelope which is far more complex than you 
 could make with just one envelope generator. You could combine a key-triggered
@@ -80,7 +80,9 @@ The manual correctly identifies low output volume of the signal
 design. But it's not the only problem. One of the problems with a passive
 mixer is that if you have a musical signal connected to one of the inputs and 
 then you connect a 0V signal into another input, the level of the music on the 
-output changes! 
+output goes down! This sort of makes sense as the new level is the average of 
+the signal and the 0V input, but it's not what any musician would 
+actually want!
 
 Also about that output: Due to the lack of any kind of buffer, the amount of 
 current in this circuit will change quite a lot depending upon what you have
@@ -93,12 +95,12 @@ and the levels change relative to each other.
 
 Why? A passive mixer is just a voltage divider in disguise. 
 And it's not much of a disguise. A voltage divider with one input connected to 
-ground is a voltage divider, whereas the same circuit with the same input entirely
+ground is a regular voltage divider, whereas the same circuit with the same input entirely
 disconnected is just a single resistor. End users of your mixer will not expect
 this behavior.
 
 Still, you will sometimes see passive mixers advertised as "summing mixers" and
-all sorts of audio fairy dust attributed to them, at a price.
+all sorts of audio fairy dust attributed to them, at a high price.
 
 ### "Active" Mixers (with Scare Quotes)
 
@@ -213,7 +215,7 @@ But there was...
 The kit includes two [zero Ohm resistors, which really are a thing](https://en.wikipedia.org/wiki/Zero-ohm_link). 
 That's a little unusual, but what's truly strange is that they're totally 
 unmentioned in the manual, and omitted from the 
-bill of materials, but they are are in the schematic (see image at right) and 
+bill of materials. They are are in the schematic (see image at right) and 
 in the pictures of the completed board in the directions. They are part of an 
 "optional inverting/noninverting op amp circuit" which 
 is not in the signal path of the rest of the mixer. (See schematic at right; 
@@ -229,7 +231,9 @@ to set up an unused op amp</a>.
 I think the purpose of the zero Ohm resistors is they could be removed and 
 replaced with a different value resistor, along with mounting additional 
 resistors in the "DNM" positions, if you later decided to use the additional 
-op amp for... something. 
+op amp for... something. They are a wire which happens to be shaped like a 
+resistor, and hence useful when you might want to replace them with a real 
+resistor in the future.
 
 <figure>
 <a href="/images/synth/Mixer0Ohm.jpg">
