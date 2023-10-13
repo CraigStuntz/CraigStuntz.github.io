@@ -45,7 +45,7 @@ One of the more popular languages that I know of had a Java-like syntax imposed 
 
 I would recommend that you start your first compiler with a "toy" language. Toy languages are on purpose simple; they often have few types (as few as one), and features that are trickier to implement are either omitted entirely or are introduced a little bit at a time. They are intended to get you up and going with a working compiler quickly.
 
-Here are some toy languages you can use. This list isn't intended to be comprehensive, or even selective; rather, I just want to give you the sense that there are a lot of languages to choose from. Pick any one of them and I guarantee you'll be more successful in your first compiler implementation than if you just make something up as you go along!
+Here are some toy languages you can use. This list isn't intended to be comprehensive, or even selective; rather, I just want to give you the sense that there are a lot of languages to choose from. Pick any one of them (or any other pre-designed toy language) and I guarantee you'll be more successful in your first compiler implementation than if you just make something up as you go along!
 
 | Language | Family |
 | -------- | ------ |
@@ -94,7 +94,7 @@ There's a big leap in difficulty between easier books which show you the basics 
 
 One recent paper which is a good bridge between these worlds is [Programming Language Semantics: It’s Easy As 1,2,3](https://www.cs.nott.ac.uk/~pszgmh/123.pdf), by Graham Hutton. I wouldn't call it a basic read, but it does exist in between the two worlds described above.
 
-Perhaps this all seems like too much, when you just want to make a DSL for your text adventure game? [Check out Creating Languages in Racket](https://queue.acm.org/detail.cfm?id=2068896), by Matthew Flatt.
+Perhaps this all seems like too much, when you just want to make a DSL for your text adventure game? Check out [Creating Languages in Racket](https://queue.acm.org/detail.cfm?id=2068896), by Matthew Flatt.
 
 ## Conclusion
 
