@@ -8,8 +8,149 @@
         <name>Craig Stuntz</name>
         <email></email>
     </author>
-    <updated>2023-09-21T00:00:00Z</updated>
+    <updated>2023-10-13T00:00:00Z</updated>
     <entry>
+    <title>On Learning Compilers and Creating Programming Languages</title>
+    <link href="https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html" />
+    <id>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</id>
+    <published>2023-10-13T00:00:00Z</published>
+    <updated>2023-10-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on October 13, 2023
+    
+</div>
+
+<p>When I first started learning about compilers, there was something important which I didn’t understand: Designing a programming language and writing a compiler are two almost entirely different skills. There is obviously some overlap between them, but less than you might think at first!</p>
+<p>I think it’s important to know this because they are both very challenging problems! It’s easier to learn these skills if you take them one at a time. Your first solution to a hard problem is likely to be… well, not as good as your tenth! However, it’s pretty common for developers to build out a toy language as they write their first compiler, which means they are making mistakes and learning stuff on two hard problems at once. Worse, those two problems are correlated: A mistake on one will make your life harder on the other. Also, as we will see, although compilers are challenging at first they’re essentially a solved problem, whereas PL design is, let’s say, an area of ongoing research.</p>
+<p>I think it’s easier to learn to write a compiler first, and then (if you want) learn to design programming languages. It will be harder to learn to design a good programming language if you don’t have experience with compiler design challenges (amongst other things), so if you want to learn both skills I recommend doing it in that order: Compiler, then PLs. Compiler construction iis useful to nearly all software engineers, even (especially?) those who will not build compilers as part of their daytime job. Knowing the challenges of PL design is also useful, but I think in a more abstract way.</p>
+<h2 id="challenges-in-compiler-design">Challenges in Compiler Design</h2>
+<p>When I say that compiler design is a “solved problem,” I don’t mean that there will never be any more innovation in the space. Instead I mean that there are published solutions to all of these problems, and you can just look them up and use them/learn from them. Also, compiler design is mostly a technical problem. While there are human factors to consider, as there are in every area of software engineering (“Which error messages would be most helpful in a given situation, and how can I be sure I’m producing those?”), many of the problems that you will be solving will be strictly technical (“When a user attempts to compile a large file, does that work or does the compiler become very slow/run out of memory?”).</p>
+<p>Specific design decisions you will have to make include:</p>
+<ul>
+<li><strong>Error handling</strong> (“When I encounter code which is incomplete or erroneous, I would like to present the user with a helpful message for each error in the program instead of immediately dying with an unhelpful message at the first error.”)</li>
+<li><strong>Syntax challenges</strong> (“When you encounter a <code>-</code>, is it unary negation or a minus sign?”)</li>
+<li><strong>Semantics challenges</strong> (“Can I correctly resolve function overloads per the PL specification for each invocation?”)</li>
+<li><strong>Typing challenges</strong> (“Does the compiler determine type correctness via type inference, type checking, or ‘both’?”)</li>
+</ul>
+<p>Some of the things which make one compiler better than another are quite measureable, such as speed. Others, such as the clarity of error messages, are a bit more challenging to measure, but nevertheless can be compared.</p>
+<h2 id="challenges-in-programming-language-design">Challenges in Programming Language Design</h2>
+<p>When I say that PL design is a largely unsolved problem, I mean two things.</p>
+<p>First, although there are published solutions for some of these problems (such as <a href="https://kframework.org/">K Framework</a> or <a href="https://redex.racket-lang.org/">PLT Redex</a>), they are not necessarily used by every designer. It is very common for PL designers to simply not use them. This is less true with compiler implementers, who tend to use off-the-shelf patterns if not libraries. Sometimes the PL designer will carefully construct a formal calculus of the language using a different system, whereas other designers will just “wing it.” Using an “informal” design process can lead to disastrous omissions in the PL design, such as <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)">the Shellshock bugs</a>. However, “informally designed” languages such as bash and PHP have been incredibly successful by many measures. I am not here to throw shade at them. I am just saying that PL design is complicated in terms of producing a language which is secure, usable, and popular. Using a formal model such as K Framework or PLT Redex might make your language more secure, but it won’t by itself make it any more or less popular. There is no formal solution for popularity that I can imagine.</p>
+<p>Second, it’s not clear what makes one programming language more usable than another (although there have been <a href="https://quorumlanguage.com/evidence.html">some studies</a>). It’s not entirely clear what “usable” even means here, as many of the criteria seem contradictory. (“Is the programming language easy for beginners to use, and does it restrict the production of invalid programs?”) There is still a ton of room for innovation and discovery in this design space.</p>
+<p>Specific design decisions you will have to make include:</p>
+<ul>
+<li><strong>Syntax challenges</strong> (“How do I want my PL to look? What identifiers/symbols should it use?”) Folks who are new to PL design often spend a lot of time thinking about such matters, but I’ll just say that there are considerably more challenges to come!</li>
+<li><strong>Semantics challenges</strong> (“When a function is both overloaded and has default arguments, which version should a given call to that function having a given list of arguments invoke?”)</li>
+<li><strong>Typing questions</strong> (Should you use gradual typing? Refinement types, dependent types, etc.?)</li>
+<li><strong>Error handling</strong> (“It would be good to design my language such that error recovery is easier for implementers”)</li>
+</ul>
+<p>There are standard formal solutions for some of this. Syntax questions can be answered, for example, using a formal grammar, such as <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>.</p>
+<p>One of the more popular languages that I know of had a Java-like syntax imposed on the designer by management in the late stages of its design. This sounds like a recipe for disaster. Yet it became quite popular anyway. PL design seems to be roughly an equal mix of understanding formalisms, fine art, and good luck. This is not so dissimilar from other areas of computer programming; it just seems to be a more extreme case of this bifurcation of skills.</p>
+<h2 id="so-what-do-you-recommend">So What Do You Recommend?</h2>
+<p>I would recommend that you start your first compiler with a “toy” language. Toy languages are on purpose simple; they often have few types (as few as one), and features that are trickier to implement are either omitted entirely or are introduced a little bit at a time. They are intended to get you up and going with a working compiler quickly.</p>
+<p>Here are some toy languages you can use. This list isn’t intended to be comprehensive, or even selective; rather, I just want to give you the sense that there are a lot of languages to choose from. Pick any one of them and I guarantee you’ll be more successful in your first compiler implementation than if you just make something up as you go along!</p>
+<table>
+<thead>
+<tr class="header">
+<th>Language</th>
+<th>Family</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://releases.llvm.org/9.0.0/docs/tutorial/LangImpl01.html">Kaleidoscope</a></td>
+<td>ALGOL</td>
+</tr>
+<tr class="even">
+<td><a href="https://craftinginterpreters.com/the-lox-language.html">Lox</a></td>
+<td>ALGOL</td>
+</tr>
+<tr class="odd">
+<td><a href="https://anoopsarkar.github.io/compilers-class/decafspec.html">Decaf</a></td>
+<td>ALGOL</td>
+</tr>
+<tr class="even">
+<td><a href="https://fsl.cs.illinois.edu/assets/CS422-Spring-2020-02a-IMP-BigStep-SmallStep.pdf">Imp</a></td>
+<td>ALGOL</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/kanaka/mal">MAL [Make a Lisp]</a></td>
+<td>Lisp</td>
+</tr>
+<tr class="even">
+<td><a href="https://beautifulracket.com/stacker/intro.html">Stacker</a></td>
+<td>FORTH</td>
+</tr>
+</tbody>
+</table>
+<p>Jeremy Siek’s <em>Essentials of Compilation</em> describes a series of Lisps which grow progressively more full-featured as the book goes on</p>
+<p>Some of these languages will seem quite simple! They might not have features which you want, such as generic variance or monads or whatever. This is on purpose! If you want to add those features after you’ve implemented the languages, please do try and do so. But it’s a good idea to get through the simple stuff first.</p>
+<h3 id="some-books-you-can-follow-if-you-want-to-read-formal-instructions-while-building-your-first-compiler">Some books you can follow if you want to read formal instructions while building your first compiler:</h3>
+<p>No one book is right for everyone. Here are a few I’ve liked.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Book</th>
+<th>Authors</th>
+<th>Compilers implemented in…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://craftinginterpreters.com/"><em>Crafting Interpreters</em></a></td>
+<td>Robert Nystrom</td>
+<td>Java</td>
+</tr>
+<tr class="even">
+<td><a href="https://wphomes.soic.indiana.edu/jsiek/"><em>Essentials of Compilation</em></a></td>
+<td>Jeremy Siek</td>
+<td>Racket</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.cs.princeton.edu/~appel/modern/ml/"><em>Modern Compiler Implementation in ML</em></a></td>
+<td>Andrew W. Appel</td>
+<td>ML</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.plai.org/"><em>Programming Languages: Application and Interpretation</em></a></td>
+<td>Shriram Krishnamurthi</td>
+<td>Racket</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.itu.dk/~sestoft/plc/"><em>Programming Language Concepts</em></a></td>
+<td>Peter Sestoft</td>
+<td>F#</td>
+</tr>
+</tbody>
+</table>
+<p>People tend to recommend <a href="https://suif.stanford.edu/dragonbook/">the Dragon Book</a>, especially people who have not read it. I have read it, and I do not recommend it when implementing your first compiler because I want you to succeed and enjoy the journey. The Dragon Book is a much better read if you already know everything that is in it. I don’t think it’s a terrible book, but it should not be the first book you read on the topic.</p>
+<h3 id="language-design-booksresources">Language design books/resources?</h3>
+<p>This is hard. It’s not my personal interest, so I haven’t read as much in this area. There is a mistake which I have seen developers make over and over again, which is related to the “I will invent a toy language while I build my first compiler” mistake, namely, to invent a programming language and then expect the world to beat a path to your door to use it. There is a difference between getting your programming language to compile toy examples and producing something which will easily and efficiently handle any case that a programmer’s mind can produce.</p>
+<p>When you write a programming language you need to specify it in such a way that every program that someone might write (even, say, <a href="https://en.wikipedia.org/wiki/Duff%27s_device">Duff’s device</a>) produces sensible results. If you don’t then you are building a door to the Shellshock bugs. This is hard! And to produce a language which not only handles arbitrary input in a way which doesn’t tend to surprise the user as well as being aesthetically interesting and unique enough for people to even be interested in checking out borders on mysticism to me.</p>
+<p>There’s a big leap in difficulty between easier books which show you the basics of certain paradigms, such as</p>
+<ul>
+<li><em>Programming Languages: Application and Interpretation</em> (linked above)</li>
+<li><a href="https://www.cs.rochester.edu/~scott/pragmatics/"><em>Programming Language Pragmatics</em></a></li>
+</ul>
+<p>…and more difficult reading which explains the formalities of PLT such as:</p>
+<ul>
+<li>Benjamin Pierce’s <a href="https://www.cis.upenn.edu/~bcpierce/tapl/"><em>Types and Programming Languages</em></a> (totally worth the effort, though)</li>
+<li><a href="https://redex.racket-lang.org/sewpr-toc.html"><em>Semantics Engineering with PLT Redex</em></a></li>
+</ul>
+<p>…which teach you the plumbing about how programming languages work at a semantic level.</p>
+<p>One recent paper which is a good bridge between these worlds is <a href="https://www.cs.nott.ac.uk/~pszgmh/123.pdf">Programming Language Semantics: It’s Easy As 1,2,3</a>, by Graham Hutton. I wouldn’t call it a basic read, but it does exist in between the two worlds described above.</p>
+<p>Perhaps this all seems like too much, when you just want to make a DSL for your text adventure game? <a href="https://queue.acm.org/detail.cfm?id=2068896">Check out Creating Languages in Racket</a>, by Matthew Flatt.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I realize that the discussion above got into some fairly technical material, but please don’t let that put you off. I’m confident that if you follow one of the books or tutorials I listed you can produce a working compiler. You will learn a ton in the process and it will benefit all of the software you write, even if it doesn’t (apparently!) involve the creation of a programming language. Have fun!</p>
+
+<div class="info">
+    
+    Tags: <a href="/tags/compilers.html">compilers</a>, <a href="/tags/computer%20science.html">computer science</a>, <a href="/tags/programming%20languages.html">programming languages</a>, <a href="/tags/plt.html">plt</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Building a Synthesizer, Chapter 7: Building the Mixer</title>
     <link href="https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html" />
     <id>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</id>
@@ -1577,87 +1718,6 @@ What’s wrong with this power supply?
 <div class="info">
     
     Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/diy.html">diy</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>How I Made a Giant Mistake with Terraform (and How Azure Made It Worse)</title>
-    <link href="https://www.craigstuntz.com/posts/2021-07-08-how-i-made-a-giant-mistake-with-terraform.html" />
-    <id>https://www.craigstuntz.com/posts/2021-07-08-how-i-made-a-giant-mistake-with-terraform.html</id>
-    <published>2021-07-08T00:00:00Z</published>
-    <updated>2021-07-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on July  8, 2021
-    
-</div>
-
-<p>I made a huge mistake a while back, resulting in all preproduction environments being deleted from a client’s Azure subscription. That’s actually not so bad – we use terraform to create the environments, so we could just run the terraform again to put them back. And better preproduction than production, right? But Azure quirks and client rules made this considerably worse.</p>
-<p>This was complicated by the fact that I used the terraform to provision two different Azure subscriptions, with entirely different security policies. In “Subscription A” which I provisioned first, I could do more or less anything. “Subscription B” which I provisioned second was far more locked down. Of note, in Subscription B I couldn’t create an Azure Resource Group. Instead, I had to open a ticket with the client’s cloud team.</p>
-<p>I had terraform like:</p>
-<pre class="terraform"><code>resource &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
-    name     = var.resource_group_name
-    location = var.resource_group_location
-}</code></pre>
-<p>…which ran fine on Subscription A, but which I could not run at all on Subscription B. There were actually two different resource groups in Subscription B, one for preproduction and one for production.</p>
-<p>Good terraform code is idempotent, which means that if you run it in an environment which already matches the script you supply, it won’t make any changes at all; it will just report that everything is up to date.</p>
-<h2 id="terraform-state">Terraform State</h2>
-<p>In a perfect world, you would never have to think about <a href="https://www.terraform.io/docs/language/state/index.html">terraform state</a>. You would just run terraform and it would provision resources and everything would be lovely. Alas, this is not that perfect world, and anyone who maintains terraform must think about state when they get up in the morning, when they’re working, and when they’re lying in bed at night.</p>
-<p>The terraform docs say:</p>
-<blockquote>
-<p>This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.</p>
-</blockquote>
-<p>This should set off alarm bells, because that’s three entirely separate problems which got shoehorned into one hairy feature. I may have more to say about this at a later time, but let’s get back to the mistake I made.</p>
-<p>Because I couldn’t create the Azure Resource Group in Subscription B, I ran the following command:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">terraform</span> import module_name.azurerm_resource_group.resource_group <span class="op">&lt;</span>id_of_resource_group<span class="op">&gt;</span></code></pre></div>
-<p>…for the preproduction resource group. That linked (in the terraform state file for the preproduction environment) the Resource Group in my terraform script with the Resource Group created by the client’s team in Azure.</p>
-<p><em>Months later,</em> while creating the production resources, I ran into the same issue (can’t create resource groups at all in Subscription B). Since Subscription B was the one we’d be taking to production, I decided that a better reflection of the actual environment would be to change the resource group to a data provider, so I edited the terraform script quoted above to read:</p>
-<pre class="terraform"><code>data &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
-    name     = var.resource_group_name
-    location = var.resource_group_location
-}</code></pre>
-<p>(I’ve just changed the word <code>resource</code> to <code>data</code>. In terraform, a <code>resource</code> is something that terraform might create, whereas a <code>data</code> is something that terraform will <em>never</em> create; it must already exist in the environment. But you might need to refer to properties of the <code>data</code> so it will appear in your script.)</p>
-<p>I ran the terraform and of course it worked fine and I didn’t need to do the <code>terraform import</code>.</p>
-<h2 id="terraform-plan-and-apply">Terraform <code>plan</code> and <code>apply</code></h2>
-<p>If you’ve worked with terraform before you’ll know that there are two different things you can do when creating resources:</p>
-<ul>
-<li><code>terraform plan</code> shows what the tool will do, (more or less) nondestructively</li>
-<li><code>terraform apply</code> destructively makes changes to your environment</li>
-</ul>
-<p>The usual strategy is to use <code>terraform plan</code> to make sure that what terraform proposes to do is correct and then <code>terraform apply</code> to destructively make changes. But another quirk of Subscription B is that for complicated reasons that I won’t get into here, I can’t run terraform interactively through the command line. Instead I have to push the script to GitHub and run it with Azure DevOps. That’s why Subscription A exists; I can test my changes out using the CLI there and rapidly iterate, and then push to GitHub and run terraform on Subscription B with ADO.</p>
-<p>I say “the usual strategy” because occasionally when I’m provisioning multiple environments – say, development, uat, production, etc. – I will cut corners and do a <code>terraform plan</code> on just one of these environments and then <code>terraform apply</code> on all of the others.</p>
-<h2 id="destroying-preproduction">Destroying Preproduction</h2>
-<p>Now you have all of the information to see the mistake that I made. Here’s what happened:</p>
-<ol style="list-style-type: decimal">
-<li>I was working on creating the production environment, which didn’t exist at all. That’s when I made the edit referenced above, from <code>resource</code> to <code>data</code></li>
-<li>I ran <code>terraform plan</code> and then <code>terraform apply</code> on production and everything worked fine. No changes were made at all.</li>
-<li>A while later, I wanted to add additional resources, so I added them and then ran <code>terraform apply</code> on preproduction.</li>
-<li>Terraform removed the entire preproduction environment</li>
-</ol>
-<p>Wait, what?!?</p>
-<p>Well, I had <em>removed</em> a terraform <code>resource</code> for the Azure Resource Group. Yes, I replaced it with a <code>data</code>, but terraform still counts that as removing it. So terraform deleted the resource group. And Azure counts deleting the resource group as meaning delete the resource group <em>and everything in it.</em> Apparently, and to my great surprise, even though I didn’t have permission to <em>create</em> Azure Resource Groups in Subscription B, I did have permission to <em>delete</em> them.</p>
-<p>So that’s bad, but surely I could just run terraform again to recreate the resources I removed, right? Well, almost. Creating Azure Resource Groups means opening a support ticket with the client, but that’s not a problem. The bigger problem is that Azure SQL Server database backups are stored… in the resource group.</p>
-<h2 id="a-terrible-horrible-no-good-very-bad-azure-feature">A Terrible, Horrible, No-Good, Very Bad Azure Feature</h2>
-<p>Now I know that readers of this blog are smart, competent engineers, so you probably are very careful about where you store your backups! Well, Azure SQL Server does back up your databases, automatically, so full marks for that, but if you inadvertently destroy a SQL Server it takes the backups with it! Also, there is, as far as I can tell, no option in the Portal or terraform to put the backups elsewhere. (This is in contrast to running an <a href="https://docs.microsoft.com/en-us/azure/azure-sql/database/features-comparison">Azure SQL Managed Instance, which is… something else entirely</a>.)</p>
-<p>Of course recreating the database is an option; we create database metadata using migrations, and it’s just preproduction, so we can pretty much create the data that we need, but now the restore plan looks like:</p>
-<ol style="list-style-type: decimal">
-<li>Open ticket to get Azure Resource Group created</li>
-<li>Run terraform to create rest of Azure resources</li>
-<li>Run DB migrations to create DB schema</li>
-<li>Run lengthy import process to pull MBs of data out of Salesforce and other sources</li>
-</ol>
-<p>If this was production, however, we would have a much harder problem on our hands. The only places where data created by users of the system exists are in the DB and backups of same.</p>
-<p>In the end, what we did was <em>not</em> do any of the above and instead immediately raise a ticket with Azure Support, who were able to grab the resources from “somewhere” (I guess when you delete a resource in Azure, it’s still on a disk somewhere, for a while), and we got our database and backups back. Not every resource could be correctly restored, but the database was the only one I cared about.</p>
-<p>So in the end we got our environments back, and it “only” took a couple of days of work, what with Azure and client support tickets. But a weekend intervened, so we had several days of downtime in preproduction, and this of course had a large impact on the testers and other teams who depend on our software.</p>
-<h2 id="some-lessons-learned">Some Lessons Learned</h2>
-<p>Just in case I’ve left any ambiguity above, the root cause in this incident was me. I ran the <code>terraform apply</code>, and to whatever extent the “real” problem was “I shouldn’t have been able to do that,” it was probably on me for not checking that there was, in fact, a lock on the Azure Resource Group.</p>
-<p>One of the things I did right in this incident was to <em>immediately</em> report the problem. I posted an “I just made a giant mistake” message before the delete was even complete, before we had even considered the database. This is of course just polite, but moving quickly turned out to be the key to recovering a deleted Azure resource. Another key to recovering the deleted resource was not creating new resources with the same name before opening the ticket with Microsoft, so I give myself credit for getting Microsoft support involved before just “trying stuff” to see if I could restore it on my own before we realized that the database backups were an issue.</p>
-<p>I guess I knew that there was the possibility that I would inadvertently destroy something when I skipped a plan, but the sheer magnitude of carnage resulting from a <em>one word change</em> in terraform was surprising.</p>
-<p>As far as SQL Server backups go, it’s obviously totally unacceptable that a backup could be blown away so easily. I don’t have a better option to suggest besides putting a lock on the Resource Group.</p>
-
-<div class="info">
-    
-    Tags: <a href="/tags/azure.html">azure</a>, <a href="/tags/devops.html">devops</a>, <a href="/tags/mistakes.html">mistakes</a>, <a href="/tags/sql%20server.html">sql server</a>, <a href="/tags/terraform.html">terraform</a>
     
 </div>
 ]]></summary>
