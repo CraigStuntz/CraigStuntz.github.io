@@ -2,10 +2,14 @@
 @import url(https://fonts.bunny.net/css?family=Ubuntu);
 @import url(https://fonts.bunny.net/css?family=Open+Sans);
 
+html {
+    font-size: 16px;
+}
+
 body {
     background-color: #f8f8f8;
     color: black;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 h1.chapterName {
@@ -18,15 +22,22 @@ h3.series {
 
 div#header {
     margin-bottom: 0px;
-    padding: 10px 50px 10px 50px;
+    padding: 0.75rem 3rem 0.75rem 3rem;
     background: #FFFFFF;
 }
+
+@media screen and (max-width: 480px) {
+    div#header {
+        padding: 0.75rem 1rem 0.75rem 1rem;
+    }
+}
+
 
 div#logo a {
     color: #000000;
     float: left;
     font-family: Avenir, 'Open Sans', sans-serif;
-    font-size: 36px;
+    font-size: 2rem;
     text-decoration: none;
 }
 
@@ -38,7 +49,7 @@ div#header #navigation {
 div#header #navigation a {
     color: #BBBBBB;
     font-family: Avenir, 'Open Sans', sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     margin-left: 45px;
     text-decoration: none;
     text-transform: capitalize;
@@ -49,13 +60,20 @@ div#header #navigation a:hover{
 }
 
 div#content {
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+@media screen and (max-width: 480px) {
+    div#content {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
 }
 
 div#content h1{
   color: #222222;
-  font-size: 42px;
+  font-size: 2.625rem;
   font-family: Avenir, 'Open Sans', sans-serif;
   font-weight: 300;
   line-height: 1.45;
@@ -65,7 +83,7 @@ div#content, /* this line for archives page */
 div#content p{
     color: #666666;
     font-family: Avenir, 'Open Sans', sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
 }
 
@@ -77,7 +95,7 @@ div#content a{
 div#footer {
     border-top: 1px solid #DEDEE1;
     color: #999999;
-    font-size: 16px;
+    font-size: 1rem;
     text-align: left;
     height: 4em;
     position: absolute;
@@ -91,14 +109,14 @@ div#footer {
 
 div#footer a {
   color: #428bca;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   text-decoration: none;
 }
 
 div.info {
     color: #555;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-style: italic;
 }
 
@@ -126,6 +144,7 @@ img.autowidth {
 div.toc {
     float: right;
     width: 25%;
+    min-width: 8rem;
     border: solid;
     margin: 0.5em;
 }
@@ -134,6 +153,11 @@ div.toc ul {
     list-style: none;
     margin: 0.5em;
     padding: 0;
+}
+
+div.toc ul {
+    padding-left: 1em;
+    text-indent: -1em;
 }
 
 figure.horizontalTiles {
