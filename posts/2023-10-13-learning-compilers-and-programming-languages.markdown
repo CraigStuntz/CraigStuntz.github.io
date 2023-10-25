@@ -58,6 +58,8 @@ Here are some toy languages you can use. This list isn't intended to be comprehe
 
 Jeremy Siek's _Essentials of Compilation_ describes a series of Lisps which grow progressively more full-featured as the book goes on
 
+Andrej Bauer and Matija Pretnar's _The PL Zoo_ is "a collection of miniature programming languages which demonstrates various concepts and techniques used in programming language design and implementation." There are a variety of different styles of languages represented there, as well as implementations in OCaml.
+
 Some of these languages will seem quite simple! They might not have features which you want, such as generic variance or monads or whatever. This is on purpose! If you want to add those features after you've implemented the languages, please do try and do so. But it's a good idea to get through the simple stuff first.
 
 ### Some books you can follow if you want to read formal instructions while building your first compiler:
