@@ -80,6 +80,7 @@
 </tbody>
 </table>
 <p>Jeremy Siek’s <em>Essentials of Compilation</em> describes a series of Lisps which grow progressively more full-featured as the book goes on</p>
+<p>Andrej Bauer and Matija Pretnar’s <em>The PL Zoo</em> is “a collection of miniature programming languages which demonstrates various concepts and techniques used in programming language design and implementation.” There are a variety of different styles of languages represented there, as well as implementations in OCaml.</p>
 <p>Some of these languages will seem quite simple! They might not have features which you want, such as generic variance or monads or whatever. This is on purpose! If you want to add those features after you’ve implemented the languages, please do try and do so. But it’s a good idea to get through the simple stuff first.</p>
 <h3 id="some-books-you-can-follow-if-you-want-to-read-formal-instructions-while-building-your-first-compiler">Some books you can follow if you want to read formal instructions while building your first compiler:</h3>
 <p>No one book is right for everyone. Here are a few I’ve liked.</p>
