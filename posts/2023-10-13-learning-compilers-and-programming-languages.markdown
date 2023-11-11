@@ -101,3 +101,7 @@ Perhaps this all seems like too much, when you just want to make a DSL for your 
 ## Conclusion
 
 I realize that the discussion above got into some fairly technical material, but please don't let that put you off. I'm confident that if you follow one of the books or tutorials I listed you can produce a working compiler. You will learn a ton in the process and it will benefit all of the software you write, even if it doesn't (apparently!) involve the creation of a programming language. Have fun!
+
+### Comments on this post elsewhere
+* [lobste.rs](https://lobste.rs/s/tpe028/on_learning_compilers_creating)
+* [The orange site](https://news.ycombinator.com/item?id=38001041)

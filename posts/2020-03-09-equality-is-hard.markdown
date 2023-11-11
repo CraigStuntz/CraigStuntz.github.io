@@ -635,6 +635,10 @@ Brandon Bloom provided a link to the paper ["The Left Hand of Equals"](https://s
 which "takes a reflexive journey through fifty years of identity and equality in object-oriented languages, and
 ends somewhere we did not expect: a 'left-handed' equality relying on trust and grace."
 
+### Comments on this post elsewhere
+* [lobste.rs](https://lobste.rs/s/vpfpyk/equality_is_hard)
+* [The orange site](https://news.ycombinator.com/item?id=22528157)
+
 [^cache]: This is [probably attributable to Phil Karlson](https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science)
 
 [^BinaryRelation]: A "binary relation" deserves a little bit of explanation, but this gets into a little math, so

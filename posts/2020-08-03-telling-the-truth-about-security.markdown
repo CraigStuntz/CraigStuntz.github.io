@@ -235,6 +235,10 @@ be informed by the amount of information a typical user can take in at any one
 point in time. "Confusion of the empirical with the true" describes a lot of 
 mistakes we make in software.
 
+### Comments on this post elsewhere
+* [lobste.rs](https://lobste.rs/s/kwkugm/telling_truth_about_security)
+* [The orange site](https://news.ycombinator.com/item?id=24044304)
+
 [^advertising]: I do think advertising is a red herring here. The two points in 
 the tweets, while really worth discussing, don't change with or without ads. 
 Indeed, a very well-known email service with ads also does a better than 

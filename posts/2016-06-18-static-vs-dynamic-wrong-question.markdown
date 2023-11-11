@@ -192,7 +192,9 @@ of other techniques. The design methodologies of the next decade probably
 haven't been invented yet.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/raichoo">@raichoo</a> <a href="https://twitter.com/kamatsu8">@kamatsu8</a> let&#39;s have some imagination about where languages and tools might go if we let go of how current tools trade things off</p>&mdash; Edwin Brady (@edwinbrady) <a href="https://twitter.com/edwinbrady/status/743865720912609280">June 17, 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+### Comments on this post elsewhere
+* [lobste.rs](https://lobste.rs/s/nukuek/static_vs_dynamic_is_wrong_question)
 
 ##### Notes
 

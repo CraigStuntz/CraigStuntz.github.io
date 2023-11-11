@@ -103,3 +103,7 @@ One of the things I did right in this incident was to _immediately_ report the p
 I guess I knew that there was the possibility that I would inadvertently destroy something when I skipped a plan, but the sheer magnitude of carnage resulting from a _one word change_ in terraform was surprising.
 
 As far as SQL Server backups go, it's obviously totally unacceptable that a backup could be blown away so easily. I don't have a better option to suggest besides putting a lock on the Resource Group. 
+
+### Comments on this post elsewhere
+* [lobste.rs](https://lobste.rs/s/7wmbqc/how_i_made_giant_mistake_with_terraform)
+* [The orange site](https://news.ycombinator.com/item?id=27776829)
