@@ -101,6 +101,11 @@
 <p>One of the things I did right in this incident was to <em>immediately</em> report the problem. I posted an “I just made a giant mistake” message before the delete was even complete, before we had even considered the database. This is of course just polite, but moving quickly turned out to be the key to recovering a deleted Azure resource. Another key to recovering the deleted resource was not creating new resources with the same name before opening the ticket with Microsoft, so I give myself credit for getting Microsoft support involved before just “trying stuff” to see if I could restore it on my own before we realized that the database backups were an issue.</p>
 <p>I guess I knew that there was the possibility that I would inadvertently destroy something when I skipped a plan, but the sheer magnitude of carnage resulting from a <em>one word change</em> in terraform was surprising.</p>
 <p>As far as SQL Server backups go, it’s obviously totally unacceptable that a backup could be blown away so easily. I don’t have a better option to suggest besides putting a lock on the Resource Group.</p>
+<h3 id="comments-on-this-post-elsewhere">Comments on this post elsewhere</h3>
+<ul>
+<li><a href="https://lobste.rs/s/7wmbqc/how_i_made_giant_mistake_with_terraform">lobste.rs</a></li>
+<li><a href="https://news.ycombinator.com/item?id=27776829">The orange site</a></li>
+</ul>
 
 <div class="info">
     
