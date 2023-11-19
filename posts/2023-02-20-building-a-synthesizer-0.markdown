@@ -98,6 +98,8 @@ some kits that I considered.
   are quite good, but don't have the emphasis on learning electronics that 
   you'll find in mki x es.EDU DIY or North Coast manuals; they're "solder this 
   resistor here" sort of instructions.
+* [**Winterboom**](https://winterbloom.com/shop#kits) makes open source DIY 
+  module kits. 
 * **Black Corporation** has [some phenomenally complicated kits](https://black-corporation.com/) 
   for polyphonic MIDI synthesizers, which feature minimal documentation and 
   typically involve soldering hundreds of surface-mount components onto many 
