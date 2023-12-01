@@ -29,6 +29,7 @@
 
 .resume ul {
     padding-inline-start: 12px;
+    text-indent: -4px;
 }
 
 .resume ul li {
