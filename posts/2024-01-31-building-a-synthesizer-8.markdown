@@ -7,11 +7,11 @@ tags: synthesis, diy, electrical engineering
 ---
 
 <div class="toc">
-* [Introduction: The World of DIY Synthesizers](2023-01-22-building-a-synthesizer-0.html)
-* [1: The mki x es.EDU DIY System](2023-01-29-building-a-synthesizer-1.html)
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
 * [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
 * [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
-* [4: The Logic Circuits Model of Computation](2023-04-03-building-a-synthesizer-4.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
 * [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
 * [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
 * [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
