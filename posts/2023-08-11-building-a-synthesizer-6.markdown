@@ -15,6 +15,7 @@ tags: diy, electrical engineering, computer science, homomorphic encryption
 * [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
 * 6: The Logic Circuits Model of Computation
 * [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
+* [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 

@@ -15,6 +15,7 @@ tags: synthesis, diy, electrical engineering
 * [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
 * [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
 * 7: Building the Mixer
+* [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
 * [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
 </div>
 
