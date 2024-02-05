@@ -66,7 +66,7 @@ building, but it differs in some important aspects:
   EG module, on the other hand, can be connected to any other module with a 
   CV input. (Some software synths are more flexible than Retro Synth in this 
   respect and allow you to use an envelope to modulate any synth parameter.)
-* With the Retro Synth envelope i's possible to have a slow attack followed by 
+* With the Retro Synth envelope it's possible to have a slow attack followed by 
   a slow decay. As we'll see, the mki x es.EDU module can't do this, because it 
   would have made the circuit more complex.
 * The Retro Synth envelope's attack, decay, and release rate controls are 
