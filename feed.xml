@@ -3,14 +3,80 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
         <title>Craig Stuntz's blog</title>
-        <link>https://www.craigstuntz.com</link>
+        <link>http://www.craigstuntz.com</link>
         <description><![CDATA[Craig Stuntz's blog]]></description>
-        <atom:link href="https://www.craigstuntz.com/feed.xml" rel="self"
+        <atom:link href="http://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Wed, 31 Jan 2024 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Wed, 21 Feb 2024 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Building a Synthesizer, Chapter 9: A Field Guide to Oscillators</title>
+    <link>http://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on February 21, 2024
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
+<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
+<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
+<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
+<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li>9: A Field Guide A Field Guide to Oscillators</li>
+<li><a href="2023-01-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>If you own a synthesizer, or have worked with software synthesizer plugins, you have no doubt encountered the term “VCA” or “Voltage Controlled Oscillator,” and indeed <a href="2023-03-02-building-a-synthesizer-3.html">we have seen it before in this series</a>. Today most synthesizers are fully digital and just have “oscillators,” which produce arbitrary waveforms using a computer, but you may also encounter “DCOs” or perhaps just “Oscillators,” and wonder if these names actually mean anything distinct.</p>
+<p>In this post I’ll explain the “oscillator” part of how synthesizers produce sound, look at three designs for actually building an oscillator, and talk about the differences in sound that you may hear from these designs.</p>
+<h2 id="voltage-controlled-oscillators">Voltage Controlled Oscillators</h2>
+<p>I won’t spend a ton of time explaining how a VCO works because <a href="2023-03-02-building-a-synthesizer-3.html">I’ve already done that</a>. For the sake of this post I’ll just say that the entire oscillator, including both the control of the tuning/timing as well as the shape of the wave produced, is analog.</p>
+<p>The earliest commercial synthesizers,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> such as Moogs, ARPs, and Buchlas from the 1960s all used VCOs.</p>
+<p>One of the major downsides of a VCO is you have to tune it. A lot. Some later commercial synths with VCOs introduced an automatic tuning feature which helps considerably, but they will still drift as you play them due primarily to temperature changes but also due to aging of electronic componaents and the inherent differences between two “identical” components. Two transistors from the same manufacturer with the same model number and made in the same production run can have very different electrical characteristics, for example. Also, as the name suggests, they are <em>Voltage Controlled,</em> that is, controlled with an analog voltage which might be produced by a keyboard or a sequencer, and there is no single standard for control voltages, so you have to tune the VCO to produce the correct note when you, for example, press keys on your keyboard.</p>
+<p>On the other hand, VCOs often sound <em>amazing,</em> and the tuning drift may be part of the reason! One surefire way to fatten up nearly any synthesizer sound is to add another oscillator and <em>detune</em> the second oscillator so it doesn’t produce precisely the same frequency as the first. Make it “fatter” still by using a LFO (Low Frequency Oscillator) to vary the detuning over time just a bit. Our ears hear this difference in frequencies as a beating sound which might be pleasant or unpleasant, depending upon the amount of difference between the two oscillators. Do this with two VCOs and there will be a certain amount of drift between the two oscillators <em>as you play,</em> and this can be a very pleasant sound. For a while, anyway, until it goes <em>way</em> out of tune and you have to stop playing and retune it.</p>
+<p>VCOs are said to have a characteristic sound due both to a limitation in the waveshapes which are used (typically, square, sine, sawtooth/ramp, triangle, and a few others) and also due to the variations in tuning. Happily, though, many people really like the sounds that they produce.</p>
+<h2 id="digitally-controlled-oscillators">Digitally Controlled Oscillators</h2>
+<p>A DCO still produces an individual cycle of oscillation using analog electronics, but uses a digital timer (typically controlled via a microcontroller) to trigger each cycle. This allows the DCO to always have “perfect pitch.” Like a VCO, a DCO is also an analog oscillator which uses analog circuits to produce the wave shape that you hear.</p>
+<p>A DCO will never require tuning. The note “A 440” will always sound at 440 Hz. You can detune a DCO, which as above you might do if using two oscillators together to produce a fatter sound. But there will not be any random “drift” in the tuning.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p>The first synth with a DCO was the Roland Juno-6, which was available in 1982.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> DCO-based oscillators are not so common today. The majority of commercial synthesizers are digital, and folks looking for an “authentic” analog sound often want a VCO in spite of tuning headaches.</p>
+<p>Essentially, the way a DCO works is the microcontroller sends a signal to the analog circuit when it’s time to produce each cycle of the waveform. You can think of a microcontroller sending a pulse every 1/440th of a second to produce an “A” note. From there an analog circuit produces a single cycle in almost exactly the same way that a VCO does, and then it stops and waits for the next pulse from the digital controller.</p>
+<p>I would explain how a DCO is implemented in hardware, but <a href="https://blog.thea.codes/the-design-of-the-juno-dco/">Thea Flowers has already done a much better job of this than I ever could</a>, so if you’re interested (and it is <em>very</em> interesting, I think!) then I recommend you go read her article!</p>
+<p>Conceptually, the only “audible” difference between a DCO and a VCO is that the DCO will never drift in the tuning of its fundamental frequency. From a practical, real-world standpoint, however, they might be implemented with different components and hence sound very distinct, and even two “identical” analog oscillators can sound different because of the difference between “identical” analog parts. Also, VCOs, as noted, <em>do</em> drift in pitch, and this also makes them sound different than a DCO.</p>
+<h2 id="digital-synthesis">Digital Synthesis</h2>
+<p>Digital Synthesis produces a sound by using a computer program to produce a waveform digitally. This includes samplers/sample players, all software synthesizers, and “virtual analog” synths which use clever programming to try to reproduce the sound of a VCO or DCO. <a href="https://www.whippedcreamsounds.com/uhe-diva-review/">Some of them do it quite well!</a></p>
+<p>The first mainstream digital synthesizers were the Casio VL-1 in 1979, which was something of a toy but considerably cheaper than the other digital synthesizers available at that time which were &gt; $10000 in 1980 dollars. Other notable milestones in making digital synthesis a mainstream technique were the E-mu Emulator, released in 1982, and the Yamaha DX-7, in 1983.</p>
+<p>The sound of a digital “oscillator” will be precisely what its programmers specify. This could be a perfect sine wave, playback of a sample, a modeled recreation of an analog oscillator, small slices of a sample as with a <a href="https://blog.native-instruments.com/what-is-wavetable-synthesis/">wavetable synthesizer</a>, or many other things.</p>
+<p>Some people will tell you that they can hear the digital “stepping” as, for example, a 16 bit, 44.1 kHz digital oscillator changes its output through its 65,536 possible amplitudes over every 1/44100s. I will tell you that these people are wrong, and that they cannot hear this.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> However, they <em>may in fact</em> hear the difference between a VCO and a “perfect” digital recreation of the “same” VCO, because, once again, even two “identical” VCOs may sound different because of differences between the analog parts, their variance with temperature, etc.</p>
+<p>While it’s both theoretically and practically possible for a digital oscillator to reproduce the sound of an analog oscillator well, there’s no denying that many synth manufacturers have not bothered to do it well. Sometimes this is on purpose; a wavetable synth, for example, is not <em>trying</em> to reproduce the sound of a VCO. But even in cases where a synth manufacturer explicitly claims to have an “analog sound” from their digital oscillators, well, some of them do it better than others.</p>
+<h2 id="synthesizers-today">Synthesizers Today</h2>
+<p>The majority of hardware synthesizers, and <em>all</em> software synthesizers, sold today are digital. Digital oscillators are quite common even in the modular synthesis world. However, there are still fully analog hardware synthesizers produced, in keyboard, desktop, and modular forms, generally with VCOs.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Yes, I’m aware that there were earlier synthesizers; the market for “mass produced” syntesizers took off in the 1960s-early 1970s.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>In principle it would be possible to make a DCO reproduce the sound of a VCO exactly by programming the microcontroller to have VCO-like drift in its tuning. In practice I’ve never seen a DCO-based synth do this, although it’s a fairly common technique in “virtual analog” digital synths. Note also that with any synth it’s quite common for preset designers to use the synth’s LFOs to modulate the pitch a little (or a lot, as with vibrato), but this is a different effect than the analog variations which are characteristic of a VCO and might be emulated by a digital synthesizer. So in practice DCO-based synths sound somewhat different from VCO-based synths, even if in principle they <em>could</em> sound the same.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>I have seen claims online that the ARP Pro Soloist (1972) has a DCO, including claims that it was <em>the first</em> commercial synth to use DCOs. I have also seen schematics for the Pro Soloist online and as far as I can tell these claims are incorrect. Never trust anything you find on the Internet, kids.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>See, for example, the <a href="https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem">Nyquist theorem</a> which shows that there is no difference between a properly dithered digital recreation of an analog signal and the original analog signal at audible frequencies, and before you tell me that your golden ears can hear sounds only audible to dogs please consider that most synthesizer presets are low-pass filtered down to frequences which all of us can hear. This is a complicated topic both because there is in fact an actual audible difference between “identical” analog VCOs as well as the metric tons of horse poop produced by the “audiophile” press on the subject.<a href="#fnref4">↩</a></p></li>
+</ol>
+</div>
+
+<div class="info">
+    
+    Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>, <a href="/tags/oscillators.html">oscillators</a>
+    
+</div>
+]]></description>
+    <pubDate>Wed, 21 Feb 2024 00:00:00 UT</pubDate>
+    <guid>http://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</guid>
+    <dc:creator>Craig Stuntz</dc:creator>
+</item>
+<item>
     <title>Building a Synthesizer, Chapter 8: Building the Envelope Generator</title>
-    <link>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</link>
+    <link>http://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</link>
     <description><![CDATA[<div class="info">
     Posted on January 31, 2024
     
@@ -27,6 +93,7 @@
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li>8: Building the Envelope Generator</li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li><a href="2023-01-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -316,12 +383,12 @@ All three modules completed so far
 </div>
 ]]></description>
     <pubDate>Wed, 31 Jan 2024 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>On Authoring Presets for u-He Diva</title>
-    <link>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</link>
     <description><![CDATA[<div class="info">
     Posted on November 11, 2023
     
@@ -351,12 +418,12 @@ All three modules completed so far
 </div>
 ]]></description>
     <pubDate>Sat, 11 Nov 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>On Learning Compilers and Creating Programming Languages</title>
-    <link>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</link>
     <description><![CDATA[<div class="info">
     Posted on October 13, 2023
     
@@ -498,12 +565,12 @@ All three modules completed so far
 </div>
 ]]></description>
     <pubDate>Fri, 13 Oct 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 7: Building the Mixer</title>
-    <link>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</link>
     <description><![CDATA[<div class="info">
     Posted on September 21, 2023
     
@@ -520,6 +587,7 @@ All three modules completed so far
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li>7: Building the Mixer</li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li><a href="2023-01-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -641,12 +709,12 @@ Close-up of 0 Ohm resistors
 </div>
 ]]></description>
     <pubDate>Thu, 21 Sep 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 6: The Logic Circuits Model of Computation</title>
-    <link>https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</link>
     <description><![CDATA[<div class="info">
     Posted on August 11, 2023
     
@@ -663,6 +731,7 @@ Close-up of 0 Ohm resistors
 <li>6: The Logic Circuits Model of Computation</li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -794,12 +863,12 @@ Same output, fewer gates
 </div>
 ]]></description>
     <pubDate>Fri, 11 Aug 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 5: Building the VCO</title>
-    <link>https://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</link>
     <description><![CDATA[<div class="info">
     Posted on May 22, 2023
     
@@ -816,6 +885,7 @@ Same output, fewer gates
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -967,12 +1037,12 @@ FFT
 </div>
 ]]></description>
     <pubDate>Mon, 22 May 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 4: A Gentle Introduction to Op Amps</title>
-    <link>https://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</link>
     <description><![CDATA[<div class="info">
     Posted on April  3, 2023
     
@@ -989,6 +1059,7 @@ FFT
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1462,12 +1533,12 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 </div>
 ]]></description>
     <pubDate>Mon, 03 Apr 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 3: Breadboarding the VCO</title>
-    <link>https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</link>
     <description><![CDATA[<div class="info">
     Posted on March  2, 2023
     
@@ -1484,6 +1555,7 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1746,12 +1818,12 @@ Simulated VCO
 </div>
 ]]></description>
     <pubDate>Thu, 02 Mar 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer: Glossary and Electrical Connections</title>
-    <link>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</link>
+    <link>http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</link>
     <description><![CDATA[<div class="info">
     Posted on February 23, 2023
     
@@ -1768,6 +1840,7 @@ Simulated VCO
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
 <li>Glossary and Electrical Connections</li>
 </ul>
 </div>
@@ -1840,100 +1913,7 @@ Minimoog CV Outputs
 </div>
 ]]></description>
     <pubDate>Thu, 23 Feb 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</guid>
-    <dc:creator>Craig Stuntz</dc:creator>
-</item>
-<item>
-    <title>Building a Synthesizer, Chapter 2: Building the Power Supply</title>
-    <link>https://www.craigstuntz.com/posts/2023-02-22-building-a-synthesizer-2.html</link>
-    <description><![CDATA[<div class="info">
-    Posted on February 22, 2023
-    
-</div>
-
-<div class="toc">
-<ul>
-<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
-<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
-<li>2: Building the Power Supply</li>
-<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
-<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
-<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
-<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
-<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
-<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
-<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
-</ul>
-</div>
-<p>I decided to build the power supply first, so that I could use it when building the other modules. That’s not strictly necessary; you can power them with a pair of 9V batteries (while building) if you like, but I was going to want a functional enclosure and power supply eventually anyway, so this seemed like a good place to start.</p>
-<p>Unlike most of the other kits in the series, Moritz Klein did not write the manuals (or design the circuit, I think), and this manual, unlike most of the others, is a “solder everything onto the board” affair instead of a “here are the tradeoffs with different components” and encouraging you to experiment around with a breadboard. Understandable (especially considering there is less “room for experimentation” when dealing with power), but probably not the most compelling introduction to the series.</p>
-<p>However, I do think we can learn about (modular) synths from building this project!</p>
-<h2 id="eurorack-format">Eurorack Format</h2>
-<p>As I metioned in the <a href="2023-02-23-building-a-synthesizer-glossary.html">glossary</a>, there isn’t really a “<a href="https://en.wikipedia.org/wiki/Eurorack">Eurorack</a> standard.” It’s more like, “look at what Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar.” If we want to build a “Eurorack compatible” enclosure and power supply, there are a few things to consider.</p>
-<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are (mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are “quantized” by “HP,” or Horizontal Pitch units. This means they are usually some multiple of 5.08 mm wide. The mks x es.EDU modules range from 4 to 10 HP. See the <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document on Doepfer’s site for the closest thing there is to a standard.</p>
-<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each module. However, it’s very, very common for modules to not use the first 6 pins and only have a 10-pin connector on the “module” end of the power cable.</p>
-<p><a href="/images/synth/EurorackPowerPinout.png"><img src="/images/synth/EurorackPowerPinout.png" width="151px" loading="lazy" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a> <a href="/images/synth/EurorackPowerConnector.png"><img src="/images/synth/EurorackPowerConnector.png" width="112px" loading="lazy" alt="A Eurorack power connector socket" style="float: right;"></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
-<p>The first thing you’ll notice is there’s a lot of redundancy there. The connectors are 16 pins, organized into two columns of eight pins each. Each two-pin “row” carries exactly the same signal; they are connected together. Furthermore, there are three rows (six pins total) of ground pins, which, again, are connected together.</p>
-<p>Most modules do not use, and don’t even include wires for, the Gate and CV on the bus, requiring you to connect the Gate/CV through the front panel of the module. Similarly, +5V power is simply not needed by most modules.</p>
-<p>So when on <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/">the order page for the case</a> it says:</p>
-<blockquote>
-<p><strong>NB! The enclosure &amp; PSU are designed specifically to accommodate DIY modules from mki x es.edu series and are not compatible with other eurorack modules.</strong></p>
-</blockquote>
-<p>I think it means two things:</p>
-<ol style="list-style-type: decimal">
-<li>The case is pre-drilled to accomodate modules of certain widths in a specific order. Nothing you couldn’t fix with a drill and a tap, but worth noting.</li>
-<li>The kit doesn’t include components for the +5V power, although it does have space/holes for them on the PCB and most modules don’t need +5V anyway.</li>
-</ol>
-<p>Other than those two <em>caveats</em> I think this case would work fine for most 3U Eurorack modules.</p>
-<p>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on Doepfer’s site is informative if you’d like to know more about the system which other “Eurorack” manufacturers are using as an example.</p>
-<div style="clear: both;">
-
-</div>
-<h2 id="building-the-power-supply"><a name="building"></a>Building the Power Supply</h2>
-<p>I’ll be perfectly frank that this kit is not the one which is going to teach you much about electronics.</p>
-<p>It would be closer to the truth to say that this one will help teach you patience! There are, for example, 14*16=224 solder joints to connect the power cable adaptors alone. After soldering these, I tested them with both a digital multimeter in continuity mode and by putting cables repeatedly into and out of the adaptors. I did not solder every single joint perfectly on the first try (surprise!), so I fixed those which didn’t work.</p>
-<p>Throughout assembling this kit, I had problems with soldering connections to ground; the ground inside the PC board is apparently a large chunk of copper and it was challenging to get it hot enough to melt solder even when the component you were soldering to it was plenty hot and at risk of cooking. It took a lot of patience and mostly a lot of testing to make sure that everything worked.</p>
-<p>The instructions said to increase your soldering iron temperature to 400℃ to solder wires to the power plug. I left it there when soldering the switch and melted something inside the switch. I bought a new switch and some spade connectors, and soldered the switch wires to the spade connectors instead and then pushed the spade connectors onto the (new) switch, which worked quite well.</p>
-<p>One minor challenge is that the +/- leads of the LEDs were not, as far as I could make out, indicated on the PCB; I had to refer to the schematic to figure out which way to put the LEDs into the board.</p>
-<h2 id="building-the-5v-power-supply">Building the +5V Power Supply</h2>
-<figure class="inlineRight">
-<a href="/images/synth/5VPowerSupply.jpg"> <img src="/images/synth/5VPowerSupply.jpg" width="400px" alt="You can see that the voltage regulator is pushed aside by the module power connector and there is no room for the capacitor."> </a>
-<figcaption>
-What’s wrong with this power supply?
-</figcaption>
-</figure>
-<p>The PCB comes drilled for parts for a +5V power supply (to pins 11 and 12 of the power sockets), but does not include parts for this. Wanting “the full experience” I sourced the parts from a local supplier (details below) and built this as well. Despite some vagueries about precisely which parts to buy, everything worked, except for the LED. I eventually figured out that the problem was getting the ground connection on the PCB hot enough to really melt solder; I had been hesitant to hold the soldering iron to the LED for the 30+ seconds it took to heat up the connection inside the board. But in the end it worked fine and now the LED lights up indicating +5V power is on.</p>
-<p>However, there is another problem with the +5V power supply, and it’s not me this time. Some of the holes for the +5V components fall under the power sockets for modules! I ended up soldering a capacitor to the bottom of the board, and the power regulator is not quite squarely mounted. (See photo at right; there are two capacitors visible on top of the board and a third which is immediately above them mounted under the board; you can see one of the two pins just peeking out from under the black module power connection, immediately above the power regulator pins. Note also that the power regulator is being somewhat pushed off of its heatsink pad by the module power connector above it.) It works fine, but I feel like I’m probably the first person to ever assemble this.</p>
-<h2 id="additional-supplies-needed">Additional Supplies Needed</h2>
-<p>If you want to add +5V power to your power supply, you will need to buy:</p>
-<ul>
-<li>2 0.1 µF capacitors, non-polarized (voltage and type unspecified; I used 50V mylar capacitors)</li>
-<li>1 10 µF polarized capacitor, 16 V (I used a 50V capacitor because that’s all my supplier had)</li>
-<li>1 1k Ohm resistor (wattage unspecified, I used a 1/2 W, which ended up being slightly too long for the pre-drilled holes in the PCB, so I’m guessing it was designed for a 1/4 W resistor?)</li>
-<li>1 5V LED (I used a green 4V LED as that’s what my supplier had)</li>
-<li>1 78M05 5V voltage regulator, or equivalent (the current is unspecified; my supplier had a 1A in stock, so that’s what I used)</li>
-</ul>
-<p>All together this cost me about $10.</p>
-<p>As you will see, there is <em>considerable</em> vagueness in the bill of materials above! I listed what I used, and these values seem to work, although I haven’t tried putting any real load on the circuit. One suggestion I would make for this kit is to fill in the missing values here!</p>
-<p>In the next installment of this series I’ll <a href="2023-03-02-building-a-synthesizer-3.html">breadboard the VCO</a>.</p>
-<h2 id="resources">Resources</h2>
-<h3 id="instructions">Instructions</h3>
-<ul>
-<li><a href="https://www.ericasynths.lv/media/instrukcija_2.pdf">mki x es.EDU Eurorack Case User Manual</a></li>
-</ul>
-<h3 id="videos">Videos</h3>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=pQKN30Mzi2g">DIY SYNTH PSU: How to design a simple dual power supply</a> by Moritz Klein (26:03). Note that this is for a different design than the one included in the kit! It’s sort of useful, although you can skip this video if you want to.</li>
-</ul>
-
-<div class="info">
-    
-    Tags: <a href="/tags/synthesis.html">synthesis</a>, <a href="/tags/diy.html">diy</a>, <a href="/tags/electrical%20engineering.html">electrical engineering</a>
-    
-</div>
-]]></description>
-    <pubDate>Wed, 22 Feb 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-02-22-building-a-synthesizer-2.html</guid>
+    <guid>http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 
