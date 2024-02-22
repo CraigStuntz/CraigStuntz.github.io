@@ -127,7 +127,9 @@ The sound of a digital "oscillator" will be precisely what its programmers
 specify. This could be a perfect sine wave, playback of a sample, 
 a modeled recreation of an analog oscillator, small slices of a sample as with a 
 [wavetable synthesizer](https://blog.native-instruments.com/what-is-wavetable-synthesis/),
-or many other things.
+or many other things. A digital synthesizer will have a Digital to Analog 
+Converter (DAC) in its signal path; a VCO or DCO based synth will not require 
+this.
 
 Some people will tell you that they can hear the digital "stepping" as, for example, a
 16 bit, 44.1 kHz digital oscillator changes its output through its 65,536 possible 
