@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Craig Stuntz's blog</title>
-    <link href="http://www.craigstuntz.com/atom.xml" rel="self" />
-    <link href="http://www.craigstuntz.com" />
-    <id>http://www.craigstuntz.com/atom.xml</id>
+    <link href="https://www.craigstuntz.com/atom.xml" rel="self" />
+    <link href="https://www.craigstuntz.com" />
+    <id>https://www.craigstuntz.com/atom.xml</id>
     <author>
         <name>Craig Stuntz</name>
         <email></email>
@@ -11,8 +11,8 @@
     <updated>2024-02-21T00:00:00Z</updated>
     <entry>
     <title>Building a Synthesizer, Chapter 9: A Field Guide to Oscillators</title>
-    <link href="http://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html" />
-    <id>http://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</id>
+    <link href="https://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html" />
+    <id>https://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</id>
     <published>2024-02-21T00:00:00Z</published>
     <updated>2024-02-21T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -53,7 +53,7 @@
 <h2 id="digital-synthesis">Digital Synthesis</h2>
 <p>Digital Synthesis produces a sound by using a computer program to produce a waveform digitally. This includes samplers/sample players, all software synthesizers, and “virtual analog” synths which use clever programming to try to reproduce the sound of a VCO or DCO. <a href="https://www.whippedcreamsounds.com/uhe-diva-review/">Some of them do it quite well!</a></p>
 <p>The first mainstream digital synthesizers were the Casio VL-1 in 1979, which was something of a toy but considerably cheaper than the other digital synthesizers available at that time which were &gt; $10000 in 1980 dollars. Other notable milestones in making digital synthesis a mainstream technique were the E-mu Emulator, released in 1982, and the Yamaha DX-7, in 1983.</p>
-<p>The sound of a digital “oscillator” will be precisely what its programmers specify. This could be a perfect sine wave, playback of a sample, a modeled recreation of an analog oscillator, small slices of a sample as with a <a href="https://blog.native-instruments.com/what-is-wavetable-synthesis/">wavetable synthesizer</a>, or many other things.</p>
+<p>The sound of a digital “oscillator” will be precisely what its programmers specify. This could be a perfect sine wave, playback of a sample, a modeled recreation of an analog oscillator, small slices of a sample as with a <a href="https://blog.native-instruments.com/what-is-wavetable-synthesis/">wavetable synthesizer</a>, or many other things. A digital synthesizer will have a Digital to Analog Converter (DAC) in its signal path; a VCO or DCO based synth will not require this.</p>
 <p>Some people will tell you that they can hear the digital “stepping” as, for example, a 16 bit, 44.1 kHz digital oscillator changes its output through its 65,536 possible amplitudes over every 1/44100s. I will tell you that these people are wrong, and that they cannot hear this.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> However, they <em>may in fact</em> hear the difference between a VCO and a “perfect” digital recreation of the “same” VCO, because, once again, even two “identical” VCOs may sound different because of differences between the analog parts, their variance with temperature, etc.</p>
 <p>While it’s both theoretically and practically possible for a digital oscillator to reproduce the sound of an analog oscillator well, there’s no denying that many synth manufacturers have not bothered to do it well. Sometimes this is on purpose; a wavetable synth, for example, is not <em>trying</em> to reproduce the sound of a VCO. But even in cases where a synth manufacturer explicitly claims to have an “analog sound” from their digital oscillators, well, some of them do it better than others.</p>
 <h2 id="synthesizers-today">Synthesizers Today</h2>
@@ -77,8 +77,8 @@
 </entry>
 <entry>
     <title>Building a Synthesizer, Chapter 8: Building the Envelope Generator</title>
-    <link href="http://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html" />
-    <id>http://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</id>
+    <link href="https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html" />
+    <id>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</id>
     <published>2024-01-31T00:00:00Z</published>
     <updated>2024-01-31T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -389,8 +389,8 @@ All three modules completed so far
 </entry>
 <entry>
     <title>On Authoring Presets for u-He Diva</title>
-    <link href="http://www.craigstuntz.com/posts/2023-11-11-diva-presets.html" />
-    <id>http://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html" />
+    <id>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</id>
     <published>2023-11-11T00:00:00Z</published>
     <updated>2023-11-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -424,8 +424,8 @@ All three modules completed so far
 </entry>
 <entry>
     <title>On Learning Compilers and Creating Programming Languages</title>
-    <link href="http://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html" />
-    <id>http://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html" />
+    <id>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</id>
     <published>2023-10-13T00:00:00Z</published>
     <updated>2023-10-13T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -571,8 +571,8 @@ All three modules completed so far
 </entry>
 <entry>
     <title>Building a Synthesizer, Chapter 7: Building the Mixer</title>
-    <link href="http://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html" />
-    <id>http://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html" />
+    <id>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</id>
     <published>2023-09-21T00:00:00Z</published>
     <updated>2023-09-21T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -715,8 +715,8 @@ Close-up of 0 Ohm resistors
 </entry>
 <entry>
     <title>Building a Synthesizer, Chapter 6: The Logic Circuits Model of Computation</title>
-    <link href="http://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html" />
-    <id>http://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html" />
+    <id>https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</id>
     <published>2023-08-11T00:00:00Z</published>
     <updated>2023-08-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -869,8 +869,8 @@ Same output, fewer gates
 </entry>
 <entry>
     <title>Building a Synthesizer, Chapter 5: Building the VCO</title>
-    <link href="http://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html" />
-    <id>http://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html" />
+    <id>https://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</id>
     <published>2023-05-22T00:00:00Z</published>
     <updated>2023-05-22T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -1043,8 +1043,8 @@ FFT
 </entry>
 <entry>
     <title>Building a Synthesizer, Chapter 4: A Gentle Introduction to Op Amps</title>
-    <link href="http://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html" />
-    <id>http://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html" />
+    <id>https://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</id>
     <published>2023-04-03T00:00:00Z</published>
     <updated>2023-04-03T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -1539,8 +1539,8 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 </entry>
 <entry>
     <title>Building a Synthesizer, Chapter 3: Breadboarding the VCO</title>
-    <link href="http://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html" />
-    <id>http://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html" />
+    <id>https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</id>
     <published>2023-03-02T00:00:00Z</published>
     <updated>2023-03-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">
@@ -1824,8 +1824,8 @@ Simulated VCO
 </entry>
 <entry>
     <title>Building a Synthesizer: Glossary and Electrical Connections</title>
-    <link href="http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html" />
-    <id>http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</id>
+    <link href="https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html" />
+    <id>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</id>
     <published>2023-02-23T00:00:00Z</published>
     <updated>2023-02-23T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info">

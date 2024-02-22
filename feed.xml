@@ -3,14 +3,14 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
         <title>Craig Stuntz's blog</title>
-        <link>http://www.craigstuntz.com</link>
+        <link>https://www.craigstuntz.com</link>
         <description><![CDATA[Craig Stuntz's blog]]></description>
-        <atom:link href="http://www.craigstuntz.com/feed.xml" rel="self"
+        <atom:link href="https://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
         <lastBuildDate>Wed, 21 Feb 2024 00:00:00 UT</lastBuildDate>
         <item>
     <title>Building a Synthesizer, Chapter 9: A Field Guide to Oscillators</title>
-    <link>http://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</link>
+    <link>https://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</link>
     <description><![CDATA[<div class="info">
     Posted on February 21, 2024
     
@@ -49,7 +49,7 @@
 <h2 id="digital-synthesis">Digital Synthesis</h2>
 <p>Digital Synthesis produces a sound by using a computer program to produce a waveform digitally. This includes samplers/sample players, all software synthesizers, and “virtual analog” synths which use clever programming to try to reproduce the sound of a VCO or DCO. <a href="https://www.whippedcreamsounds.com/uhe-diva-review/">Some of them do it quite well!</a></p>
 <p>The first mainstream digital synthesizers were the Casio VL-1 in 1979, which was something of a toy but considerably cheaper than the other digital synthesizers available at that time which were &gt; $10000 in 1980 dollars. Other notable milestones in making digital synthesis a mainstream technique were the E-mu Emulator, released in 1982, and the Yamaha DX-7, in 1983.</p>
-<p>The sound of a digital “oscillator” will be precisely what its programmers specify. This could be a perfect sine wave, playback of a sample, a modeled recreation of an analog oscillator, small slices of a sample as with a <a href="https://blog.native-instruments.com/what-is-wavetable-synthesis/">wavetable synthesizer</a>, or many other things.</p>
+<p>The sound of a digital “oscillator” will be precisely what its programmers specify. This could be a perfect sine wave, playback of a sample, a modeled recreation of an analog oscillator, small slices of a sample as with a <a href="https://blog.native-instruments.com/what-is-wavetable-synthesis/">wavetable synthesizer</a>, or many other things. A digital synthesizer will have a Digital to Analog Converter (DAC) in its signal path; a VCO or DCO based synth will not require this.</p>
 <p>Some people will tell you that they can hear the digital “stepping” as, for example, a 16 bit, 44.1 kHz digital oscillator changes its output through its 65,536 possible amplitudes over every 1/44100s. I will tell you that these people are wrong, and that they cannot hear this.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> However, they <em>may in fact</em> hear the difference between a VCO and a “perfect” digital recreation of the “same” VCO, because, once again, even two “identical” VCOs may sound different because of differences between the analog parts, their variance with temperature, etc.</p>
 <p>While it’s both theoretically and practically possible for a digital oscillator to reproduce the sound of an analog oscillator well, there’s no denying that many synth manufacturers have not bothered to do it well. Sometimes this is on purpose; a wavetable synth, for example, is not <em>trying</em> to reproduce the sound of a VCO. But even in cases where a synth manufacturer explicitly claims to have an “analog sound” from their digital oscillators, well, some of them do it better than others.</p>
 <h2 id="synthesizers-today">Synthesizers Today</h2>
@@ -71,12 +71,12 @@
 </div>
 ]]></description>
     <pubDate>Wed, 21 Feb 2024 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 8: Building the Envelope Generator</title>
-    <link>http://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</link>
+    <link>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</link>
     <description><![CDATA[<div class="info">
     Posted on January 31, 2024
     
@@ -383,12 +383,12 @@ All three modules completed so far
 </div>
 ]]></description>
     <pubDate>Wed, 31 Jan 2024 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>On Authoring Presets for u-He Diva</title>
-    <link>http://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</link>
     <description><![CDATA[<div class="info">
     Posted on November 11, 2023
     
@@ -418,12 +418,12 @@ All three modules completed so far
 </div>
 ]]></description>
     <pubDate>Sat, 11 Nov 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>On Learning Compilers and Creating Programming Languages</title>
-    <link>http://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</link>
     <description><![CDATA[<div class="info">
     Posted on October 13, 2023
     
@@ -565,12 +565,12 @@ All three modules completed so far
 </div>
 ]]></description>
     <pubDate>Fri, 13 Oct 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 7: Building the Mixer</title>
-    <link>http://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</link>
     <description><![CDATA[<div class="info">
     Posted on September 21, 2023
     
@@ -709,12 +709,12 @@ Close-up of 0 Ohm resistors
 </div>
 ]]></description>
     <pubDate>Thu, 21 Sep 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 6: The Logic Circuits Model of Computation</title>
-    <link>http://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</link>
     <description><![CDATA[<div class="info">
     Posted on August 11, 2023
     
@@ -863,12 +863,12 @@ Same output, fewer gates
 </div>
 ]]></description>
     <pubDate>Fri, 11 Aug 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 5: Building the VCO</title>
-    <link>http://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</link>
     <description><![CDATA[<div class="info">
     Posted on May 22, 2023
     
@@ -1037,12 +1037,12 @@ FFT
 </div>
 ]]></description>
     <pubDate>Mon, 22 May 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-05-22-building-a-synthesizer-5.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 4: A Gentle Introduction to Op Amps</title>
-    <link>http://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</link>
     <description><![CDATA[<div class="info">
     Posted on April  3, 2023
     
@@ -1533,12 +1533,12 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 </div>
 ]]></description>
     <pubDate>Mon, 03 Apr 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-04-03-building-a-synthesizer-4.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer, Chapter 3: Breadboarding the VCO</title>
-    <link>http://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</link>
     <description><![CDATA[<div class="info">
     Posted on March  2, 2023
     
@@ -1818,12 +1818,12 @@ Simulated VCO
 </div>
 ]]></description>
     <pubDate>Thu, 02 Mar 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 <item>
     <title>Building a Synthesizer: Glossary and Electrical Connections</title>
-    <link>http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</link>
+    <link>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</link>
     <description><![CDATA[<div class="info">
     Posted on February 23, 2023
     
@@ -1913,7 +1913,7 @@ Minimoog CV Outputs
 </div>
 ]]></description>
     <pubDate>Thu, 23 Feb 2023 00:00:00 UT</pubDate>
-    <guid>http://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</guid>
+    <guid>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 
