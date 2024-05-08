@@ -1,0 +1,162 @@
+---
+title: "Building a Synthesizer, Chapter 10: Building the VCA"
+series: Building a Synthesizer
+chapter: "10"
+chapterName: Building the VCA
+tags: synthesis, diy, electrical engineering
+---
+
+## What Even Is a VCA?
+
+If you have used keyboard/desktop style synthesizers but not modular synths, 
+you may have seen a "VCA" section of your synth before, or, depending on the
+synth in question, you may have just seen a dial somewhere with a different 
+label. 
+
+A VCA allows you to use one control voltage to adjust the level of another 
+signal. The most common use is to use the output of an envelope generator to 
+adjust the level of the VCO's output (turning an unchanging drone into a note 
+with an attack, decay, etc.) or to change the filter settings as a note 
+progresses, which gives the note more character by changing the specific 
+frequencies emitted over the course of a note. But there are many other uses for
+a VCA!
+
+Still, because the two uses above are so common, in many synthesizers the "VCA" 
+is represented as a "Volume" knob somewhere, or as a slider by an envelope 
+generator. 
+
+For example, here are two synthesizers with two different labels for the same 
+feature:
+
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAJupiter8.png">
+<img src="/images/synth/VCAJupiter8.png" loading="lazy" height="300px" alt="The VCA section of the Roland Jupiter 8 synthesizer. It has a continuous slider marked Level and a four position switch marked LFO Mod">
+</a>
+<figcaption>Jupiter-8 VCA</figcaption>
+</figure>
+
+<figure class="horizontalTiles">
+<a href="/images/synth/VCARetroSynth.png">
+<img src="/images/synth/VCARetroSynth.png" loading="lazy" height="300px" alt="The two envelopes of Logic Pro's Retro Synth plugin. Beside each of the two envelopes is a slider marked Vol">
+</a>
+<figcaption>Retro Synth</figcaption>
+</figure>
+
+<div style="clear:both  ;"></div>
+
+On the left is the "VCA" section of the Roland Jupiter-8. You get two controls:
+A simple level slider, and a four position switch which controls how much one of
+the synth's LFOs affects the output. On the right is the Retro Synth plugin from
+Logic Pro; here the "VCA" feature is just a slider labeled "Vol" to the right of
+the two envelope generators. Neither of these have a "control (voltage) input,"
+because they are hard-wired to the envelope and the LFO, in the case of the 
+Jupiter-8, and to the envelopes, in the case of Retro Synth.
+
+In the modular world it's pretty common for a VCA to be a separate module, but 
+you may end up using them in exactly the same way: You want to turn the endless
+drone of a VCO into distinct notes, so you connect an Envelope Generator to your
+keyboard's Gate output and you connect the output of the EG into the control 
+voltage input of a VCA. You then connect the VCO's output into the audio signal
+input of the VCA, and the output of the VCA now has distinct notes when you 
+press a key. Success!
+
+However, a VCA can be used for other applications; I'd recommend watching 
+[this video](https://www.youtube.com/watch?v=xxr5fT-E7m0) (particularly the 
+second half) if you'd like to see examples. 
+
+## How a VCA Works
+
+A VCA is simply a volume knob which can be controlled using a control voltage. 
+The control voltage is "...typically from -2.5 V to +2.5 V (5 Vpp) for LFOs, and 
+from 0 V to +8 V for ADSRs," to quote the [Eurorack (non-)specification](https://doepfer.de/a100_man/a100t_e.htm).
+There's usually two "volume knobs," in series: A _real_ volume knob you can set 
+with your fingers and an electronically controllable volume setting you set with 
+a control voltage. 
+
+We know how potentiometers work, and the "real" volume knob is just one of 
+those, with an op amp for isolation and gain. But how does a control voltage 
+controlled volume knob work? If there was such a thing as a "voltage controlled
+resistor," that would do the trick. It sounds like something which could be done
+with an op amp, but it would require a somewhat less common circuit, called an
+operational transconductance amplifier (or OTA) instead. These tend to have an 
+amplifier bias or $I_{ABC}$ input which will control the gain of the amplifier
+based on the current going into that input. But other designs are possible, and
+as we will see the MKI x ES.EDU VCA is based on individual transistors instead
+of an integrated circuit like an OTA.
+
+## How a Bipolar Junction Transistor Works
+
+In the VCO kit we used a transistor as a kind of variable resistor controlled by
+the base input. The instructions spend a good bit of time explaining why a 
+transistor is not, in fact, a resistor. So is a transistor a resistor, or isn't 
+it? 
+
+The answer is a bit of both. A transistor provides resistance, clearly. 
+You can control the amount of resistance using the voltage you connect
+to the base. But resist<em>ance</em> is not the same as being a good 
+resist<em>or</em>. A transistor is designed to allow current to flow in only one
+direction, unlike a resistor, and, also unlike a resistor, a transistor will 
+pass a fairly steady current regardless of voltage applied to the collector. 
+So the transistor is not a drop-in replacement for a resitor, even if it was 
+useful in supplying a 
+voltage-controlled _resistance_ when building the VCO. It's also noteworthy that
+the VCO required a resistance which varied exponentially with the input control
+voltage, and thus it's super convenient to use a transistor, which more or less
+does just this. With the VCA, however, we want the volume to change linearly 
+with the control voltage, so we will need to be careful about how we use the 
+transistors. 
+
+So here once again we get to the point that the purpose of these kits is as
+much or more about teaching you how electronics work than it is about building
+the greatest synthesizer in the world. We've used a couple of transistors in 
+the past, but we haven't gone very deep into how the work. So, no time like the
+present!
+
+If you look up a [Bipolar Junction Transistor on Wikipedia](https://en.wikipedia.org/wiki/Bipolar_junction_transistor)
+or in many electronics books, the description will start with a discussion of
+"P-type" and "N-type" semiconductors, and at the end you still won't have a 
+good idea of what they do. Instead, I'm going to go with what Professor Aaron
+Lanterman calls the "magic elves theory," and describe what they do without 
+explaining the physical implementation, instead saying, "they do it that way 
+because the magic elves inside make it happen." This is actually similar to 
+[the "transistor man" presentation in Horowitz and Hill's _The Art of Electronics_](https://blog.adafruit.com/2015/06/17/the-original-full-size-negative-of-transistor-man-that-was-used-in-the-first-edition-of-art-of-electronics-photos-electronicsbook/).
+
+
+
+## Breadboarding the VCA
+
+The first thing we are asked to build is a volume control using just a 
+potentiometer. Not exciting, but the idea is that a VCA will essentially be 
+just controlling volume using a control voltage instead of a knob. Of course the
+truth is somewhat more complex, given the need to isolate modules from each 
+other in terms of impedance, but we'll get there.
+
+
+## Resources
+
+### Instructions
+
+* [mki x es.EDU VCA User Manual](https://www.ericasynths.lv/media/VCA_MANUAL_FINAL.pdf)
+
+### Simulations
+
+All of these simulations are by Moritz Klein
+
+* [Voltage Dividers](https://tinyurl.com/y8dbcu2q)
+* [Transistor vs. Resistor](https://tinyurl.com/y9kqbqnj)
+* [Transistor Amplifiers](https://tinyurl.com/ycdpkfnq)
+* [The Emitter Resistor](https://tinyurl.com/yd9lavjv)
+* [Gain Changing Tricks](https://tinyurl.com/y7ctexrd)
+* [The Differential Amplifier](https://tinyurl.com/yd7shjwz)
+* [The Differential Amplifier (with Signal Subtraction)](https://tinyurl.com/y7gxgq23)
+* [The Differential Amplifier (with Mismatch Fix)](https://tinyurl.com/y7kh5c72)
+* [The MKI x ES.EDU VCA](https://tinyurl.com/yce5ddsh)
+
+### Videos
+
+* [Designing a classic transistor-VCA from scratch](https://www.youtube.com/watch?v=yMrCCx6uqcE)
+  by Moritz Klein (48:42)
+* [Introducing the mki x es.edu DIY VCA kit](https://www.youtube.com/watch?v=NuS8slR2Ue0)
+  by Moritz Klein (6:19)
+* [MK1 vs es.EDU Dual VCA - Build and Demo](https://www.youtube.com/watch?v=xxr5fT-E7m0)
+  by Quincas Moreira (31:04)
