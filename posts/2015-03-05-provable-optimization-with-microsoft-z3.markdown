@@ -84,9 +84,12 @@ sat
 )
 ```
 
-A round of applause for the theorem prover, please! To see the full solution, [try it yourself](http://rise4fun.com/Z3/7VZh) without installing anything.
+A round of applause for the theorem prover, please! The full solution is at the 
+bottom of this post. You can 
+[try it yourself online](https://microsoft.github.io/z3guide/playground/Freeform%20Editing) 
+without installing anything.
 
-One interesting point here: The output language is SMT-LIB, just like the input language. The "compile" transforms a provably consistent and more obviously correct specification into an more efficient representation of the answer in the same language as the input. This is especially useful for problems which do not have a single answer. Z3 [can return a function matching a specification](http://rise4fun.com/Z3/smtc_arith) as easily as it can return an integer.
+One interesting point here: The output language is SMT-LIB, just like the input language. The "compile" transforms a provably consistent and more obviously correct specification into an more efficient representation of the answer in the same language as the input. This is especially useful for problems which do not have a single answer. Z3 can return a function matching a specificationas easily as it can return an integer.
 
 What does it mean when I ask "if this specification even makes sense?" Well, let's say I don't like the number 180. I can exclude it with an additional `assert`:
 
@@ -94,6 +97,30 @@ What does it mean when I ask "if this specification even makes sense?" Well, let
 (assert (> num 180))
 ```
 
-This time, when I check-sat, Z3 replies unsat, meaning the model is not satisfiable, which means there's definitely no solution. So 180 is not only the smallest solution to the original problem, it turns out to be the unique solution.
+This time, when I check-sat, Z3 replies `unsat`, meaning the model is not satisfiable, which means there's definitely no solution. So 180 is not only the smallest solution to the original problem, it turns out to be the unique solution.
 
 Formal methods can show that your problem specifications are consistent and that your implementation is correct, and they can also guarantee that "extreme" optimizations are correct. This turns out to be [really useful in real-world problems](http://research.microsoft.com/en-us/um/people/lamport/tla/formal-methods-amazon.pdf).
+
+## Appendix: Full Solution
+```commonlisp
+; Write a Ruby program that determines the smallest three digit number 
+; such that when said number is divided by the sum of its digits 
+; the answer is 20.
+(define-fun hundreds  ((n Int)) Int (div n 100))
+(define-fun tens      ((n Int)) Int (div (- n (* 100 (hundreds n))) 10))
+(define-fun ones      ((n Int)) Int (mod n 10))
+(define-fun digit-sum ((n Int)) Int (+ (hundreds n) (tens n) (ones n)))
+(define-fun matches-problem ((n Int)) Bool
+  (and 
+    (>= n 100) 
+    (< n 1000)                   ; three digits
+    (= 20.0 (/ n (digit-sum n)))))
+(declare-const num Int)
+(assert 
+  (and 
+    (matches-problem num)
+    (forall ((other Int)) (implies (matches-problem other) (>= other num))) ; no smaller answer
+  ))
+(check-sat)
+(get-model)
+```
