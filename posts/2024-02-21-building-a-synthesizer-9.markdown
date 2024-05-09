@@ -117,7 +117,7 @@ synthesizers, and "virtual analog" synths which use clever programming to try
 to reproduce the sound of a VCO or DCO. 
 [Some of them do it quite well!](https://www.whippedcreamsounds.com/uhe-diva-review/)
 
-The first mainstream digital synthesizers were the Casio VL-1 in 1979, which was
+The first mainstream digital synthesizers were [the Casio VL-1 in 1979](https://www.youtube.com/watch?v=3TT5nAW8gi4), which was
 something of a toy but considerably cheaper than the other digital synthesizers 
 available at that time which were > $10000 in 1980 dollars. Other notable 
 milestones in making digital synthesis a mainstream technique were the E-mu 
