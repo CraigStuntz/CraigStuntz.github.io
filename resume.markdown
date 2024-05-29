@@ -34,6 +34,22 @@ engineering
 </td>
 </tr>
 
+
+<tr class="client">
+<td>
+for DOmedia
+</td>
+</tr>
+<td>
+* Write Java code to integrate DO's proprietary buying platform with 
+  occasionally-documented APIs from their integration partners. 
+</td>
+<td class="right">
+Java, JavaScript, MariaDB, AWS
+</td>
+</tr>
+
+
 <tr class="client">
 <td>
 for WillowTree (formerly Dynamit)
@@ -174,8 +190,17 @@ list of talks I do:
 
 ## Selected Projects
 
-### Iffy-SAT
-The world's sketchiest SMT solver. A work in progress!
+### Checking Dependent Types with Normalization by Evaluation (Swift Version)
+
+[https://github.com/CraigStuntz/bidi/](https://github.com/CraigStuntz/bidi/)
+
+A translation of David Christiansen's bidirectional typechecking Haskell example into Swift.
+
+### aural
+
+[https://github.com/CraigStuntz/aural/](https://github.com/CraigStuntz/aural/)
+
+A command line utilty, written in Swift, to manage Audio Units on macOS
 
 ### Fizil
 
@@ -196,9 +221,3 @@ checking, optimization, and code generation, written in F#.
 [https://github.com/CraigStuntz/Fantam](https://github.com/CraigStuntz/Fantam)
 
 F#, purely functional port of Bob Nystrom's Bantam Pratt Parser example.
-
-### Cryptopals
-
-[Source code on request]
-
-Working my way through the Cryptopals challenges, writing source in F#.

@@ -4,10 +4,12 @@ tags: presentations
 ---
 
 ### What On Earth Is Quantum Computing?!? (And will it break all my encryption?)
-* [Central Ohio Infosec Summit](https://www.centralohioissa.org/) (Accepted)
-· 21-22 May 2020
-* [Stir Trek](https://stirtrek.com/) (Accepted)
-· 1 May 2020
+* [Stir Trek](https://stirtrek.com/)
+· 7 May 2021
+· [Slides](https://speakerdeck.com/craigstuntz/what-on-earth-is-quantum-computing-and-will-it-break-all-my-encryption-stir-trek-edition)
+* [Central Ohio Infosec Summit](https://www.centralohioissa.org/)
+· 4 September 2020
+· [Slides](https://speakerdeck.com/craigstuntz/what-on-earth-is-quantum-computing-and-will-it-break-all-my-encryption-05e892c7-6a01-496b-8fdc-c2d52ae69740)
 * [BSides Columbus 2018](https://bsidescmh2018.busyconf.com)
 · 1 March 2019
 · [Slides](https://speakerdeck.com/craigstuntz/what-on-earth-is-quantum-computing-and-will-it-break-all-my-encryption)
@@ -16,6 +18,9 @@ tags: presentations
 You might have heard that quantum computers can break public key encryption. You might also have heard that you can buy a quantum computer today, or run programs on one via a cloud service. Yet TLS does not seem to be broken! What is going on? It's hard to tell, because most "explanations" of quantum computing are either marketing brochures or written for an audience of physics postdocs. This talk will clearly explain what we know about quantum computing today, and how it is relevant to software professionals now and in the near future. We'll focus on the security space in particular and discuss what quantum computers can do besides factor large integers. Come with questions, leave with a clear vision for how new computing technologies may change your work in the decades to come!
 
 ### Shifting Application Security Left
+* [Improving talks]
+· 6 December 2023
+· [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left-8e93e23d-f4f5-4d56-acb6-4fd2e783f228) 
 * [Central Ohio InfoSec Summit](https://www.infosecsummit.com/ehome/2018cbusinfosec/agenda/)
 · 14 May 2018
 · [Slides](https://speakerdeck.com/craigstuntz/shifting-application-security-left-1) 
