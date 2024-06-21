@@ -172,8 +172,7 @@ Fortran!
 ## Speaking
 
 Please see my list of current presentations ([https://www.craigstuntz.com/presentations.html](presentations.html)) for full 
-details, slide decks, and video, but here is a selected and highly condensed 
-list of talks I do:
+details, slide decks, and video, but here is a selected list of talks I do:
 
 * What On Earth Is Quantum Computing?!? (And will it break all my encryption?)
 * Shifting Application Security Left
@@ -200,7 +199,7 @@ A translation of David Christiansen's bidirectional typechecking Haskell example
 
 [https://github.com/CraigStuntz/aural/](https://github.com/CraigStuntz/aural/)
 
-A command line utilty, written in Swift, to manage Audio Units on macOS
+A command line utility, written in Swift, to manage Audio Units on macOS
 
 ### Fizil
 

@@ -2,12 +2,17 @@
 @import url(https://fonts.bunny.net/css?family=Ubuntu);
 @import url(https://fonts.bunny.net/css?family=Open+Sans);
 
+:root {
+    --main-bg-color: #f8f8f8;
+}
+  
+
 html {
     font-size: 16px;
 }
 
 body {
-    background-color: #f8f8f8;
+    background-color: var(--main-bg-color);
     color: black;
     font-size: 1rem;
 }
@@ -112,6 +117,15 @@ div#footer a {
   font-size: 1rem;
   font-weight: 400;
   text-decoration: none;
+}
+
+div.highlight {
+    background-color: lightyellow;
+    border-left: 1em solid lightgray;
+    border-right: 1em solid var(--main-bg-color);
+    overflow:hidden;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 div.info {

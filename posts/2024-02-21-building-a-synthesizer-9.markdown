@@ -16,12 +16,12 @@ tags: synthesis, electrical engineering, oscillators
 * [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
 * [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
 * [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
-* 9: A Field Guide A Field Guide to Oscillators
+* 9: A Field Guide to Oscillators
 * [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
 </div>
 
 If you own a synthesizer, or have worked with software synthesizer plugins, you
-have no doubt encountered the term "VCA" or "Voltage Controlled Oscillator," 
+have no doubt encountered the term "VCO" or "Voltage Controlled Oscillator," 
 and indeed 
 [we have seen it before in this series](2023-03-02-building-a-synthesizer-3.html). 
 Today most synthesizers are fully digital and just have "oscillators," which produce
