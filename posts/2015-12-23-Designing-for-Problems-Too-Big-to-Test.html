@@ -39,7 +39,10 @@
     
 </div>
 
-<p>In this post, I will show an example of where using unit testing as a design methodology does not work, and how to produce a design for correct code anyway. There is no single design methodology which works for all problems, so it’s useful to have a variety of tools at your disposal.</p>
+<p>In this post, I will show an example of where using unit testing as a design
+methodology does not work, and how to produce a design for correct code anyway.
+There is no single design methodology which works for all problems, so it’s
+useful to have a variety of tools at your disposal.</p>
 <p>This post is my contribution to the <a href="https://sergeytihon.wordpress.com/2015/10/25/f-advent-calendar-in-english-2015/">2015 F# Advent Calendar</a>.</p>
 <p>I’m implementing a compiler for a tiny language without use of external libraries for things like parsing and code generation. The idea is to produce a minimal example of a purely functional compiler. This is an ongoing project, and some parts are further along than others, but you can see the source code as I work, and it does produce working EXEs today.</p>
 <p>Designing a compiler is harder than many problems in programming, because they do something difficult: A compiler must be able to accept any string and either produce an equivalent program or explain clearly to a human being why this is string is not a valid program. And there are a lot of possible strings!</p>
@@ -49,32 +52,34 @@
 <ul>
 <li><strong>The Big Ball of Mud.</strong> Arguably the most common methodology, this involves just poking at the problem until things seem to work for the most common case, maybe.</li>
 <li><strong>Big Design Up Front.</strong> In this methodology, a full specification for the implementation of the system is developed before coding begins. Many people consider this obsolete or, at best, wildly inefficient.</li>
-<li><strong>Test Driven Design.</strong> I’m going to distinguish this from test driven development, because tests are useful both as a methodology for program design and for implementing a program design. In practice, people tend to combine these. As a design methodology, the general idea is that you start with either high or low level simple cases, and continue working until a design evolves. Some people divide this into sub-schools of test driven design. Despite its ubiquity, few defend the big ball of mud as a design practice. Big design up front is widely ridiculed. That leaves TDD as the most prevalent design methodology that people are willing to publicly defend. Unfortunately, testing, while useful, is fundamentally limited.</li>
+<li><strong>Test Driven Design.</strong> I’m going to distinguish this from test driven development, because tests are useful both as a methodology for program design and for implementing a program design. In practice, people tend to combine these. As a design methodology, the general idea is that you start with either high or low level simple cases, and continue working until a design evolves. Some people divide this into sub-schools of test driven design.
+Despite its ubiquity, few defend the big ball of mud as a design practice. Big design up front is widely ridiculed. That leaves TDD as the most prevalent design methodology that people are willing to publicly defend. Unfortunately, testing, while useful, is fundamentally limited.</li>
 </ul>
 <blockquote>
 <p>“…program testing can be a very effective way to show the presence of bugs, but is hopelessly inadequate for showing their absence.” Edsger Dijkstra</p>
 </blockquote>
-<p>In cases where “the happy path” is far more prevalent than “edge cases,” this might not seem to be a show-stopping limitation, and test driven design works OK in many cases.</p>
+<p>In cases where “the happy path” is far more prevalent than “edge cases,” this
+might not seem to be a show-stopping limitation, and test driven design works OK in many cases.</p>
 <h3 id="there-are-no-edge-cases-in-programming-languages">There Are No Edge Cases In Programming Languages</h3>
 <p>As noted above, a compiler must be able to accept any string and either produce an equivalent program or explain clearly to a human being why this is string is not a valid program. A compiler designer cannot predict the valid programs people may write, nor the errors they may create.</p>
 <p>For example, let’s consider <a href="https://en.wikipedia.org/wiki/Duff%27s_device">Duff’s Device</a>. It’s safe to presume that Brian Kernighan and Dennis Ritchie did not have this in mind when they designed the C programming language. For the uninitiated, Duff’s Device nests a while loop inside of a switch statement:</p>
-<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c">send(to, from, count)
-<span class="dt">register</span> <span class="dt">short</span> *to, *from;
-<span class="dt">register</span> count;
-{
-    <span class="dt">register</span> n = (count + <span class="dv">7</span>) / <span class="dv">8</span>;
-    <span class="cf">switch</span> (count % <span class="dv">8</span> ) {
-    <span class="cf">case</span> <span class="dv">0</span>: <span class="cf">do</span> { *to = *from++;
-    <span class="cf">case</span> <span class="dv">7</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">6</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">5</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">4</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">3</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">2</span>:      *to = *from++;
-    <span class="cf">case</span> <span class="dv">1</span>:      *to = *from++;
-            } <span class="cf">while</span> (--n &gt; <span class="dv">0</span>);
-    }
-}</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>send<span class="op">(</span>to<span class="op">,</span> from<span class="op">,</span> count<span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">short</span> <span class="op">*</span>to<span class="op">,</span> <span class="op">*</span>from<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> count<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">register</span> n <span class="op">=</span> <span class="op">(</span>count <span class="op">+</span> <span class="dv">7</span><span class="op">)</span> <span class="op">/</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>count <span class="op">%</span> <span class="dv">8</span> <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span> <span class="cf">do</span> <span class="op">{</span> <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">7</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">6</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">5</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">4</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">3</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span>      <span class="op">*</span>to <span class="op">=</span> <span class="op">*</span>from<span class="op">++;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">while</span> <span class="op">(--</span>n <span class="op">&gt;</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>This is unreadable to the point that it borders on obfuscation, but is legal C, per the specification, and does perform a useful optimization on a particular case. I bring it up because, as a language implementer, I think it drives home the point that there is no possibility of creating (anywhere near) all of the possible unit tests for all of the possible ways someone might choose to use your language.</p>
 <h3 id="different-tasks-different-design-methodologies">Different Tasks, Different Design Methodologies</h3>
 <p>In many programming tasks, the number of “happy path” cases are similar to the number of edge and error cases. At least within the same order of magnitude. In these cases it’s probably possible to exhaustively test the system, even if people don’t usually bother to do so.</p>
@@ -84,70 +89,78 @@
 <p>This will make more sense if I give an example.</p>
 <h3 id="lexing-and-regular-expressions">Lexing and Regular Expressions</h3>
 <p>In many compilers, the first phase of compilation is lexing, where the string representing the program source code is split into tokens. The token list will be passed to the parser, which attempts to match them up with the grammar of the programming language. As a practical example, consider the following expression from a Lisp-like language, which increments the number 1, resulting in the value 2.</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(inc <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(inc <span class="dv">1</span>)</span></code></pre></div>
 <p>Lexing divides this source code into a stream of tokens, like this:</p>
 <pre><code>LeftParenthesis
 Identifier &quot;inc&quot;
 LiteralInt 1
 RightParenthesis</code></pre>
 <p>These tokens will be consumed by the parser to produce and abstract syntax tree, type checked, optimized, etc., but let’s just look at lexing for now.</p>
-<p>Substrings of the input source code are mapped to tokens using regular expressions. Not <a href="http://www.regular-expressions.info/quickstart.html">the PCRE type with zillions of features</a> you might be familiar with, but <a href="https://en.wikipedia.org/wiki/Lexical_grammar">a far simpler version</a> with only a few rules. The lexical grammar for this language looks something like this:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">leftParenthesis  = <span class="ch">'('</span>
-rightParenthesis = <span class="ch">')'</span>
-letter           = <span class="ch">'A'</span> | <span class="ch">'B'</span> | <span class="ch">'C'</span> | …
-digit            = <span class="ch">'0'</span> | <span class="ch">'1'</span> | <span class="ch">'2'</span> | …
-number           = (<span class="ch">'+'</span>digit|<span class="ch">'-'</span>digit|digit) digit*
-alphanumeric     = letter | number
-//<span class="co"> …</span></code></pre></div>
+<p>Substrings of the input source code are mapped to tokens using regular expressions. Not
+<a href="http://www.regular-expressions.info/quickstart.html">the PCRE type with zillions of features</a>
+you might be familiar with, but <a href="https://en.wikipedia.org/wiki/Lexical_grammar">a far simpler version</a>
+with only a few rules. The lexical grammar for this language looks something like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>leftParenthesis  = <span class="ch">'('</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rightParenthesis = <span class="ch">')'</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>letter           = <span class="ch">'A'</span> | <span class="ch">'B'</span> | <span class="ch">'C'</span> | …</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>digit            = <span class="ch">'0'</span> | <span class="ch">'1'</span> | <span class="ch">'2'</span> | …</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>number           = <span class="op">(</span><span class="ch">'+'</span>digit|<span class="ch">'-'</span>digit|digit<span class="op">)</span> digit*</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>alphanumeric     = letter | number</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>//<span class="co"> …</span></span></code></pre></div>
 <p>You don’t use <code>System.Text.RegularExpressions.Regex</code> for this; it’s slow, and has features you won’t need.</p>
 <p>How can we guarantee that we can tokenize any possible string? We don’t need to; as long as we explicitly handle the case of strings we can’t tokenize, we’re covered. I do this by having an extra token type for unrecognized characters. These are eventually mapped into errors the user sees.</p>
 <p>How can we guarantee that we can tokenize any string representing a valid program without seeing an unrecognizable character? Because the parser is designed around a formalism (a context free grammar) which maps lexemes to abstract syntax trees, and the only valid programs are those which can be constructed from repeated applications of the production rules in the parser’s grammar. We have changed the scope of the problem from “any possible string” to “any possible sequence of lexemes.”</p>
-<p>Right away we have a big win in the number of test cases. Any “character” in a string could be one of 2^16 UTF-16 code points, but the number of possible lexemes is considerably smaller. A real language would have <a href="https://github.com/whitequark/parser/blob/master/lib/parser/lexer.rl">maybe 10 times more</a>, but that’s still better than testing an input of any possible Unicode code point:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> Lexeme =
-    | LeftParenthesis
-    | RightParenthesis
-    | Identifier    <span class="kw">of</span> <span class="dt">string</span>
-    | LiteralInt    <span class="kw">of</span> <span class="dt">int</span>
-    | LiteralString <span class="kw">of</span> <span class="dt">string</span>
-    | Unrecognized  <span class="kw">of</span> <span class="dt">char</span></code></pre></div>
+<p>Right away we have a big win in the number of test cases. Any “character” in a
+string could be one of 2^16 UTF-16 code points, but the number of possible
+lexemes is considerably smaller. A real language would have <a href="https://github.com/whitequark/parser/blob/master/lib/parser/lexer.rl">maybe 10 times more</a>,
+but that’s still better than testing an input of any possible Unicode code point:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Lexeme =</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    | LeftParenthesis</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    | RightParenthesis</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    | Identifier    <span class="kw">of</span> <span class="dt">string</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    | LiteralInt    <span class="kw">of</span> <span class="dt">int</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    | LiteralString <span class="kw">of</span> <span class="dt">string</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    | Unrecognized  <span class="kw">of</span> <span class="dt">char</span></span></code></pre></div>
 <p>We can test the lexer in isolation with a much smaller number of test cases.</p>
 <p>The example I gave was a very simple expression, but real-world programs obviously contain more complicated expressions. Also, real-world code is often invalid and must be rejected by the compiler. Some coding errors cannot be detected until further on in the compilation pipeline, but there are possible errors at the lexing stage. For example, in my language, identifiers must begin with a letter, so the expression</p>
-<div class="sourceCode"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(| <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(| <span class="dv">1</span>)</span></code></pre></div>
 <p>…maps to:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">LeftParenthesis
-Unrecognized <span class="ch">'|'</span>
-LiteralInt <span class="dv">1</span>
-RightParenthesis</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>LeftParenthesis</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Unrecognized <span class="ch">'|'</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>LiteralInt <span class="dv">1</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>RightParenthesis</span></code></pre></div>
 <p>Importantly, we should be able to examine any character of a real-world string, and map it into one of these types. The <code>Unrecognized</code> type serves as a kind of fall through for characters which do not fit into the types in the union.</p>
 <p>F#’s exhaustiveness checking ensures that we cannot forget to handle a particular case even if we add additional lexemes to the language specification later. As a simple example, consider this pretty print function which takes a list of lexemes and produces a string similar to the originally parsed source code:</p>
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> <span class="kw">private</span> prettyPrintLexeme = <span class="kw">function</span>
-| LeftParenthesis          -&gt; <span class="st">&quot;(&quot;</span>
-| RightParenthesis         -&gt; <span class="st">&quot;)&quot;</span>
-| Identifier    identifier -&gt; identifier
-| LiteralInt    num        -&gt; num.ToString()
-| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;</span><span class="st">&quot;</span> str
-| Unrecognized  ch         -&gt; ch.ToString()
-
-<span class="kw">let</span> prettyPrint =
-    List<span class="kw">.</span>map prettyPrintLexeme
-    &gt;&gt; String<span class="kw">.</span>concat <span class="st">&quot; &quot;</span></code></pre></div>
-<p>If we were to, after the fact, add an additional type of lexeme, but forgot to modify the <code>prettyPrint</code> function, we would receive a compiler warning since the function would no longer be exhaustive.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">private</span> prettyPrintLexeme = <span class="kw">function</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>| LeftParenthesis          -&gt; <span class="st">&quot;(&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>| RightParenthesis         -&gt; <span class="st">&quot;)&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>| Identifier    identifier -&gt; identifier</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>| LiteralInt    num        -&gt; num.ToString<span class="op">()</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>| LiteralString str        -&gt; sprintf <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;</span><span class="st">&quot;</span> str</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>| Unrecognized  ch         -&gt; ch.ToString<span class="op">()</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> prettyPrint =</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    List<span class="kw">.</span>map prettyPrintLexeme</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    &gt;&gt; String<span class="kw">.</span>concat <span class="st">&quot; &quot;</span></span></code></pre></div>
+<p>If we were to, after the fact, add an additional type of lexeme, but forgot to
+modify the <code>prettyPrint</code> function, we would receive a compiler warning since the
+function would no longer be exhaustive.</p>
 <h3 id="the-rest-of-the-pipeline">The Rest of the Pipeline</h3>
 <p>What about parsing, type checking, and the rest of the compilation pipeline? Formalisms exist for those, as well.</p>
 <table>
 <thead>
 <tr class="header">
-<th>Compilation phase | Fo</th>
+<th>Compilation phase</th>
 <th>Formalism</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Parsing | Cont</td>
+<td>Parsing</td>
 <td>Context free grammar</td>
 </tr>
 <tr class="even">
-<td>Optimization |</td>
+<td>Optimization</td>
 <td>Algebra</td>
 </tr>
 <tr class="odd">
@@ -155,7 +168,7 @@ RightParenthesis</code></pre></div>
 <td>Logical inference rules</td>
 </tr>
 <tr class="even">
-<td>Code generation | Deno</td>
+<td>Code generation</td>
 <td>Denotational semantics</td>
 </tr>
 </tbody>
@@ -168,7 +181,7 @@ RightParenthesis</code></pre></div>
 
 <div class="info">
     
-    Tags: <a href="../tags/F%23.html">F#</a>, <a href="../tags/compilers.html">compilers</a>, <a href="../tags/testing.html">testing</a>, <a href="../tags/formal%20methods.html">formal methods</a>
+    Tags: <a title="All pages tagged 'F#'." href="../tags/F%23.html" rel="tag">F#</a>, <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>, <a title="All pages tagged 'testing'." href="../tags/testing.html" rel="tag">testing</a>, <a title="All pages tagged 'formal methods'." href="../tags/formal%20methods.html" rel="tag">formal methods</a>
     
 </div>
 

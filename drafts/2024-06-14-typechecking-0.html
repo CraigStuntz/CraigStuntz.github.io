@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Craig Stuntz - A Very Gentle Introduction to Type Checking, Introudction</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://types.pl/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    A Very Gentle Introduction to Type Checking,
+                        Introduction
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    Introduction
+                </h1>
+            
+            <div class="info">
+    Posted on June 14, 2024
+    
+</div>
+
+<div class="toc">
+<ul>
+<li>Introduction: Type checkin’</li>
+</ul>
+</div>
+<p>Compiler tutorials often start and end with parsing, and while parsing is very
+interesting, I think, there is more to writing a compiler than parsing syntax!
+In this series I’ll be explaining how to type check (and infer types from) code.</p>
+<p>A tutorial on this should be:</p>
+<ul>
+<li>Approachable, as in readable by someone without a CS degree</li>
+<li>Thorough, as in covering at least the basics of most of what you want a type
+checker to do</li>
+<li>Concise. There’s a place for books like
+<a href="https://www.cis.upenn.edu/~bcpierce/tapl/">Types and Programming Languages</a>,
+but someone who just wants to write a type checker to learn about compilers
+should not have to read and understand a whole textbook to do so</li>
+<li>Modern, because type checking has changed in the last 20 years and we don’t
+want to leave out contemporary techniques</li>
+</ul>
+<p>The best introduction to type checking, by the above criteria, that I know is called
+<a href="https://davidchristiansen.dk/tutorials/nbe/">Checking Dependent Types with Normalization by Evaluation: A Tutorial</a>,
+by David Thrane Christiansen. However, it assumes a certain amout of knowledge
+(for example: what even is the ‘untyped lambda calculus?’),
+and I wanted to write an introduction “for newbies.” So I will be following his
+tutorial, but I will be adding a lot of explanations along the way.</p>
+<p>David provides two versions of his tutorial,
+<a href="https://davidchristiansen.dk/tutorials/nbe/">one written in Racket</a> and the
+other
+<a href="https://davidchristiansen.dk/tutorials/implementing-types-hs.pdf">written in Haskell</a>.
+I’ve translated those two to a third version
+<a href="https://github.com/CraigStuntz/bidi/">written in Swift</a>. Why Swift? It’s not
+because Swift is especially well-suited to this task. But I wanted to learn
+Swift, and one way which helps me learn is to write some non-trivial, so now
+there’s a Swift version. I am hoping that this version will
+increase the number of people who want to learn from David’s tutorial.</p>
+<h2 id="type-equivalence">Type Equivalence</h2>
+<p>In order to learn to type check a program, you must learn how to decide whether
+or not two types are equivalent, because a program type checks
+successfully when the type it is expecting in some place is “equivalent” to the
+type it actually got in that place.</p>
+<p>This sounds really easy, and indeed if the only two types in your type system
+were <code>Int</code> and <code>Boolean</code> then it would be really easy. But types con be
+considerably more complex than this, and in fact when we get to dependent types
+we will see that there is <em>no general answer</em> to this question. However, we can
+answer the question often enough to make a compiler that works for most of the
+code that someone will want to write, and might time out when they do something
+extremely odd, but won’t ever produce incorrect results.</p>
+<h2 id="meet-the-languages">Meet the Languages</h2>
+<p>The tutorial will be in three general parts. You should complete them <em>in order.</em></p>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section/Language</th>
+<th>What You Will Learn</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Untyped Lambda Calculus</td>
+<td>Normalizing expressions</td>
+</tr>
+<tr class="even">
+<td>2. Simply Typed Lambda Calculus</td>
+<td>Type checking and type inferencing</td>
+</tr>
+<tr class="odd">
+<td>3. Tartlet (A Dependently Typed Language)</td>
+<td>Equivalence, dependent types</td>
+</tr>
+</tbody>
+</table>
+<p>Each section will use a different language which we will use to develop our
+knowledge of type checking. We will learn how to type check the simply typed
+lambda calculus because it is easier to do that than to type check Swift. You
+have to crawl before you can walk, as they say. But the principles we explore
+here should be helpful to you if you go farther, and, as we will see when we get
+into dependent typing, there is some real sophistication in this material.</p>
+<p>The langauge Tartlet is a <em>toy language</em> which “is very much like the language
+Pie from [the book] <em>The Little Typer,</em> except it has fewer features and simpler
+rules.”</p>
+<p>Pie, is not used in this tutorial. However, it can be nice to have Pie around if
+you’d like to try out Pie/Tartlet with a more humane syntax.</p>
+<h2 id="installing-softare">Installing Softare</h2>
+<p>If you want to try the Swift code I’ve written, you need a few dependencies; see
+<a href="https://github.com/CraigStuntz/bidi/">the README</a> for the simple instructions.</p>
+<h3 id="installing-pie">Installing Pie</h3>
+<p>If you want to use the Pie language in Racket, (or if you want to try the code
+in the Racket version of the tutorial) you will first need to install
+Dr. Racket if you don’t have it already. One way to do this on a Mac is:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> brew install <span class="at">--cask</span> racket</span></code></pre></div>
+<p>You can then install Pie using the <code>raco</code> package manager for Racket:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> raco pkg install pie</span></code></pre></div>
+<p>You can then open Dr. Racket, and type the traditional “Hello World” of Pie:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a># lang pie</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">'spinach</span></span></code></pre></div>
+<p>Then click the “Run” button and Pie will respond:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">the</span> Atom <span class="dt">'spinach</span>)</span></code></pre></div>
+<p>Congratulations! You’ve now done more Pie programming than 99.9% of your
+colleagues!</p>
+<h3 id="installing-haskell">Installing Haskell</h3>
+<p>If you want to install Haskell,
+<a href="https://www.haskell.org/get-started/">follow the instructions here</a>. This is
+optional; you can use it to follow along with the Haskell version of the
+tutorial if you choose to.</p>
+<h2 id="other-references">Other References</h2>
+<p>This tutorial series is based on Checking Dependent Types with Normalization
+by Evaluation: A Tutorial <a href="https://davidchristiansen.dk/tutorials/implementing-types-hs.pdf">(Haskell version)</a>
+and <a href="https://davidchristiansen.dk/tutorials/nbe/">(Racket version)</a>, by David
+Thrane Christiansen. I have also been reading the book David wrote with Daniel
+P. Friedman, <a href="https://thelittletyper.com/"><em>The Little Typer</em></a>, which covers
+much of the same material in a very readable way.</p>
+<p>There is a survey paper, <a href="https://dl.acm.org/doi/10.1145/3450952">Bidirectional Typing</a>,
+by Jana Dunfield and Neel Krishnaswami, which was published by ACM Computing
+Surveys in 2021.</p>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>

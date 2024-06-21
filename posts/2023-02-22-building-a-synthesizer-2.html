@@ -58,60 +58,140 @@
 <li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
-<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide A Field Guide to Oscillators</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
-<p>I decided to build the power supply first, so that I could use it when building the other modules. That’s not strictly necessary; you can power them with a pair of 9V batteries (while building) if you like, but I was going to want a functional enclosure and power supply eventually anyway, so this seemed like a good place to start.</p>
-<p>Unlike most of the other kits in the series, Moritz Klein did not write the manuals (or design the circuit, I think), and this manual, unlike most of the others, is a “solder everything onto the board” affair instead of a “here are the tradeoffs with different components” and encouraging you to experiment around with a breadboard. Understandable (especially considering there is less “room for experimentation” when dealing with power), but probably not the most compelling introduction to the series.</p>
+<p>I decided to build the power supply first, so that I could use it when building
+the other modules. That’s not strictly necessary; you can power them with a
+pair of 9V batteries (while building) if you like, but I was going to want a
+functional enclosure and power supply eventually anyway, so this seemed like a
+good place to start.</p>
+<p>Unlike most of the other kits in the series, Moritz Klein did not write the
+manuals (or design the circuit, I think), and this manual, unlike most of the
+others, is a “solder everything onto the board” affair instead of a “here are
+the tradeoffs with different components” and encouraging you to experiment
+around with a breadboard. Understandable (especially considering there is less
+“room for experimentation” when dealing with power), but probably not the most
+compelling introduction to the series.</p>
 <p>However, I do think we can learn about (modular) synths from building this project!</p>
 <h2 id="eurorack-format">Eurorack Format</h2>
-<p>As I metioned in the <a href="2023-02-23-building-a-synthesizer-glossary.html">glossary</a>, there isn’t really a “<a href="https://en.wikipedia.org/wiki/Eurorack">Eurorack</a> standard.” It’s more like, “look at what Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar.” If we want to build a “Eurorack compatible” enclosure and power supply, there are a few things to consider.</p>
-<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are (mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are “quantized” by “HP,” or Horizontal Pitch units. This means they are usually some multiple of 5.08 mm wide. The mks x es.EDU modules range from 4 to 10 HP. See the <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document on Doepfer’s site for the closest thing there is to a standard.</p>
-<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each module. However, it’s very, very common for modules to not use the first 6 pins and only have a 10-pin connector on the “module” end of the power cable.</p>
-<p><a href="../images/synth/EurorackPowerPinout.png"><img src="../images/synth/EurorackPowerPinout.png" width="151px" loading="lazy" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a> <a href="../images/synth/EurorackPowerConnector.png"><img src="../images/synth/EurorackPowerConnector.png" width="112px" loading="lazy" alt="A Eurorack power connector socket" style="float: right;"></a> At the left is a pinout from the mks x es.EDU schematic. To the right is a picture of one of the 14 sockets in the mks x es.EDU power supply, which you can connect to a single module.</p>
-<p>The first thing you’ll notice is there’s a lot of redundancy there. The connectors are 16 pins, organized into two columns of eight pins each. Each two-pin “row” carries exactly the same signal; they are connected together. Furthermore, there are three rows (six pins total) of ground pins, which, again, are connected together.</p>
-<p>Most modules do not use, and don’t even include wires for, the Gate and CV on the bus, requiring you to connect the Gate/CV through the front panel of the module. Similarly, +5V power is simply not needed by most modules.</p>
-<p>So when on <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/">the order page for the case</a> it says:</p>
+<p>As I metioned in the <a href="2023-02-23-building-a-synthesizer-glossary.html">glossary</a>,
+there isn’t really a “<a href="https://en.wikipedia.org/wiki/Eurorack">Eurorack</a>
+standard.” It’s more like, “look at what Doepfer did on the
+<a href="https://doepfer.de/a100e.htm">A-100</a> and do something similar.” If we want to
+build a “Eurorack compatible” enclosure and power supply, there are a few things
+to consider.</p>
+<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are
+(mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are
+“quantized” by “HP,” or Horizontal Pitch units. This means they are usually
+some multiple of 5.08 mm wide. The mks x es.EDU modules range from 4 to 10 HP.
+See the <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document
+on Doepfer’s site for the closest thing there is to a standard.</p>
+<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each
+module. However, it’s very, very common for modules to not use the first 6
+pins and only have a 10-pin connector on the “module” end of the power cable.</p>
+<p><a href="../images/synth/EurorackPowerPinout.png"><img src="../images/synth/EurorackPowerPinout.png" width="151px" loading="lazy" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a>
+<a href="../images/synth/EurorackPowerConnector.png"><img src="../images/synth/EurorackPowerConnector.png" width="112px" loading="lazy" alt="A Eurorack power connector socket" style="float: right;"></a>
+At the left is a pinout from the mks x es.EDU schematic. To the right is a
+picture of one of the 14 sockets in the mks x es.EDU power supply, which you can
+connect to a single module.</p>
+<p>The first thing you’ll notice is there’s a lot of redundancy there. The
+connectors are 16 pins, organized into two columns of eight pins each. Each
+two-pin “row” carries exactly the same signal; they are connected together.
+Furthermore, there are three rows (six pins total) of ground pins, which, again,
+are connected together.</p>
+<p>Most modules do not use, and don’t even include wires for, the
+Gate and CV on the bus, requiring you to connect the Gate/CV through
+the front panel of the module. Similarly, +5V power is simply not needed by most
+modules.</p>
+<p>So when on <a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/">the order page for the case</a>
+it says:</p>
 <blockquote>
-<p><strong>NB! The enclosure &amp; PSU are designed specifically to accommodate DIY modules from mki x es.edu series and are not compatible with other eurorack modules.</strong></p>
+<p><strong>NB! The enclosure &amp; PSU are designed specifically to accommodate DIY modules
+from mki x es.edu series and are not compatible with other eurorack modules.</strong></p>
 </blockquote>
 <p>I think it means two things:</p>
-<ol style="list-style-type: decimal">
-<li>The case is pre-drilled to accomodate modules of certain widths in a specific order. Nothing you couldn’t fix with a drill and a tap, but worth noting.</li>
-<li>The kit doesn’t include components for the +5V power, although it does have space/holes for them on the PCB and most modules don’t need +5V anyway.</li>
+<ol type="1">
+<li>The case is pre-drilled to accomodate modules of certain widths in a specific
+order. Nothing you couldn’t fix with a drill and a tap, but worth noting.</li>
+<li>The kit doesn’t include components for the +5V power, although it
+does have space/holes for them on the PCB and most modules don’t need +5V anyway.</li>
 </ol>
-<p>Other than those two <em>caveats</em> I think this case would work fine for most 3U Eurorack modules.</p>
-<p>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on Doepfer’s site is informative if you’d like to know more about the system which other “Eurorack” manufacturers are using as an example.</p>
+<p>Other than those two <em>caveats</em> I think this case would work fine for most 3U
+Eurorack modules.</p>
+<p>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on
+Doepfer’s site is informative if you’d like to know more about the system which
+other “Eurorack” manufacturers are using as an example.</p>
 <div style="clear: both;">
 
 </div>
 <h2 id="building-the-power-supply"><a name="building"></a>Building the Power Supply</h2>
-<p>I’ll be perfectly frank that this kit is not the one which is going to teach you much about electronics.</p>
-<p>It would be closer to the truth to say that this one will help teach you patience! There are, for example, 14*16=224 solder joints to connect the power cable adaptors alone. After soldering these, I tested them with both a digital multimeter in continuity mode and by putting cables repeatedly into and out of the adaptors. I did not solder every single joint perfectly on the first try (surprise!), so I fixed those which didn’t work.</p>
-<p>Throughout assembling this kit, I had problems with soldering connections to ground; the ground inside the PC board is apparently a large chunk of copper and it was challenging to get it hot enough to melt solder even when the component you were soldering to it was plenty hot and at risk of cooking. It took a lot of patience and mostly a lot of testing to make sure that everything worked.</p>
-<p>The instructions said to increase your soldering iron temperature to 400℃ to solder wires to the power plug. I left it there when soldering the switch and melted something inside the switch. I bought a new switch and some spade connectors, and soldered the switch wires to the spade connectors instead and then pushed the spade connectors onto the (new) switch, which worked quite well.</p>
-<p>One minor challenge is that the +/- leads of the LEDs were not, as far as I could make out, indicated on the PCB; I had to refer to the schematic to figure out which way to put the LEDs into the board.</p>
+<p>I’ll be perfectly frank that this kit is not the one which is going to
+teach you much about electronics.</p>
+<p>It would be closer to the truth to say that
+this one will help teach you patience! There are, for example, 14*16=224 solder
+joints to connect the power cable adaptors alone. After soldering these, I
+tested them with both a digital multimeter in continuity mode and by putting
+cables repeatedly into and out of the adaptors. I did not solder every single
+joint perfectly on the first try (surprise!), so I fixed those which didn’t work.</p>
+<p>Throughout assembling this kit, I had problems with soldering connections to
+ground; the ground inside the PC board is apparently a large chunk of copper and
+it was challenging to get it hot enough to melt solder even when the component
+you were soldering to it was plenty hot and at risk of cooking. It took a lot
+of patience and mostly a lot of testing to make sure that everything worked.</p>
+<p>The instructions said to increase your soldering iron temperature to 400℃ to
+solder wires to the power plug. I left it there when soldering the switch and
+melted something inside the switch. I bought a new switch and some spade
+connectors, and soldered the switch wires to the spade connectors instead and
+then pushed the spade connectors onto the (new) switch, which worked quite well.</p>
+<p>One minor challenge is that the +/- leads of the LEDs were not, as far as I
+could make out, indicated on the PCB; I had to refer to the schematic to figure
+out which way to put the LEDs into the board.</p>
 <h2 id="building-the-5v-power-supply">Building the +5V Power Supply</h2>
 <figure class="inlineRight">
-<a href="../images/synth/5VPowerSupply.jpg"> <img src="../images/synth/5VPowerSupply.jpg" width="400px" alt="You can see that the voltage regulator is pushed aside by the module power connector and there is no room for the capacitor."> </a>
+<a href="../images/synth/5VPowerSupply.jpg">
+<img src="../images/synth/5VPowerSupply.jpg" width="400px" alt="You can see that the voltage regulator is pushed aside by the module power connector and there is no room for the capacitor.">
+</a>
 <figcaption>
 What’s wrong with this power supply?
 </figcaption>
 </figure>
-<p>The PCB comes drilled for parts for a +5V power supply (to pins 11 and 12 of the power sockets), but does not include parts for this. Wanting “the full experience” I sourced the parts from a local supplier (details below) and built this as well. Despite some vagueries about precisely which parts to buy, everything worked, except for the LED. I eventually figured out that the problem was getting the ground connection on the PCB hot enough to really melt solder; I had been hesitant to hold the soldering iron to the LED for the 30+ seconds it took to heat up the connection inside the board. But in the end it worked fine and now the LED lights up indicating +5V power is on.</p>
-<p>However, there is another problem with the +5V power supply, and it’s not me this time. Some of the holes for the +5V components fall under the power sockets for modules! I ended up soldering a capacitor to the bottom of the board, and the power regulator is not quite squarely mounted. (See photo at right; there are two capacitors visible on top of the board and a third which is immediately above them mounted under the board; you can see one of the two pins just peeking out from under the black module power connection, immediately above the power regulator pins. Note also that the power regulator is being somewhat pushed off of its heatsink pad by the module power connector above it.) It works fine, but I feel like I’m probably the first person to ever assemble this.</p>
+<p>The PCB comes drilled for parts for a +5V power supply (to pins 11 and 12 of
+the power sockets), but does not include parts for this. Wanting “the full
+experience” I sourced the parts from a local supplier (details below) and
+built this as well. Despite some vagueries about precisely which parts to buy,
+everything worked, except for the LED. I eventually figured out that the
+problem was getting the ground connection on the PCB hot enough to really melt
+solder; I had been hesitant to hold the soldering iron to the LED for the 30+
+seconds it took to heat up the connection inside the board. But in the end it
+worked fine and now the LED lights up indicating +5V power is on.</p>
+<p>However, there is another problem with the +5V power supply, and it’s not me this time.
+Some of the holes for the +5V components fall under the power sockets for modules!
+I ended up soldering a capacitor to the bottom of the board, and the power
+regulator is not quite squarely mounted. (See photo at right; there are two
+capacitors visible on top of the board and a third which is immediately above
+them mounted under the board; you can see one of the two pins just peeking out
+from under the black module power connection, immediately above the power
+regulator pins. Note also that the power regulator is being somewhat pushed off
+of its heatsink pad by the module power connector above it.) It
+works fine, but I feel like I’m probably the first person to ever assemble this.</p>
 <h2 id="additional-supplies-needed">Additional Supplies Needed</h2>
 <p>If you want to add +5V power to your power supply, you will need to buy:</p>
 <ul>
 <li>2 0.1 µF capacitors, non-polarized (voltage and type unspecified; I used 50V mylar capacitors)</li>
 <li>1 10 µF polarized capacitor, 16 V (I used a 50V capacitor because that’s all my supplier had)</li>
-<li>1 1k Ohm resistor (wattage unspecified, I used a 1/2 W, which ended up being slightly too long for the pre-drilled holes in the PCB, so I’m guessing it was designed for a 1/4 W resistor?)</li>
+<li>1 1k Ohm resistor (wattage unspecified, I used a 1/2 W, which ended up being
+slightly too long for the pre-drilled holes in the PCB, so I’m guessing it was
+designed for a 1/4 W resistor?)</li>
 <li>1 5V LED (I used a green 4V LED as that’s what my supplier had)</li>
 <li>1 78M05 5V voltage regulator, or equivalent (the current is unspecified; my supplier had a 1A in stock, so that’s what I used)</li>
 </ul>
 <p>All together this cost me about $10.</p>
-<p>As you will see, there is <em>considerable</em> vagueness in the bill of materials above! I listed what I used, and these values seem to work, although I haven’t tried putting any real load on the circuit. One suggestion I would make for this kit is to fill in the missing values here!</p>
+<p>As you will see, there is <em>considerable</em> vagueness in the bill of materials
+above! I listed what I used, and these values seem to work, although I haven’t
+tried putting any real load on the circuit. One suggestion I would make for this
+kit is to fill in the missing values here!</p>
 <p>In the next installment of this series I’ll <a href="2023-03-02-building-a-synthesizer-3.html">breadboard the VCO</a>.</p>
 <h2 id="resources">Resources</h2>
 <h3 id="instructions">Instructions</h3>
@@ -120,12 +200,15 @@ What’s wrong with this power supply?
 </ul>
 <h3 id="videos">Videos</h3>
 <ul>
-<li><a href="https://www.youtube.com/watch?v=pQKN30Mzi2g">DIY SYNTH PSU: How to design a simple dual power supply</a> by Moritz Klein (26:03). Note that this is for a different design than the one included in the kit! It’s sort of useful, although you can skip this video if you want to.</li>
+<li><a href="https://www.youtube.com/watch?v=pQKN30Mzi2g">DIY SYNTH PSU: How to design a simple dual power supply</a>
+by Moritz Klein (26:03). Note that this is for a different design than the one
+included in the kit! It’s sort of useful, although you can skip this video if
+you want to.</li>
 </ul>
 
 <div class="info">
     
-    Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+    Tags: <a title="All pages tagged 'synthesis'." href="../tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged 'diy'." href="../tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged 'electrical engineering'." href="../tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
     
 </div>
 

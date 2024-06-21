@@ -53,7 +53,7 @@
 <p>Which method should you use? <em>It depends on why you’re doing the division.</em> If you’re computing how many cupcakes each child can have at a birthday party, then you’d better use the answer with the positive remainder. If you’re computing how many panels of fencing you need to surround your yard, then you’d better use the answer with the negative remainder.</p>
 <p>In fact, there are at least <a href="https://www.microsoft.com/en-us/research/publication/division-and-modulus-for-computer-scientists/" title="Division and Modulus for Computer Scientists">five different, valid algorithms</a> for selecting a quotient and remainder for a given integer division problem.</p>
 <p>The homomorphic encryption scheme used in the van Dijk, et. al. paper and in Gentry’s CACM article uses “R-division”:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Compute the real quotient <strong>Q<sub>R</sub></strong>.</li>
 <li>Compute the integer quotient <strong>Q<sub>Z</sub></strong> by rounding <strong>Q<sub>R</sub></strong> to the closest integer.</li>
 <li>Compute the remainder <strong>R = Dividend - Divisor * Q<sub>Z</sub></strong></li>
@@ -95,11 +95,11 @@
 <h2 id="programs-as-digital-circuits">Programs as Digital Circuits</h2>
 <p>A homomorphic encryption scheme, in addition to the usual <code>Encrypt</code> and <code>Decrypt</code> and <code>KeyGen</code> functions, has an <code>Evaluate</code> function which performs operations on the ciphertext, resulting in the ciphertext of the result of the function.</p>
 <p>Obviously, this necessitates a different style of programming than that afforded by the typical programming language. In particular, code like this:</p>
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">bool</span> a = b ? c : d</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> a <span class="op">=</span> b <span class="op">?</span> c <span class="op">:</span> d</span></code></pre></div>
 <p>…(where <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are all <code>bool</code>s) is impossible, because the value of <code>b</code> is encrypted, so the program cannot know what to assign to <code>a</code>. If, however, we can perform binary operations on the ciphertext of <code>b</code>, then we can rewrite the statement above as:</p>
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">bool</span> a = (b &amp; c) | ((!b) &amp; d)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> a <span class="op">=</span> <span class="op">(</span>b <span class="op">&amp;</span> c<span class="op">)</span> <span class="op">|</span> <span class="op">((!</span>b<span class="op">)</span> <span class="op">&amp;</span> d<span class="op">)</span></span></code></pre></div>
 <p>…or its homomorphic encryption equivalent:</p>
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">CypherText a = (b h_and c) <span class="fu">h_or</span> (<span class="fu">h_not</span>(b) h_and d)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>CypherText a <span class="op">=</span> <span class="op">(</span>b h_and c<span class="op">)</span> <span class="fu">h_or</span> <span class="op">(</span><span class="fu">h_not</span><span class="op">(</span>b<span class="op">)</span> h_and d<span class="op">)</span></span></code></pre></div>
 <p>…where the <code>h_*</code> operators are the homomorphic equivalents of the usual Boolean operations and <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are now of type <code>CypherText</code>.</p>
 <p>Note that the version with the ternary operator and the version with the <code>AND</code> and <code>OR</code> operators are not strictly the same, although their results are; the ternary operator is lazy, whereas the <code>AND</code> and <code>OR</code> version uses complete evaluation. This is necessary when the values are encrypted. It also means that the function may be inefficient.</p>
 <p>Intuitively, it’s easy to see that any <a href="https://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29">referentially transparent</a> function can be reduced to such operations; this is what compilers and operating systems do under the hood anyway. I’m not going to go into any detail on how this is done; get an introduction to digital circuits book if you are interested in the particulars.</p>
@@ -118,7 +118,7 @@
 
 <div class="info">
     
-    Tags: <a href="../tags/math.html">math</a>, <a href="../tags/homomorphic%20encrption.html">homomorphic encrption</a>, <a href="../tags/cryptography.html">cryptography</a>, <a href="../tags/Craig%20Gentry.html">Craig Gentry</a>
+    Tags: <a title="All pages tagged 'math'." href="../tags/math.html" rel="tag">math</a>, <a title="All pages tagged 'homomorphic encrption'." href="../tags/homomorphic%20encrption.html" rel="tag">homomorphic encrption</a>, <a title="All pages tagged 'cryptography'." href="../tags/cryptography.html" rel="tag">cryptography</a>, <a title="All pages tagged 'Craig Gentry'." href="../tags/Craig%20Gentry.html" rel="tag">Craig Gentry</a>
     
 </div>
 

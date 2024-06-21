@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Craig Stuntz - A Very Gentle Introduction to Type Checking, Chapter 1.1: </title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://types.pl/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    A Very Gentle Introduction to Type Checking,
+                        1.1
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    The Untyped Lambda Calculus (and Friends)
+                </h1>
+            
+            <div class="info">
+    Posted on June 15, 2024
+    
+</div>
+
+<div class="toc">
+<ul>
+<li>Introduction: Type checkin’</li>
+<li>1: The Untyped Lambda Calculus
+<ul>
+<li>1.1: What Even Is The Untyped Lambda Calculus (Etc.)?</li>
+</ul></li>
+</ul>
+</div>
+<p>My plan is that in each section of this series I’m going to give enough
+information that a competent programmer can understand a section of David’s
+tutorial. My goal for this post is to get you through the title and the first
+few paragraphs.</p>
+<p>Throughout this series, I will quote from David’s tutorial, which I will put
+in a yellow box, like this:</p>
+<div class="highlight">
+<p><strong>Checking Dependent Types with Normalization by Evaluation</strong></p>
+<p>To implement dependent types, we need to be able to determine when two types
+are the same. In simple type systems, this process is a fairly straightforward
+structural equality check, but as the expressive power of a type system
+increases, this equality check becomes more difficult.</p>
+</div>
+<figure class="inlineRight">
+<div class="sourceCode" id="cb1"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>implicit <span class="kw">enum</span> Type<span class="op">:</span> <span class="dt">Equatable</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> int</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> boolean</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> list<span class="op">(</span>Type<span class="op">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">t1</span> <span class="op">=</span> Type<span class="op">.</span>int</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">t2</span> <span class="op">=</span> Type<span class="op">.</span>int</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>t1 <span class="op">==</span> t2<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">t3</span> <span class="op">=</span> Type<span class="op">.</span>list<span class="op">(</span>t1<span class="op">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">t4</span> <span class="op">=</span> Type<span class="op">.</span>list<span class="op">(</span>t2<span class="op">)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>t3 <span class="op">==</span> t4<span class="op">)</span></span></code></pre></div>
+<figcaption>
+Structural equality
+</figcaption>
+</figure>
+<p>As noted earlier, if the only types your programming language contained were
+<code>Int</code> and <code>Boolean</code> then this would indeed be very easy. <code>Int == Int</code> and
+<code>Int != Boolean</code> and we’re finished.</p>
+<p>A “fairly straightforward structural equality check” means that we might need to
+do a comparison just slightly more complicated than <code>Int == Int</code> (for example,
+we might need to check equality on a sum type, which in Swift is known as
+<a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/enumerations/#Associated-Values">an <code>enum</code> with associated values</a>), but we can still do this quite easily. In
+Swift you just add <code>: Equatable</code> to the <code>enum</code> definition and the compiler will
+generate the necessary code for you.</p>
+<p>However, more complicated type systems (e.g., Swift includes subtyping and
+implicit type conversions) will require an analysis which is a bit more
+complicated than just a simple structural equality check.</p>
+<h2 id="what-are-dependent-types">What Are Dependent Types?</h2>
+<div class="highlight">
+<p>In particular, when types can contain programs, we need to be able to run
+these programs and check whether their outputs are the same.</p>
+</div>
+<p>“…when types can contain programs” refers to dependent types. This is sort of
+starting at the end; there will be a lot of material to cover before we get to
+a dependently typed language. But it’s worth knowing what dependent types are.</p>
+<p>Depending upon your point of view, dependent types are:</p>
+<ul>
+<li>The sort of types used by languages such as Idris, Agda, and Lean.</li>
+<li>A type system where types can include a value. The classic example is that
+a list of length 0 is a different type than a list of length 1.</li>
+<li>A programming language where there is no hard line between types and regular
+values; new types can be computed in the same way that new values can.</li>
+<li>A Turing complete type system, where arbitrary computations can be performed
+in the types, instead of just in the normal expressions.</li>
+</ul>
+<p>The sort of type checker you had in mind to implement might not require checking
+dependent types; if you’re going to write a type checker for Swift or Java, you
+won’t need them. (You will, however, need to deal with subtyping, which can be
+challenging.) The general technique of bidirectional type checking will
+still be useful even if dependent types aren’t included in the programming
+language you’re checking.</p>
+<p>Speaking of which…</p>
+<h2 id="what-is-bidirectional-type-checking">What Is Bidirectional Type Checking?</h2>
+<div class="highlight">
+<p>Normalization by evaluation is one way of performing this sameness check,
+while bidirectional type checking guides the invocation of the checks.</p>
+</div>
+<p>In the bad old days of statically typed programming languages, it was common to
+have languages where all types were checked, none were inferred. (Think early
+versions of Java or C#.) This became painful and redundant, and programmers
+wondered if there was a better way. In fact there <em>was</em> a better way, as the
+programming language ML demonstrated in, um, 1973. It just took the rest of the
+world a while to catch up.</p>
+<p>In many cases it is possible to <strong>infer</strong> types instead of checking them. This
+can be taken to an extreme: In some programming languages such as Haskell or ML
+there is not a strict requirement to ever declare a type. However, most
+programmers have found that not ever using any type annotations makes
+programming errors very difficult to diagnose, and so they will typically use a
+style guide that requires use of type annotations on function declarations and
+other places. Other programming languages, such as Swift and the current version
+of C#, allow type inference in some places but <em>require</em> it on named function
+declarations.</p>
+<p>Bidirectional type checking combines type checking and type synthesis
+(inference) in a principled way. By doing so, it is a guideline for how to write
+a type checker which is sufficiently powerful to implement most features needed
+by contemporary programming languages, including some with very advanced type
+systems.</p>
+<h2 id="what-is-normalization">What Is Normalization?</h2>
+<p>The first thing we are going to do is to learn how to take an expression and
+convert it to a “simpler” form, called the normal form, in a process called
+<strong>normalization</strong>. The reason we need to do this is we have to decide if the type
+of an expression is equivalent to the type that we are expecting. This is easier
+if the expression is in the simplest possible form. We will look at some
+examples in a second, but first let’s consider the programming language we will
+be type checking in this first section of the tutorial.</p>
+<h3 id="what-is-the-point-of-normalization">What Is the Point of Normalization?</h3>
+<p>When you are type checking some function, you might need to decide if it’s
+legal to call that function with some argument value. With the untyped lambda
+calculus, which we will meet below, the answer is clearly “yes” because there
+is only one type, so there is no need to type check at all. So why will we be
+dealing with the untyped lambda calculus in a type checking tutorial at all?
+Well, peeking ahead a little, we will want to look at a type and decide if it
+is “equivalent” to some other type. We will do this by normalizing an expression
+first and then doing an equivalence comparison on it, so first we must learn to
+normalize!</p>
+<h3 id="a-very-simple-example">A Very Simple Example</h3>
+<p>That’s a little abstract, so let’s look at an example from Swift:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="fu">add1</span><span class="op">(</span><span class="va">n</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> -&gt; <span class="fu">Int</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> n <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">zero</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span> <span class="op">=</span> add1<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)</span></span></code></pre></div>
+<p>When calling <code>add1</code> we want to pass a value, which we store in the variable <code>zero</code>
+for the <code>n</code> argument. <code>zero</code> is a variable of type <code>Int</code> and in fact contains an
+instance of type <code>Int</code>, so the type check should be successful.</p>
+<h3 id="a-slightly-more-complicated-example">A Slightly More Complicated Example</h3>
+<p>Should this type check?</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">three</span> <span class="op">=</span> add1<span class="op">(</span>n<span class="op">:</span> add1<span class="op">(</span>n<span class="op">:</span> add1<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)))</span></span></code></pre></div>
+<p>If you’ve been programming for a while I think you’ll agree that the answer is
+“yes,” but it’s not quite so simple for the type checker to answer. In this case
+we must know that we are allowed to pass a function call, with all required
+arguments, in a place that requires a value with the same type as the function
+call’s result. The type checker must also check the entire stack of function
+calls in order to make sure everything is correct. Even in this simple example
+that’s not a trivial task, and we will be considering far more complicated cases
+before the end of this series.</p>
+<p>Happily, as with most things in compiler design, there are “recipes” you can
+follow to solve such problems reliably!</p>
+<h3 id="ok-but-what-is-normalization-by-evaluation">Ok, But What Is ‘Normalization By Evaluation’</h3>
+<p>Evaluation means just what you think it does, if you’ve studied compilers or
+have used a language with an <code>eval</code> function. We will interpret the syntax of
+the code and by doing so reduce it to a “simpler” form. For example, references
+to a variable will be substituted with the value of that variable.</p>
+<p>I’m not going to discuss this much more for now because we will cover it in
+great detail in the near future, but I just want to put into your mind the idea
+that evaluating an expression will result in it eventually becoming normalized,
+because that is in fact true.</p>
+<h2 id="what-even-is-the-untyped-lambda-calculus">What Even Is the Untyped Lambda Calculus?</h2>
+<div class="highlight">
+<p><em>1 Evaluating Untyped λ-Calculus</em></p>
+<p>Let’s start with an evaluator for the untyped λ-calculus.</p>
+</div>
+<p>Swift’s type system is a bit complicated, so rather than use Swift as an example
+language, we will begin with something called “the untyped lambda calculus.”
+Don’t be put off by a mention of “calculus”; we will not be computing integrals
+here!</p>
+<p>You can look at the untyped lambda calculus as a programming language, or you
+can look at it as an alternate model of computation. There is only one data
+type, which is an anonymous function taking a single argument and returning a
+single value. The type of this argument and returned value are, naturally,
+anonymous functions taking a single argument and returning a single value.</p>
+<p>(It turns out that the untyped lambda calculus is
+<a href="https://www.youtube.com/watch?v=RPQD7-AOjMI">Turing complete</a>, and can
+compute literally anything that any other programming language can express.
+However, we won’t be making use of this fact in this series.)</p>
+<p>It’s hard to even consider this in terms of other programming languages, which
+have, you know, integers, and booleans and stuff, but maybe think “What if
+Python had only assignments, the <code>lambda</code> keyword, function calls, and nothing
+else? We can make life just a
+little bit easier by having variables and top-level functions declared, but
+again, there will not be any other types besides functions taking a single
+argument and returning a single value.</p>
+<p>In Python, <code>lambda</code> creates an anonymous function with one argument returning a
+result, so <code>lambda x: x</code> will return the value of its argument. So we could have:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> python3</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># In the lambda calculus, we write:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">#   identity = λx.x</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># In Python, we write:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> identity <span class="ex">=</span> lambda x: x</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># They mean the same thing! Here's another example:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">#   another_identity = λx.(λy.y)x</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> another_identity <span class="ex">=</span> lambda x: <span class="er">(</span><span class="ex">lambda</span> y: y<span class="kw">)(</span><span class="ex">x</span><span class="kw">)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># And another:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co">#   not_identity = λx.λy.x</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> not_identity <span class="ex">=</span> lambda x: lambda y: x</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Let's try them out!</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># I'm going to pass an integer as a simple demonstration, but the untyped lambda </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># calculus does not have an integer type.</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> identity<span class="kw">(</span><span class="ex">1</span><span class="kw">)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> another_identity<span class="kw">(</span><span class="ex">1</span><span class="kw">)</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> not_identity<span class="kw">(</span><span class="ex">1</span><span class="kw">)</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>function <span class="op">&lt;</span>lambda<span class="op">&gt;</span>.<span class="op">&lt;</span>locals<span class="op">&gt;</span>.<span class="op">&lt;</span>lambda<span class="op">&gt;</span> at <span class="ex">0x101283c40</span><span class="op">&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> not_identity<span class="kw">(</span><span class="ex">1</span><span class="kw">)(</span><span class="ex">2</span><span class="kw">)</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span></span></code></pre></div>
+<p>In case it’s not obvious from the above, this is real Python code and works (try
+it!), and <code>identity</code> and <code>another_identity</code> are
+<em>equivalent functions</em>. Although their bodies are different, both return the
+value of whatever argument you pass to
+them. <code>not_identity</code> is a different function, and does not return its argument.
+Our goal for this section will be to be write code which is able to tell the
+difference between these functions (and others).</p>
+<div class="highlight">
+<p>Writing an evaluator requires the following steps:</p>
+<ul>
+<li>Identify the values that are to be the result of evaluation</li>
+<li>Figure out which expressions become values immediately, and which require
+computation</li>
+<li>Implement structs for the values, and use procedures for computation</li>
+</ul>
+<p>In this case, for the untyped λ-calculus, the only values available are
+closures, and computation occurs when a closure is applied to another value.</p>
+</div>
+<p>That sort of makes sense, but if you want to do something more complicated
+in your program, like add two numbers together, then you have to stop and think
+about how you’re going to represent numbers in a programming language which
+doesn’t have them.</p>
+<h2 id="what-even-is-a-natural-number">What Even Is a Natural Number?</h2>
+<p>The type of number that we’re going to use is a natural number, and by this we
+mean a number which is in the set <span class="math inline">{0, 1, 2, ..., ∞}</span></p>
+<p>Swift doesn’t have a type like this. It has <code>UInt64</code>, but there are obviously
+values too large to store in a <code>UInt64</code>. It turns out that this really matters,
+because the type of <code>add1</code> above is actually a bit more complicated than “Int”.
+It’s actually “an <code>Int</code> or perhaps it might throw an exception due to a numeric
+overflow.”</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➜</span> swift repl  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Welcome</span> to Apple Swift version 5.10 <span class="er">(</span><span class="ex">swiftlang-5.10.0.13</span> clang-1500.3.9.4<span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Type</span> :help for assistance.</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="op">&gt;</span> Int.max</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="va">$R0</span><span class="ex">:</span> Int = 9223372036854775807</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span><span class="op">&gt;</span> func <span class="ex">add1</span><span class="er">(</span><span class="ex">n:</span> Int<span class="kw">)</span> <span class="ex">-</span><span class="op">&gt;</span> Int { return n + 1 }</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">3</span><span class="op">&gt;</span> add1<span class="kw">(</span><span class="ex">n:</span> Int.max<span class="kw">)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Execution</span> interrupted. Enter code to recover and continue.</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Enter</span> LLDB commands to investigate <span class="er">(</span><span class="bu">type</span> :help for assistance.<span class="kw">)</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span><span class="op">&gt;</span>  </span></code></pre></div>
+<p>You might think I’m being overly picky here, but a type checker must understand
+every possible case for the types in use. (Does this mean that Swift is unsound?
+Not really, this notion of “or may throw a numeric overflow exception” is built
+into the language, and makes the language design somewhat more difficult. Again,
+we will be starting with a simpler language.)</p>
+<h2 id="what-even-is-a-church-numeral">What Even Is a Church Numeral?</h2>
+<p>The type checker must solve a problem which is very similar to the optimizer: Is
+it safe to replace one expression with a different expression, in every possible
+case? As we have seen with <code>add1</code> above, this can be a pertty subtle question,
+with edge cases which are not obvious from looking at source code. How can we
+be sure that saying that a number is “a natural number” means that it can be
+used <em>anywhere</em> a program expects a natural number to be used?</p>
+<p>It would help if instead of considering, well, <span class="math inline">∞</span> cases, we could cut that
+list down a bit. And for the type of natural numbers, we can in fact cut it down
+to only two cases:</p>
+<ul>
+<li><code>zero</code></li>
+<li><code>succ n</code> (or <code>add1(n)</code> – calling it <code>succ</code> is more common, but David uses
+<code>add1</code>, so I will follow his lead), which means “given some value <code>n</code> which is
+certainly a natural number, the next largest value, <span class="math inline"><em>n</em> + 1</span>.”</li>
+</ul>
+<p>So we can literally have a data type like:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>indirect <span class="kw">enum</span> Nat <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> zero</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> add1<span class="op">(</span>Nat<span class="op">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>And now Swift has a “natural numbers” data type! This way of storing natural
+numbers is sometimes called a
+“<a href="https://en.wikipedia.org/wiki/Church_encoding#Church_numerals">Church numeral</a>.”</p>
+<h2 id="why-why-why-for-the-love-of-church-why">Why, Why, Why for the Love of Church, Why?</h2>
+<p>Of course, representing a number like <code>1000</code> would seem to be a little bit
+involved given such an encoding, but on the positive side we have made such
+values much easier to type check: There are only two cases!</p>
+<p>What the point of all this is? Why not just
+use better known data types from better known languages? We could do that, but
+the implementation would be far more complicated, as “real” programming
+languages tend to have many more special cases and exceptions in their
+semantics (for example, numeric exceptions, implicit conversions, function
+overloading, etc.). The languages and data types used in this tutorial are
+explicitly designed to be minimal and easy to reason about. For example, with a
+Church encoded natural number, if you can prove a statement about only two
+cases, <code>zero</code> and <code>add1(n)</code> where <code>n</code> is any natural number, then you have
+proven the statement about <em>every</em> natural number, all <span class="math inline">∞</span> of them!</p>
+<h2 id="abstract-syntax-trees">Abstract Syntax Trees</h2>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>
