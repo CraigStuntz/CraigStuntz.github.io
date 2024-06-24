@@ -7,8 +7,546 @@
         <description><![CDATA[Craig Stuntz's blog]]></description>
         <atom:link href="https://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Wed, 21 Feb 2024 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 24 Jun 2024 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Building a Synthesizer, Chapter 10: Building the VCA</title>
+    <link>https://www.craigstuntz.com/posts/2024-06-24-building-a-synthesizer-10.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on June 24, 2024
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
+<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
+<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
+<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
+<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li>10: Building the VCA</li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<h2 id="what-even-is-a-vca">What Even Is a VCA?</h2>
+<p>If you have used keyboard/desktop style synthesizers but not modular synths,
+you may have seen a “VCA” section of your synth before, or, depending on the
+synth in question, you may have just seen a dial somewhere with a different
+label.</p>
+<p>A VCA allows you to use one control voltage to adjust the level of another
+signal. The most common use is to use the output of an envelope generator to
+adjust the level of the VCO’s output (turning an unchanging drone into a note
+with an attack, decay, etc.). But there are many other uses for
+a VCA!</p>
+<p>Still, because the two uses above are so common, in many synthesizers the “VCA”
+is represented as a “Volume” knob somewhere, or as a slider by an envelope
+generator.</p>
+<p>For example, here are two synthesizers with two different labels for the same
+feature:</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAJupiter8.png">
+<img src="/images/synth/VCAJupiter8.png" loading="lazy" height="300px" alt="The VCA section of the Roland Jupiter 8 synthesizer. It has a continuous slider marked Level and a four position switch marked LFO Mod">
+</a>
+<figcaption>
+Jupiter-8 VCA
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCARetroSynth.png">
+<img src="/images/synth/VCARetroSynth.png" loading="lazy" height="300px" alt="The two envelopes of Logic Pro's Retro Synth plugin. Beside each of the two envelopes is a slider marked Vol">
+</a>
+<figcaption>
+Retro Synth
+</figcaption>
+</figure>
+<div style="clear:both  ;">
+
+</div>
+<p>On the left is the “VCA” section of the Roland Jupiter-8. You get two controls:
+A simple level slider, and a four position switch which controls how much one of
+the synth’s LFOs affects the output. On the right is the Retro Synth plugin from
+Logic Pro; here the “VCA” feature is just sort of implied by the envelope and
+a slider labeled “Vel” (for Velocity) to the right of
+the two envelope generators. Neither of these have a “control (voltage) input,”
+because they are hard-wired to the envelope and the LFO, in the case of the
+Jupiter-8, and to the envelopes, in the case of Retro Synth.</p>
+<p>In the modular world it’s pretty common for a VCA to be a separate module, but
+you may end up using them in exactly the same way: You want to turn the endless
+drone of a VCO into distinct notes, so you connect an Envelope Generator to your
+keyboard’s Gate output and you connect the output of the EG into the control
+voltage input of a VCA. You then connect the VCO’s output into the audio signal
+input of the VCA, and the output of the VCA now has distinct notes when you
+press a key. Success!</p>
+<p>However, a VCA can be used for other applications; I’d recommend watching
+<a href="https://www.youtube.com/watch?v=xxr5fT-E7m0">this video</a> (particularly the
+last two thirds) if you’d like to see examples.</p>
+<h2 id="how-a-vca-works">How a VCA Works</h2>
+<p>A VCA is simply a volume knob which can be controlled using a control voltage.
+The control voltage is “…typically from -2.5 V to +2.5 V (5 Vpp) for LFOs, and
+from 0 V to +8 V for ADSRs,” to quote the <a href="https://doepfer.de/a100_man/a100t_e.htm">Eurorack (non-)specification</a>.
+There’s usually two “volume knobs,” in series: A <em>real</em> volume knob you can set
+with your fingers and an electronically controllable volume setting you set with
+a control voltage.</p>
+<p>We know how potentiometers work, and the “real” volume knob is just one of
+those, with an op amp for isolation and gain. But how does a control voltage
+controlled volume knob work? If we ccould find such a thing as a “voltage controlled
+resistor,” that would do the trick. It sounds like something which could be done
+with an op amp, but it would require a somewhat less common circuit, called an
+operational transconductance amplifier (or OTA) instead. These tend to have an
+amplifier bias or <span class="math inline"><em>I</em><sub><em>A</em><em>B</em><em>C</em></sub></span> input which will control the gain of the amplifier
+based on the current going into that input. But other designs are possible, and
+as we will see the MKI x ES.EDU VCA is based on individual transistors instead
+of an integrated circuit like an OTA.</p>
+<h2 id="breadboarding-the-vca">Breadboarding the VCA</h2>
+<p>Before I start breadboarding I ususally separate out the various resistor
+values, set them in order, and tape them to a piece of paper with their values
+in Ohms written alongside them.</p>
+<div class="highlight">
+<p><strong>Important</strong>: Before you start breadboarding, carefully look at the 10k, 20k, and
+100k resistors. There are two different kinds! See the section
+<a href="#resistance-is-futile">“Resistance is Futile,”</a> below, for details. The manual
+does not include this distinction in the Bill of
+Materials nor mention it at all unitl much later. You will want to keep these
+two types of resitors separate, as it will make your life easier later on.</p>
+</div>
+<h3 id="breadboarding-the-volume-potentiometer">Breadboarding the Volume Potentiometer</h3>
+<p>The first thing we are asked to build is a volume control using just a
+potentiometer. Not exciting, but the idea is that a VCA will essentially be
+just controlling volume using a control voltage instead of a knob. Of course the
+truth is somewhat more complex, given the need to isolate modules from each
+other in terms of impedance, but we’ll get there. Anyway, having built that
+we can verify that we can indeed vary the volume of a signal passing through
+our not-quite-yet-voltage-controlled-amplifier by twisting the potentiometer
+knob. Moving right along…</p>
+<h3 id="how-a-bipolar-junction-transistor-works">How a Bipolar Junction Transistor Works</h3>
+<p>If you look up a <a href="https://en.wikipedia.org/wiki/Bipolar_junction_transistor">Bipolar Junction Transistor on Wikipedia</a>
+or in many electronics books, the description will start with a discussion of
+“P-type” and “N-type” semiconductors, and at the end you still won’t have a
+good idea of what they do. Instead, I’m going to go with what Professor Aaron
+Lanterman calls the “magic elves theory,” and describe what they do without
+explaining the physical implementation, instead saying, “they do it that way
+because the magic elves inside make it happen.” This is actually similar to
+<a href="https://blog.adafruit.com/2015/06/17/the-original-full-size-negative-of-transistor-man-that-was-used-in-the-first-edition-of-art-of-electronics-photos-electronicsbook/">the “transistor man” presentation in Horowitz and Hill’s <em>The Art of Electronics</em></a>.</p>
+<p>The purpose of these kits is perhaps more
+about teaching you how electronics work than it is about building
+the greatest synthesizer in the world. We’ve used a couple of transistors in
+the past, but we haven’t gone very deep into how the work. So, no time like the
+present! <a href="https://www.ericasynths.lv/media/VCA_MANUAL_FINAL.pdf">The instructions</a>
+now take a (pages-long) digression into how transistors, and
+bipolar junction transistors (BJTs) in particular, work. I won’t repeat that
+here, but there is a points that I found confusing which I would like to try and
+clarify.</p>
+<p>In the VCO kit we used a transistor as a kind of variable resistor controlled by
+the base input. The VCA instructions spend a good bit of time explaining why a
+transistor is not, in fact, a resistor. A transistor provides resistance,
+clearly: A fairly high resistance value when no voltage is connected to the base!
+You can control the amount of current passing through the device using the
+voltage you connect to the base.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>But resist<em>ance</em> is not the same as being a good resist<em>or</em>. A
+transistor is designed to allow current to (easily) flow in only one
+direction, unlike a resistor, and, also unlike a resistor, a transistor will
+pass a fairly steady current regardless of voltage applied to the collector.
+So the transistor is not a drop-in replacement for a resit<em>or</em>, even if it was
+useful to us in supplying a
+voltage-controlled <em>resistance</em> when building the VCO. It’s also noteworthy that
+the VCO required a resistance which varied exponentially with the input control
+voltage, and thus it’s super convenient to use a transistor, which more or less
+does just this. With the VCA, however, we want the volume to change linearly
+with the control voltage, so we will need to be careful about how we use the
+transistors.</p>
+<h4 id="the-problem-with-bjts">The Problem with BJTs</h4>
+<p>One problem that BJTs have is that they are not very consistent devices. Even
+BJTs from the same manufacturer with the same part number will vary in how much
+current they pass and the precise base thresholds that control the transistor.
+They will also vary considerably with the outside temperature.</p>
+<p>So, we would like to compensate for these variations. How do we do that?</p>
+<h4 id="negative-feedback">Negative Feedback</h4>
+<figure class="inlineRight">
+<a href="/images/synth/VCAManualNegativeFeedback.png">
+<img src="/images/synth/VCAManualNegativeFeedback.png" loading="lazy" width="300px" alt="A transistor with the base connected to the input signal, the collector connected to the 12V rail through a 20k resistor, and the emitter connected to ground through a 10k resistor">
+</a>
+<figcaption>
+From the mki x es.edu VCA Manual
+</figcaption>
+</figure>
+<p>We start with a circuit much like the one on the right but without the 10k
+resistor at the bottom. Then we get to the point that I found confusing!
+Moritz talks about “introducing negative feedback” by connecting a resistor
+between the transistor’s emitter and ground. That’s the 10k resistor at
+the bottom of the circuit at right. What I didn’t understand was: A resistor is
+a passive component; how could introducing just one resistor provide <em>any</em> kind of
+feedback?</p>
+<p>The answer is that although the resistor is passive, the transistor is very much
+not passive, and putting a resistor between the emitter and ground makes a world
+of difference because it changes the behavior of the transistor. How? When the
+transistor’s emitter is connected directly to ground then <em>the emitter voltage will always be at
+ground,</em> no matter what the base of the transistor is set to. But when there is
+a resistor between the emitter and ground, things get more complicated.</p>
+<p>A transistor is “active” when the voltage between the base and the emitter is
+over a certain threshold, around 0.6V. When the transistor is active, current
+will pass between both the base and the emitter and the collector and the emitter
+(for an NPN transistor). This current flowing out of the emitter has to flow
+across the 10k resostor. When a current flows across a resistor you get a
+voltage. Therefore the voltage at the transistor’s emitter is no longer being
+held at ground. Instead it varies depending upon the amount of current passing
+through the resistor. And this change from “voltage is fixed at ground” to
+“voltage varies with the amount of current being passed out of the emitter and
+across the resistor” is the key to understanding how adding just that one
+resistor can be called “negative feedback.” The more current that passes through
+the resistor, the higher the voltage difference across its two ends will be,
+right? However, this means that the end of the resistor connected to the emitter
+will be at a higher voltage, and therefore the higher the current, the lower
+the difference in voltage between the transistor’s base and emitter will be…
+which reduces the current! This is the negative feedback.</p>
+<p>Therefore, if something changes the gain of the transistor, such as its
+temperature, this circuit will have the opposite effect: More amplification
+means a higher voltage at the emitter which means a lower voltage from base to
+emitter which means a lower gain!</p>
+<h4 id="another-way-to-look-at-negative-feedback">Another Way to Look At “Negative Feedback”</h4>
+<p>One of the things that confused me about the directions use of the phrase
+“negative feedback” is that I hadn’t seen this phrase in other tutorials about
+transistor amplification. But once I
+understood what he meant by negative feedback I could line up what he was
+saying with other explanations. So now I
+will explain this in a different way, but I will be describing the same
+“negative feedback” mentioned above. It helps me to have multiple ways to
+consider the same phenomenon.</p>
+<p>In this section I’m summmarizing the explanation from
+<a href="https://www.mheducation.com/highered/product/practical-electronics-inventors-fourth-edition-scherz-monk/9781259587542.html"><em>Practical Electronics for Inventors, Fourth Edition,</em></a>
+by Scherz and Monk.</p>
+<p>The gain of a transistor, by definition, is:</p>
+<p><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></p>
+<p>Where <span class="math inline"><em>V</em><sub><em>C</em></sub></span> is equal to the voltage at the collector, <span class="math inline"><em>R</em><sub><em>C</em></sub></span> is equal to the
+resistance at the collector, and similarly for the emitter. However, that’s not
+quite the full story, because a transistor has a small internal
+<a href="https://en.wiktionary.org/wiki/transresistance">transresistance</a>
+in its emitter region, and one way you can think about thermal instability in a
+transistor is that the transreistance changes with temperature. So a somewhat
+more accurate model is:</p>
+<p><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></p>
+<p>Where <span class="math inline"><em>r</em><sub><em>t</em><em>r</em></sub></span> is the transresistance value, which, again, is not constant. This
+is not 100% accurate as there is some small current flowing from the base to the
+emitter. But this does tell us that we can minimize the effect of <span class="math inline"><em>r</em><sub><em>t</em><em>r</em></sub></span> by
+making <span class="math inline"><em>R</em><sub><em>E</em></sub></span> comparatively large relative to it.</p>
+<p><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></p>
+<p>How much is that? Well, we have <span class="math inline"><em>I</em><sub><em>E</em></sub></span> <em>apporximately</em> 600 μA, which works out to
+arount 46Ω. So a 10KΩ resistor should make its effects very small indeed. Scherz
+and Monk say, “In practice, <span class="math inline"><em>R</em><sub><em>E</em></sub></span> should be chosen to place <span class="math inline"><em>V</em><sub><em>E</em></sub></span> around 1 V
+(for temperature stability and maximum swing in the output). Here we’re around
+6V, but note that in the very next step we will be reducing the voltage at the
+emitter!</p>
+<h3 id="breadboarding-a-one-transistor-vca">Breadboarding a One Transistor VCA</h3>
+<p>So now let’s build a VCA (with actual voltage control, not just a
+potentiometer). It looks like this:</p>
+<figure>
+<a href="/images/synth/VCAOneTransistor.jpg">
+<img src="/images/synth/VCAOneTransistor.jpg" loading="lazy" width="600px" alt="A breadboard showing a simple, one-transistor VCA circuit. We can see a BJT, a DIP op amp package, a potentiometer, and a 1/8 inch jack.">
+</a>
+<figcaption>
+Single Transistor VCA
+</figcaption>
+</figure>
+<p>When we look at the output on a scope, though, the results are not so great:</p>
+<figure>
+<a href="/images/synth/VCAOneTransistorScope.png">
+<img src="/images/synth/VCAOneTransistorScope.png" loading="lazy" width="600px" alt="An oscilloscope screen capture showing a yellow trace with a square wave, a magenta trace with the same square wave although much fuzzier and lower in amplitude, and a cyan trace which is the magenta trace inverted">
+</a>
+<figcaption>
+Single Transistor VCA Output
+</figcaption>
+</figure>
+<p>The yellow trace here is the output of a function generator I’m using as my
+“signal.” This is like the audio signal I would be running through the VCA in
+the real world. The magenta trace is the input into the base, and the cyan trace
+is the VCA’s output at the jack. These last two look “blurry,” but note that the
+vertical scale on the oscilloscope is much smaller for them. (20mV/div vs. 1V/div.)</p>
+<h3 id="breadboarding-a-differential-amplifier">Breadboarding a Differential Amplifier</h3>
+<p>There are a few problems with the circuit we have built so far:</p>
+<ul>
+<li>Poor amplification (low gain)</li>
+<li>It’s noisy</li>
+<li>The output is inverted</li>
+<li>It’s still sensitive to temperature variation in the resistors, even though
+we have improved things by adding the resistor at the emitter</li>
+<li>When we change the CV signal, the DC offset of the audio output changes</li>
+</ul>
+<p>Moritz proposes to fix all of this by using a
+<a href="https://electrosome.com/differential-amplifier-transistors/">differential pair</a>
+of transistors. So first we add a second transistor and arrange both in a
+differential pair.</p>
+<figure>
+<a href="/images/synth/VCATwoTransistors.jpg">
+<img src="/images/synth/VCATwoTransistors.jpg" loading="lazy" width="600px" alt="A breadboard containing a cirucit with two transistors, a DIP chip with some op amps, a jack, a potentiometer, and a bunch of resistors">
+</a>
+<figcaption>
+Two Transistor VCA
+</figcaption>
+</figure>
+<p>Now we get two outputs, which are in opposite phase:</p>
+<figure>
+<a href="/images/synth/VCATwoTransistorsScope.png">
+<img src="/images/synth/VCATwoTransistorsScope.png" loading="lazy" width="600px" alt="An oscilloscope screen capture showing a yellow trace with a square wave, a magenta trace with the same square wave although much fuzzier and lower in amplitude, a cyan trace which is output from one transistor and a green trace which is the output from another transistor">
+</a>
+<figcaption>
+Two Transistor VCA Output
+</figcaption>
+</figure>
+<p>Adding a couple more transistors and the second op amp (in the same IC package
+as the first one), we can combine the two signals, subtracting them to produce
+the difference between them (hence, differential pair). This is an op amp
+configuration which I didn’t show in
+<a href="2023-04-03-building-a-synthesizer-4.html">my op amp tutorial</a>, so here it is:</p>
+<figure>
+<a href="/images/synth/VCAOpAmpSubtractor.png">
+<img src="/images/synth/VCAOpAmpSubtractor.png" loading="lazy" width="600px" alt="A schematic of a subtractor configuration of an op amp.">
+</a>
+<figcaption>
+Subtractor
+</figcaption>
+</figure>
+<p>If you’ve read that tutorial, you’ll understand how this works. It’s exactly the
+same as an inverter configuration, except instead of having the non-inverting
+(‘+’) input tied to ground, instead the non-inverting input of the op amp is
+connected to another signal input, via a voltage divider. Without going into
+too much detail in this post, it hopefully makes sense if you think that when
+the non-inverting input is at ground this is exactly an inverter, because
+0/ground minus the inverting input is the opposite of the inverting input.</p>
+<p>Anyway, with the op amp outputting the difference of the two transistor signals,
+our trace now looks like:</p>
+<figure>
+<a href="/images/synth/VCASubtractedTrace.png">
+<img src="/images/synth/VCASubtractedTrace.png" loading="lazy" width="600px" alt="Oscilloscope showing a cyan trace in the foreground which is the subtraction of the two diode outputs">
+</a>
+<figcaption>
+Subtractor Output
+</figcaption>
+</figure>
+<figure class="inlineRight">
+<a href="/images/synth/VCABreadboardFinished.jpg">
+<img src="/images/synth/VCABreadboardFinished.jpg" loading="lazy" width="300px" alt="A breadboard with the completed VCA, which looks very much like the incomplete VCAs except for the addition of a few more resistors and a trimpot">
+</a>
+<figcaption>
+Completed VCA
+</figcaption>
+</figure>
+<p>The next step is to add a trimpot which allows adjustment to compensate for
+small manufacturing differences between the two transistors. Even when both
+transistors are at precisely the same temperature, two different transistors
+of the same lot from the same manufacturer may vary in their gain. One way
+around this is to buy a matched set of transistors in an IC package. Another way
+around this is to add a trimpot:</p>
+<figure>
+<a href="/images/synth/VCAWithTrimpotTrace.png">
+<img src="/images/synth/VCAWithTrimpotTrace.png" loading="lazy" width="600px" alt="Oscilloscope traces showing a now vertically centered output in cyan in the foreground">
+</a>
+<figcaption>
+Subtractor with Trimpot
+</figcaption>
+</figure>
+<p>Finally we change some resistor values to make the last op amp in the signal
+chain boost the amplified signal up to a 10V peak to peak output.</p>
+<p>I realize the signal looks quite noisy. Some of that is real, because
+breadboards tend to be pretty noisy. Some of that is due to the high
+magnification of the output signal vs. the function generator signal. Here it is
+with the same vertical scaling:</p>
+<figure>
+<a href="/images/synth/VCASameVerticalScaling.png">
+<img src="/images/synth/VCASameVerticalScaling.png" loading="lazy" width="600px" alt="Oscilloscope traces at equal verticl scaling; the output now appears less noisy compared to the input">
+</a>
+<figcaption>
+At Equal Vertical Scaling
+</figcaption>
+</figure>
+<h2 id="soldering-it-all-together">Soldering It All Together</h2>
+<p>One curious fact about this project is that even though you are building
+essentially two entirely separate VCAs, they are laid out differently on the
+PCB. I’m not sure why this is the case; perhaps it has something to do with
+where the sockets and potentiometers would have landed. But it’s necessary to
+be very careful when selecting parts, because the layouts are <em>mostly</em> the same,
+except where they’re different.</p>
+<h3 id="resistance-is-futile">Resistance is Futile</h3>
+<figure class="inlineRight">
+<a href="/images/synth/VCAResistors.jpg">
+<img src="/images/synth/VCAResistors.jpg" loading="lazy" width="300px" alt="A bunch of resistors, with 0.1% tolerance resistors on the right with just a tiny difference in shade from the 1% resistors on the left.">
+</a>
+<figcaption>
+1% Resistors on Left, 0.1% Resistors on Right. Can you distinguish the light blues?
+</figcaption>
+</figure>
+<p>Soldering on the resistors was unexpectedly complicated.</p>
+<p>The manual notes that some of the resistors need to be closely matched, and
+therefore they have supplied <em>a few</em> ±0.1% tolerance resistors where they need
+to be as close as possible. This is really helpful, but it would have been even
+more helpful if they had mentioned it prior to page 51 of the manual! As above,
+I didn’t notice this difference when breadboarding and had to sort out the
+differently specced resistors.</p>
+<p>The manual states:</p>
+<blockquote>
+<p>You can identify these <strong>±0.1% tolerance resistors by their light blue bodies</strong></br>
+[emphasis in original]</p>
+</blockquote>
+<p>There is a difference in the blue, but it’s quite subtle.
+The ±0.1% and the ±1% resistors look near-identical, and I therefore had a bunch of
+sorting parts to do from my breadboard assembly (made even more complicated by
+the fact that 100Ω and 100kΩ resitors also look near-identical when you test them
+with a multimeter, and their color codes aren’t that distinct, either).</p>
+<p>Adding to the “light blue woes,” the colors in the photo in the manual (left,
+below) don’t match the tolerances in the layout diagram (right)!</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAManualPhoto.jpg">
+<img src="/images/synth/VCAManualPhoto.jpg" loading="lazy" width="400px" alt="This photo from the manual shows a bunch of resistors with different shades of blue, which don't match the tolerances specified in the parts diagram.">
+</a>
+<figcaption>
+Photo from Manual
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAManualDiagram.png">
+<img src="/images/synth/VCAManualDiagram.png" loading="lazy" width="400px" alt="The same resistors in the parts layout diagram.">
+</a>
+<figcaption>
+Diagram from Manual (Red Circles in Original)
+</figcaption>
+</figure>
+<div style="clear: both;">
+
+</div>
+<p>A <strong>much better way of distinguishing these different kinds of resistors</strong>
+(unmentioned in the manual!) is the
+fact that <em>the resistor tolerance is encoded in the color band code.</em> So a 1%
+tolerance 100k resistor will be “Brown Black Black Orange <strong>Brown</strong>” whereas a
+100k 0.1% tolerance resisotor will be “Brown Black Black Orange <strong>Violet</strong>”</p>
+<figure class="inlineRight">
+<a href="/images/synth/VCATransistorTester.jpg">
+<img src="/images/synth/VCATransistorTester.jpg" loading="lazy" width="100px" alt="A component tester with a transistor in it. The screen reads Transistor(NPN), hFE=536, Vbe=0.79V, Ic=7.4mA">
+</a>
+<figcaption>
+Measuring a Transistor
+</figcaption>
+</figure>
+<h3 id="choosing-transistors">Choosing Transistors</h3>
+<p>Most of the rest of the soldering was uneventful, but when it came time to
+attach the transistors I wanted to match them as closely as possible. I have a
+component tester which I used to measure the hFE of all four transistors
+included in the kit; their values were 524, 536, 552, and 572. So I paired the
+524 &amp; 536 and the 552 &amp; 572 transistors.</p>
+<h3 id="which-way-does-the-front-panel-go">Which Way Does the Front Panel Go?</h3>
+<p>At one point the manual says to attach the front panel, but this kit has two
+perfectly symmetrical VCAs and there are two possible ways to attach the front
+panel! Only one way will result in the jacks going into their labeled spaces on
+the front panel, though (with the “IN1” jack going into the hole labeled “IN1”),
+so be careful and check the labels on the board when attaching this.</p>
+<p>After attaching the front panel, the last step is to insert the two TL072 ICs.
+I always get a little nervous when I do these, because if you insert them the
+wrong way you will cook the ICs when you power them up. The two ICs are aligned
+differently on the board, the photo in the manual is unclear, and the “notch” on
+the IC doesn’t match the notch on the socket, so you will want to triple-check
+this before you move on.</p>
+<h2 id="powering-up">Powering Up</h2>
+<p>Mortiz suggests first testing the VCA using an oscillator
+(<a href="/posts/2023-03-02-building-a-synthesizer-3.html">which I have</a>) and
+just seeing if the “Offset” potentiometers work correctly, so I did that, and
+it sounded fine. Then you’re supposed to adjust the trimpots to center the
+oscillation around ground. This is mentioned way back in the breadboarding
+section of the manual, but it’s important to set your oscilloscope to DC coupled
+when doing this adjustment. If the trace doesn’t move when you adjust the
+trimpot then you probably have the oscilloscope input set to AC coupled.</p>
+<p>I had to fix a cold solder joint. It took me longer to find than it should have.
+Hint to future me: If something that used to work stops working, start your
+search with the jack socket into which you’ve just plugged a cable. One thing that
+confused me while I was fixing this was a feature I didn’t know the VCA had:
+IN1 is normalled to IN2, so you can use one input for both VCA sections (and
+similarly with CV1 &amp; CV2). This is mentioned in the manual, but only in the
+appendix.</p>
+<p>In the trace below, there is a sawtooth waveform from the VCO connected to IN1,
+and nothing connected to IN2 (so the IN1 signal is normalled to the second VCA).
+The Offset knobs are set to different positions. The yellow trace is OUT1 and
+the purple trace is OUT2. I’m pleased that there is far
+less noise in this (the PC board version of the VCAs) than there was in the
+breadboard version.</p>
+<figure>
+<a href="/images/synth/VCANormalled.png">
+<img src="/images/synth/VCANormalled.png" loading="lazy" width="600px" alt="Oscilloscope traces showing a purple trace and a yellow trace with the same signal at two different amplitudes">
+</a>
+<figcaption>
+VCA Outputs
+</figcaption>
+</figure>
+<p>With that finished, I now have a more or less functional synthesizer! There is
+no filter (yet!), but I can play a note and have an envelope which sounds nice.
+I’m very happy with the progress I’ve made!</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAFinishedFront.jpg">
+<img src="/images/synth/VCAFinishedFront.jpg" loading="lazy" width="400px" alt="Photo of the front panel of the finished VCA. The single module has 2 VCAs. Each has an Offset potentiometer, and IN, CV, and OUT jacks">
+</a>
+<figcaption>
+Front
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAFinishedRear.jpg">
+<img src="/images/synth/VCAFinishedRear.jpg" loading="lazy" width="400px" alt="Photo of the rear of the VCA. You can see a Eurorack power connector, blue trimpots, transistors, ICs for the op amps, capacitors, and a whole bunch of resistors">
+</a>
+<figcaption>
+Rear
+</figcaption>
+</figure>
+<div style="clear: both;">
+
+</div>
+<h2 id="resources">Resources</h2>
+<h3 id="instructions">Instructions</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/media/VCA_MANUAL_FINAL.pdf">mki x es.EDU VCA User Manual</a></li>
+</ul>
+<h3 id="simulations">Simulations</h3>
+<p>All of these simulations are by Moritz Klein</p>
+<ul>
+<li><a href="https://tinyurl.com/y8dbcu2q">Voltage Dividers</a></li>
+<li><a href="https://tinyurl.com/y9kqbqnj">Transistor vs. Resistor</a></li>
+<li><a href="https://tinyurl.com/ycdpkfnq">Transistor Amplifiers</a></li>
+<li><a href="https://tinyurl.com/yd9lavjv">The Emitter Resistor</a></li>
+<li><a href="https://tinyurl.com/y7ctexrd">Gain Changing Tricks</a></li>
+<li><a href="https://tinyurl.com/yd7shjwz">The Differential Amplifier</a></li>
+<li><a href="https://tinyurl.com/y7gxgq23">The Differential Amplifier (with Signal Subtraction)</a></li>
+<li><a href="https://tinyurl.com/y7kh5c72">The Differential Amplifier (with Mismatch Fix)</a></li>
+<li><a href="https://tinyurl.com/yce5ddsh">The MKI x ES.EDU VCA</a></li>
+</ul>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=yMrCCx6uqcE">Designing a classic transistor-VCA from scratch</a>
+by Moritz Klein (48:42)</li>
+<li><a href="https://www.youtube.com/watch?v=NuS8slR2Ue0">Introducing the mki x es.edu DIY VCA kit</a>
+by Moritz Klein (6:19)</li>
+<li><a href="https://www.youtube.com/watch?v=xxr5fT-E7m0">MK1 vs es.EDU Dual VCA - Build and Demo</a>
+by Quincas Moreira (31:04)</li>
+</ul>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Yes, I said <em>voltage.</em> bipolar junction transistors, despite
+popular mythology,
+<a href="https://www.youtube.com/watch?v=sIDD_GeF7eo">are voltage-controlled devices</a>.
+What’s more, I’m not just being pedantic here; this will become important in the
+discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
+    
+</div>
+]]></description>
+    <pubDate>Mon, 24 Jun 2024 00:00:00 UT</pubDate>
+    <guid>https://www.craigstuntz.com/posts/2024-06-24-building-a-synthesizer-10.html</guid>
+    <dc:creator>Craig Stuntz</dc:creator>
+</item>
+<item>
     <title>Building a Synthesizer, Chapter 9: A Field Guide to Oscillators</title>
     <link>https://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</link>
     <description><![CDATA[<div class="info">
@@ -28,7 +566,8 @@
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
 <li>9: A Field Guide to Oscillators</li>
-<li><a href="2023-01-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
 <p>If you own a synthesizer, or have worked with software synthesizer plugins, you
@@ -204,7 +743,8 @@ on the subject.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩�
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li>8: Building the Envelope Generator</li>
 <li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
-<li><a href="2023-01-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
 <p>At this point, I’ve built an oscillator, which makes sound, but one issue it has
@@ -984,7 +1524,8 @@ because you’re trying to solve with weird naming what would be better solved w
 <li>7: Building the Mixer</li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
 <li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
-<li><a href="2023-01-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
 <p>There are two “mixer” modules in the mki x es.EDU system, the “Mixer” module and
@@ -1241,6 +1782,7 @@ by Moritz Klein (26:38)</li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
 <li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1483,6 +2025,7 @@ Savage, John E., Addison-Wesley, 1998</li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
 <li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1765,6 +2308,7 @@ by Synth Diy Guy (17:53)</li>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
 <li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -2834,6 +3378,7 @@ particularly relevant to this topic</p>
 <li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
 <li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
 <li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -3317,246 +3862,6 @@ think this video series is very, very useful.</li>
 ]]></description>
     <pubDate>Thu, 02 Mar 2023 00:00:00 UT</pubDate>
     <guid>https://www.craigstuntz.com/posts/2023-03-02-building-a-synthesizer-3.html</guid>
-    <dc:creator>Craig Stuntz</dc:creator>
-</item>
-<item>
-    <title>Building a Synthesizer: Glossary and Electrical Connections</title>
-    <link>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</link>
-    <description><![CDATA[<div class="info">
-    Posted on February 23, 2023
-    
-</div>
-
-<div class="toc">
-<ul>
-<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
-<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
-<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
-<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
-<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
-<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
-<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
-<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
-<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
-<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
-<li>Glossary and Electrical Connections</li>
-</ul>
-</div>
-<p>If you play synths, are quite familiar with modular synths, and already
-understand why you can’t just plug a keyboard into a modular synth and expect
-stuff to work, or if you don’t care much about how modular synths work then feel
-free to skip this article.</p>
-<h2 id="a-glossary">A Glossary</h2>
-<p><strong>DIY</strong> stands for “Do It Yourself,” and, in this context, refers to building
-synths either from a kit or from just plain electronic components.</p>
-<p>A <strong>modular</strong> synth is one which is comprised of separate modules, such as
-oscillators and filters, which can usually be purchased separately and
-interconnected using patch cables. Most big-name synths that you buy from
-Roland, Korg, Yamaha, etc., today are <em>not</em> modular. Modular does not mean “any
-synth with patch cables,” however. There are synths called “<strong>semimodular</strong>”
-synths which can be patched but are part of a single, inseparable case and
-which are typically “normalled” together (that is, the synth will make a sound
-without any patch cables, and then you can change the sound via patching).
-A modular synthesizer is distinguished by the ability to mix and match
-modules from various manufacturers to produce a tone.</p>
-<p>A <strong>monophonic</strong> synth can only play one note at a time, like a trumpet. A
-<strong>polyphonic</strong> synth can play multiple notes at a time, like a piano. Polyphonic
-synths have a limited number of “voices,” which is very roughly the number of
-notes they can play at once. Polyphonic synths can usually play more than one
-preset at a time, perhaps splitting the keyboard between two or more instruments.</p>
-<p>Modular synths are monophonic, for the most part, because each module <em>usually</em>
-handles a single sound at a time. A polyphonic synth, on the other hand, will
-generally allow the player to create a preset once and play chords with it, by
-default. It’s pretty common to use multiple modules to make multiple sounds,
-concurrently, but this is closer to having multiple monophonic synths than to
-having a single, polyphonic synth.</p>
-<p><strong>MIDI</strong> stands for Musical Instrument Digital Interface. It’s an old, slow
-networking protocol which was designed to be the cheapest possible solution to
-a particular problem in the 1980s: How to play one polyphonic synthesizer using
-an external keyboard or sequencer. At one point in time (also during the 80s),
-it was accurately described as “the local area network with the world’s larget
-installed user base.” It’s hard to overstate the effect that MIDI had on music.
-For many, it made “home studios” <em>possible.</em> Today it’s <em>still</em> in use, almost
-entirely unchanged, although it’s being ever-so-gradually edged out by USB.</p>
-<p>An <strong>analog synthesizer</strong> makes sounds using analog circuitry, as opposed to a
-<strong>digital synthesizer</strong>, which makes sounds using digital signal processing.
-Modular synth components <em>tend</em> to be analog, but there’s no rule which says
-they have to be, and digital modules do exist. I mention this because it’s
-orthogonal to the interface. In other words, MIDI is a digital interface which
-can be used to control either analog or digital synths. Voltage control is
-an analog interface which can be used to control either analog or digital
-synths or modules.</p>
-<h2 id="voltage-control">Voltage Control</h2>
-<p>Most commercial synths include a MIDI interface, with the exception of modular
-gear which more often uses an <em>even older…</em> well… “standard” is not quite
-the right word. Anyway, you can connect modules together using an analog protocol
-called “Voltage Control” (or “CV/Gate” after the specific connections). You can
-also connect a keyboard or sequencer to a modular synth using the same
-connections, which might be useful if your keyboard or hardware sequencer has
-CV/Gate outputs (some do, some don’t) and your modular synth does not have a
-MIDI interface… module.</p>
-<p>These are analog signals, and will allow you, if you plan carefully, to connect two
-modules together and probably control them with a keyboard or external sequencer,
-although with greatly limited features in comparsion with a keyboard-to-synth
-MIDI connection. “Greatly limited” here means that features of MIDI such as
-support for chords, multiple channels over a single wire, and such niceties as
-keyboard velocity and aftertouch, either don’t exist at all or require
-additional work to support.</p>
-<p>Taking a simple example, where you want to plug a keyboard into a modular synth,
-well, you have to look and consider your options. If your keyboard has only a
-MIDI output, then you must use a MIDI-to-CV module. If your keyboard has outputs
-labeled “CV,” “Gate,” “Pitch,” “Trigger,” “Mod,” or similar, then you can
-probably connect these directly to some modules on a modular synth. However, the
-signals carried on these outputs can vary, depending upon who implemented them.</p>
-<figure>
-<a href="/images/synth/NovationSLMKIIIBackPanel.png">
-<img src="/images/synth/NovationSLMKIIIBackPanel.png" width="786px" loading="lazy" alt="The back panel of a Novation SL MkIII, showing CV, Gate, and Mod outputs">
-</a>
-<figcaption>
-The back panel of a Novation SL MkIII, including CV outputs
-</figcaption>
-</figure>
-<p>On a modular synthesizer, there are three general kinds of signals: CV/pitch,
-gate/trigger, and audio. Although note that it’s generally fine, encouraged, even
-to plug, say, the CV output of one module into the audio input of another
-module, or whatever. <em>In general</em> you can plug anything into anything, although
-there is no guarantee it will make a pleasing sound!</p>
-<h3 id="cv-or-pitch">CV (or Pitch)</h3>
-<p>A pitch Control Voltage (CV) is expected, in the <a href="#eurorack">Eurorack</a> world
-(although not necessarily in modular synthesis in general),
-to be 1V per octave. This mostly means that an A1 (the note “A” in the second
-octave of a standard, 88 key piano) is 1V and an A5 is 5V. Mostly! You may
-encounter other “encodings” of pitch, such as those where the voltage goes into
-the negative. But 1V/octave, starting at 0V is the system most commonly used
-and that’s what the mks x es.EDU modules use.</p>
-<p>Given that the CV will have a voltage corresponding to the note that you’re
-playing, you might ask, “But what if I play a chord?” Simple! You don’t get to
-encode chords with CV. Most keyboards will just choose the highest or most
-recent note that you’ve played and set the CV to that. The expectation is that
-you’re going to use this connection with a monophonic synthesizer or with a
-single modular “voice.” If you wanted to play a three-note chord on a keyboard
-and have that voiced by a modular synth, you would need three separate CV and
-Gate outputs from your keyboard, and three separate oscillators on your modular
-synth. I’ve never seen a keyboard with three CV outputs, although you can buy
-<a href="https://six4pix.net/product/cvocd/">a MIDI-to-CV interface which has more</a>.</p>
-<p>[In 1968, Wendy Carlos released the album <em><a href="https://www.wendycarlos.com/+sob.html">Switched-On Bach,</a></em>
-where she played
-many of Bach’s (very much polyphonic) compositions on the (very much monophonic)
-Moog synthesizer. How did she do this? Simple, she played one voice at a time
-into an 8-track tape recorder. It’s an incredible feat of musicianship that the
-result sounds so good!]</p>
-<h4 id="mod">Mod</h4>
-<p>It’s not uncommon for keyboards to have an output or two called “Mod.” Mod is
-electrically the same as CV/Pitch, but instead of sending pitch there the
-keyboard can translate some other MIDI
-<a href="https://www.whippedcreamsounds.com/midi-cc-list/">continous controller</a>
-to a voltage sent
-to that jack. Judging by the name I guess the expectation is that you’ll assign
-the mod wheel, but it could be set to anything. From there it translates
-whatever you’ve set it to a 0-5V output on the Mod jack.</p>
-<figure class="inlineRight">
-<a href="/images/synth/MoogLittlePhattyCVInputs.png">
-<img src="/images/synth/MoogLittlePhattyCVInputs.png" width="180px" loading="lazy" alt="The CV inputs of a Moog Litte Phatty synthesizer, showing Pitch CV, Vol CV, Filter CV, and KB Gate jacks">
-</a>
-<figcaption>
-Moog Little Phatty CV inputs
-</figcaption>
-</figure>
-<h4 id="other-cv">Other CV</h4>
-<p>If you just say “CV” and don’t say anything else, people will tend to presume
-you are talking about pitch CV (e.g., on the Novation back panel above the
-“CV” jack carries pitch information). But as seen with “Mod,” other information
-can be carried using a Control Voltage as well. The Moog Little Phatty seen
-at right will take Volume and Filter controls as well as pitch and gate over its
-CV inputs.</p>
-<div style="clear: both;">
-
-</div>
-<figure class="inlineRight">
-<a href="/images/synth/MoogModelDCVOuts.png">
-<img src="/images/synth/MoogModelDCVOuts.png" width="213px" loading="lazy" alt="The CV outputs of a Minimoog synthesizer, showing After Pressure, Pitch, V-Trig, and Velocity jacks">
-</a>
-<figcaption>
-Minimoog CV Outputs
-</figcaption>
-</figure>
-<h3 id="gate-or-trigger">Gate or Trigger</h3>
-<p>In addition to Control Voltage you may have noticed a “Gate” output. This is
-a simple on and off, binary signal (where “on” might be anywhere between 5V and
-10V, and “off” is 0V), representing whether the key is pressed/on or
-released/off. A few devices, such as the Minimoog, have
-“<a href="https://noiseengineering.us/blogs/loquelic-literitas-the-blog/getting-started-gates-vs-triggers">Trigger</a>”
-outputs instead of or in addition to Gate; trigger is a short pulse which
-happens at the start of a note and returns quickly to zero, in contrast to
-Gate which stays high as long as the note is played.</p>
-<p>Why not put pitch CV and Gate on the same signal? One reason is because CV goes
-down to 0. Another reason is that you might want to send them to different
-modules, say, a pitch CV to an oscillator and gate to an envelope generator.</p>
-<h2 id="eurorack"><a name="eurorack"></a>Eurorack</h2>
-<p>Not all modules play nicely together, but a plurality of
-modules sold today follow the <strong>Eurorack,</strong> um, again, not “standard,” exactly.
-Suffice it to say that if you buy two Eurorack modules and play with them
-enough, you can probably get them to do something interesting. Anyhow, Eurorack
-includes both a common physical form factor, CV voltage (mostly!), and power
-requirements. Usually.</p>
-<p>In the absence of a “Eurorack standard,” most makers take a “look at what
-Doepfer did on the <a href="https://doepfer.de/a100e.htm">A-100</a> and do something
-similar” approach. “Eurorack
-compatible” synth modules tend to follow the following conventions:</p>
-<p>The <strong>physical form factor,</strong> or the size of the modules. Eurorack modules are
-(mostly!) 3U (three rack units, or 128.5 mm) high, and their widths are
-“quantized” by “HP,” or Horizontal Pitch units. This means they are usually
-some multiple of 5.08 mm wide.</p>
-<p>The <strong>power requirements.</strong> The Eurorack power bus has a 16 pin connector for each
-module. However, it’s very, very common for modules to not use the first 6
-pins and only have a 10-pin connector on the “module” end of the power cable.</p>
-<p><a href="/images/synth/EurorackPowerPinout.png"><img src="/images/synth/EurorackPowerPinout.png" width="151px" alt="a list of pins in the Eurorack power connectors and which voltages each one carries" style="float: left;"></a>
-<a href="/images/synth/EurorackPowerConnector.png"><img src="/images/synth/EurorackPowerConnector.png" width="112px" alt="A Eurorack power connector socket" style="float: right;"></a>
-At the left is a pinout from the mks x es.EDU schematic. To the right is a
-picture of one of the 14 sockets in the mks x es.EDU power supply, which you can
-connect to a single module.</p>
-<p>The first thing you’ll notice is there’s a lot of redundancy there. The
-connectors are 16 pins, organized into two columns of eight pins each. Each
-two-pin “row” carries exactly the same signal; they are connected together.
-Furthermore, there are three rows (six pins total) of ground pins, which, again,
-are connected together.</p>
-<p>The power provided by the bus is +12 and -12 VDC. Some have argued that it would
-have been better if it specified ±15VDC, but Eurorack really was aligned to the
-specific needs of one system, the Doepfer A-100, not modular synths in general.</p>
-<p>Finally, there are CV, Gate, and +5V power wires. Most modules
-do not use, and don’t even include wires for, the Gate and CV on the bus
-(expecting you to instead connect Gate and CV via jacks on the front
-of a module), and +5V connections. I guess the idea behind the Gate and CV
-connections is you could plug a keyboard or MIDI interface into these and then
-have the signal “normalled” (connected by default, until you plugged a patch
-cable in elsewhere) to the CV/gate input on some modules. At any rate, not many
-modules use this feature at all, requiring you to connect the Gate/CV through
-the front panel of the module. Similarly, +5V power is simply not needed by most
-modules.</p>
-<p>There is a <a href="http://www.elby-designs.com/webtek/documents/eurosynth-specification.htm">EuroSynth</a>
-specification which attempts to take the mishmash of Eurorack informal specs and
-formalize them. Needless to say, essentially no manufacturers have adopted this
-spec.</p>
-<p>In the <a title="The mki x es.EDU DIY System" href="2023-02-21-building-a-synthesizer-1.html">next post</a> we will look at the mki x es.EDU DIY System in
-more detail.</p>
-<h2 id="resources">Resources</h2>
-<ul>
-<li>The <a href="https://doepfer.de/a100_man/a100m_e.htm">Construction Details</a> document
-on Doepfer’s site gives information about the physical form factor of Eurorack.</li>
-<li>The <a href="https://doepfer.de/a100_man/a100t_e.htm">Technical Details</a> document on
-Doepfer’s site is a good overview of volatage control in general. It’s also
-informative if you’d like to know more about the A-100, which other “Eurorack”
-manufacturers are using as an example.</li>
-</ul>
-
-<div class="info">
-    
-    Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
-    
-</div>
-]]></description>
-    <pubDate>Thu, 23 Feb 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-02-23-building-a-synthesizer-glossary.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 

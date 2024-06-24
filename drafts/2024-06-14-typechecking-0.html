@@ -54,8 +54,13 @@
 </div>
 <p>Compiler tutorials often start and end with parsing, and while parsing is very
 interesting, I think, there is more to writing a compiler than parsing syntax!
-In this series I’ll be explaining how to type check (and infer types from) code.</p>
-<p>A tutorial on this should be:</p>
+In this series I’ll be explaining how to type check (and infer types from) code.
+Writing a compiler is a challenging problem, but there are recipes that you can
+follow, and if you follow these recipes, then anyone with a bit of programming
+skill and some dedication can do it. Writing a typechecker is proving theorems
+about code, which <em>sounds</em> challanging, but again, <em>you can do it</em> by following a
+recipe.</p>
+<p>A tutorial should be:</p>
 <ul>
 <li>Approachable, as in readable by someone without a CS degree</li>
 <li>Thorough, as in covering at least the basics of most of what you want a type
@@ -63,40 +68,37 @@ checker to do</li>
 <li>Concise. There’s a place for books like
 <a href="https://www.cis.upenn.edu/~bcpierce/tapl/">Types and Programming Languages</a>,
 but someone who just wants to write a type checker to learn about compilers
-should not have to read and understand a whole textbook to do so</li>
+should not have to read and understand a whole college textbook to do so</li>
 <li>Modern, because type checking has changed in the last 20 years and we don’t
 want to leave out contemporary techniques</li>
 </ul>
 <p>The best introduction to type checking, by the above criteria, that I know is called
 <a href="https://davidchristiansen.dk/tutorials/nbe/">Checking Dependent Types with Normalization by Evaluation: A Tutorial</a>,
 by David Thrane Christiansen. However, it assumes a certain amout of knowledge
-(for example: what even is the ‘untyped lambda calculus?’),
+(for example: what even is the ‘untyped lambda calculus’ and what does
+‘normalizing’ it mean?),
 and I wanted to write an introduction “for newbies.” So I will be following his
 tutorial, but I will be adding a lot of explanations along the way.</p>
-<p>David provides two versions of his tutorial,
-<a href="https://davidchristiansen.dk/tutorials/nbe/">one written in Racket</a> and the
-other
-<a href="https://davidchristiansen.dk/tutorials/implementing-types-hs.pdf">written in Haskell</a>.
-I’ve translated those two to a third version
-<a href="https://github.com/CraigStuntz/bidi/">written in Swift</a>. Why Swift? It’s not
-because Swift is especially well-suited to this task. But I wanted to learn
-Swift, and one way which helps me learn is to write some non-trivial, so now
-there’s a Swift version. I am hoping that this version will
-increase the number of people who want to learn from David’s tutorial.</p>
+<h3 id="but-craig-you-annoy-me">But, Craig, You Annoy Me 🙄</h3>
+<p>Perhaps you find my annotations and additions too verbose. That’s fine! Just
+<a href="https://davidchristiansen.dk/tutorials/nbe/">read David’s tutorial</a>! If you
+<em>can</em> understand it without further explanation, then that’s the most efficient
+way to learn the material. My series is intended for people unfamiliar with some
+of the knowledge that is assumed in David’s version.</p>
 <h2 id="type-equivalence">Type Equivalence</h2>
 <p>In order to learn to type check a program, you must learn how to decide whether
 or not two types are equivalent, because a program type checks
 successfully when the type it is expecting in some place is “equivalent” to the
 type it actually got in that place.</p>
 <p>This sounds really easy, and indeed if the only two types in your type system
-were <code>Int</code> and <code>Boolean</code> then it would be really easy. But types con be
+were <code>Int</code> and <code>Boolean</code> then it would be easy. But types con be
 considerably more complex than this, and in fact when we get to dependent types
 we will see that there is <em>no general answer</em> to this question. However, we can
 answer the question often enough to make a compiler that works for most of the
 code that someone will want to write, and might time out when they do something
 extremely odd, but won’t ever produce incorrect results.</p>
 <h2 id="meet-the-languages">Meet the Languages</h2>
-<p>The tutorial will be in three general parts. You should complete them <em>in order.</em></p>
+<p>The tutorial will be in three sections. You should complete them <em>in order.</em></p>
 <table>
 <colgroup>
 <col style="width: 51%" />
@@ -123,23 +125,52 @@ extremely odd, but won’t ever produce incorrect results.</p>
 </tr>
 </tbody>
 </table>
-<p>Each section will use a different language which we will use to develop our
-knowledge of type checking. We will learn how to type check the simply typed
-lambda calculus because it is easier to do that than to type check Swift. You
+<p>Each section we will implement a different language. We will learn how to type
+check the simply typed lambda calculus before Tartlet because it is easier to do
+that than to type check Tartlet, and type checking Tartlet is easier than type
+checking Swift. You
 have to crawl before you can walk, as they say. But the principles we explore
 here should be helpful to you if you go farther, and, as we will see when we get
 into dependent typing, there is some real sophistication in this material.</p>
 <p>The langauge Tartlet is a <em>toy language</em> which “is very much like the language
-Pie from [the book] <em>The Little Typer,</em> except it has fewer features and simpler
-rules.”</p>
-<p>Pie, is not used in this tutorial. However, it can be nice to have Pie around if
-you’d like to try out Pie/Tartlet with a more humane syntax.</p>
+Pie from [the book] <a href="https://thelittletyper.com/"><em>The Little Typer,</em></a> except it
+has fewer features and simpler rules.”</p>
+<p>The language Pie will not be used in this tutorial. However, it can be nice to
+have Pie around if you’d like to try out Pie/Tartlet with a more humane syntax.</p>
+<h2 id="swift">Swift</h2>
+<p>David provides two versions of his tutorial,
+<a href="https://davidchristiansen.dk/tutorials/nbe/">one written in Racket</a> and the
+other
+<a href="https://davidchristiansen.dk/tutorials/implementing-types-hs.pdf">written in Haskell</a>.
+I’ve translated those two to a third version
+<a href="https://github.com/CraigStuntz/bidi/">written in Swift</a>. Why Swift? It’s not
+because Swift is especially well-suited to this task. But I wanted to learn
+Swift, and one way which helps me learn is to write some non-trivial, so now
+there’s a Swift version.</p>
+<p>You should use whichever version works best for you! (I also found
+<a href="https://github.com/heyrutvik/nbe-a-tutorial">a Scala version</a> I appreciate that
+Swift is not everybody’s cup of tea, which is why it’s great that there are now
+<em>four</em> languages to choose from. If Haskell or Racket works better for you, then
+use that version!</p>
+<p>Personally I <em>do</em> like both Racket and Haskell more than Swift, but I recognize
+that there is no “one best” language in the world and that different people have
+their own preferences! Swift is also more similar to many other “mainstream”
+languages such as C# and Java than Haskell and Racket are. I am hoping that
+this version will increase the number of people who want to learn from David’s
+tutorial.</p>
+<p>I tried to make this series not assume <em>too much</em> Swift knowledge. When I
+introduce a feature which is “uniquely Swift,” (as in, works differently than
+other languages) I will give a little background on that feature. The idea is
+to make the series accessible to people who have general programming experience,
+but not so much (or any) in Swift, <em>per se.</em></p>
 <h2 id="installing-softare">Installing Softare</h2>
 <p>If you want to try the Swift code I’ve written, you need a few dependencies; see
-<a href="https://github.com/CraigStuntz/bidi/">the README</a> for the simple instructions.</p>
-<h3 id="installing-pie">Installing Pie</h3>
+<a href="https://github.com/CraigStuntz/bidi/">the README</a> for the simple instructions.
+My Swift version will work fine in Xcode, if you like that IDE, but Xcode is not
+required to work in Swift, and I don’t personally use it.</p>
+<h3 id="installing-racketpie">Installing Racket/Pie</h3>
 <p>If you want to use the Pie language in Racket, (or if you want to try the code
-in the Racket version of the tutorial) you will first need to install
+in the Racket version of the tutorial) you will first probably want
 Dr. Racket if you don’t have it already. One way to do this on a Mac is:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> brew install <span class="at">--cask</span> racket</span></code></pre></div>
 <p>You can then install Pie using the <code>raco</code> package manager for Racket:</p>
@@ -147,7 +178,7 @@ Dr. Racket if you don’t have it already. One way to do this on a Mac is:</p>
 <p>You can then open Dr. Racket, and type the traditional “Hello World” of Pie:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a># lang pie</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">'spinach</span></span></code></pre></div>
-<p>Then click the “Run” button and Pie will respond:</p>
+<p>Then click the “Run” button and Pie will respond:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">the</span> Atom <span class="dt">'spinach</span>)</span></code></pre></div>
 <p>Congratulations! You’ve now done more Pie programming than 99.9% of your
 colleagues!</p>
@@ -156,6 +187,10 @@ colleagues!</p>
 <a href="https://www.haskell.org/get-started/">follow the instructions here</a>. This is
 optional; you can use it to follow along with the Haskell version of the
 tutorial if you choose to.</p>
+<p>I haven’t found a repo with the Haskell source code from
+<a href="https://davidchristiansen.dk/tutorials/implementing-types-hs.pdf">the PDF</a>, but
+you can get the
+<a href="https://github.com/david-christiansen/pie-hs">Haskell source code to Pie</a>.</p>
 <h2 id="other-references">Other References</h2>
 <p>This tutorial series is based on Checking Dependent Types with Normalization
 by Evaluation: A Tutorial <a href="https://davidchristiansen.dk/tutorials/implementing-types-hs.pdf">(Haskell version)</a>
@@ -166,6 +201,13 @@ much of the same material in a very readable way.</p>
 <p>There is a survey paper, <a href="https://dl.acm.org/doi/10.1145/3450952">Bidirectional Typing</a>,
 by Jana Dunfield and Neel Krishnaswami, which was published by ACM Computing
 Surveys in 2021.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p><code>the</code> is a type declaration. The response means that <code>'spinach</code> has the
+type <code>Atom</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 <div class="info">
     
