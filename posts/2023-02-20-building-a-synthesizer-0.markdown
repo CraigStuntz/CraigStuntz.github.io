@@ -17,6 +17,7 @@ tags: synthesis, diy, electrical engineering
 * [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
 * [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
 * [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
+* [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 

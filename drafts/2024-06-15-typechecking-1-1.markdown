@@ -46,7 +46,8 @@ let t3 = Type.list(t1)
 let t4 = Type.list(t2)
 assert(t3 == t4)
 ```
-<figcaption>Structural equality</figcaption>
+<figcaption>Structural equality; different instances are equal when they contain 
+the same values</figcaption>
 </figure>
 
 As noted earlier, if the only types your programming language contained were 

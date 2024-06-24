@@ -6,6 +6,21 @@ chapterName: Building the VCA
 tags: synthesis, diy, electrical engineering
 ---
 
+<div class="toc">
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
+* [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
+* [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
+* [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
+* [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
+* [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
+* [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
+* 10: Building the VCA
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
+</div>
+
 ## What Even Is a VCA?
 
 If you have used keyboard/desktop style synthesizers but not modular synths, 
@@ -61,7 +76,7 @@ press a key. Success!
 
 However, a VCA can be used for other applications; I'd recommend watching 
 [this video](https://www.youtube.com/watch?v=xxr5fT-E7m0) (particularly the 
-second half) if you'd like to see examples. 
+last two thirds) if you'd like to see examples. 
 
 ## How a VCA Works
 
@@ -74,7 +89,7 @@ a control voltage.
 
 We know how potentiometers work, and the "real" volume knob is just one of 
 those, with an op amp for isolation and gain. But how does a control voltage 
-controlled volume knob work? If there was such a thing as a "voltage controlled
+controlled volume knob work? If we ccould find such a thing as a "voltage controlled
 resistor," that would do the trick. It sounds like something which could be done
 with an op amp, but it would require a somewhat less common circuit, called an
 operational transconductance amplifier (or OTA) instead. These tend to have an 
@@ -111,40 +126,6 @@ knob. Moving right along...
 
 ### How a Bipolar Junction Transistor Works
 
-Now the instructions take a (pages-long) digression into how transistors, and 
-bipolar junction transistors (BJTs) in particular, work. I won't repeat that 
-here, but there are a couple of points that I found confusing which I would 
-like to try and clarify.
-
-Once again we get to the point that the purpose of these kits is as
-much more about teaching you how electronics work than it is about building
-the greatest synthesizer in the world. We've used a couple of transistors in 
-the past, but we haven't gone very deep into how the work. So, no time like the
-present!
-
-In the VCO kit we used a transistor as a kind of variable resistor controlled by
-the base input. The instructions spend a good bit of time explaining why a 
-transistor is not, in fact, a resistor. A transistor provides resistance, clearly. 
-You can control the amount of resistance using the voltage you connect
-to the base. (Yes, I said _voltage._ bipolar junction transistors, despite 
-popular mythology, 
-[are voltage-controlled devices](https://www.youtube.com/watch?v=sIDD_GeF7eo).
-What's more, I'm not just being pedantic here; this will become important in the
-discussion which follows.)
-
-But resist<em>ance</em> is not the same as being a good resist<em>or</em>. A 
-transistor is designed to allow current to (easily) flow in only one
-direction, unlike a resistor, and, also unlike a resistor, a transistor will 
-pass a fairly steady current regardless of voltage applied to the collector. 
-So the transistor is not a drop-in replacement for a resitor, even if it was 
-useful in supplying a 
-voltage-controlled _resistance_ when building the VCO. It's also noteworthy that
-the VCO required a resistance which varied exponentially with the input control
-voltage, and thus it's super convenient to use a transistor, which more or less
-does just this. With the VCA, however, we want the volume to change linearly 
-with the control voltage, so we will need to be careful about how we use the 
-transistors. 
-
 If you look up a [Bipolar Junction Transistor on Wikipedia](https://en.wikipedia.org/wiki/Bipolar_junction_transistor)
 or in many electronics books, the description will start with a discussion of
 "P-type" and "N-type" semiconductors, and at the end you still won't have a 
@@ -153,6 +134,38 @@ Lanterman calls the "magic elves theory," and describe what they do without
 explaining the physical implementation, instead saying, "they do it that way 
 because the magic elves inside make it happen." This is actually similar to 
 [the "transistor man" presentation in Horowitz and Hill's _The Art of Electronics_](https://blog.adafruit.com/2015/06/17/the-original-full-size-negative-of-transistor-man-that-was-used-in-the-first-edition-of-art-of-electronics-photos-electronicsbook/).
+
+The purpose of these kits is perhaps more
+about teaching you how electronics work than it is about building
+the greatest synthesizer in the world. We've used a couple of transistors in 
+the past, but we haven't gone very deep into how the work. So, no time like the
+present! [The instructions](https://www.ericasynths.lv/media/VCA_MANUAL_FINAL.pdf) 
+now take a (pages-long) digression into how transistors, and 
+bipolar junction transistors (BJTs) in particular, work. I won't repeat that 
+here, but there is a points that I found confusing which I would like to try and 
+clarify.
+
+In the VCO kit we used a transistor as a kind of variable resistor controlled by
+the base input. The VCA instructions spend a good bit of time explaining why a 
+transistor is not, in fact, a resistor. A transistor provides resistance, 
+clearly: A fairly high resistance value when no voltage is connected to the base!
+You can control the amount of current passing through the device using the 
+voltage you connect to the base.[^resistance] 
+
+But resist<em>ance</em> is not the same as being a good resist<em>or</em>. A 
+transistor is designed to allow current to (easily) flow in only one
+direction, unlike a resistor, and, also unlike a resistor, a transistor will 
+pass a fairly steady current regardless of voltage applied to the collector. 
+So the transistor is not a drop-in replacement for a resit<em>or</em>, even if it was 
+useful to us in supplying a 
+voltage-controlled _resistance_ when building the VCO. It's also noteworthy that
+the VCO required a resistance which varied exponentially with the input control
+voltage, and thus it's super convenient to use a transistor, which more or less
+does just this. With the VCA, however, we want the volume to change linearly 
+with the control voltage, so we will need to be careful about how we use the 
+transistors. 
+
+#### The Problem with BJTs
 
 One problem that BJTs have is that they are not very consistent devices. Even
 BJTs from the same manufacturer with the same part number will vary in how much
@@ -171,11 +184,11 @@ So, we would like to compensate for these variations. How do we do that?
 </figure>
 
 We start with a circuit much like the one on the right but without the 10k 
-resistor at the bottom. Then we get to the first point that I found confusing! 
+resistor at the bottom. Then we get to the point that I found confusing! 
 Moritz talks about "introducing negative feedback" by connecting a resistor 
-between the transistor's emitter and ground. Again, that's the 10k resistor at
+between the transistor's emitter and ground. That's the 10k resistor at
 the bottom of the circuit at right. What I didn't understand was: A resistor is 
-a passive component; how could introducing just one resistor provide any kind of 
+a passive component; how could introducing just one resistor provide *any* kind of 
 feedback? 
 
 The answer is that although the resistor is passive, the transistor is very much
@@ -188,17 +201,18 @@ a resistor between the emitter and ground, things get more complicated.
 A transistor is "active" when the voltage between the base and the emitter is 
 over a certain threshold, around 0.6V. When the transistor is active, current
 will pass between both the base and the emitter and the collector and the emitter
-(for an NPN transistor). When a current flows across a resistor you get a 
+(for an NPN transistor). This current flowing out of the emitter has to flow 
+across the 10k resostor. When a current flows across a resistor you get a 
 voltage. Therefore the voltage at the transistor's emitter is no longer being 
 held at ground. Instead it varies depending upon the amount of current passing
 through the resistor. And this change from "voltage is fixed at ground" to 
 "voltage varies with the amount of current being passed out of the emitter and 
 across the resistor" is the key to understanding how adding just that one 
 resistor can be called "negative feedback." The more current that passes through
-the resitor, the higher the voltage difference across its two ends will be, 
+the resistor, the higher the voltage difference across its two ends will be, 
 right? However, this means that the end of the resistor connected to the emitter
 will be at a higher voltage, and therefore the higher the current, the lower 
-the difference in voltage between the transistor's base and emitter will be --
+the difference in voltage between the transistor's base and emitter will be...
 which reduces the current! This is the negative feedback.
 
 Therefore, if something changes the gain of the transistor, such as its 
@@ -230,8 +244,8 @@ resistance at the collector, and similarly for the emitter. However, that's not
 quite the full story, because a transistor has a small internal 
 [transresistance](https://en.wiktionary.org/wiki/transresistance) 
 in its emitter region, and one way you can think about thermal instability in a
-transistor is that the transreistance changes with temperature. So a more 
-accurate model is:
+transistor is that the transreistance changes with temperature. So a somewhat 
+more accurate model is:
 
 $$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$
 
@@ -273,13 +287,14 @@ When we look at the output on a scope, though, the results are not so great:
 The yellow trace here is the output of a function generator I'm using as my 
 "signal." This is like the audio signal I would be running through the VCA in 
 the real world. The magenta trace is the input into the base, and the cyan trace
-is the VCA's output at the jack. 
+is the VCA's output at the jack. These last two look "blurry," but note that the
+vertical scale on the oscilloscope is much smaller for them. (20mV/div vs. 1V/div.)
 
 ### Breadboarding a Differential Amplifier
 
 There are a few problems with the circuit we have built so far:
 
-* Poor amplification 
+* Poor amplification (low gain)
 * It's noisy
 * The output is inverted
 * It's still sensitive to temperature variation in the resistors, even though
@@ -380,7 +395,7 @@ One curious fact about this project is that even though you are building
 essentially two entirely separate VCAs, they are laid out differently on the 
 PCB. I'm not sure why this is the case; perhaps it has something to do with 
 where the sockets and potentiometers would have landed. But it's necessary to 
-be very careful when selecting parts, because the layoust are *mostly* the same,
+be very careful when selecting parts, because the layouts are *mostly* the same,
 except where they're different.
 
 ### Resistance is Futile
@@ -406,6 +421,7 @@ The manual states:
 > You can identify these **±0.1% tolerance resistors by their light blue bodies**</br>
 > [emphasis in original]
 
+There is a difference in the blue, but it's quite subtle. 
 The ±0.1% and the ±1% resistors look near-identical, and I therefore had a bunch of 
 sorting parts to do from my breadboard assembly (made even more complicated by
 the fact that 100Ω and 100kΩ resitors also look near-identical when you test them 
@@ -473,7 +489,8 @@ just seeing if the "Offset" potentiometers work correctly, so I did that, and
 it sounded fine. Then you're supposed to adjust the trimpots to center the 
 oscillation around ground. This is mentioned way back in the breadboarding 
 section of the manual, but it's important to set your oscilloscope to DC coupled 
-when doing this adjustment. 
+when doing this adjustment. If the trace doesn't move when you adjust the 
+trimpot then you probably have the oscilloscope input set to AC coupled.
 
 I had to fix a cold solder joint. It took me longer to find than it should have.
 Hint to future me: If something that used to work stops working, start your 
@@ -481,11 +498,41 @@ search with the jack socket into which you've just plugged a cable. One thing th
 confused me while I was fixing this was a feature I didn't know the VCA had: 
 IN1 is normalled to IN2, so you can use one input for both VCA sections (and 
 similarly with CV1 & CV2). This is mentioned in the manual, but only in the 
-appendix. 
+appendix.
+
+In the trace below, there is a sawtooth waveform from the VCO connected to IN1,
+and nothing connected to IN2 (so the IN1 signal is normalled to the second VCA).
+The Offset knobs are set to different positions. The yellow trace is OUT1 and 
+the purple trace is OUT2. I'm pleased that there is far
+less noise in this (the PC board version of the VCAs) than there was in the 
+breadboard version.
+
+<figure>
+<a href="/images/synth/VCANormalled.png">
+<img src="/images/synth/VCANormalled.png" loading="lazy" width="600px" alt="Oscilloscope traces showing a purple trace and a yellow trace with the same signal at two different amplitudes">
+</a>
+<figcaption>VCA Outputs</figcaption>
+</figure>
 
 With that finished, I now have a more or less functional synthesizer! There is 
 no filter (yet!), but I can play a note and have an envelope which sounds nice.
 I'm very happy with the progress I've made!
+
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAFinishedFront.jpg">
+<img src="/images/synth/VCAFinishedFront.jpg" loading="lazy" width="400px" alt="Photo of the front panel of the finished VCA. The single module has 2 VCAs. Each has an Offset potentiometer, and IN, CV, and OUT jacks">
+</a>
+<figcaption>Front</figcaption>
+</figure>
+
+<figure class="horizontalTiles">
+<a href="/images/synth/VCAFinishedRear.jpg">
+<img src="/images/synth/VCAFinishedRear.jpg" loading="lazy" width="400px" alt="Photo of the rear of the VCA. You can see a Eurorack power connector, blue trimpots, transistors, ICs for the op amps, capacitors, and a whole bunch of resistors">
+</a>
+<figcaption>Rear</figcaption>
+</figure>
+<div style="clear: both;"></div>
+
 
 ## Resources
 
@@ -515,3 +562,9 @@ All of these simulations are by Moritz Klein
   by Moritz Klein (6:19)
 * [MK1 vs es.EDU Dual VCA - Build and Demo](https://www.youtube.com/watch?v=xxr5fT-E7m0)
   by Quincas Moreira (31:04)
+
+[^resistance]: Yes, I said _voltage._ bipolar junction transistors, despite 
+popular mythology, 
+[are voltage-controlled devices](https://www.youtube.com/watch?v=sIDD_GeF7eo).
+What's more, I'm not just being pedantic here; this will become important in the
+discussion which follows.

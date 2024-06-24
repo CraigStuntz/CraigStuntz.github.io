@@ -17,7 +17,8 @@ tags: synthesis, diy, electrical engineering
 * [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
 * 8: Building the Envelope Generator
 * [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
-* [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
+* [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
 At this point, I've built an oscillator, which makes sound, but one issue it has 

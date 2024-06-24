@@ -17,7 +17,8 @@ tags: synthesis, diy, electrical engineering
 * 7: Building the Mixer
 * [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
 * [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
-* [Glossary and Electrical Connections](2023-01-23-building-a-synthesizer-glossary.html)
+* [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
 There are two "mixer" modules in the mki x es.EDU system, the "Mixer" module and
