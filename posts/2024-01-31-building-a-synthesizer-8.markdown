@@ -554,6 +554,10 @@ circuit.
 * [Modwiggler thread](https://www.modwiggler.com/forum/viewtopic.php?t=259994)
 * [Modulargrid page](https://www.modulargrid.net/e/erica-synths-edu-envelope)
 
+### Product Pages
+* [EDU DIY EG](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-eg/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
 ### Simulations
 
 * [Simplest Envelope](https://tinyurl.com/y7ea7j3a)

@@ -180,6 +180,10 @@ In the next installment of this series I'll [breadboard the VCO](2023-03-02-buil
 ### Instructions
 * [mki x es.EDU Eurorack Case User Manual](https://www.ericasynths.lv/media/instrukcija_2.pdf)
 
+### Product Pages
+* [DIY eurorack case for mki x es.EDU system](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-1x84hp-case/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
 ### Videos
 * [DIY SYNTH PSU: How to design a simple dual power supply](https://www.youtube.com/watch?v=pQKN30Mzi2g)
   by Moritz Klein (26:03). Note that this is for a different design than the one

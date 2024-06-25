@@ -540,6 +540,10 @@ I'm very happy with the progress I've made!
 
 * [mki x es.EDU VCA User Manual](https://www.ericasynths.lv/media/VCA_MANUAL_FINAL.pdf)
 
+### Product Pages
+* [EDU DIY VCA](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vca/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
 ### Simulations
 
 All of these simulations are by Moritz Klein

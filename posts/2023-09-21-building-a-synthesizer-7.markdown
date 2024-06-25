@@ -253,6 +253,10 @@ Thanks for reading!
 
 * [mki x es.EDU Mixer User Manual](https://www.ericasynths.lv/media/MIXER_MANUAL.pdf)
 
+### Product Pages
+* [EDU DIY Mixer](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-mixer/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
 ### Simulations
 
 All of these simulations are by Moritz Klein

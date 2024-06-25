@@ -479,6 +479,10 @@ folks, that's about as much of a cliffhanger as I can manage.
 * [Modwiggler thread](https://www.modwiggler.com/forum/viewtopic.php?t=257249)
 * [Modulargrid page](https://www.modulargrid.net/e/erica-synths-edu-vco)
 
+### Product Pages
+* [EDU DIY VCO](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vco/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
 ### Simulation
 * The [VCO core](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l5YCsA2ATIkzoBZHwJwDMky2AHIogOxmbIgZ4MCmAtGGAFBhmEhmkQ2MPXxV6w+pCjQMYaMnqFohPhkicAJiDFLC9AdhCr6qcADlh5TgHcd4oSPt6pt-oMnujJqJwDGXo4GHvhSIKjQqPDRMXCEbPjGsBxk2IToiIRU4thGMHBcAOaB2KGBiGBm0hp2hkH8cPU1JU66QmXNbaX0YHC03b4AhuB9QmTSvVRm5NK0SCDscrFJCDxghOtT2GhUPCspaRlZOUa90W6T0+MjU0LpvnaXd2Zn-ffNr88jkP2CGgFPGbgdYSa7VWDRCDKcRkbKQdLIfAkMRkWj5BCcABOwP0YwmIIYuSg33gnGKHFxiCJFPoKGqDxxoPxqTxvlQHGBLKBlScQImDUaXGx42knhF7TCZ3OxXFA3FFSqvgA9uADMTsJB8IlejJoroUOhiS8lJwgA)
 * [VCO core with CV and tuning](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l5YCsA2ATIkrqIOwE5IBmQvPMHMPQyZZEHAFhA0UmYFMBaMMAKDAAchEAIFtidUqhASoUbOGi0Z0Ysyi8AJiCmYUIsXrrSwAOQZgGA3gHcdeabN3o6kWwfGE6oti40BjDxkvIItXTGhUeGiYuEIuPAjUK0gBVGS8ZBws6gwYOD4Ac1Cwb0MGQmk2NzsfYO9S+o1awycHEDDm+2lOsEhkjsa3AENwfqYGODHRDqmBcAxuDD6YpJTEPGyCfCJMtbE0jKycyGWY9z6ZybZL+cJEKovUu4exgfvHuz731++mQgETDcgVusxuSB6U2qsGiECwZDAhB4olQpQoeRhfAATuAIWDca8GMggWNorxijxCcSCT1DNULnjruAomwmW5URAwCz8VzKvibiJ4OBeAAXQXiV4CRofOQQbjQIRiEjJHACCj9GYwCxwCoFMS4BACOgrECadgAM2GAFcADYi8kiaXIeZSugVKoaMU4EJeebZO7OuTcXHQKhwViI0qWHCoOicLX4KRqhAETbIIik00W6129z+mSSqYytw4-My-N+G6xXgAJXogb8FcmclZNw90MQtfrd0B3Y6VhbsxA3Hb8k7pcg-0DOEnHT5N1YNXos999B9gbc5CYM4mfJ3HWpnKF+VOIAAYgBLAB27AdMdZA-vHT29InU79s8rpPgvCiOGXTCNp+AxMAAwgAavwjAgOmdwhLBMi9keUIwhgoEAPbDFiADOt44ghsgIagMayuc+GpPiCFEiSxA-nWVHUlRL5yM2I6DjAnb0RRxHSERzbVEOXLsdgvBvjIgZoO+pFkuh4DeCxkCkBEGLRGmKDoHIJh0IQvBAA)

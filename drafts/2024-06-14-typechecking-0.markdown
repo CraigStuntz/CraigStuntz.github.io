@@ -21,15 +21,15 @@ recipe.
 
 A tutorial should be:
 
-* Approachable, as in readable by someone without a CS degree
+* Approachable, as in readable by someone without a CS degree.
 * Thorough, as in covering at least the basics of most of what you want a type
-  checker to do
+  checker to do.
 * Concise. There's a place for books like 
   [Types and Programming Languages](https://www.cis.upenn.edu/~bcpierce/tapl/), 
   but someone who just wants to write a type checker to learn about compilers 
-  should not have to read and understand a whole college textbook to do so
+  should not have to read and understand a college course to do so.
 * Modern, because type checking has changed in the last 20 years and we don't 
-  want to leave out contemporary techniques
+  want to leave out contemporary techniques.
 
 The best introduction to type checking, by the above criteria, that I know is called 
 [Checking Dependent Types with Normalization by Evaluation: A Tutorial](https://davidchristiansen.dk/tutorials/nbe/),
@@ -118,7 +118,7 @@ other languages) I will give a little background on that feature. The idea is
 to make the series accessible to people who have general programming experience,
 but not so much (or any) in Swift, *per se.*
 
-## Installing Softare
+## Installing Software
 
 If you want to try the Swift code I've written, you need a few dependencies; see
 [the README](https://github.com/CraigStuntz/bidi/) for the simple instructions.
