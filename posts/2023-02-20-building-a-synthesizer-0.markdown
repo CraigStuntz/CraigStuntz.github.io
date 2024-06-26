@@ -66,7 +66,7 @@ equivalent to [programming on the ENIAC](https://computerhistory.org/blog/progra
 > the adder.
 
 As a musician, I far prefer playing software instruments. I have the musical 
-attention span of a [squirrel on "Mach 6"](https://journals.le.ac.uk/ojs1/index.php/pst/article/view/3739), and I like to be able to 
+attention span of a [squirrel on "Mach 6"](https://journals.le.ac.uk/index.php/pst/article/view/3739), and I like to be able to 
 change from song to song at a whim. But as an (amateur!)
 electrical engineer, I can learn a lot from building hardware, _especially_ if 
 the circuits are fairly easy to understand. So a modular 
