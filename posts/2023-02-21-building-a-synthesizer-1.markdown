@@ -100,7 +100,7 @@ finding that I often want additional information, such as more explanation of
 what certain components do or additional schematic diagrams. I will share that
 information in the post for each kit I build.
 
-That's the whole system! I will discuss each module in more detail when I write
+That's the whole system![^ButWaitTheresMore] I will discuss each module in more detail when I write
 about building them in future posts. The 
 <a title="Building the Power Supply" href="2023-02-22-building-a-synthesizer-2.html">next post</a>
 in this series discusses building the power supply.
@@ -117,3 +117,7 @@ in this series discusses building the power supply.
   entire Erica Synths EDU series.
 
 <img src="/images/synth/DIY_System_web_5.jpg" width="80%" loading="lazy" alt="The mki x es.EDU DIY System -- the entire, complete system in its enclosure">
+
+[^ButWaitTheresMore]: Since I wrote this article Erica Synths has 
+[introduced some additional kits](https://www.ericasynths.lv/shop/diy-kits-1/) 
+in the mki x es.EDU series, which are not included in the "System" package.
