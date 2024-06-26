@@ -95,6 +95,12 @@ some kits that I considered.
   learning electronics, and the intent is to 
   build modules that you're going to want to keep and play, moreso than the 
   two options above.
+* You'll be relieved to know that the 'AI' in 
+  [**AI Synthesis**](https://aisynthesis.com/) is the founder's initials and does 
+  *not* stand for "artificial intelligence." The emphasis here is more on 
+  soldering than on learning electronics, but 
+  [their build guides are excellent](https://aisynthesis.com/how-to-build-ai011-eurorack-vco-module/)
+  and the whole shop is focused on DIY.
 * **Dreadbox** has, occasionally, [a kit or two in stock](https://www.dreadbox-fx.com/diy-kits/). 
   These are kit versions of the commercial synths they sell, which are mostly 
   desktop units which play nicely with Eurorack modular synths. The instructions
