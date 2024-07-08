@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Craig Stuntz - A Very Gentle Introduction to Type Checking, Chapter n</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://types.pl/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    A Very Gentle Introduction to Type Checking,
+                        n
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    Misc.
+                </h1>
+            
+            <div class="info">
+    Posted on July  6, 2024
+    
+</div>
+
+<div class="toc">
+<ul>
+<li>Introduction: Type checkin’</li>
+</ul>
+</div>
+<h2 id="rules">Rules</h2>
+<p>When we build a parser, we use rules, often specified as
+<a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a> to
+determine which syntax is valid and which is invalid. Our code should <em>exactly</em>
+follow these rules. Here is an example bit of EBNF, from Wikipedia:</p>
+<pre class="ebnf"><code>digit excluding zero = &quot;1&quot; | &quot;2&quot; | &quot;3&quot; | &quot;4&quot; | &quot;5&quot; | &quot;6&quot; | &quot;7&quot; | &quot;8&quot; | &quot;9&quot; ;
+digit                = &quot;0&quot; | digit excluding zero ;</code></pre>
+<p>I will bet that the EBNF syntax above looked a bit strange when you first
+encountered it, but if you have done any kind of work with compilers at all then
+you have probably gotten comfortable with it. (If not, don’t worry; that’s the
+last time you’ll see EBNF in this series!)</p>
+<p>Similarly, when we build a type checker, we will follow
+<a href="https://www.cs.princeton.edu/courses/archive/spring12/cos320/typing.pdf">typing judgements</a>,
+expressed as <a href="https://en.wikipedia.org/wiki/Rule_of_inference">inference rules</a>.</p>
+<p>Inference rules look somewhat alarming when you first see them, but in this
+series I will try to walk you through them <em>very</em> gently. A sample inference
+rule is below. Right now I don’t want you to even try to understand it; I just
+want you to <em>recognize it.</em> When you see a rule like this, I want you to think:
+“That’s a typing inference rule. It tells me something about how the type
+checker should behave.”</p>
+<p><span class="math display">$$ \frac{\Gamma \vdash e \Leftarrow t_1}{\Gamma \vdash e \in t_1 \Rightarrow t_1} \quad $$</span></p>
+<p>Don’t worry, we will learn what this all means soon enough!</p>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>

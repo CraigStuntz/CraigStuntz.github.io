@@ -63,12 +63,15 @@ recipe.</p>
 <p>A tutorial should be:</p>
 <ul>
 <li>Approachable, as in readable by someone without a CS degree.</li>
-<li>Thorough, as in covering at least the basics of most of what you want a type
-checker to do.</li>
+<li>Comprehensive, as in covering the basics of most of what you want a type
+checker to do, and providing at least a path to more advanced features.</li>
 <li>Concise. There’s a place for books like
 <a href="https://www.cis.upenn.edu/~bcpierce/tapl/">Types and Programming Languages</a>,
 but someone who just wants to write a type checker to learn about compilers
 should not have to read and understand a college course to do so.</li>
+<li>Principled, as a type checker is a proving system about code. You don’t want
+to ship the first thing which doesn’t break your unit tests, such as they are.
+Instead your type checker should be based around a core which works for all cases.</li>
 <li>Modern, because type checking has changed in the last 20 years and we don’t
 want to leave out contemporary techniques.</li>
 </ul>
@@ -76,7 +79,7 @@ want to leave out contemporary techniques.</li>
 <a href="https://davidchristiansen.dk/tutorials/nbe/">Checking Dependent Types with Normalization by Evaluation: A Tutorial</a>,
 by David Thrane Christiansen. However, it assumes a certain amout of knowledge
 (for example: what even is the ‘untyped lambda calculus’ and what does
-‘normalizing’ it mean?),
+‘normalizing’ it mean? do I have to learn Haskell?),
 and I wanted to write an introduction “for newbies.” So I will be following his
 tutorial, but I will be adding a lot of explanations along the way.</p>
 <h3 id="but-craig-you-annoy-me">But, Craig, You Annoy Me 🙄</h3>
@@ -97,6 +100,8 @@ we will see that there is <em>no general answer</em> to this question. However, 
 answer the question often enough to make a compiler that works for most of the
 code that someone will want to write, and might time out when they do something
 extremely odd, but won’t ever produce incorrect results.</p>
+<p>Spoiler alert: Most of this tutorial will in fact be dedicated to judging when
+two types are “equivalent.”</p>
 <h2 id="meet-the-languages">Meet the Languages</h2>
 <p>The tutorial will be in three sections. You should complete them <em>in order.</em></p>
 <table>
@@ -121,11 +126,11 @@ extremely odd, but won’t ever produce incorrect results.</p>
 </tr>
 <tr class="odd">
 <td>3. Tartlet (A Dependently Typed Language)</td>
-<td>Equivalence, dependent types</td>
+<td>Type equivalence, dependent types</td>
 </tr>
 </tbody>
 </table>
-<p>Each section we will implement a different language. We will learn how to type
+<p>In each section we will implement a different language. We will learn how to type
 check the simply typed lambda calculus before Tartlet because it is easier to do
 that than to type check Tartlet, and type checking Tartlet is easier than type
 checking Swift. You
@@ -134,7 +139,9 @@ here should be helpful to you if you go farther, and, as we will see when we get
 into dependent typing, there is some real sophistication in this material.</p>
 <p>The langauge Tartlet is a <em>toy language</em> which “is very much like the language
 Pie from [the book] <a href="https://thelittletyper.com/"><em>The Little Typer,</em></a> except it
-has fewer features and simpler rules.”</p>
+has fewer features and simpler rules.” The only real documentation of the Pie
+language is <em>The Little Typer</em> and the only real documentation of Tartlet is,
+well, you’re reading it.</p>
 <p>The language Pie will not be used in this tutorial. However, it can be nice to
 have Pie around if you’d like to try out Pie/Tartlet with a more humane syntax.</p>
 <h2 id="swift">Swift</h2>
@@ -148,7 +155,7 @@ because Swift is especially well-suited to this task. But I wanted to learn
 Swift, and one way which helps me learn is to write some non-trivial, so now
 there’s a Swift version.</p>
 <p>You should use whichever version works best for you! (I also found
-<a href="https://github.com/heyrutvik/nbe-a-tutorial">a Scala version</a> I appreciate that
+<a href="https://github.com/heyrutvik/nbe-a-tutorial">a Scala version</a>.) I appreciate that
 Swift is not everybody’s cup of tea, which is why it’s great that there are now
 <em>four</em> languages to choose from. If Haskell or Racket works better for you, then
 use that version!</p>
@@ -204,8 +211,9 @@ Surveys in 2021.</p>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p><code>the</code> is a type declaration. The response means that <code>'spinach</code> has the
-type <code>Atom</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><code>the</code> is a type declaration. The response declares that <code>'spinach</code> has the
+type <code>Atom</code>. This declaration was inferred from the literal <code>'spinach</code>
+because it’s the normalized type annotation for an <code>Atom</code><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
