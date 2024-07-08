@@ -339,7 +339,7 @@ If you've read that tutorial, you'll understand how this works. It's exactly the
 same as an inverter configuration, except instead of having the non-inverting 
 ('+') input tied to ground, instead the non-inverting input of the op amp is 
 connected to another signal input, via a voltage divider. Without going into 
-too much detail in this post, it hopefully makes sense if you think that when
+too much detail in this post,[^subtractor] it hopefully makes sense if you think that when
 the non-inverting input is at ground this is exactly an inverter, because 
 0/ground minus the inverting input is the opposite of the inverting input.
 
@@ -572,3 +572,5 @@ popular mythology,
 [are voltage-controlled devices](https://www.youtube.com/watch?v=sIDD_GeF7eo).
 What's more, I'm not just being pedantic here; this will become important in the
 discussion which follows.
+
+[^subtractor]: Here's [a nice tutorial on using op amps in a subtractor configuration](https://www.youtube.com/watch?v=TBSvsbjAUWg).

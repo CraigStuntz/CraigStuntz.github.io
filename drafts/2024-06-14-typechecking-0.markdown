@@ -22,12 +22,15 @@ recipe.
 A tutorial should be:
 
 * Approachable, as in readable by someone without a CS degree.
-* Thorough, as in covering at least the basics of most of what you want a type
-  checker to do.
+* Comprehensive, as in covering the basics of most of what you want a type
+  checker to do, and providing at least a path to more advanced features.
 * Concise. There's a place for books like 
   [Types and Programming Languages](https://www.cis.upenn.edu/~bcpierce/tapl/), 
   but someone who just wants to write a type checker to learn about compilers 
   should not have to read and understand a college course to do so.
+* Principled, as a type checker is a proving system about code. You don't want
+  to ship the first thing which doesn't break your unit tests, such as they are.
+  Instead your type checker should be based around a core which works for all cases.
 * Modern, because type checking has changed in the last 20 years and we don't 
   want to leave out contemporary techniques.
 
@@ -35,7 +38,7 @@ The best introduction to type checking, by the above criteria, that I know is ca
 [Checking Dependent Types with Normalization by Evaluation: A Tutorial](https://davidchristiansen.dk/tutorials/nbe/),
 by David Thrane Christiansen. However, it assumes a certain amout of knowledge
 (for example: what even is the 'untyped lambda calculus' and what does 
-'normalizing' it mean?), 
+'normalizing' it mean? do I have to learn Haskell?), 
 and I wanted to write an introduction "for newbies." So I will be following his
 tutorial, but I will be adding a lot of explanations along the way. 
 
@@ -62,6 +65,9 @@ answer the question often enough to make a compiler that works for most of the
 code that someone will want to write, and might time out when they do something 
 extremely odd, but won't ever produce incorrect results.
 
+Spoiler alert: Most of this tutorial will in fact be dedicated to judging when
+two types are "equivalent."
+
 ## Meet the Languages
 
 The tutorial will be in three sections. You should complete them *in order.*
@@ -70,9 +76,9 @@ The tutorial will be in three sections. You should complete them *in order.*
 | ----------------------------------------- | ---------------------------------------| 
 | 1. Untyped Lambda Calculus                | Normalizing expressions                |
 | 2. Simply Typed Lambda Calculus           | Type checking and type inferencing     |
-| 3. Tartlet (A Dependently Typed Language) | Equivalence, dependent types           |
+| 3. Tartlet (A Dependently Typed Language) | Type equivalence, dependent types      |
 
-Each section we will implement a different language. We will learn how to type 
+In each section we will implement a different language. We will learn how to type 
 check the simply typed lambda calculus before Tartlet because it is easier to do 
 that than to type check Tartlet, and type checking Tartlet is easier than type 
 checking Swift. You 
@@ -82,7 +88,9 @@ into dependent typing, there is some real sophistication in this material.
 
 The langauge Tartlet is a *toy language* which "is very much like the language 
 Pie from [the book] [*The Little Typer,*](https://thelittletyper.com/) except it 
-has fewer features and simpler rules."
+has fewer features and simpler rules." The only real documentation of the Pie 
+language is *The Little Typer* and the only real documentation of Tartlet is,
+well, you're reading it.
 
 The language Pie will not be used in this tutorial. However, it can be nice to 
 have Pie around if you'd like to try out Pie/Tartlet with a more humane syntax.
@@ -100,7 +108,7 @@ Swift, and one way which helps me learn is to write some non-trivial, so now
 there's a Swift version.
 
 You should use whichever version works best for you! (I also found 
-[a Scala version](https://github.com/heyrutvik/nbe-a-tutorial) I appreciate that 
+[a Scala version](https://github.com/heyrutvik/nbe-a-tutorial).) I appreciate that 
 Swift is not everybody's cup of tea, which is why it's great that there are now 
 *four* languages to choose from. If Haskell or Racket works better for you, then 
 use that version!
@@ -182,5 +190,6 @@ There is a survey paper, [Bidirectional Typing](https://dl.acm.org/doi/10.1145/3
 by Jana Dunfield and Neel Krishnaswami, which was published by ACM Computing 
 Surveys in 2021.
 
-[^the]: `the` is a type declaration. The response means that `'spinach` has the 
-        type `Atom`. 
+[^the]: `the` is a type declaration. The response declares that `'spinach` has the 
+        type `Atom`. This declaration was inferred from the literal `'spinach` 
+        because it's the normalized type annotation for an `Atom`
