@@ -4,11 +4,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Craig Stuntz - A Math Primer for Gentry’s Fully Homomorphic Encryption</title>
+        <title>Craig Stuntz - 2010-04-08-a-math-primer-for-homomorphic-encryption</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
         <!-- KaTeX -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
         <!-- The loading of KaTeX is deferred to speed up page rendering -->
@@ -32,13 +32,29 @@
         <div id="content">
             
             
-                <h1>A Math Primer for Gentry’s Fully Homomorphic Encryption</h1>
+                <h1>2010-04-08-a-math-primer-for-homomorphic-encryption</h1>
             
             <div class="info">
     Posted on April  8, 2010
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="a-math-primer-for-gentrys-fully-homomorphic-encryption">A Math Primer for Gentry’s Fully Homomorphic Encryption</h1>
+<div class="info">
+Posted on April 8, 2010
+</div>
 <p>A couple of weeks ago, I wrote <a href="2010-03-18-what-is-homomorphic-encryption.html">What Is Homomorphic Encryption, and Why Should I Care?</a> In that post, I promised to share my C# implementation of the algorithm from Craig Gentry’s CACM article. Before I can do that, though, I need to explain some of the math involved.</p>
 <p>Perhaps surprisingly, it’s actually very simple. (I say “surprisingly” because much of the math and technical papers on encryption is decidedly not simple, including that of <a href="http://crypto.stanford.edu/craig/">Gentry’s first fully homomorphic scheme</a>, which was based on <a href="https://en.wikipedia.org/wiki/Ideal_lattice">ideal lattices</a>.)</p>
 <p>This scheme created by Marten van Dijk, Craig Gentry, Shai Halevi and Vinod Vaikuntanathan, however, uses basic arithmetic operations like division, with a few uncommon, but easy to understand, variations.</p>
@@ -95,11 +111,17 @@
 <h2 id="programs-as-digital-circuits">Programs as Digital Circuits</h2>
 <p>A homomorphic encryption scheme, in addition to the usual <code>Encrypt</code> and <code>Decrypt</code> and <code>KeyGen</code> functions, has an <code>Evaluate</code> function which performs operations on the ciphertext, resulting in the ciphertext of the result of the function.</p>
 <p>Obviously, this necessitates a different style of programming than that afforded by the typical programming language. In particular, code like this:</p>
+<div id="cb8" class="sourceCode">
 <div class="sourceCode" id="cb8"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> a <span class="op">=</span> b <span class="op">?</span> c <span class="op">:</span> d</span></code></pre></div>
+</div>
 <p>…(where <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are all <code>bool</code>s) is impossible, because the value of <code>b</code> is encrypted, so the program cannot know what to assign to <code>a</code>. If, however, we can perform binary operations on the ciphertext of <code>b</code>, then we can rewrite the statement above as:</p>
+<div id="cb9" class="sourceCode">
 <div class="sourceCode" id="cb9"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> a <span class="op">=</span> <span class="op">(</span>b <span class="op">&amp;</span> c<span class="op">)</span> <span class="op">|</span> <span class="op">((!</span>b<span class="op">)</span> <span class="op">&amp;</span> d<span class="op">)</span></span></code></pre></div>
+</div>
 <p>…or its homomorphic encryption equivalent:</p>
+<div id="cb10" class="sourceCode">
 <div class="sourceCode" id="cb10"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>CypherText a <span class="op">=</span> <span class="op">(</span>b h_and c<span class="op">)</span> <span class="fu">h_or</span> <span class="op">(</span><span class="fu">h_not</span><span class="op">(</span>b<span class="op">)</span> h_and d<span class="op">)</span></span></code></pre></div>
+</div>
 <p>…where the <code>h_*</code> operators are the homomorphic equivalents of the usual Boolean operations and <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are now of type <code>CypherText</code>.</p>
 <p>Note that the version with the ternary operator and the version with the <code>AND</code> and <code>OR</code> operators are not strictly the same, although their results are; the ternary operator is lazy, whereas the <code>AND</code> and <code>OR</code> version uses complete evaluation. This is necessary when the values are encrypted. It also means that the function may be inefficient.</p>
 <p>Intuitively, it’s easy to see that any <a href="https://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29">referentially transparent</a> function can be reduced to such operations; this is what compilers and operating systems do under the hood anyway. I’m not going to go into any detail on how this is done; get an introduction to digital circuits book if you are interested in the particulars.</p>
@@ -115,10 +137,14 @@
 <li>Just <code>NOR</code></li>
 <li>Both <code>XOR</code> and <code>AND</code></li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/math.html" rel="tag" title="All pages tagged 'math'.">math</a>, <a href="../tags/homomorphic%20encrption.html" rel="tag" title="All pages tagged 'homomorphic encrption'.">homomorphic encrption</a>, <a href="../tags/cryptography.html" rel="tag" title="All pages tagged 'cryptography'.">cryptography</a>, <a href="../tags/Craig%20Gentry.html" rel="tag" title="All pages tagged 'Craig Gentry'.">Craig Gentry</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'math'." href="../tags/math.html" rel="tag">math</a>, <a title="All pages tagged 'homomorphic encrption'." href="../tags/homomorphic%20encrption.html" rel="tag">homomorphic encrption</a>, <a title="All pages tagged 'cryptography'." href="../tags/cryptography.html" rel="tag">cryptography</a>, <a title="All pages tagged 'Craig Gentry'." href="../tags/Craig%20Gentry.html" rel="tag">Craig Gentry</a>
+    Tags: 
     
 </div>
 

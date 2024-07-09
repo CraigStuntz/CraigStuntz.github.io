@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
         <!-- KaTeX -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
         <!-- The loading of KaTeX is deferred to speed up page rendering -->
@@ -69,7 +69,7 @@ the name suggests, building a type checker for the untyped lambda calculus would
 be rather useless, as there is only one type in the language and therefore any
 syntactically valid program would type check: there are no type errors, only
 syntax errors. Instead we will use this language to learn about
-normalization by evaluation, which will be used when we build a type checker for
+<strong>normalization by evaluation</strong>, which will be used when we build a type checker for
 the simply typed lambda calculus (next section) and <em>necessary</em> when we build a
 type checker for Tartlet.</p>
 <p>A type checker needs to look an expression and find its type and then evaluate
@@ -198,14 +198,19 @@ other places. Other programming languages, such as Swift and the current version
 of C#, allow type inference in some places but <em>require</em> it on named function
 declarations.</p>
 <p>Bidirectional type checking combines type checking and type synthesis
-(inference) in a principled way. In some cases, we can infer/synthesize a type
-by following simple rules. For example, if we enounter a variable at a use site
-(in other words, after it is declared), we can synthesize the type by looking up
+(inference) in a principled way. Sometimes, given an expression we can
+synthesize/infer its type. Other times we know what type we are expecting and
+need to confirm (check) that the expression has an equivalent type.
+Bidirectional type checking tells us whether we should be using type synthesis
+or type checking in any given context.</p>
+<p>For example, if we enounter a variable at a use site (in other words, after it
+is declared), we can synthesize the type by looking up
 the variable in the context, or list of variables in scope. In other cases, we
-must check the type against some existing type, for example a function must be
-of a function type. Bidirectional type checking makes it clear whether we should
-use synthesis or checking in any situation we might encounter in code. By doing
-so, it is a guideline for how to write
+must check the type against some existing type, for example if there is a
+function call in code then we must check that we are in fact calling a reference
+of a function type (and not, say, an integer). Bidirectional type checking makes
+it clear whether we should use synthesis or checking in any situation we might
+encounter in code. By doing so, it is a guideline for how to write
 a type checker which is sufficiently powerful to implement most features needed
 by contemporary programming languages, including some with advanced type
 systems.</p>
@@ -217,19 +222,19 @@ of an expression is equivalent to the type that we are expecting. This is easier
 if the expression is in the simplest possible form.</p>
 <h3 id="a-very-simple-example">A Very Simple Example</h3>
 <p>That’s a little abstract, so let’s look at an example from Swift:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="fu">add1To</span><span class="op">(</span><span class="va">n</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> -&gt; <span class="fu">Int</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="fu">increment</span><span class="op">(</span><span class="va">n</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> -&gt; <span class="fu">Int</span> <span class="op">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> n <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">zero</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span> <span class="op">=</span> add1To<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)</span></span></code></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span> <span class="op">=</span> increment<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)</span></span></code></pre></div>
 <p>So far, so good, but of course we could have written <code>one</code> as:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">1</span> <span class="co">// because add1To(n: zero) == 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">1</span> <span class="co">// because increment(n: zero) == 1</span></span></code></pre></div>
 <p>You might prefer one version of the <em>source code,</em> but in fact both versions are
 the same value in the end. We call the second version, with the literal <code>1</code>, the
 <strong>normalized</strong> version because it is “less complicated” than the version with
-the function call to <code>add1To</code>. We will formalize the definition of “less
+the function call to <code>increment</code>. We will formalize the definition of “less
 complicated” in the near future.</p>
 <h3 id="what-is-the-point-of-normalization">What Is the Point of Normalization?</h3>
 <p>When writing a type checker it is easier to look at simpler forms, and in this
@@ -246,11 +251,11 @@ do this by normalizing an expression
 first and then doing an equivalence comparison on it, so first we must learn to
 normalize!</p>
 <h3 id="a-slightly-more-complicated-example">A Slightly More Complicated Example</h3>
-<p>When calling <code>add1To</code> we want to pass a value, which we store in the variable <code>zero</code>
+<p>When calling <code>increment</code> we want to pass a value, which we store in the variable <code>zero</code>
 and pass as the <code>n</code> argument. <code>zero</code> is a variable of type <code>Int</code> and in fact contains an
 instance of type <code>Int</code>, so the type check should be successful.</p>
 <p>Should this type check?</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">three</span> <span class="op">=</span> add1To<span class="op">(</span>n<span class="op">:</span> add1To<span class="op">(</span>n<span class="op">:</span> add1To<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)))</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">three</span> <span class="op">=</span> increment<span class="op">(</span>n<span class="op">:</span> increment<span class="op">(</span>n<span class="op">:</span> increment<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)))</span></span></code></pre></div>
 <p>If you’ve been programming for a while I think you’ll agree that the answer is
 “yes,” but it’s not quite so simple for the type checker to answer. In this case
 we must know that we are allowed to pass a function call, with all required
@@ -301,10 +306,19 @@ are no other types.</p>
 had a simple core with fewer features. That might be right in some cases, but
 the untyped lambda calculus shows that there is a bottom bound to this idea.
 There is basically <em>one</em> feature in the whole language, and it’s quite difficult
-to write any meaningful programs in.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> However, it’s quite simple to write an
+to write any meaningful programs in. However, it’s quite simple to write an
 expression evaluator for it due to its simplicity, and as that is what we are
 aiming to do it is a good choice for our purposes. Still, this section is a bit
 complicated if it’s your first exposure to the untyped lambda calculus!</p>
+<p>(One might fairly ask why David picked the untyped lambda calculus as an
+example. Nothing in the tutorial depends on its use; it’s just a simple example
+here. The untyped lambda calculus is important in theoretical computer science
+and so one can presume that folks coming to the tutorial from a TCS background
+will be familiar with it already. This is perhaps less true when people approach the
+tutorial from a “practitioner”/commercial programmer background. However, the
+untyped lambda calculus does have at least one thing going for it, which is that
+it’s very simple to evaluate. We will be doing that very soon!)</p>
+<h3 id="the-simplest-value-in-the-untyped-lambda-calculus">The Simplest Value In the Untyped Lambda Calculus</h3>
 <p>Let’s consider the simplest possible value in the untyped lambda caculus, the
 identity function. It just returns the value of its argument. Values in the
 untyped lambda calculus start with the Greek lower-case lambda, <code>λ</code>, then they
@@ -312,14 +326,14 @@ have an arugment name, by convention a single lower-case character, and then a
 dot (<code>.</code>), followed by the body of the function. So the identity function looks
 like this:</p>
 <pre><code>λx.x</code></pre>
-<p>Think: “A function that when called with some value <code>x</code> returns that value <code>x</code>.
+<p>Think: “An anonymous function that when called with some value <code>x</code> returns that value <code>x</code>.
 (In Swift it would look like <code>{ x in x }</code>; in JavaScript it would look like
 <code>x =&gt; x</code>).</p>
 <p>It’s hard to even consider this in terms of other programming languages, which
 have, you know, integers, and booleans and stuff, because the untyped lambda
 calculus very much does not have types for integers and booleans and stuff.
 However, you can use these functions to perform computations which are the same
-as in languages which <em>do</em> have those features.</p>
+as in languages which <em>do</em> have those features.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="highlight">
 <p>Writing an evaluator requires the following steps:</p>
 <ul>
@@ -331,6 +345,12 @@ computation</li>
 <p>In this case, for the untyped λ-calculus, the only values available are
 closures, and computation occurs when a closure is applied to another value.</p>
 </div>
+<p>Writing an evaluator means we will be interpreting the untyped lambda calculus.
+If you’re into compilers this should be familiar territory. We will be starting
+with the code we are evaluating in the untyped lambda calculus “already parsed”
+into an abstract syntax tree (AST); that is, the input to our evaluator will be
+AST expressions instead of strings. But we require additional types
+to hold values as we evaluate that AST.</p>
 <p>You may have encountered the term
 <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)"><strong>closure</strong></a> before,
 but it’s a combination of a function and an environment which may include both
@@ -338,23 +358,25 @@ bound variables (arguments to the function) and free variables (variables which
 are defined externally to the function’s body).</p>
 <p>“when a closure is applied to another value” means when the closure is invoked
 using another value as an argument.</p>
-<p>If you want to do something more complicated
-in your program, like add two numbers together, then you have to stop and think
+<h2 id="what-even-is-a-natural-number">What Even Is a Natural Number?</h2>
+<p>If you want to do something more complicated in your program in the untyped
+lambda calculus, like add two numbers together, then you have to stop and think
 about how you’re going to represent numbers in a programming language which
 doesn’t have them.</p>
-<h2 id="what-even-is-a-natural-number">What Even Is a Natural Number?</h2>
 <p>The type of number that we’re going to use is a <strong>natural number</strong>, and by this
-we mean a number which is in the set <span class="math inline">{0, 1, 2, ..., ∞}</span></p>
+we mean a number which is in the set <span class="math inline">{0, 1, 2, ..., ∞}</span> However, we
+are going to have to think about how to represent these using anonymous
+functions!</p>
 <p>Swift doesn’t have a type like this. It has <code>UInt64</code>, but there are obviously
 values too large to store in a <code>UInt64</code>. It turns out that this really matters,
-because the type of <code>add1To</code> above is actually a bit more complicated than “Int”.
+because the type of <code>increment</code> above is actually a bit more complicated than “Int”.
 It’s actually “an <code>Int</code> or perhaps it might throw an exception due to a numeric
 overflow.”</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➜</span> swift repl  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Welcome</span> to Apple Swift version 5.10 <span class="er">(</span><span class="ex">swiftlang-5.10.0.13</span> clang-1500.3.9.4<span class="kw">)</span><span class="bu">.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Type</span> :help for assistance.</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="op">&gt;</span> func <span class="ex">add1To</span><span class="er">(</span><span class="ex">n:</span> Int<span class="kw">)</span> <span class="ex">-</span><span class="op">&gt;</span> Int { return n + 1 }</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span><span class="op">&gt;</span> add1To<span class="kw">(</span><span class="ex">n:</span> Int.max<span class="kw">)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="op">&gt;</span> func <span class="ex">increment</span><span class="er">(</span><span class="ex">n:</span> Int<span class="kw">)</span> <span class="ex">-</span><span class="op">&gt;</span> Int { return n + 1 }</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span><span class="op">&gt;</span> increment<span class="kw">(</span><span class="ex">n:</span> Int.max<span class="kw">)</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Execution</span> interrupted. Enter code to recover and continue.</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Enter</span> LLDB commands to investigate <span class="er">(</span><span class="bu">type</span> :help for assistance.<span class="kw">)</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">3</span><span class="op">&gt;</span>  </span></code></pre></div>
@@ -367,7 +389,7 @@ starting with a simpler language.</p>
 <h2 id="what-even-is-a-church-numeral">What Even Is a Church Numeral?</h2>
 <p>The type checker must solve a problem which is very similar to the optimizer: Is
 it safe to replace one expression with a different expression, in every possible
-case? As we have seen with <code>add1To</code> above, this can be a pertty subtle question,
+case? As we have seen with <code>increment</code> above, this can be a pertty subtle question,
 with edge cases which are not obvious from looking at source code. How can we
 be sure that saying that a number is “a natural number” means that it can be
 used <em>anywhere</em> a program expects a natural number to be used?</p>
@@ -380,7 +402,7 @@ to only two cases:</p>
 </ul>
 <p><code>add1</code> means “given some value <code>n</code> which is certainly a natural number, the next
 largest value, <span class="math inline"><em>n</em> + 1</span>.”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<p>So we can literally have a data type like:</p>
+<p>So (in Swift) we can literally have a data type like:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>indirect <span class="kw">enum</span> Nat <span class="op">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> zero</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> add1<span class="op">(</span>Nat<span class="op">)</span></span>
@@ -401,16 +423,19 @@ one   = λf.λx.f x
 two   = λf.λx.f(f x)
 three = λf.λx.f(f(f x))
 four  = λf.λx.f(f(f(f x)))</code></pre>
-<p>…because (don’t worry if you can’t follow this derivation; I’ll explain more
-below):</p>
+<p>…because (don’t worry if you can’t follow this derivation; we have computers
+to do this for us):</p>
 <pre><code>one = add1 zero                                   because 1 = 1 + 0
-    = (λn.λf.λx.(f ((n f) x))) (λf.λx.x)          substitute defintions of add1 and zero
-    = λf.λx.(f (((λf.λx.x) f) x))                 substitute λf.λx.x for argument n
-    = λf.λx.(f ((λf.f) x))                        because (λx.x))f = f
-    = λf.λx.f x                                   because (λf.f))x = x</code></pre>
-<p>This way of storing natural
-numbers is sometimes called a
-“<a href="https://en.wikipedia.org/wiki/Church_encoding#Church_numerals">Church numeral</a>.”</p>
+    = (λn.λf.λx.f (n f x)) (λf.λx.x)              substitute defintions of add1 and zero
+    = λf.λx.f λf.λx.x f x                         substitute λf.λx.x for argument n
+    = λf.λx.f λf.f x                              because (λx.x) f = f
+    = λf.λx.f x                                   because (λf.f) x = x</code></pre>
+<p>This way of storing natural numbers is sometimes called a
+“<a href="https://en.wikipedia.org/wiki/Church_encoding#Church_numerals">Church numeral</a>.”
+And this simplification of <code>add1 zero</code> into <code>λf.λx.f x</code> is exactly the sort of
+evaluation we will be performing as part of “normalization by evaluation.”
+Clearly it’s a pain to do this by hand, so we will be writing an expression
+evaluator to do it for us!</p>
 <p>The way to think about Church numerals as expressed in the functions above is
 that when invoked they run a function, call it <code>f</code>, as many times as the
 numeral. So <code>zero</code>, above, <em>never evaluates</em> <code>f</code> and so runs it <em>zero</em> times.
