@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Craig Stuntz - 2014-07-07-test-only-development</title>
+        <title>Craig Stuntz - "Test-Only Development" with the Z3 Theorem Prover</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -32,29 +32,13 @@
         <div id="content">
             
             
-                <h1>2014-07-07-test-only-development</h1>
+                <h1>"Test-Only Development" with the Z3 Theorem Prover</h1>
             
             <div class="info">
     Posted on July  7, 2014
     
 </div>
 
-<div id="header">
-<div id="logo">
-<a href="../">Craig Stuntz</a>
-</div>
-<div id="navigation">
-<a href="../">Home</a>
-<a href="../about.html">About</a>
-<a href="../presentations.html">Presentations</a>
-<a href="../archive.html">Archive</a>
-</div>
-</div>
-<div id="content">
-<h1 id="test-only-development-with-the-z3-theorem-prover">“Test-Only Development” with the Z3 Theorem Prover</h1>
-<div class="info">
-Posted on July 7, 2014
-</div>
 <p>In this post I’ll introduce a style of programming which may be totally unfamiliar and perhaps a bit magical to many readers. What if you could write a unit test for a problem and have your compiler automatically return a correct implementation? Call it “test only” instead of “test first.” I’m going to translate the problem itself into a specification language and use Microsoft Research’s <a href="http://rise4fun.com/z3">Z3 theorem prover</a> to find a solution. I won’t write any implementation code at all!</p>
 <h2 id="a-simple-problem">A Simple Problem</h2>
 <p>Here’s the problem I’ll use as an example, which is <a href="https://projecteuler.net/problem=4">problem #4 from Project Euler</a>:</p>
@@ -63,14 +47,12 @@ Posted on July 7, 2014
 </blockquote>
 <p>Find the largest palindrome made from the product of two 3-digit numbers.</p>
 <p>The usual approach is to use brute force. Here’s a C# example, which I suspect is similar to what many people do:</p>
-<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>from    factor1 <span class="kw">in</span> Enumerable<span class="op">.</span><span class="fu">Range</span><span class="op">(</span><span class="dv">100</span><span class="op">,</span> <span class="dv">899</span><span class="op">)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> from    factor2 <span class="kw">in</span> Enumerable<span class="op">.</span><span class="fu">Range</span><span class="op">(</span><span class="dv">100</span><span class="op">,</span> <span class="dv">899</span><span class="op">)</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> let     product <span class="op">=</span> factor1 <span class="op">*</span> factor2</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> where   <span class="fu">IsPalindrome</span><span class="op">(</span>product<span class="op">)</span> <span class="co">// defined elsewhere</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> orderby product descending</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> select  <span class="kw">new</span> <span class="op">{</span> Factor1 <span class="op">=</span> factor1<span class="op">,</span> Factor2 <span class="op">=</span> factor2<span class="op">,</span> Product <span class="op">=</span> product<span class="op">}).</span><span class="fu">First</span><span class="op">()</span></span></code></pre></div>
-</div>
 <p>This is not a terrible solution. It runs pretty quickly and returns the correct solution, and we can see opportunities for making it more efficient. I suspect most people would declare the problem finished and move on.</p>
 <p>However, the LINQ syntax may obscure the fact that this is still a brute force solution. Any time we have to think about how to instruct a computer to find the answer to the problem instead of the characteristics of the problem itself, we add cognitive overhead and increase the chances of making a mistake.</p>
 <p>Also, what is that <code>IsPalindrome(product)</code> hiding? Most people implement this by converting the number to a string, and comparing it with the reversed value. But it turns out that the mathematical properties of a palindromic number are critical to finding an efficient solution.</p>
@@ -79,37 +61,26 @@ Posted on July 7, 2014
 <p>For my purely declarative solution, I’m going to use the language <a href="http://smt-lib.org/">SMT-LIB</a>. As a pure specification language, it doesn’t allow me to define an implementation at all! Instead, I’ll use it to express the constraints of the problem, and then use MSR’s Z3 solver to find a solution. SMT-LIB uses Lisp-like S-expressions, so, yes Virginia, there will be parentheses, but don’t let that scare you off. It’s always worthwhile to learn languages which make you think about problems differently, and I think you’ll find SMT-LIB really delivers!</p>
 <p>Since this language will seem unusual to many readers, let’s walk through the problem step by step.</p>
 <p>First, we need to declare some of the variables used in the problem. I use “variable” here in the mathematical, rather than software, sense: A placeholder for an unknown, but not something to which I’ll be assigning varying values. So here are three variables roughly equivalent to the corresponding C# vars above:</p>
-<div id="cb2" class="sourceCode">
 <div class="sourceCode" id="cb2"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(declare-const product Int)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>(declare-const factor1 Int)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>(declare-const factor2 Int)</span></code></pre></div>
-</div>
 <p>In an S-expression, the first item inside the parentheses is the function, and the remaining items are arguments. So <code>declare-const</code> is the function here and the remaining items are the variable name and its “sort” (type).</p>
 <p>Next, the problem says that <code>product</code> must be the, ahem, product of the two factors:</p>
-<div id="cb3" class="sourceCode">
 <div class="sourceCode" id="cb3"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">*</span> factor1 factor2) product))</span></code></pre></div>
-</div>
 <p>“<code>assert</code>” sounds like a unit test, doesn’t it? Indeed, many people coming to a theorem prover from a software development background will find that programming them is much more similar to writing tests than writing code. The line above just says that <code>factor1 * factor2 = product</code>. But it’s an assertion, not an assignment; we haven’t specified values for any of these variables.</p>
 <p>The problem statement says that both factors are three digit numbers:</p>
-<div id="cb4" class="sourceCode">
 <div class="sourceCode" id="cb4"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor1 <span class="dv">100</span>) (<span class="op">&lt;=</span> factor1 <span class="dv">999</span>)))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> factor2 <span class="dv">100</span>) (<span class="op">&lt;=</span> factor2 <span class="dv">999</span>)))</span></code></pre></div>
-</div>
 <p>Mathematically, what does it mean for a number to be a palindrome? In this case, the largest product of 3 digit numbers is going to be a six digit number of the form <strong>abccba</strong>, so product = 100000<strong>a</strong> + 10000<strong>b</strong> + 1000<strong>c</strong> + 100<strong>c</strong> + 10<strong>b</strong> + <strong>a</strong>. As I noted above, expressing the relationship this way is key to finding a non-brute-force solution using algebra. But you don’t need to know that in order to use Z3, because Z3 knows algebra! All you need to know is that you should express relationships mathematically instead of using string manipulation.</p>
-<div id="cb5" class="sourceCode">
 <div class="sourceCode" id="cb5"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(declare-const a Int)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(declare-const b Int)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>(declare-const c Int)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">+</span> (<span class="op">*</span> <span class="dv">100000</span> a) (<span class="op">*</span> <span class="dv">10000</span> b) (<span class="op">*</span> <span class="dv">1000</span> c) (<span class="op">*</span> <span class="dv">100</span> c) (<span class="op">*</span> <span class="dv">10</span> b) a)))</span></code></pre></div>
-</div>
 <p>I implied above that <strong>a</strong>, <strong>b</strong>, and <strong>c</strong> are single-digit numbers, so we need to be specific about that. Also, <strong>a</strong> can’t be 0 or we won’t have a 6 digit number.</p>
-<div id="cb6" class="sourceCode">
 <div class="sourceCode" id="cb6"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">1</span>) (<span class="op">&lt;=</span> a <span class="dv">9</span>)))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> b <span class="dv">0</span>) (<span class="op">&lt;=</span> b <span class="dv">9</span>)))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> c <span class="dv">0</span>) (<span class="op">&lt;=</span> c <span class="dv">9</span>)))</span></code></pre></div>
-</div>
 <p>These 4 assertions about a, b, and c are enough to determine that product is a palindrome. We’re not quite done yet, but let’s see how we’re doing so far. <code>(check-sat)</code> asks Z3 if there is a solution to the problem we’ve posed, and <code>(get-model)</code> displays that solution. Here’s the entire script so far:</p>
-<div id="cb7" class="sourceCode">
 <div class="sourceCode" id="cb7"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(declare-const product Int)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>(declare-const factor1 Int)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>(declare-const factor2 Int)</span>
@@ -129,9 +100,7 @@ Posted on July 7, 2014
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
 <span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
-</div>
 <p>When you run this through Z3 (<a href="http://rise4fun.com/z3">try it yourself!</a>), the solver responds:</p>
-<div id="cb8" class="sourceCode">
 <div class="sourceCode" id="cb8"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sat</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>(model</span>
@@ -148,7 +117,6 @@ Posted on July 7, 2014
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  (define-fun factor1 () Int</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="dv">707</span>)</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-</div>
 <p>That’s pretty good! <code>sat</code>, here, means that Z3 found a solution (it would have displayed <code>unsat</code> if it hadn’t). Eliding some of the syntax, the solution it found was 143 * 707 = 101101. Not bad for zero implementation code, but also not the answer to the Project Euler problem, which asks for the largest product.</p>
 <h2 id="optimization">Optimization</h2>
 <p>“Optimization,” in Z3 parlance, refers to finding the “best” proof for the theorem, not doing it as quickly as possible. But how do we tell Z3 to find the largest product?</p>
@@ -157,13 +125,10 @@ Posted on July 7, 2014
 <p>Z3(15, 10): ERROR: Objective function ‘(* factor1 factor2)’ is not supported</p>
 </blockquote>
 <p>After some fiddling, however, it seems (maximize (+ factor1 factor2)) works, sort of. Adding this to the script above causes Z3 to return:</p>
-<div id="cb9" class="sourceCode">
 <div class="sourceCode" id="cb9"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">+</span> factor1 factor2) |-&gt; [<span class="dv">1282</span>:oo]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>unknown --...</span></code></pre></div>
-</div>
 <p>Which is to say, Z3 could not find the maximal value. (“oo” just means ∞, and <code>unknown</code> means it could neither prove nor disprove the theorem.) Guessing that a might be bigger than 1, I can change its range to 8..9 and Z3 arrives at a single solution:</p>
-<div id="cb10" class="sourceCode">
 <div class="sourceCode" id="cb10"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">+</span> factor1 factor2) |-&gt; <span class="dv">1906</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sat</span>
@@ -182,9 +147,7 @@ Posted on July 7, 2014
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  (define-fun product () Int</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="dv">906609</span>)</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-</div>
 <p>The final script is:</p>
-<div id="cb11" class="sourceCode">
 <div class="sourceCode" id="cb11"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(declare-const product Int)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>(declare-const factor1 Int)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>(declare-const factor2 Int)</span>
@@ -206,19 +169,14 @@ Posted on July 7, 2014
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
-</div>
 <p>This bothers me just a little, since I had to lie ever so slightly about my objective, even though I did end up with the right answer.</p>
 <p>That’s just a limitation of Z3, and it may be fixed some day; Z3 is under active development, and <a href="http://rise4fun.com/Z3/tutorial/optimization">the optimization features are not even in the unstable or master branches</a>. But think about what has been achieved here: We’ve solved a problem with nothing but statements about the properties of the correct answer, and without any “implementation” code whatsoever. Also, using this technique forced me to think deeply about what the problem actually meant.
 Can This Be Real?</p>
 <p>At this point, you may have questions about doing software development in this way. Sure, it works fine for this trivial problem, but can you solve real-world problems this way? Is it fast? Are there any other tools with similar features? What are the downsides of working in this way? You may find the answers to these questions as surprising as the code above. Stay tuned!</p>
-<div class="info">
-Tags: <a href="../tags/z3.html" rel="tag" title="All pages tagged 'z3'.">z3</a>, <a href="../tags/theorem%20provers.html" rel="tag" title="All pages tagged 'theorem provers'.">theorem provers</a>, <a href="../tags/testing.html" rel="tag" title="All pages tagged 'testing'.">testing</a>
-</div>
-</div>
 
 <div class="info">
     
-    Tags: 
+    Tags: <a title="All pages tagged 'z3'." href="../tags/z3.html" rel="tag">z3</a>, <a title="All pages tagged 'theorem provers'." href="../tags/theorem%20provers.html" rel="tag">theorem provers</a>, <a title="All pages tagged 'testing'." href="../tags/testing.html" rel="tag">testing</a>
     
 </div>
 

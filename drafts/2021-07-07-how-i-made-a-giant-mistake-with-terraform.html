@@ -34,6 +34,22 @@
 <a href="../">Craig Stuntz</a>
 </div>
 <div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="how-i-made-a-giant-mistake-with-terraform">2021-07-07-how-i-made-a-giant-mistake-with-terraform</h1>
+<div class="info">
+Posted on July 7, 2021
+</div>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
 <a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
 </div>
 </div>
@@ -58,10 +74,10 @@ Posted on July 7, 2021
 <p>I made a huge mistake a while back, resulting in all preproduction environments being deleted from a client’s Azure subscription. That’s actually not so bad – we use terraform to create the environments, so we could just run the terraform again to put them back. And better preproduction than production, right? But Azure quirks and client rules made this considerably worse.</p>
 <p>This was complicated by the fact that I used the terraform to provision two different Azure subscriptions, with entirely different security policies. In “Subscription A” which I provisioned first, I could do more or less anything. “Subscription B” which I provisioned second was far more locked down. Of note, in Subscription B I couldn’t create an Azure Resource Group. Instead, I had to open a ticket with the client’s cloud team.</p>
 <p>I had terraform like:</p>
-<pre class="terraform"><code>resource &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
-    name     = var.resource_group_name
-    location = var.resource_group_location
-}</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode terraform"><code class="sourceCode terraform"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">resource</span> <span class="st">&quot;azurerm_resource_group&quot;</span> <span class="st">&quot;resource_group&quot;</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    name     <span class="op">=</span> <span class="va">var</span>.resource_group_name</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="va">var</span>.resource_group_location</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>…which ran fine on Subscription A, but which I could not run at all on Subscription B. There were actually two different resource groups in Subscription B, one for preproduction and one for production.</p>
 <p>Good terraform code is idempotent, which means that if you run it in an environment which already matches the script you supply, it won’t make any changes at all; it will just report that everything is up to date.</p>
 <h2 id="terraform-state">Terraform State</h2>
@@ -69,15 +85,17 @@ Posted on July 7, 2021
 <p>Because I couldn’t create the Azure Resource Group in Subscription B, I ran the following command:</p>
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">terraform</span> import module_name.azurerm_resource_group.resource_group <span class="op">&lt;</span>id_of_resource_group<span class="op">&gt;</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">terraform</span> import module_name.azurerm_resource_group.resource_group <span class="op">&lt;</span>id_of_resource_group<span class="op">&gt;</span></span></code></pre></div>
+</div>
 </div>
 </div>
 <p>…for the preproduction resource group. That linked the Resource Group in my terraform script with the Resource Group created by the client’s team in Azure.</p>
 <p><em>Months later,</em> while creating the production resources, I ran into the same issue (can’t create resource groups at all in Subscription B). Since Subscription B was the one we’d be taking to production, I decided that a better reflection of the actual environment would be to change the resource group to a data provider, so I edited the terraform script quoted above to read:</p>
-<pre class="terraform"><code>data &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
-    name     = var.resource_group_name
-    location = var.resource_group_location
-}</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode terraform"><code class="sourceCode terraform"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="st">&quot;azurerm_resource_group&quot;</span> <span class="st">&quot;resource_group&quot;</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    name     <span class="op">=</span> <span class="va">var</span>.resource_group_name</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="va">var</span>.resource_group_location</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>(I’ve just changed the word <code>resource</code> to <code>data</code>. In terraform, a <code>resource</code> is something that terraform might create, whereas a <code>data</code> is something that terraform will <em>never</em> create; it must already exist in the environment. But you might need to refer to properties of the <code>data</code> so it will appear in your script.)</p>
 <p>I ran the terraform and of course it worked fine and I didn’t need to do the <code>terraform import</code>.</p>
 <h2 id="terraform-plan-and-apply">Terraform <code>plan</code> and <code>apply</code></h2>
@@ -90,7 +108,7 @@ Posted on July 7, 2021
 <p>I say “the usual strategy” because occasionally when I’m provisioning multiple environments – say, development, uat, production, etc. – I will cut corners and do a <code>terraform plan</code> on just one of these environments and then <code>terraform apply</code> on all of the others.</p>
 <h2 id="destroying-preproduction">Destroying Preproduction</h2>
 <p>Now you have all of the information to see the mistake that I made. Here’s what happened:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>I was working on creating the production environment, which didn’t exist at all. That’s when I made the edit referenced above, from <code>resource</code> to <code>data</code></li>
 <li>I ran <code>terraform plan</code> and then <code>terraform apply</code> on production and everything worked fine. No changes were made at all.</li>
 <li>A while later, I wanted to add additional resources, so I added them and then ran <code>terraform apply</code> on preproduction.</li>
@@ -102,7 +120,7 @@ Posted on July 7, 2021
 <h2 id="a-terrible-horrible-no-good-very-bad-azure-feature">A Terrible, Horrible, No-Good, Very Bad Azure Feature</h2>
 <p>Now I know that readers of this blog are smart, competent engineers, so you probably are very careful about where you store your backups! Well, Azure SQL Server does back up your databases, automatically, so full marks for that, but if you inadvertently destroy a SQL Server it takes the backups with it! Also, there is, as far as I can tell, no option in the Portal or terraform to put the backups elsewhere. (This is in contrast to running an <a href="https://docs.microsoft.com/en-us/azure/azure-sql/database/features-comparison">Azure SQL Managed Instance, which is… something else entirely</a>.)</p>
 <p>Of course recreating the database is an option; we create database metadata using migrations, and it’s just preproduction, so we can pretty much create the data that we need, but now the restore plan looks like:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Open ticket to get Azure Resource Group created</li>
 <li>Run terraform to create rest of Azure resources</li>
 <li>Run DB migrations to create DB schema</li>
@@ -116,6 +134,10 @@ Posted on July 7, 2021
 <p>One of the things I did right in this incident was to <em>immediately</em> report the problem. I posted an “I just made a giant mistake” message before the delete was even complete, before we had even considered the database. This is of course just polite, but moving quickly turned out to be the key to recovering a deleted Azure resource. Another key to recovering the deleted resource was not creating new resources with the same name before opening the ticket with Microsoft, so I give myself credit for getting Microsoft support involved before just “trying stuff” to see if I could restore it on my own before we realized that the database backups were an issue.</p>
 <p>I guess I knew that there was the possibility that I would inadvertently destroy something when I skipped a plan, but the sheer magnitude of carnage resulting from a <em>one word change</em> in terraform was surprising.</p>
 <p>As far as SQL Server backups go, it’s obviously totally unacceptable that a backup could be blown away so easily. I don’t have a better option to suggest besides putting a lock on the Resource Group.</p>
+<div class="info">
+Tags:
+</div>
+</div>
 <div class="info">
 Tags:
 </div>

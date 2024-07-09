@@ -3,18 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter 10: Building the VCA</title>
+        <title>Craig Stuntz - 2024-06-24-building-a-synthesizer-9</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -30,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        10
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the VCA
-                </h1>
-            
+            <h1>2024-06-24-building-a-synthesizer-9</h1>
+
             <div class="info">
     Posted on June 24, 2024
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer-10">Building a Synthesizer,
+10</h3>
+<h1 class="chapterName" id="building-the-vca">Building the VCA</h1>
+<div class="info">
+Posted on June 24, 2024
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -79,20 +79,12 @@ generator.</p>
 <p>For example, here are two synthesizers with two different labels for the same
 feature:</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCAJupiter8.png">
-<img src="../images/synth/VCAJupiter8.png" loading="lazy" height="300px" alt="The VCA section of the Roland Jupiter 8 synthesizer. It has a continuous slider marked Level and a four position switch marked LFO Mod">
-</a>
-<figcaption>
-Jupiter-8 VCA
-</figcaption>
+<a href="../images/synth/VCAJupiter8.png"><img src="../images/synth/VCAJupiter8.png" loading="lazy" height="300" alt="The VCA section of the Roland Jupiter 8 synthesizer. It has a continuous slider marked Level and a four position switch marked LFO Mod" /></a>
+<figcaption>Jupiter-8 VCA</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCARetroSynth.png">
-<img src="../images/synth/VCARetroSynth.png" loading="lazy" height="300px" alt="The two envelopes of Logic Pro's Retro Synth plugin. Beside each of the two envelopes is a slider marked Vol">
-</a>
-<figcaption>
-Retro Synth
-</figcaption>
+<a href="../images/synth/VCARetroSynth.png"><img src="../images/synth/VCARetroSynth.png" loading="lazy" height="300" alt="The two envelopes of Logic Pro's Retro Synth plugin. Beside each of the two envelopes is a slider marked Vol" /></a>
+<figcaption>Retro Synth</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -128,7 +120,7 @@ controlled volume knob work? If we ccould find such a thing as a “voltage cont
 resistor,” that would do the trick. It sounds like something which could be done
 with an op amp, but it would require a somewhat less common circuit, called an
 operational transconductance amplifier (or OTA) instead. These tend to have an
-amplifier bias or <span class="math inline"><em>I</em><sub><em>A</em><em>B</em><em>C</em></sub></span> input which will control the gain of the amplifier
+amplifier bias or <span class="math inline"><em>I</em><sub><em>ABC</em></sub></span> input which will control the gain of the amplifier
 based on the current going into that input. But other designs are possible, and
 as we will see the MKI x ES.EDU VCA is based on individual transistors instead
 of an integrated circuit like an OTA.</p>
@@ -176,7 +168,7 @@ the base input. The VCA instructions spend a good bit of time explaining why a
 transistor is not, in fact, a resistor. A transistor provides resistance,
 clearly: A fairly high resistance value when no voltage is connected to the base!
 You can control the amount of current passing through the device using the
-voltage you connect to the base.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+voltage you connect to the base.<a href="#fn1" id="fnref1" class="footnote-ref" role="doc-noteref"><sup>1</sup></a></p>
 <p>But resist<em>ance</em> is not the same as being a good resist<em>or</em>. A
 transistor is designed to allow current to (easily) flow in only one
 direction, unlike a resistor, and, also unlike a resistor, a transistor will
@@ -197,12 +189,8 @@ They will also vary considerably with the outside temperature.</p>
 <p>So, we would like to compensate for these variations. How do we do that?</p>
 <h4 id="negative-feedback">Negative Feedback</h4>
 <figure class="inlineRight">
-<a href="../images/synth/VCAManualNegativeFeedback.png">
-<img src="../images/synth/VCAManualNegativeFeedback.png" loading="lazy" width="300px" alt="A transistor with the base connected to the input signal, the collector connected to the 12V rail through a 20k resistor, and the emitter connected to ground through a 10k resistor">
-</a>
-<figcaption>
-From the mki x es.edu VCA Manual
-</figcaption>
+<a href="../images/synth/VCAManualNegativeFeedback.png"><img src="../images/synth/VCAManualNegativeFeedback.png" loading="lazy" width="300" alt="A transistor with the base connected to the input signal, the collector connected to the 12V rail through a 20k resistor, and the emitter connected to ground through a 10k resistor" /></a>
+<figcaption>From the mki x es.edu VCA Manual</figcaption>
 </figure>
 <p>We start with a circuit much like the one on the right but without the 10k
 resistor at the bottom. Then we get to the point that I found confusing!
@@ -250,7 +238,7 @@ consider the same phenomenon.</p>
 <a href="https://www.mheducation.com/highered/product/practical-electronics-inventors-fourth-edition-scherz-monk/9781259587542.html"><em>Practical Electronics for Inventors, Fourth Edition,</em></a>
 by Scherz and Monk.</p>
 <p>The gain of a transistor, by definition, is:</p>
-<p><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></p>
+<p><span class="math display"><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></span></p>
 <p>Where <span class="math inline"><em>V</em><sub><em>C</em></sub></span> is equal to the voltage at the collector, <span class="math inline"><em>R</em><sub><em>C</em></sub></span> is equal to the
 resistance at the collector, and similarly for the emitter. However, that’s not
 quite the full story, because a transistor has a small internal
@@ -258,12 +246,12 @@ quite the full story, because a transistor has a small internal
 in its emitter region, and one way you can think about thermal instability in a
 transistor is that the transreistance changes with temperature. So a somewhat
 more accurate model is:</p>
-<p><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></p>
-<p>Where <span class="math inline"><em>r</em><sub><em>t</em><em>r</em></sub></span> is the transresistance value, which, again, is not constant. This
+<p><span class="math display"><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></span></p>
+<p>Where <span class="math inline"><em>r</em><sub><em>tr</em></sub></span> is the transresistance value, which, again, is not constant. This
 is not 100% accurate as there is some small current flowing from the base to the
-emitter. But this does tell us that we can minimize the effect of <span class="math inline"><em>r</em><sub><em>t</em><em>r</em></sub></span> by
+emitter. But this does tell us that we can minimize the effect of <span class="math inline"><em>r</em><sub><em>tr</em></sub></span> by
 making <span class="math inline"><em>R</em><sub><em>E</em></sub></span> comparatively large relative to it.</p>
-<p><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></p>
+<p><span class="math display"><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></span></p>
 <p>How much is that? Well, we have <span class="math inline"><em>I</em><sub><em>E</em></sub></span> <em>apporximately</em> 600 μA, which works out to
 arount 46Ω. So a 10KΩ resistor should make its effects very small indeed. Scherz
 and Monk say, “In practice, <span class="math inline"><em>R</em><sub><em>E</em></sub></span> should be chosen to place <span class="math inline"><em>V</em><sub><em>E</em></sub></span> around 1 V
@@ -274,21 +262,13 @@ emitter!</p>
 <p>So now let’s build a VCA (with actual voltage control, not just a
 potentiometer). It looks like this:</p>
 <figure>
-<a href="../images/synth/VCAOneTransistor.jpg">
-<img src="../images/synth/VCAOneTransistor.jpg" loading="lazy" width="600px" alt="A breadboard showing a simple, one-transistor VCA circuit. We can see a BJT, a DIP op amp package, a potentiometer, and a 1/8 inch jack.">
-</a>
-<figcaption>
-Single Transistor VCA
-</figcaption>
+<a href="../images/synth/VCAOneTransistor.jpg"><img src="../images/synth/VCAOneTransistor.jpg" loading="lazy" width="600" alt="A breadboard showing a simple, one-transistor VCA circuit. We can see a BJT, a DIP op amp package, a potentiometer, and a 1/8 inch jack." /></a>
+<figcaption>Single Transistor VCA</figcaption>
 </figure>
 <p>When we look at the output on a scope, though, the results are not so great:</p>
 <figure>
-<a href="../images/synth/VCAOneTransistorScope.png">
-<img src="../images/synth/VCAOneTransistorScope.png" loading="lazy" width="600px" alt="An oscilloscope screen capture showing a yellow trace with a square wave, a magenta trace with the same square wave although much fuzzier and lower in amplitude, and a cyan trace which is the magenta trace inverted">
-</a>
-<figcaption>
-Single Transistor VCA Output
-</figcaption>
+<a href="../images/synth/VCAOneTransistorScope.png"><img src="../images/synth/VCAOneTransistorScope.png" loading="lazy" width="600" alt="An oscilloscope screen capture showing a yellow trace with a square wave, a magenta trace with the same square wave although much fuzzier and lower in amplitude, and a cyan trace which is the magenta trace inverted" /></a>
+<figcaption>Single Transistor VCA Output</figcaption>
 </figure>
 <p>The yellow trace here is the output of a function generator I’m using as my
 “signal.” This is like the audio signal I would be running through the VCA in
@@ -310,21 +290,13 @@ we have improved things by adding the resistor at the emitter</li>
 of transistors. So first we add a second transistor and arrange both in a
 differential pair.</p>
 <figure>
-<a href="../images/synth/VCATwoTransistors.jpg">
-<img src="../images/synth/VCATwoTransistors.jpg" loading="lazy" width="600px" alt="A breadboard containing a cirucit with two transistors, a DIP chip with some op amps, a jack, a potentiometer, and a bunch of resistors">
-</a>
-<figcaption>
-Two Transistor VCA
-</figcaption>
+<a href="../images/synth/VCATwoTransistors.jpg"><img src="../images/synth/VCATwoTransistors.jpg" loading="lazy" width="600" alt="A breadboard containing a cirucit with two transistors, a DIP chip with some op amps, a jack, a potentiometer, and a bunch of resistors" /></a>
+<figcaption>Two Transistor VCA</figcaption>
 </figure>
 <p>Now we get two outputs, which are in opposite phase:</p>
 <figure>
-<a href="../images/synth/VCATwoTransistorsScope.png">
-<img src="../images/synth/VCATwoTransistorsScope.png" loading="lazy" width="600px" alt="An oscilloscope screen capture showing a yellow trace with a square wave, a magenta trace with the same square wave although much fuzzier and lower in amplitude, a cyan trace which is output from one transistor and a green trace which is the output from another transistor">
-</a>
-<figcaption>
-Two Transistor VCA Output
-</figcaption>
+<a href="../images/synth/VCATwoTransistorsScope.png"><img src="../images/synth/VCATwoTransistorsScope.png" loading="lazy" width="600" alt="An oscilloscope screen capture showing a yellow trace with a square wave, a magenta trace with the same square wave although much fuzzier and lower in amplitude, a cyan trace which is output from one transistor and a green trace which is the output from another transistor" /></a>
+<figcaption>Two Transistor VCA Output</figcaption>
 </figure>
 <p>Adding a couple more transistors and the second op amp (in the same IC package
 as the first one), we can combine the two signals, subtracting them to produce
@@ -332,12 +304,8 @@ the difference between them (hence, differential pair). This is an op amp
 configuration which I didn’t show in
 <a href="2023-04-03-building-a-synthesizer-4.html">my op amp tutorial</a>, so here it is:</p>
 <figure>
-<a href="../images/synth/VCAOpAmpSubtractor.png">
-<img src="../images/synth/VCAOpAmpSubtractor.png" loading="lazy" width="600px" alt="A schematic of a subtractor configuration of an op amp.">
-</a>
-<figcaption>
-Subtractor
-</figcaption>
+<a href="../images/synth/VCAOpAmpSubtractor.png"><img src="../images/synth/VCAOpAmpSubtractor.png" loading="lazy" width="600" alt="A schematic of a subtractor configuration of an op amp." /></a>
+<figcaption>Subtractor</figcaption>
 </figure>
 <p>If you’ve read that tutorial, you’ll understand how this works. It’s exactly the
 same as an inverter configuration, except instead of having the non-inverting
@@ -349,20 +317,12 @@ the non-inverting input is at ground this is exactly an inverter, because
 <p>Anyway, with the op amp outputting the difference of the two transistor signals,
 our trace now looks like:</p>
 <figure>
-<a href="../images/synth/VCASubtractedTrace.png">
-<img src="../images/synth/VCASubtractedTrace.png" loading="lazy" width="600px" alt="Oscilloscope showing a cyan trace in the foreground which is the subtraction of the two diode outputs">
-</a>
-<figcaption>
-Subtractor Output
-</figcaption>
+<a href="../images/synth/VCASubtractedTrace.png"><img src="../images/synth/VCASubtractedTrace.png" loading="lazy" width="600" alt="Oscilloscope showing a cyan trace in the foreground which is the subtraction of the two diode outputs" /></a>
+<figcaption>Subtractor Output</figcaption>
 </figure>
 <figure class="inlineRight">
-<a href="../images/synth/VCABreadboardFinished.jpg">
-<img src="../images/synth/VCABreadboardFinished.jpg" loading="lazy" width="300px" alt="A breadboard with the completed VCA, which looks very much like the incomplete VCAs except for the addition of a few more resistors and a trimpot">
-</a>
-<figcaption>
-Completed VCA
-</figcaption>
+<a href="../images/synth/VCABreadboardFinished.jpg"><img src="../images/synth/VCABreadboardFinished.jpg" loading="lazy" width="300" alt="A breadboard with the completed VCA, which looks very much like the incomplete VCAs except for the addition of a few more resistors and a trimpot" /></a>
+<figcaption>Completed VCA</figcaption>
 </figure>
 <p>The next step is to add a trimpot which allows adjustment to compensate for
 small manufacturing differences between the two transistors. Even when both
@@ -371,12 +331,8 @@ of the same lot from the same manufacturer may vary in their gain. One way
 around this is to buy a matched set of transistors in an IC package. Another way
 around this is to add a trimpot:</p>
 <figure>
-<a href="../images/synth/VCAWithTrimpotTrace.png">
-<img src="../images/synth/VCAWithTrimpotTrace.png" loading="lazy" width="600px" alt="Oscilloscope traces showing a now vertically centered output in cyan in the foreground">
-</a>
-<figcaption>
-Subtractor with Trimpot
-</figcaption>
+<a href="../images/synth/VCAWithTrimpotTrace.png"><img src="../images/synth/VCAWithTrimpotTrace.png" loading="lazy" width="600" alt="Oscilloscope traces showing a now vertically centered output in cyan in the foreground" /></a>
+<figcaption>Subtractor with Trimpot</figcaption>
 </figure>
 <p>Finally we change some resistor values to make the last op amp in the signal
 chain boost the amplified signal up to a 10V peak to peak output.</p>
@@ -385,12 +341,8 @@ breadboards tend to be pretty noisy. Some of that is due to the high
 magnification of the output signal vs. the function generator signal. Here it is
 with the same vertical scaling:</p>
 <figure>
-<a href="../images/synth/VCASameVerticalScaling.png">
-<img src="../images/synth/VCASameVerticalScaling.png" loading="lazy" width="600px" alt="Oscilloscope traces at equal verticl scaling; the output now appears less noisy compared to the input">
-</a>
-<figcaption>
-At Equal Vertical Scaling
-</figcaption>
+<a href="../images/synth/VCASameVerticalScaling.png"><img src="../images/synth/VCASameVerticalScaling.png" loading="lazy" width="600" alt="Oscilloscope traces at equal verticl scaling; the output now appears less noisy compared to the input" /></a>
+<figcaption>At Equal Vertical Scaling</figcaption>
 </figure>
 <h2 id="soldering-it-all-together">Soldering It All Together</h2>
 <p>One curious fact about this project is that even though you are building
@@ -401,12 +353,8 @@ be very careful when selecting parts, because the layouts are <em>mostly</em> th
 except where they’re different.</p>
 <h3 id="resistance-is-futile">Resistance is Futile</h3>
 <figure class="inlineRight">
-<a href="../images/synth/VCAResistors.jpg">
-<img src="../images/synth/VCAResistors.jpg" loading="lazy" width="300px" alt="A bunch of resistors, with 0.1% tolerance resistors on the right with just a tiny difference in shade from the 1% resistors on the left.">
-</a>
-<figcaption>
-1% Resistors on Left, 0.1% Resistors on Right. Can you distinguish the light blues?
-</figcaption>
+<a href="../images/synth/VCAResistors.jpg"><img src="../images/synth/VCAResistors.jpg" loading="lazy" width="300" alt="A bunch of resistors, with 0.1% tolerance resistors on the right with just a tiny difference in shade from the 1% resistors on the left." /></a>
+<figcaption>1% Resistors on Left, 0.1% Resistors on Right. Can you distinguish the light blues?</figcaption>
 </figure>
 <p>Soldering on the resistors was unexpectedly complicated.</p>
 <p>The manual notes that some of the resistors need to be closely matched, and
@@ -428,20 +376,12 @@ with a multimeter, and their color codes aren’t that distinct, either).</p>
 <p>Adding to the “light blue woes,” the colors in the photo in the manual (left,
 below) don’t match the tolerances in the layout diagram (right)!</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCAManualPhoto.jpg">
-<img src="../images/synth/VCAManualPhoto.jpg" loading="lazy" width="400px" alt="This photo from the manual shows a bunch of resistors with different shades of blue, which don't match the tolerances specified in the parts diagram.">
-</a>
-<figcaption>
-Photo from Manual
-</figcaption>
+<a href="../images/synth/VCAManualPhoto.jpg"><img src="../images/synth/VCAManualPhoto.jpg" loading="lazy" width="400" alt="This photo from the manual shows a bunch of resistors with different shades of blue, which don't match the tolerances specified in the parts diagram." /></a>
+<figcaption>Photo from Manual</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCAManualDiagram.png">
-<img src="../images/synth/VCAManualDiagram.png" loading="lazy" width="400px" alt="The same resistors in the parts layout diagram.">
-</a>
-<figcaption>
-Diagram from Manual (Red Circles in Original)
-</figcaption>
+<a href="../images/synth/VCAManualDiagram.png"><img src="../images/synth/VCAManualDiagram.png" loading="lazy" width="400" alt="The same resistors in the parts layout diagram." /></a>
+<figcaption>Diagram from Manual (Red Circles in Original)</figcaption>
 </figure>
 <div style="clear: both;">
 
@@ -452,12 +392,8 @@ fact that <em>the resistor tolerance is encoded in the color band code.</em> So 
 tolerance 100k resistor will be “Brown Black Black Orange <strong>Brown</strong>” whereas a
 100k 0.1% tolerance resisotor will be “Brown Black Black Orange <strong>Violet</strong>”</p>
 <figure class="inlineRight">
-<a href="../images/synth/VCATransistorTester.jpg">
-<img src="../images/synth/VCATransistorTester.jpg" loading="lazy" width="100px" alt="A component tester with a transistor in it. The screen reads Transistor(NPN), hFE=536, Vbe=0.79V, Ic=7.4mA">
-</a>
-<figcaption>
-Measuring a Transistor
-</figcaption>
+<a href="../images/synth/VCATransistorTester.jpg"><img src="../images/synth/VCATransistorTester.jpg" loading="lazy" width="100" alt="A component tester with a transistor in it. The screen reads Transistor(NPN), hFE=536, Vbe=0.79V, Ic=7.4mA" /></a>
+<figcaption>Measuring a Transistor</figcaption>
 </figure>
 <h3 id="choosing-transistors">Choosing Transistors</h3>
 <p>Most of the rest of the soldering was uneventful, but when it came time to
@@ -500,31 +436,19 @@ the purple trace is OUT2. I’m pleased that there is far
 less noise in this (the PC board version of the VCAs) than there was in the
 breadboard version.</p>
 <figure>
-<a href="../images/synth/VCANormalled.png">
-<img src="../images/synth/VCANormalled.png" loading="lazy" width="600px" alt="Oscilloscope traces showing a purple trace and a yellow trace with the same signal at two different amplitudes">
-</a>
-<figcaption>
-VCA Outputs
-</figcaption>
+<a href="../images/synth/VCANormalled.png"><img src="../images/synth/VCANormalled.png" loading="lazy" width="600" alt="Oscilloscope traces showing a purple trace and a yellow trace with the same signal at two different amplitudes" /></a>
+<figcaption>VCA Outputs</figcaption>
 </figure>
 <p>With that finished, I now have a more or less functional synthesizer! There is
 no filter (yet!), but I can play a note and have an envelope which sounds nice.
 I’m very happy with the progress I’ve made!</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCAFinishedFront.jpg">
-<img src="../images/synth/VCAFinishedFront.jpg" loading="lazy" width="400px" alt="Photo of the front panel of the finished VCA. The single module has 2 VCAs. Each has an Offset potentiometer, and IN, CV, and OUT jacks">
-</a>
-<figcaption>
-Front
-</figcaption>
+<a href="../images/synth/VCAFinishedFront.jpg"><img src="../images/synth/VCAFinishedFront.jpg" loading="lazy" width="400" alt="Photo of the front panel of the finished VCA. The single module has 2 VCAs. Each has an Offset potentiometer, and IN, CV, and OUT jacks" /></a>
+<figcaption>Front</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCAFinishedRear.jpg">
-<img src="../images/synth/VCAFinishedRear.jpg" loading="lazy" width="400px" alt="Photo of the rear of the VCA. You can see a Eurorack power connector, blue trimpots, transistors, ICs for the op amps, capacitors, and a whole bunch of resistors">
-</a>
-<figcaption>
-Rear
-</figcaption>
+<a href="../images/synth/VCAFinishedRear.jpg"><img src="../images/synth/VCAFinishedRear.jpg" loading="lazy" width="400" alt="Photo of the rear of the VCA. You can see a Eurorack power connector, blue trimpots, transistors, ICs for the op amps, capacitors, and a whole bunch of resistors" /></a>
+<figcaption>Rear</figcaption>
 </figure>
 <div style="clear: both;">
 
@@ -559,17 +483,23 @@ by Quincas Moreira (31:04)</li>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Yes, I said <em>voltage.</em> bipolar junction transistors, despite
+<li><div id="fn1">
+<p>Yes, I said <em>voltage.</em> bipolar junction transistors, despite
 popular mythology,
 <a href="https://www.youtube.com/watch?v=sIDD_GeF7eo">are voltage-controlled devices</a>.
 What’s more, I’m not just being pedantic here; this will become important in the
-discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
 </ol>
 </section>
+<div class="info">
+Tags: <a href="../tags/synthesis.html" rel="tag" title="All pages tagged 'synthesis'.">synthesis</a>, <a href="../tags/diy.html" rel="tag" title="All pages tagged 'diy'.">diy</a>, <a href="../tags/electrical%20engineering.html" rel="tag" title="All pages tagged 'electrical engineering'.">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'synthesis'." href="../tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged 'diy'." href="../tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged 'electrical engineering'." href="../tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
+    Tags: 
     
 </div>
 

@@ -3,17 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter 4: The Logic Circuits Model of Computation</title>
+        <title>Craig Stuntz - 2023-02-18-building-a-synthesizer-4</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -29,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        4
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    The Logic Circuits Model of Computation
-                </h1>
-            
+            <h1>2023-02-18-building-a-synthesizer-4</h1>
+
             <div class="info">
     Posted on February 18, 2023
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer-4">Building a Synthesizer,
+4</h3>
+<h1 class="chapterName" id="the-logic-circuits-model-of-computation">The Logic Circuits Model of Computation</h1>
+<div class="info">
+Posted on February 18, 2023
+</div>
 <p>I’m going to step aside from circuit building to talk about the logic circuits model of computation. This may surprise you, reader, as it would at first seem to have nothing to do with building an analog synthesizer. I have a few reasons for doing so. One is that I’ll be talking about analog computers in a future post, so think of this post as a gentle introduction to the topic of alternative computing models. The second is that we can see a synthesizer, whether digital or analog, as a dedicated piece of hardware which can solve a restricted set of computing problems (producing sounds), and I find it interesting to look at a synth from a computing point of view. But analog synthesizers, anyway, are not engineered like most computers!</p>
 <p>If you’re strictly interested in synthesis or electrical engineering, then you might want to skip ahead to the next chapter, but if you’re reading my blog then you migth find the following interesting!</p>
 <h2 id="von-neumann-machines">Von Neumann Machines</h2>
@@ -56,27 +57,23 @@
 <p>Another model, which used to be somewhat common, but is far less so given that powerful CPUs can be had for pennies these days, is the logic circuits model. In this case instead of a CPU with an instruction pointer which goes through a list of instructions, fetches data from memory, operates on that data, saves it back to memory, etc., we have a far simpler device which is just a bunch of logic gates. This is so simple, in fact, that it can be efficiently simulated on a Von Neumann machine, so we can either build a logic circuit from raw gates or we can simulate it on a general purpose computer; the result of the computation will be the same either way.</p>
 <h3 id="an-example-circuit">An Example Circuit</h3>
 <p>Having said that, it’s still an interesting model, and it still has applications today. So let’s give a quick example. Consider the following function in TypeScript:</p>
-<pre class="typescript"><code>function doTheThing(a: boolean, b: boolean, c: boolean): boolean {
-    if (c) {
-        return a &amp;&amp; b;
-    } else {
-        return a || b;
-    }
-}</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">doTheThing</span>(a<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span> c<span class="op">:</span> <span class="dt">boolean</span>)<span class="op">:</span> <span class="dt">boolean</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (c) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">&amp;&amp;</span> b<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">||</span> b<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>This function is of questionable utility, but will serve as a simple example which we can easily translate to a circuits model. It uses a control boolean, <code>c</code> to decide whether to do a boolean <code>AND</code> operation or an <code>OR</code> operation on its other two inputs.</p>
 <p>What would a circuits model of this function look like? Well, we have <code>AND</code> and <code>OR</code> as fundamental operators in a circuit, so we can just use those:</p>
 <figure>
-<a href="../images/synth/2Gates.png"> <img src="../images/synth/2Gates.png" loading="lazy" alt="An AND and an XOR gate."> </a>
-<figcaption>
-A good start!
-</figcaption>
+<a href="../images/synth/2Gates.png"><img src="../images/synth/2Gates.png" loading="lazy" alt="An AND and an XOR gate." /></a>
+<figcaption>A good start!</figcaption>
 </figure>
 <p>So far, so good, but how do we handle the if/then logic? One way is to compute both values, and then decide on which one to use based on the <code>c</code> value:</p>
 <figure>
-<a href="../images/synth/LogicCircuit.png"> <img src="../images/synth/LogicCircuit.png" loading="lazy" alt="A logic circuit equivalent to the TypeScript code above."> </a>
-<figcaption>
-Logically correct
-</figcaption>
+<a href="../images/synth/LogicCircuit.png"><img src="../images/synth/LogicCircuit.png" loading="lazy" alt="A logic circuit equivalent to the TypeScript code above." /></a>
+<figcaption>Logically correct</figcaption>
 </figure>
 <p>Progress! We have a working circuit. From left to right, we compute both the <code>AND</code> and <code>OR</code>ed values, then look at <code>c</code>. We put it directly into one <code>AND</code> gate, and also into another <code>AND</code> gate after first passing it through a <code>NOT</code> gate. Finally we take the <code>OR</code> of both <code>AND</code> gates to see if the output should be high/on/true.</p>
 <p>We can prove this works via the following truth table:</p>
@@ -142,10 +139,8 @@ Logically correct
 </table>
 <p>You can take a moment and work through the truth table for both the original TypeScript code and the circuit above to prove that they’re the same in all cases. We could leave it at that and be done with it, but looking at the truth table we can see that a somewhat simpler circuit would do:</p>
 <figure>
-<a href="../images/synth/EquivalentLogicCircuit.png"> <img src="../images/synth/EquivalentLogicCircuit.png" loading="lazy" alt="An equivalent logic circuit to the circuit above, but with five gates instead of six."> </a>
-<figcaption>
-Same output, fewer gates
-</figcaption>
+<a href="../images/synth/EquivalentLogicCircuit.png"><img src="../images/synth/EquivalentLogicCircuit.png" loading="lazy" alt="An equivalent logic circuit to the circuit above, but with five gates instead of six." /></a>
+<figcaption>Same output, fewer gates</figcaption>
 </figure>
 <p>This circuit uses only five gates, instead of six in the original. If you like, you can take a second to convince yourself that the circuit above returns the same values as the truth table, the first circuit, and the TypeScript code. They’re all equivalent.</p>
 <p>So even though it might <em>seem</em> inefficient to compute both branches of the <code>if</code> and then pick one, appearances can be deceiving. In general, I worry far more about whether my programs are <em>correct</em> than I do if they are performing as fast as possible (but possibly returning an incorrect result!). If you do need to optimize some routine, it is important to compare the optimized versions in a profiler, not just squint at the code.</p>
@@ -161,10 +156,14 @@ Same output, fewer gates
 <p>So homomorphic encryption systems often use a logic circuits model of computation, which can be branch free, as shown above. In particular, <a href="https://crypto.stanford.edu/craig/">Craig Gentry’s 2010 thesis</a>, which introduced the first fully homomorphic cryptosystem, used this model.</p>
 <h2 id="mental-exercise">Mental Exercise</h2>
 <p>My real agenda here is to get you thinking about different kinds of computing models, because next we’re going to talk about analog computers, and they’re far weirder than logic circuits!</p>
+<div class="info">
+Tags: <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>, <a href="../tags/computer%20science.html">computer science</a>, <a href="../tags/homomorphic%20encryption.html">homomorphic encryption</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>, <a href="../tags/computer%20science.html">computer science</a>, <a href="../tags/homomorphic%20encryption.html">homomorphic encryption</a>
+    Tags: 
     
 </div>
 

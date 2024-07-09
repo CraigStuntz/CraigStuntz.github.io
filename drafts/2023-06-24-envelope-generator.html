@@ -3,18 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter ???: Building the Envelope Generator</title>
+        <title>Craig Stuntz - 2023-06-24-envelope-generator</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -30,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        ???
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the Envelope Generator
-                </h1>
-            
+            <h1>2023-06-24-envelope-generator</h1>
+
             <div class="info">
     Posted on June 24, 2023
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer">Building a Synthesizer,
+???</h3>
+<h1 class="chapterName" id="building-the-envelope-generator">Building the Envelope Generator</h1>
+<div class="info">
+Posted on June 24, 2023
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-01-22-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -66,11 +66,9 @@
 <h2 id="what-even-is-an-envelope-generator">What Even Is an Envelope Generator?</h2>
 <p>An envelope allows you to control the behavior of a sound over time. They’re frequently used to vary the volume, pitch, and filter cutoff of a sound, but really they can vary any parameter of a synth. As noted above, without an envelope your oscillator will just run forever, which most people don’t find musically pleasing!</p>
 <p>Here’s an envelope from the Logic Pro Retro Synth plugin, which is similar to the envelopes you’ll find on many non-modular keyboard synthesizers:</p>
-<figure class>
-<a href="../images/synth/LogicProVintageSynthAmpEG.png"> <img src="../images/synth/LogicProVintageSynthAmpEG.png" loading="lazy" width="400px" alt="The AMP ENV from Logic Pro. We can see an attack, decay, sustain, and release setting on a visual graph. There is a volume slider to the right."> </a>
-<figcaption>
-Retro Synth Amp Env
-</figcaption>
+<figure>
+<a href="../images/synth/LogicProVintageSynthAmpEG.png"><img src="../images/synth/LogicProVintageSynthAmpEG.png" loading="lazy" width="400" alt="The AMP ENV from Logic Pro. We can see an attack, decay, sustain, and release setting on a visual graph. There is a volume slider to the right." /></a>
+<figcaption>Retro Synth Amp Env</figcaption>
 </figure>
 <p>This looks superficially similar to the envelope generator that we’ll be building, but it differs in some important aspects:</p>
 <ul>
@@ -89,26 +87,20 @@ Retro Synth Amp Env
 </ul>
 <p>One of these things is not like the other! This will turn out to be surprisingly important in the discussion below.</p>
 <p>When using an envelope to control the note volume, you can change the shape of a note to be like an organ, which goes to full volume when you press a key and turns the note off when you release it:</p>
-<figure class>
-<a href="../images/synth/VintageSynthOrganEnv.png"> <img src="../images/synth/VintageSynthOrganEnv.png" loading="lazy" width="400px" alt="An organ has a very short attack, no decay, sustain at 100%, and a very short release."> </a>
-<figcaption>
-Retro Synth Organ Envelope
-</figcaption>
+<figure>
+<a href="../images/synth/VintageSynthOrganEnv.png"><img src="../images/synth/VintageSynthOrganEnv.png" loading="lazy" width="400" alt="An organ has a very short attack, no decay, sustain at 100%, and a very short release." /></a>
+<figcaption>Retro Synth Organ Envelope</figcaption>
 </figure>
 <p>…or a piano, where the note spikes briefly to full volume and then fades, eventually to nothing, as you hold the key. If you release the key during the decay the volume will of course drop immediately to nothing:</p>
-<figure class>
-<a href="../images/synth/VintageSynthPianoEnv.png"> <img src="../images/synth/VintageSynthPianoEnv.png" loading="lazy" width="400px" alt="A piano has a very short attack, a slow decay, sustain at 0%, and an instant release."> </a>
-<figcaption>
-Retro Synth Piano Envelope
-</figcaption>
+<figure>
+<a href="../images/synth/VintageSynthPianoEnv.png"><img src="../images/synth/VintageSynthPianoEnv.png" loading="lazy" width="400" alt="A piano has a very short attack, a slow decay, sustain at 0%, and an instant release." /></a>
+<figcaption>Retro Synth Piano Envelope</figcaption>
 </figure>
 <p>A real piano has a somewhat more complex decay, but the Retro Synth envelope can only do a linear decay. Other synths can do an exponential or arbitrary decay shape which will more accurately model a piano.</p>
 <p>It’s pretty common to have envelopes which aren’t really modeled after acoustic instruments, for example with a “pad” sound. This might have a slow attack, a slow decay, sustain at 75%, and a slow release:</p>
-<figure class>
-<a href="../images/synth/VintageSynthPadEnv.png"> <img src="../images/synth/VintageSynthPadEnv.png" loading="lazy" width="400px" alt="A pad envelope"> </a>
-<figcaption>
-Retro Synth Pad Envelope
-</figcaption>
+<figure>
+<a href="../images/synth/VintageSynthPadEnv.png"><img src="../images/synth/VintageSynthPadEnv.png" loading="lazy" width="400" alt="A pad envelope" /></a>
+<figcaption>Retro Synth Pad Envelope</figcaption>
 </figure>
 <p>As noted, this is one of two envelopes in the Retro Synth plugin, which is quite simple and lacks a modulation matrix. Other synth plugins have additional envelopes which can be arbitrarily routed to modulate any parameter on the synth via a modulation matrix.</p>
 <p>With an Envelope Generator <em>module,</em> you can accomplish these uses by connecting them to other modules:</p>
@@ -162,16 +154,12 @@ Retro Synth Pad Envelope
 <p>In the first iteration which you build on the breadboard it applies only <em>one</em> lowpass filter to the gate, giving you a more rounded shape. Then, by using a pair of diodes, two separate lowpass filters are used in the circuit, one for the rise, and a separate filter for the fall (see example on the right).</p>
 <p>That’s simple enough, but it’s a little <em>too</em> simple, even for these circuits. The envelope needs a sustain, and that can’t be accomplished with just a filter. So instead of just filtering the Gate signal directly, instead it splits the Gate input into two separate signal paths: A pulse at the start of the Gate similar to the “Trigger” output that some keyboards have, and a pulse wave which is similar to the Gate but which is set at a sustain level which youc an adjust with a potentiometer. These two paths are mixed together, forming a shape like the one at the right. Just like before, you can vary the attack speed with one pot and the descending phases (decay and release) with another pot.</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/EGPulse.png"> <img src="../images/synth/EGPulse.png" loading="lazy" width="400px" alt="This shows the signal which will be used to generate the envelope. It has a thin bar going up to 100% on the left followed by a sustain level at about 50% for the rest of the pulse. Also shown is the square wave which is the input to the E."> </a>
-<figcaption>
-Pulse
-</figcaption>
+<a href="../images/synth/EGPulse.png"><img src="../images/synth/EGPulse.png" loading="lazy" width="400" alt="This shows the signal which will be used to generate the envelope. It has a thin bar going up to 100% on the left followed by a sustain level at about 50% for the rest of the pulse. Also shown is the square wave which is the input to the E." /></a>
+<figcaption>Pulse</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/EGPulseMeasure.png"> <img src="../images/synth/EGPulseMeasure.png" loading="lazy" width="400px" alt="The same image as before, only it's overlaid with measurement cursors showing that the width of the attack pulse is 16 ms"> </a>
-<figcaption>
-…with measurement
-</figcaption>
+<a href="../images/synth/EGPulseMeasure.png"><img src="../images/synth/EGPulseMeasure.png" loading="lazy" width="400" alt="The same image as before, only it's overlaid with measurement cursors showing that the width of the attack pulse is 16 ms" /></a>
+<figcaption>…with measurement</figcaption>
 </figure>
 <div style="clear: both;">
 
@@ -181,25 +169,19 @@ Pulse
 <h2 id="breadboarding-the-envelope-generator">Breadboarding the Envelope Generator</h2>
 <h3 id="passive-vs.active-circuits">Passive vs. Active Circuits</h3>
 <figure class="inlineRight">
-<a href="../images/synth/EGPassive.png"> <img src="../images/synth/EGPassive.png" loading="lazy" width="400px" alt="There is a yellow square wave representing the Gate signal overlaid with a purple trace representing the envelope output. This purple trace raises slowly and asymptotically to the top of the yellow trace, and then when the yellow trace goes back to zero it slowly goes down, again following a roughly exponential curve."> </a>
-<figcaption>
-Passive trace
-</figcaption>
+<a href="../images/synth/EGPassive.png"><img src="../images/synth/EGPassive.png" loading="lazy" width="400" alt="There is a yellow square wave representing the Gate signal overlaid with a purple trace representing the envelope output. This purple trace raises slowly and asymptotically to the top of the yellow trace, and then when the yellow trace goes back to zero it slowly goes down, again following a roughly exponential curve." /></a>
+<figcaption>Passive trace</figcaption>
 </figure>
 <p>We start by building a passive EG, but as you can’t hook it up to anything which draws more current than an oscilloscope without changing the envelope, that’s really only good for demonstrating the principle of operation of the EG. Building a “useful” EG will require some op amps.</p>
 <p>If you look at the “Passive trace” figure on the right, the yellow trace is the square wave I am using as the input to the EG, and the purple trace is the output of the EG. As you can see, the output of the passive circuit is limited to the voltage of the input to the EG. Also, the output impedance would not be handled well; the shape of the waveform would change depending upon what you connected to the EG.</p>
 <figure class="inlineRight">
-<a href="../images/synth/EGActive.png"> <img src="../images/synth/EGActive.png" loading="lazy" width="400px" alt="Active trace"> </a>
-<figcaption>
-Active trace
-</figcaption>
+<a href="../images/synth/EGActive.png"><img src="../images/synth/EGActive.png" loading="lazy" width="400" alt="Active trace" /></a>
+<figcaption>Active trace</figcaption>
 </figure>
 <p>With the active EG the output voltage (see the “Active trace” figure) is now independent of the input voltage, and the impedance would be better handled, due to the use of a buffer op amp. Here’s what that looks like on the breadboard:</p>
 <figure>
-<a href="../images/synth/EGBreadboard.jpg"> <img src="../images/synth/EGBreadboard.jpg" loading="lazy" width="800px" alt="Breadboarded simple EG with attack and decay pots"> </a>
-<figcaption>
-Two pots and counting…“
-</figcaption>
+<a href="../images/synth/EGBreadboard.jpg"><img src="../images/synth/EGBreadboard.jpg" loading="lazy" width="800" alt="Breadboarded simple EG with attack and decay pots" /></a>
+<figcaption>Two pots and counting…“</figcaption>
 </figure>
 <p>(If you look <em>really closely</em> at this photo you’ll notice an extra resistor I’ve added to bring the voltage threshold down to about 2 V to start the EG. As noted above, my function generator has a limited voltage range.)</p>
 <div style="clear: both;">
@@ -207,24 +189,20 @@ Two pots and counting…“
 </div>
 <h3 id="attack-decayrelease-sustain-controls">Attack, Decay/Release, Sustain Controls</h3>
 <figure class="inlineRight">
-<a href="../images/synth/EGADSRPulse.png"> <img src="../images/synth/EGADSRPulse.png" loading="lazy" width="400px" alt="ADSR trace with pulse"> </a>
-<figcaption>
-ADSR trace
-</figcaption>
+<a href="../images/synth/EGADSRPulse.png"><img src="../images/synth/EGADSRPulse.png" loading="lazy" width="400" alt="ADSR trace with pulse" /></a>
+<figcaption>ADSR trace</figcaption>
 </figure>
 <p>I’m going to explain how the attack and decay are implemented in the circuit. This is, ironically considering it was done to keep the circuit itself simple, somewhat complicated to understand, so feel free to skip ahead to the next section if you’re so inclined.</p>
 <p>The way a “real” envelope generator works on a commercial synth works is first the attack happens, taking the envelope to its maximum level. Then the decay, as it goes to the sustain level, and finally, when the key is released, the release happens.</p>
 <p>With the mki x es.EDU kit, on the other hand, the release only has a chance to happen when the attack is quite short. If you look at the trace on the right you can see that with a short attack, the decay can happen, followed by the sustain and release. This is the “best case scenario” for this circuit. The figure on the right, “ADSR trace,” illustrates this “bess case scenario.” With roughly this shape, you can adjust the attack (a little!), the decay/release times as a single value, and set a sustain level.</p>
 <figure class="inlineRight">
-<a href="../images/synth/EGSlowAttack.png"> <img src="../images/synth/EGSlowAttack.png" loading="lazy" width="400px" alt="ADSR trace with slow attack"> </a>
-<figcaption>
-ADSR trace with slow attack
-</figcaption>
+<a href="../images/synth/EGSlowAttack.png"><img src="../images/synth/EGSlowAttack.png" loading="lazy" width="400" alt="ADSR trace with slow attack" /></a>
+<figcaption>ADSR trace with slow attack</figcaption>
 </figure>
 <p>When I dial in a longer attack, there is no decay; in this case the attack takes its time to even arrive at the sustain level, wherever that happens to be set. Importantly, the attack in this case only goes to the sustain level; it does not go to 100% as a standard synthesizer attack would do.</p>
 <p>(Note how the attack level is much higher in the “ADSR trace” example, and how the attack only goes to the “sustain” level of the “ADSR trace” in the “ADSR trace with slow attack” example.)</p>
 <p>This is because of how the EG works. If you look at the figure to the right called “ADSR trace with slow attack,” you can see a third, blue trace. The blue trace is a pulse which is fired when the input goes high. As you can see, the pulse is pretty short. One way to think about the duration of the pulse is that it’s the maximum length of time your attack can be for there to still have a separate decay. You can have a longer attack, yes, but if you do then:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>You won’t get any decay, and</li>
 <li>Your attack will only go to the sustain level, not to 100%.</li>
 </ol>
@@ -235,17 +213,13 @@ ADSR trace with slow attack
 <h3 id="led">LED</h3>
 <p>I added an LED, and a transistor to drive it.</p>
 <figure>
-<a href="../images/synth/EGWithLED.jpg"> <img src="../images/synth/EGWithLED.jpg" loading="lazy" width="800px" alt="Breadboarded EG with LED light shining"> </a>
-<figcaption>
-The “LED Moment”
-</figcaption>
+<a href="../images/synth/EGWithLED.jpg"><img src="../images/synth/EGWithLED.jpg" loading="lazy" width="800" alt="Breadboarded EG with LED light shining" /></a>
+<figcaption>The “LED Moment”</figcaption>
 </figure>
 <h3 id="inversion">Inversion</h3>
 <figure class="inlineRight">
-<a href="../images/synth/EGInverted.png"> <img src="../images/synth/EGInverted.png" loading="lazy" width="400px" alt="Inverted trace"> </a>
-<figcaption>
-Inverted trace
-</figcaption>
+<a href="../images/synth/EGInverted.png"><img src="../images/synth/EGInverted.png" loading="lazy" width="400" alt="Inverted trace" /></a>
+<figcaption>Inverted trace</figcaption>
 </figure>
 <p>This time the blue trace on the right is showing the inverted output. No surprise there; it uses <a href="../posts/2023-04-03-building-a-synthesizer-4.html#inverter">an op amp in an inverting configuration</a> to produce this output.</p>
 <div style="clear: both;">
@@ -254,10 +228,8 @@ Inverted trace
 <h3 id="looping-the-envelope">Looping the Envelope</h3>
 <p>I found this section somewhat hard to understand, not least because the directions lead off with a confusing bit of language:</p>
 <figure>
-<a href="../images/synth/EGManualConfusion.png"> <img src="../images/synth/EGManualConfusion.png" loading="lazy" width="800px" alt="Screenshot of the Looping the Envelope section of the manual, with a looping circuit diagram and the text &quot;You just patch it in between output (on the right) and input (on the left) &quot;"> </a>
-<figcaption>
-It’s your other left…
-</figcaption>
+<a href="../images/synth/EGManualConfusion.png"><img src="../images/synth/EGManualConfusion.png" loading="lazy" width="800" alt="Screenshot of the Looping the Envelope section of the manual, with a looping circuit diagram and the text &quot;You just patch it in between output (on the right) and input (on the left) &quot;" /></a>
+<figcaption>It’s your other left…</figcaption>
 </figure>
 <p>I was pretty sure this was a mistake; the input is on the right and the output is on the left. <a href="https://tinyurl.com/y7wh2o6u">Looking at the circuit simulator seemed to confirme this</a>. It was only when I watched <a href="https://www.youtube.com/watch?v=L9vTz0vm6pc">Moritz’s YouTube video</a> that I realized he was talking about the <em>envelope generator</em> inputs and outputs, not the I/O for the Schmitt trigger he’s describing here. Of course the output of the Schmitt trigger goes to the input of the envelope generator, and vice/versa!</p>
 <p>In the end the way that this produces a loop is pretty simple, and here’s how I would explain it:</p>
@@ -265,10 +237,8 @@ It’s your other left…
 Given that requirement, then we just need a circuit which will make the input go high whenever the output goes low. That sounds like a Schmitt trigger inverter, something which you’ll be familiar with if you’ve previously build the mki x es.EDU VCO, and the circuit shown is just building a Schmitt trigger inverter using an op amp and a few passive components.</p>
 <p>However, my confusion only got worse as I looked deeper into this step. I had found the breadboard diagrams increasingly difficult to line up with the schematics as the breadboard got more densely packed, and I ended up annotating the diagram in this step. It differs from the schematic in the step in a couple of important ways, and all of the jumpers and the unlabeled pots, op amps, and jacks had finally pushed past the point where I could keep track of this in my head.</p>
 <figure>
-<a href="../images/synth/EGHuh.png"> <img src="../images/synth/EGHuh.png" loading="lazy" width="800px" alt="A schematic diagram of the full EG circuit with a breadboard diagram of the mostly-equivalent circuit below it, with a few differences circled and some annotations added to identify specific parts."> </a>
-<figcaption>
-Schematic and Breadboard
-</figcaption>
+<a href="../images/synth/EGHuh.png"><img src="../images/synth/EGHuh.png" loading="lazy" width="800" alt="A schematic diagram of the full EG circuit with a breadboard diagram of the mostly-equivalent circuit below it, with a few differences circled and some annotations added to identify specific parts." /></a>
+<figcaption>Schematic and Breadboard</figcaption>
 </figure>
 <p>These are <em>mostly</em> the same as the diagrams from the manual, only I have added all of the colored annotations. Note, especially, the red circles. The breadboard version of the circuit does not include the switch (the components for the Gate input section are on the board, but they’re “permanently switched off” in this version), and in the breadboard version the resistor goes to the negative rail instead of ground. That last bit just seems like an error to me – the full schematic and the PC board layout later in the directions match the schematic here. So I ended up not doing this part.</p>
 <h3 id="the-mistake-i-made">The Mistake I Made</h3>
@@ -277,10 +247,8 @@ Schematic and Breadboard
 <p>The limitation to very short attack times is somewhat less than ideal, so could we fix it? The “pulse” used to generate the attack is set to a pretty short duration, and it’s not adjustable. What if it were adjustable? That’s not so hard. We could replace the attack potentiometer with a stereo potentiometer (which is really just two separate potentiometers with a single shaft to adjust them). Then we could use one of these for the attack time, as before, and the second for adjusting the width of the pulse.</p>
 <p>So <a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcAmALNZA2VAOMmB2SBVATlIQJAMxCVQGY6BTAWjDACgAlEd5HHVSo+YAXTFQpqSCimyYCTgHMpJEbISYFUTgCc+2ISP6D1UsPDj7DI85uHSi1gO62QjZO-ucAhu9R8EAYvQNpSOX5wKzhg6BwGQgZUTFIGHAICBAQwKhh8UkwBRgJSUuQKiMsrG0KPILrsHWr4TgATYNCG2jCQLzAAOUDcTgB5EEIvdJEiEWn5GwRSKZwRSeDVi1b-Mlp5pZWRQUkolvgoDFQBLKv8MBzEC7RrghwESES0-EJomrdd4KYQQAkIKTj-OqgujLTpgtwHWHQw66NxgGEyWQVEQYlHgGEMRJ40KxSDgkCQwloqaE0luSGbCm0Un+Oo4qkeWLHLynGKyVgweA4DJFd4lbDCSBUfmwOBCmgE5ZwMC4V5MM6k3isZCQMyOLUELz2PoePrQJDIM3yM1krEczFoQGCWl9B0422eXQdW2JQQCQQ+42DYY4dp9IUeEIu7GR-pDZUh3IiP2OjZzIFbGIXR4AQQAKrnswBhADSnETYeBkYDwidvysWeIIAAIgBRQvZgCaAHpuC2ADIt7MAZRbZIJewQ1L22tx48R8yhzoXM4X6aXhJrwQ3ODhW56O9THgPS82uFk8w9J7TwKCAavEa6PUjzt6HtfJLJvWrQRxL5-sRSbEPwAYw8IwcUAo8dAFKwIBgZ4Mled5PgYb48hlLhVEgs8wOxOowQAD2CDgOT2TAIBkCIjhAAA1ABJbMAB0AGchzo1sACFs24TgiNQuYymCBBgQAkBBGzJsACkAFUh1zFjZN44IIiwWQZCYLAmCTQQAAUR2kptRlYCSh24FiWwGGj+1GHTRwhHoAPAj83FYJy+Q4YkwVUdhJEgnzQmPXF2EcHF2G0O1PVEcK-PwNTYljYMVCitSjDCtTAtJUC0oirUdQihQZXgODoAKIpVgYUpykqBsuBc7VdRMer8rJVy1gNPgmvWUkOkjTAtAmNZ+oS+M-HcPrpwmfquVEfpeTiBIkhSNJEOyXIM1aFyjHMVqBt3XKGo6vKurLAg1kG2gPMmpk6xJaAz21XkYioIdZILOiBiS5VzvARwgVrZ0xEEcafu+0kiJoCZXhQCAgQosSQAkmS5JYgBZUdwaYIEqDETHSDU+H6KY1j2JbLieIAIz4OcmtKCBTqZE6TEuzd-PqC6boK8h3ke2CEYAFz53xgIAaxAZiAAcAEtheYFrmaCVnfzl3zcFEXyjGdYKgPc8QlZcwGcuZ5yZpEnXKy8UkAHtwHNfq4vIPoCqsMpxuQJBMRt4JOGt307fqSAvBnfJwHATggA">I tried this out in the circuit simulator</a>, and it seems to work, for the most part. (Except that the falstad.com simulator has no stereo potentiometers; I had to use two mono pots with separate adjustments.) But I can certainly make the attack longer by increasing the resistance of what used to be a single 10k resistor and is now a potentiometer. Overall it feels like an improvement.</p>
 <figure>
-<a href="../images/synth/EGSimulatorFixedAttack.png"> <img src="../images/synth/EGSimulatorFixedAttack.png" loading="lazy" width="800px" alt="A schematic of the envelope generator in a circuit simulator with the modification described in the text."> </a>
-<figcaption>
-Improved Attack
-</figcaption>
+<a href="../images/synth/EGSimulatorFixedAttack.png"><img src="../images/synth/EGSimulatorFixedAttack.png" loading="lazy" width="800" alt="A schematic of the envelope generator in a circuit simulator with the modification described in the text." /></a>
+<figcaption>Improved Attack</figcaption>
 </figure>
 <p>Actually including it in the final project would require changes in packaging since the stereo pot is larger than a mono pot, and changes to the circuit. More importantly, I would need to tweak the resistor/capacitor values in the lowpass filter at the input so that the range of the pot was correct for both the pulse length and the attack curve across the full range of the stereo pot.</p>
 <h2 id="building-the-pc-board">Building the PC Board</h2>
@@ -312,10 +280,14 @@ Improved Attack
 <li><a href="https://www.youtube.com/watch?v=L9vTz0vm6pc">How to loop any envelope</a> by Moritz Klein (2:48)</li>
 <li><a href="https://youtu.be/BKg2gU8tf08">Erica Synths .EDU Envelope - Building and Demo</a> by Synth DIY Guy (18:05)</li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+    Tags: 
     
 </div>
 

@@ -34,6 +34,22 @@
 <a href="../">Craig Stuntz</a>
 </div>
 <div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="equality-is-hard">2020-02-18-equality-is-hard</h1>
+<div class="info">
+Posted on February 18, 2020
+</div>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
 <a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
 </div>
 </div>
@@ -95,10 +111,12 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> MyString = { SomeField : <span class="dt">string</span> }
-<span class="kw">let</span>  a = { SomeField = <span class="st">&quot;Some value&quot;</span> }
-<span class="kw">let</span>  b = { SomeField = <span class="st">&quot;Some value&quot;</span> }
-<span class="kw">if</span> a = b <span class="kw">then</span> //<span class="co"> returns true, enters &quot;then&quot; block</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb1"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> MyString = <span class="op">{</span> SomeField : <span class="dt">string</span> <span class="op">}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span>  a = <span class="op">{</span> SomeField = <span class="st">&quot;Some value&quot;</span> <span class="op">}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span>  b = <span class="op">{</span> SomeField = <span class="st">&quot;Some value&quot;</span> <span class="op">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> a = b <span class="kw">then</span> //<span class="co"> returns true, enters &quot;then&quot; block</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -106,14 +124,16 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">class</span> MyString {
-    <span class="kw">private</span> <span class="kw">readonly</span> <span class="dt">string</span> someField;
-    <span class="kw">public</span> <span class="dt">string</span> SomeField { <span class="kw">get</span>; }
-    <span class="kw">public</span> <span class="fu">MyString</span>(<span class="dt">string</span> someField) =&gt; <span class="kw">this</span>.<span class="fu">someField</span> = someField;
-}
-<span class="dt">var</span> a = <span class="kw">new</span> <span class="fu">MyString</span>(<span class="st">&quot;Some value&quot;</span>);
-<span class="dt">var</span> b = <span class="kw">new</span> <span class="fu">MyString</span>(<span class="st">&quot;Some value&quot;</span>);
-<span class="kw">if</span> (a == b) { <span class="co">// returns false, does not enter block</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb2"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyString <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="kw">readonly</span> <span class="dt">string</span> someField<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">string</span> SomeField <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="fu">MyString</span><span class="op">(</span><span class="dt">string</span> someField<span class="op">)</span> <span class="op">=&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">someField</span> <span class="op">=</span> someField<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> a <span class="op">=</span> <span class="kw">new</span> <span class="fu">MyString</span><span class="op">(</span><span class="st">&quot;Some value&quot;</span><span class="op">);</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> b <span class="op">=</span> <span class="kw">new</span> <span class="fu">MyString</span><span class="op">(</span><span class="st">&quot;Some value&quot;</span><span class="op">);</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> <span class="op">(</span>a <span class="op">==</span> b<span class="op">)</span> <span class="op">{</span> <span class="co">// returns false, does not enter block</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -123,11 +143,13 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp">[&lt;TestMethod&gt;]
-<span class="kw">let</span> ``The result <span class="kw">of</span> the calculation is the expected value``() = 
-    <span class="kw">let</span> expected = { SomeField = <span class="st">&quot;Some value&quot;</span>; SomeOtherField = <span class="dv">15</span>; StillAnotherField = <span class="kw">true</span>; ... }
-    <span class="kw">let</span> actual = calculate()
-    Assert<span class="kw">.</span>AreEqual(expected, actual)</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb3"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">[&lt;</span>TestMethod<span class="op">&gt;]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> ``The result <span class="kw">of</span> the calculation is the expected value``<span class="op">()</span> = </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> expected = <span class="op">{</span> SomeField = <span class="st">&quot;Some value&quot;</span>; SomeOtherField = <span class="dv">15</span>; StillAnotherField = <span class="kw">true</span>; ... <span class="op">}</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> actual = calculate<span class="op">()</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    Assert<span class="kw">.</span>AreEqual<span class="op">(</span>expected, actual<span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -138,7 +160,9 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> Person = { Name : <span class="dt">string</span>; Age : integer; Offspring : Person list }</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb4"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Person = <span class="op">{</span> Name : <span class="dt">string</span>; Age : integer; Offspring : Person list <span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -146,8 +170,10 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> jane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ { Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }
-<span class="kw">let</span> sue  = { Name = <span class="st">&quot;Sue&quot;</span>;  Age = <span class="dv">35</span>; Offspring = [ { Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb5"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> jane = <span class="op">{</span> Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = <span class="op">[</span> <span class="op">{</span> Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = <span class="op">[]</span> <span class="op">}</span> <span class="op">]</span> <span class="op">}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> sue  = <span class="op">{</span> Name = <span class="st">&quot;Sue&quot;</span>;  Age = <span class="dv">35</span>; Offspring = <span class="op">[</span> <span class="op">{</span> Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = <span class="op">[]</span> <span class="op">}</span> <span class="op">]</span> <span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -155,9 +181,11 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> john = { Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] };
-<span class="kw">let</span> jane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ john ] }
-<span class="kw">let</span> sue  = { Name = <span class="st">&quot;Sue&quot;</span>;  Age = <span class="dv">35</span>; Offspring = [ john ] }</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb6"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> john = <span class="op">{</span> Name = <span class="st">&quot;John&quot;</span>; Age = <span class="dv">15</span>; Offspring = <span class="op">[]</span> <span class="op">}</span>;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> jane = <span class="op">{</span> Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = <span class="op">[</span> john <span class="op">]</span> <span class="op">}</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> sue  = <span class="op">{</span> Name = <span class="st">&quot;Sue&quot;</span>;  Age = <span class="dv">35</span>; Offspring = <span class="op">[</span> john <span class="op">]</span> <span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -166,7 +194,9 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> newJane = { Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = [ { Name = <span class="st">&quot;Pat&quot;</span>; Age = <span class="dv">15</span>; Offspring = [] } ] }</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb7"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> newJane = <span class="op">{</span> Name = <span class="st">&quot;Jane&quot;</span>; Age = <span class="dv">47</span>; Offspring = <span class="op">[</span> <span class="op">{</span> Name = <span class="st">&quot;Pat&quot;</span>; Age = <span class="dv">15</span>; Offspring = <span class="op">[]</span> <span class="op">}</span> <span class="op">]</span> <span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -174,9 +204,11 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> john = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>);
-<span class="dt">var</span> jane = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { john });
-<span class="dt">var</span> sue  = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Sue&quot;</span>,  <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { john });</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb8"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> john <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;John&quot;</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="kw">null</span><span class="op">);</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;Jane&quot;</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="kw">new</span> List<span class="op">&lt;</span>Person<span class="op">&gt;</span> <span class="op">{</span> john <span class="op">});</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> sue  <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;Sue&quot;</span><span class="op">,</span>  <span class="dv">15</span><span class="op">,</span> <span class="kw">new</span> List<span class="op">&lt;</span>Person<span class="op">&gt;</span> <span class="op">{</span> john <span class="op">});</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -184,7 +216,9 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">jane.<span class="fu">Offspring</span>.<span class="fu">First</span>().<span class="fu">Name</span> = <span class="st">&quot;Pat&quot;</span>;</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb9"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>jane<span class="op">.</span><span class="fu">Offspring</span><span class="op">.</span><span class="fu">First</span><span class="op">().</span><span class="fu">Name</span> <span class="op">=</span> <span class="st">&quot;Pat&quot;</span><span class="op">;</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -192,8 +226,10 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">var</span> jane = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>) });
-<span class="dt">var</span> sue  = <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;Sue&quot;</span>,  <span class="dv">15</span>, <span class="kw">new</span> List&lt;Person&gt; { <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">15</span>, <span class="kw">null</span>) });</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb10"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;Jane&quot;</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="kw">new</span> List<span class="op">&lt;</span>Person<span class="op">&gt;</span> <span class="op">{</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;John&quot;</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="kw">null</span><span class="op">)</span> <span class="op">});</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> sue  <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;Sue&quot;</span><span class="op">,</span>  <span class="dv">15</span><span class="op">,</span> <span class="kw">new</span> List<span class="op">&lt;</span>Person<span class="op">&gt;</span> <span class="op">{</span> <span class="kw">new</span> <span class="fu">Person</span><span class="op">(</span><span class="st">&quot;John&quot;</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="kw">null</span><span class="op">)</span> <span class="op">});</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -217,8 +253,10 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> aValue <span class="op">=</span> <span class="at">someFunction</span>()<span class="op">;</span> <span class="co">// Assignment</span>
-<span class="cf">if</span> (aValue <span class="op">===</span> <span class="dv">3</span>) <span class="op">{</span>            <span class="co">// Test for equality</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> aValue <span class="op">=</span> <span class="fu">someFunction</span>()<span class="op">;</span> <span class="co">// Assignment</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (aValue <span class="op">===</span> <span class="dv">3</span>) {            <span class="co">// Test for equality</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -227,7 +265,9 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">a = b = c = <span class="dv">3</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb12"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>a <span class="kw">=</span> b <span class="kw">=</span> c <span class="kw">=</span> <span class="dv">3</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -237,8 +277,10 @@ Posted on February 18, 2020
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode tex"><code class="sourceCode latex">if aValue = 3 ... 
-where aValue = someFunction()</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb13"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>if aValue = 3 ... </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>where aValue = someFunction()</span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -247,8 +289,10 @@ where aValue = someFunction()</code></pre></div>
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">let</span> aValue = someFunction(); //<span class="co"> Assignment</span>
-<span class="kw">if</span> aValue = <span class="dv">3</span> <span class="kw">then</span>           //<span class="co"> Test for equality</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb14"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> aValue = someFunction<span class="op">()</span>; //<span class="co"> Assignment</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> aValue = <span class="dv">3</span> <span class="kw">then</span>           //<span class="co"> Test for equality</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -257,8 +301,10 @@ where aValue = someFunction()</code></pre></div>
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> aValue = someFunction(); <span class="co">// Assignment</span>
-<span class="cf">if</span> (aValue = <span class="dv">3</span>) {            <span class="co">// Also assignment!</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> aValue <span class="op">=</span> someFunction<span class="op">();</span> <span class="co">// Assignment</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>aValue <span class="op">=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span>            <span class="co">// Also assignment!</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -266,12 +312,14 @@ where aValue = someFunction()</code></pre></div>
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> aValue = someFunction(); <span class="co">// Assignment</span>
-<span class="cf">if</span> (<span class="dv">3</span> == aValue) {           <span class="co">// Test for equality</span>
-
-<span class="co">// [...]</span>
-
-<span class="cf">if</span> (<span class="dv">3</span> = aValue) {            <span class="co">// Syntax error: Cannot assign aValue to 3.</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> aValue <span class="op">=</span> someFunction<span class="op">();</span> <span class="co">// Assignment</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span><span class="dv">3</span> <span class="op">==</span> aValue<span class="op">)</span> <span class="op">{</span>           <span class="co">// Test for equality</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">// [...]</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span><span class="dv">3</span> <span class="op">=</span> aValue<span class="op">)</span> <span class="op">{</span>            <span class="co">// Syntax error: Cannot assign aValue to 3.</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -284,8 +332,10 @@ where aValue = someFunction()</code></pre></div>
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">int</span> int1 = <span class="dv">3</span>;
-Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEquals</span>(int1, int1)); <span class="co">// Prints False</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb17"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> int1 <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Console<span class="op">.</span><span class="fu">WriteLine</span><span class="op">(</span>Object<span class="op">.</span><span class="fu">ReferenceEquals</span><span class="op">(</span>int1<span class="op">,</span> int1<span class="op">));</span> <span class="co">// Prints False</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -294,8 +344,10 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">WHERE</span> (SOME_EXPRESSION = SOME_OTHER_EXPRESSION)
-  <span class="kw">OR</span> (SOME_EXPRESSION <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">AND</span> SOME_OTHER_EXPRESSION <span class="kw">IS</span> <span class="kw">NULL</span>)</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb18"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> (SOME_EXPRESSION <span class="op">=</span> SOME_OTHER_EXPRESSION)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">OR</span> (SOME_EXPRESSION <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">AND</span> SOME_OTHER_EXPRESSION <span class="kw">IS</span> <span class="kw">NULL</span>)</span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -305,11 +357,13 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span class="kw">type</span> MaybeFloat = 
-    | Float          <span class="kw">of</span> <span class="dt">float</span>
-    | Imaginary      <span class="kw">of</span> real: <span class="dt">float</span> * imaginary: <span class="dt">float</span>
-    | Indeterminate
-    | //<span class="co">/ ...    </span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb19"><pre class="sourceCode fsharp"><code class="sourceCode fsharp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> MaybeFloat = </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    | Float          <span class="kw">of</span> <span class="dt">float</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    | Imaginary      <span class="kw">of</span> real: <span class="dt">float</span> * imaginary: <span class="dt">float</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    | Indeterminate</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    | //<span class="co">/ ...    </span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -333,9 +387,11 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
-  <span class="fu">var_dump</span><span class="ot">(</span><span class="st">&quot;608E-4234&quot;</span> == <span class="st">&quot;272E-3063&quot;</span><span class="ot">);</span> <span class="co">// true</span>
-<span class="kw">?&gt;</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb20"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">var_dump</span>(<span class="st">&quot;608E-4234&quot;</span> <span class="op">==</span> <span class="st">&quot;272E-3063&quot;</span>)<span class="ot">;</span> <span class="co">// true</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -349,18 +405,20 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="at">@Override</span>
-<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">equals</span>(<span class="bu">Object</span> o) {
-    <span class="kw">if</span> (<span class="kw">this</span> == o)
-        <span class="kw">return</span> <span class="kw">true</span>;
-    <span class="kw">if</span> (o == <span class="kw">null</span>)
-        <span class="kw">return</span> <span class="kw">false</span>;
-    <span class="kw">if</span> (!o.<span class="fu">getClass</span>().<span class="fu">isAssignableFrom</span>(<span class="fu">getClass</span>())) <span class="co">// Danger! This is a mistake!</span>
-        <span class="kw">return</span> <span class="kw">false</span>;
-    ThisClass thisClass = (ThisClass) o;
-    <span class="co">// field comparison</span>
-    <span class="co">// ...</span>
-}</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb21"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Override</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">equals</span><span class="op">(</span><span class="bu">Object</span> o<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span><span class="kw">this</span> <span class="op">==</span> o<span class="op">)</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>o <span class="op">==</span> <span class="kw">null</span><span class="op">)</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>o<span class="op">.</span><span class="fu">getClass</span><span class="op">().</span><span class="fu">isAssignableFrom</span><span class="op">(</span><span class="fu">getClass</span><span class="op">()))</span> <span class="co">// Danger! This is a mistake!</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    ThisClass thisClass <span class="op">=</span> <span class="op">(</span>ThisClass<span class="op">)</span> o<span class="op">;</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// field comparison</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -368,8 +426,10 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">    <span class="kw">if</span> (<span class="fu">getClass</span>() != o.<span class="fu">getClass</span>())
-        <span class="kw">return</span> <span class="kw">false</span>;</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb22"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span><span class="fu">getClass</span><span class="op">()</span> <span class="op">!=</span> o<span class="op">.</span><span class="fu">getClass</span><span class="op">())</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -380,9 +440,11 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="st">''</span> <span class="op">==</span> <span class="dv">0</span><span class="op">;</span>      <span class="co">// true</span>
-<span class="dv">0</span>  <span class="op">==</span> <span class="st">'0'</span><span class="op">;</span>    <span class="co">// true</span>
-<span class="st">''</span> <span class="op">==</span> <span class="st">'0'</span><span class="op">;</span>    <span class="co">// false!</span></code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb23"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="st">''</span> <span class="op">==</span> <span class="dv">0</span><span class="op">;</span>      <span class="co">// true</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  <span class="op">==</span> <span class="st">'0'</span><span class="op">;</span>    <span class="co">// true</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="st">''</span> <span class="op">==</span> <span class="st">'0'</span><span class="op">;</span>    <span class="co">// false!</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -392,14 +454,16 @@ Console.<span class="fu">WriteLine</span>(Object.<span class="fu">ReferenceEqual
 <div class="sourceCode">
 <div class="sourceCode">
 <div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs">[TestMethod] 
-<span class="kw">public</span> <span class="dt">void</span> <span class="fu">Calculation_Is_Correct</span>() {
-    <span class="dt">var</span> expected = <span class="kw">new</span> <span class="fu">Result</span>(SOME_EXPECTED_VALUE);
-
-    <span class="dt">var</span> actual = _service.<span class="fu">DoCalculation</span>(SOME_INPUT);
-
-    Assert.<span class="fu">AreEqual</span>(expected, actual);
-}</code></pre></div>
+<div class="sourceCode">
+<div class="sourceCode" id="cb24"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>TestMethod<span class="op">]</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">Calculation_Is_Correct</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> expected <span class="op">=</span> <span class="kw">new</span> <span class="fu">Result</span><span class="op">(</span>SOME_EXPECTED_VALUE<span class="op">);</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> actual <span class="op">=</span> _service<span class="op">.</span><span class="fu">DoCalculation</span><span class="op">(</span>SOME_INPUT<span class="op">);</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    Assert<span class="op">.</span><span class="fu">AreEqual</span><span class="op">(</span>expected<span class="op">,</span> actual<span class="op">);</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -451,24 +515,28 @@ from the <a href="https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work
 <li><div id="fn1">
 
 </div>
-<p>This is <a href="https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science">probably attributable to Phil Karlson</a><a href="#fnref1">↩</a></p></li>
+<p>This is <a href="https://skeptics.stackexchange.com/questions/19836/has-phil-karlton-ever-said-there-are-only-two-hard-things-in-computer-science">probably attributable to Phil Karlson</a><a href="#fnref1">↩︎</a></p></li>
 <li><div id="fn2">
 
 </div>
-<p>A “binary relation” deserves a little bit of explanation, but this gets into a little math, so feel free to ignore if it doesn’t help you. We have two sets <em>A</em> and <em>B</em>. (They might be the same set.) For any two members <em>a</em> and <em>b</em> of the sets, we want a rule which says whether they’re in the relation or not. So if <em>A</em> and <em>B</em> are the integers, the ordered pair <em>(1, 2)</em> is not in the relation “is equal to” but the ordered pair <em>(5, 5)</em> is in the relation. A relation is a subset of the cross product of the sets.<a href="#fnref2">↩</a></p></li>
+<p>A “binary relation” deserves a little bit of explanation, but this gets into a little math, so feel free to ignore if it doesn’t help you. We have two sets <em>A</em> and <em>B</em>. (They might be the same set.) For any two members <em>a</em> and <em>b</em> of the sets, we want a rule which says whether they’re in the relation or not. So if <em>A</em> and <em>B</em> are the integers, the ordered pair <em>(1, 2)</em> is not in the relation “is equal to” but the ordered pair <em>(5, 5)</em> is in the relation. A relation is a subset of the cross product of the sets.<a href="#fnref2">↩︎</a></p></li>
 <li><div id="fn3">
 
 </div>
-<p>Gowers, Timothy, <em>Mathematics: A Very Short Introduction</em>, p. 60<a href="#fnref3">↩</a></p></li>
+<p>Gowers, Timothy, <em>Mathematics: A Very Short Introduction</em>, p. 60<a href="#fnref3">↩︎</a></p></li>
 <li><div id="fn4">
 
 </div>
-<p><code>a = b = c = []</code> in Ruby assigns <em>the same reference</em> to <code>a</code>, <code>b</code>, and <code>c</code>. So if you mutate <code>a</code>, you’ll mutate <code>b</code> and <code>c</code> at the same time. That’s probably not what you wanted, otherwise what would be the point of having three separate references? In contrast, with a value type like <code>Integer</code>, mutating <code>a</code> will <em>not</em> change the value of <code>b</code> or <code>c</code>.<a href="#fnref4">↩</a></p></li>
+<p><code>a = b = c = []</code> in Ruby assigns <em>the same reference</em> to <code>a</code>, <code>b</code>, and <code>c</code>. So if you mutate <code>a</code>, you’ll mutate <code>b</code> and <code>c</code> at the same time. That’s probably not what you wanted, otherwise what would be the point of having three separate references? In contrast, with a value type like <code>Integer</code>, mutating <code>a</code> will <em>not</em> change the value of <code>b</code> or <code>c</code>.<a href="#fnref4">↩︎</a></p></li>
 <li><div id="fn5">
 
 </div>
-<p><code>~</code> is the SML operator for unary negation, so <code>~0</code> should be read as “negative zero.”<a href="#fnref5">↩</a></p></li>
+<p><code>~</code> is the SML operator for unary negation, so <code>~0</code> should be read as “negative zero.”<a href="#fnref5">↩︎</a></p></li>
 </ol>
+</div>
+<div class="info">
+Tags:
+</div>
 </div>
 <div class="info">
 Tags:

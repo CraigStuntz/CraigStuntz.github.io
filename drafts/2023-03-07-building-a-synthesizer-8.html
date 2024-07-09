@@ -34,12 +34,28 @@
 <a href="../">Craig Stuntz</a>
 </div>
 <div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="building-a-synthesizer-8">2023-03-07-building-a-synthesizer-8</h1>
+<div class="info">
+Posted on March 7, 2023
+</div>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
 <a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
 </div>
 </div>
 <div id="content">
-<h3 id="building-a-synthesizer-8" class="series">Building a Synthesizer, 8</h3>
-<h1 id="a-gentle-introduction-to-op-amps" class="chapterName">A Gentle Introduction to Op Amps</h1>
+<h3 class="series" id="building-a-synthesizer-8">Building a Synthesizer, 8</h3>
+<h1 class="chapterName" id="a-gentle-introduction-to-op-amps">A Gentle Introduction to Op Amps</h1>
 <div class="info">
 Posted on March 7, 2023
 </div>
@@ -62,7 +78,7 @@ An Op Amp
 <p>Like may stories I will tell in this post, this is a lie, but it’s a white lie. There are a bunch of details I’ve omitted. We will get to those as they become relevant.</p>
 <p>When you’re looking at a schematic and see the symbol above, you can say, “Aha! That’s an op amp.” You’ve already learned something useful!</p>
 <p>Not every component with a triangle and a <code>+</code> and <code>-</code> input is an op amp. This is not an op amp:</p>
-<a href="../images/synth/OTA.png"><img src="../images/synth/OTA.png" alt="Schematic symbol for an operational transconductance amplifier" width="200" /></a>
+<a href="../images/synth/OTA.png"><img src="../images/synth/OTA.png" width="200" alt="Schematic symbol for an operational transconductance amplifier" /></a>
 Not an Op Amp
 <p>The above is… well, don’t worry too much about what it is; that’s not what this article is about. The important point is that when you see something which looks like the first picture in this article, that’s an op amp. When you see something which looks <em>sort of</em> like an op amp but has a bunch of extra stuff, then it might be something different.</p>
 <p>The “operational amplifier” gets its name from the op amp’s ability to perform certain mathematical operations on an input. We will give specific examples in the next level, but if you’re wondering where the name came from, now you know. An op amp can be used in a number of different configurations to provide useful features (“operations”) in a circuit. They are widely used in analog audio electronics. They are not the only kind of amplifier in use, but they are one of the most common.</p>
@@ -80,7 +96,7 @@ An Op Amp In a “Buffer” Configuration
 <p>This sort of buffer is widely used in audio circuits, among many other applications. If you plugged a pair of headphones into an output without such a buffer, the headphones <strong>impedance</strong> (resistance to audio signal) might interfere with the circuit which produced the audio signal. The buffer prevents this and ensures that the signal produced by the audio circuit is the same signal you hear in the headphones.</p>
 <p>Some other names for the “buffer” configuration are the “unity gain amplifier” or the “voltage follower.” They mean the same thing.</p>
 <p>Here’s an example of an op amp in a “buffer” configuration in a real circuit:</p>
-<a href="../images/synth/OpAmpSchematicBuffer.png"><img src="../images/synth/OpAmpSchematicBuffer.png" alt="Detail from the VCO schematic showing an op amp in a buffer configuration" width="300" /></a>
+<a href="../images/synth/OpAmpSchematicBuffer.png"><img src="../images/synth/OpAmpSchematicBuffer.png" width="300" alt="Detail from the VCO schematic showing an op amp in a buffer configuration" /></a>
 From the mki x es.edu VCO Schematic
 <p>The symbols are different in this schematic. We will just have to live with that. People don’t always use the same symbols. There’s no right or wrong.</p>
 <p>I have included some of the other components in this detail from the schematic to emphasize that you will need to be able to pick these configurations out when they are surrounded by other components.</p>
@@ -91,7 +107,7 @@ An Op Amp In an “Amplifier” Configuration
 <p>In this specific case, with these specific resistor values, the voltage at the output is 3* the voltage at the input (within certain limits). You can change the amount of gain by changing the resistor values. In the extreme case, where the resisitor going to ground is infinite (no wire at all), and the resistor going from the output to the <code>-</code> input is 0 Ohms (a plain old wire), this circuit is the same as the “Buffer” configuration above. So the buffer is just a special case of the amplifier, only the buffer has a lower gain (amplification factor) of 1 (meaning no amplification).</p>
 <p>One thing you can’t do is have a gain of less than unity – to have an output voltage less than the input voltage. But you can do this with an inverting amplifier, which we’ll discuss in a little bit.</p>
 <p>Here’s an example of an op amp in an “amplifier” configuration in a real circuit:</p>
-<a href="../images/synth/OpAmpSchematicAmplifier.png"><img src="../images/synth/OpAmpSchematicAmplifier.png" alt="Detail from the Mixer schematic showing an op amp in a amplifier configuration" width="300" /></a>
+<a href="../images/synth/OpAmpSchematicAmplifier.png"><img src="../images/synth/OpAmpSchematicAmplifier.png" width="300" alt="Detail from the Mixer schematic showing an op amp in a amplifier configuration" /></a>
 From the mki x es.edu Mixer Schematic
 <h3 id="inverter">Inverter</h3>
 <p>The inverter turns a signal upside down. For example, you might have an input signal which alternates between 3V and -5V. The inverter would turn that into a signal which alternated between -3V and 5V.</p>
@@ -101,7 +117,7 @@ An Op Amp In an “Inverter” Configuration
 <p>Like the “amplifier,” this circuit also has two resistors, but they’re in a different place, which makes the circuit do a different thing. Again, don’t worry about <em>how</em> it works right now.</p>
 <p>Do note that I’ve switched the inputs in this diagram, putting the <code>-</code> input on top. The only reason I’ve done this is because it allows me to keep the input to the circuit in a consistent place (the input signal which we want to invert should be connected to the <code>-</code> input via a resistor), and because it allows me to run the ground which is connected to the <code>+</code> input in a downward direction, which I find aesthetically pleasing. You can draw the diagram either way.</p>
 <p>Here are two inverters in a row from the Mixer schematic. It inverts the signal twice!</p>
-<a href="../images/synth/OpAmpSchematicInverters.png"><img src="../images/synth/OpAmpSchematicInverters.png" alt="Detail from the Mixer schematic showing an op amp in an inverter configuration" width="300" /></a>
+<a href="../images/synth/OpAmpSchematicInverters.png"><img src="../images/synth/OpAmpSchematicInverters.png" width="300" alt="Detail from the Mixer schematic showing an op amp in an inverter configuration" /></a>
 From the mki x es.edu Mixer Schematic
 <p>Why would it do that? It’s discussed in <a href="https://www.ericasynths.lv/media/MIXER_MANUAL.pdf">the mixer instructions</a>. But it’s a little premature for us to discuss that until we talk a little bit more about how op amps work.</p>
 <h3 id="inverting-amplifier">Inverting Amplifier</h3>
@@ -111,7 +127,7 @@ An Op Amp In an “Inverting Amplifier” Configuration
 <p>In this case, I’ve set the resistor values such that the amplifier has a gain of -0.5. So if for example you connect 5V at the input, you will see -2.5V at the output.</p>
 <p>The “non-inverting” amplifier configuration could only have a gain of greater than or equal to 1. But the inverting configuration can amplify by a factor from 0 to “negative infinity.” (A lie, in the real world it’s really somewhere in the neighborhood of -100000, but it will do for what we’re building.)</p>
 <p>Here is an op amp in an “inverting amplifier” configuration from the VCF schematic.</p>
-<a href="../images/synth/OpAmpSchematicInvertingAmplifier.png"><img src="../images/synth/OpAmpSchematicInvertingAmplifier.png" alt="Detail from the VCF schematic showing an op amp in an inverting amplifier configuration" width="300" /></a>
+<a href="../images/synth/OpAmpSchematicInvertingAmplifier.png"><img src="../images/synth/OpAmpSchematicInvertingAmplifier.png" width="300" alt="Detail from the VCF schematic showing an op amp in an inverting amplifier configuration" /></a>
 From the mki x es.edu VCF Schematic
 <h3 id="comparator">Comparator</h3>
 <p>The comparator compares the voltage, V<sub>input</sub>, at the <code>+</code> input with the voltage, V<sub>ref</sub> at the <code>-</code> input. It sets the output “high” if V<sub>input</sub> is higher than V<sub>ref</sub> and “low” if V<sub>input</sub> is lower than V<sub>ref</sub>.</p>
@@ -120,7 +136,7 @@ An Op Amp In a “Comparator” Configuration
 <p>“High” and “low,” here, mean “as high of an output as the op amp can produce, given the power we provide to it,” and similarly for low.</p>
 <p>Eagle-eyed readers may notice that this circuit diagram is the same as the one of the “plain” op amp in “Level 0: What Is an Op Amp.” So yes, this “circuit” is just a plain op amp with no extra components.</p>
 <p>Despite its simplicity, this turns out to be a very useful circuit in some cases. For example, in the VCO kit we use an op amp in comparitor mode to produce a PWM wave from a sawtooth wave. (See <a href="2023-03-02-building-a-synthesizer-3.html">that post</a> for details.) It looks like this:</p>
-<a href="../images/synth/OpAmpSchematicComparator.png"><img src="../images/synth/OpAmpSchematicComparator.png" alt="Detail from the VCO schematic showing an op amp in a comparator configuration" width="300" /></a>
+<a href="../images/synth/OpAmpSchematicComparator.png"><img src="../images/synth/OpAmpSchematicComparator.png" width="300" alt="Detail from the VCO schematic showing an op amp in a comparator configuration" /></a>
 From the mki x es.edu VCO Schematic
 <h2 id="level-2-power-up">Level 2: Power Up</h2>
 <p>Perhaps you’ve thought, “Amplifier, huh? That power has to come from somewhere!” If so, give yourself a pat on the back; you’re right! We need to supply power to the op amp. The amount of power required will depend on the particular chip you’re using.</p>
@@ -137,7 +153,7 @@ TL074 Pinout
 <p>Although an op amp’s gain is very high (more on this below), the op amp can’t ever output any voltage greater than the voltage connected to the V<sub>cc+</sub> input, and it can’t ever output any voltage lower than the voltage connected to the V<sub>cc-</sub> input. Actually, the true values are even lower; the <a href="https://www.ti.com/product/TL074#tech-docs">TL074 data sheet</a> says that its actual minimum/maximum output level is 1.5V below V<sub>cc</sub>. So the VCO output in this case is limited to <em>approximately</em> +/- 10.5V.</p>
 <p>One thing that a lot of people notice is that there is no ground input to the op amp IC. There does not need to be one because the op amp IC’s internal circuit does not directly use a ground, and, somewhat like a transistor, instead depends on the fact that the output and the input circuits are grounded to a common rail.</p>
 <p>So a “complete” circuit might look like:</p>
-<a href="../images/synth/OpAmpWithGround.png"><img src="../images/synth/OpAmpWithGround.png" alt="An op amp in a circuit with an input voltage, a ground rail, and a load (a 1K resisitor)." width="300" /></a>
+<a href="../images/synth/OpAmpWithGround.png"><img src="../images/synth/OpAmpWithGround.png" width="300" alt="An op amp in a circuit with an input voltage, a ground rail, and a load (a 1K resisitor)." /></a>
 A “Complete” Op Amp Circuit
 <p>In this example, the input to the op amp is a 40Hz sawtooth oscillator, and the load is represented by a 1k resistor, which would probably be something more interesting in a “real” circuit.</p>
 <h2 id="level-3-the-ideal-op-amp">Level 3: The “Ideal Op Amp”</h2>
@@ -163,7 +179,9 @@ A “Complete” Op Amp Circuit
 An Op Amp In a “Comparator” Configuration
 <p>I am calling the voltages applied to the inputs “V<sub>input</sub>” and “V<sub>ref</sub>”</p>
 <p>When the voltage at the <code>+</code> input (V<sub>input</sub>) is higher than the voltage at the <code>-</code> input (V<sub>ref</sub>), the difference:<br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} V_{input} - V_{ref} \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} V_{input} - V_{ref} \end{align} $$</span></span><br />
+</span><br />
 …is a positive number. Let’s say that V<sub>input</sub> is 5 and V<sub>ref</sub> is 3. The op amp multiplies this result, 2, by the very large gain, and immediately sets the output voltage to 200000V. Or tries to. Remember, the output voltage is limited by the voltage going into the V<sub>cc+</sub> power input, which is something far more reasonable, like 12V. So the op amp does the best it can and sets the output to about 10.5V, which is the largest amount of voltage it <em>can</em> emit.</p>
 <p>If V<sub>input</sub> was <em>smaller</em> than V<sub>ref</sub>, then their difference would be negative and the op amp would swing the output hard in the other direction, attempting to set the output voltage to -200000V or so, but quickly hitting the limit of V<sub>cc-</sub>.</p>
 <p>And that fully describes the comparitor case; when the <code>+</code> input is higher than the <code>-</code> input the output goes high, and when the <code>+</code> input is lower than the <code>-</code> input the output goes low.</p>
@@ -203,7 +221,9 @@ An Op Amp In a “Buffer” Configuration
 An Op Amp In a “Buffer” Configuration
 <p>How does this work internally? Let’s examine the voltages over time. It will help to remember that, due to the wire, the output voltage and the voltage at the <code>-</code> will <em>always</em> be the same. In general, it is helpful, when looking at these circuits, to ask yourself if there are any things which are always true, and this is an example: The ouptut and the <code>-</code> input will always have the same voltage, in this case.</p>
 <p>Initally, all voltages are at 0. The voltage we’re sending into the <code>+</code> input is at 0V, and, presuming we’ve just powered up the chip, so is the output. Consequently, the voltage at the <code>-</code> input, which is literally “hard-wired” to the output, is also at 0V. T Given our new understanding of the op amp, we can see that nothing needs to change, because the output voltage should be:<br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (0V-0V) \times 100000 \\ = 0V \end{split} \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (0V-0V) \times 100000 \\ = 0V \end{split} \end{align} $$</span></span><br />
+</span><br />
 The buffer has “done its job” of copying 0V at its input to 0V at its output. All is well!</p>
 <p>Now, let’s say I raise the signal at the <code>+</code> input on the op amp to 5V. What happens then? Well, the output of the op amp had been at 0V, and it’s connected to the <code>-</code> input by a wire, so the <code>-</code> input sits at 0V. The difference between the two inputs is 5V - 0V = 5V, so the op amp will attempt to set the output to 5V * 100000, give or take a decimal place, and will crank up the voltage, really quickly. A cheap TL074 op amp has a slew rate of 20V/µs, which is to say, far too fast for you to even notice how long it takes to start increasing the voltage.</p>
 <p>However, a funny thing happens as the voltage rises. The output goes up past 1V, 2V, 3V, 4V… what happens when it gets to 5V? I will remind you, the <code>-</code> input is connected to the output via a near-zero-resistance wire. When the output gets to 5V, it raises the <code>-</code> input to 5V. Now the difference between the two inputs is back to 0V! The op amp could cut the power to the output entirely, but in doing so it would bring the output voltage down to, say, 4.9, which would cause the difference between the two inputs to be 0.1V, which would cause the output to once again try to raise to 0.1V * 100000 = 10000V, only to get there, it would have to cross 5V, resulting in the power being cut.</p>
@@ -223,14 +243,18 @@ The buffer has “done its job” of copying 0V at its input to 0V at its output
 An Op Amp In an “Amplifier” Configuration
 <p>If the voltage at the input is 0V, then <em>all</em> voltages are 0V, for much the same reasons as in the “buffer” case. There’s a resistor between the output and the <code>-</code> input, but that doesn’t matter considering that both ends of it are at 0V. Everything stays at 0V, at least until we change the voltage at the input.</p>
 <p>What will happen if we set the input to 1V? Well, just like with the buffer, the op amp will try to set the output voltage to:<br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (1V-0V) \times 100000 \\ = 100000V \end{split} \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (1V-0V) \times 100000 \\ = 100000V \end{split} \end{align} $$</span></span><br />
+</span><br />
 So, a huge number. But to get there, it has to start climbing, and that’s when the fun begins. It’s time to start talking about those resistor values.</p>
 <p>There are two resistors in the circuit. We can label them R<sub>f</sub> (the <code>f</code> is for “feedback”) and R<sub>g</sub> (the <code>g</code> is for “ground”). We are using 100k and 50k Ohm value resistors for these two, respectively. By changing the values that you use, you can change the amount of gain in the circuit.</p>
 <a href="../images/synth/Operational_amplifier_noninverting.png"><img src="../images/synth/Operational_amplifier_noninverting.png" alt="Schematic diagram of an op amp in an amplifier configuration, with generic R-sub-f and R-sub-g labels" /></a>
 Ong saluri, CC BY-SA 3.0, via <a href="https://commons.wikimedia.org/wiki/File:Operational_amplifier_noninverting.svg">Wikimedia Commons</a>
 <p>The <em>formula</em> for the voltage output by an op amp in an “amplifier” circuit is:</p>
 <p><br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \left(1 + \cfrac {R_f} {R_g}\right) \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \left(1 + \cfrac {R_f} {R_g}\right) \end{align} $$</span></span><br />
+</span><br />
 </p>
 <p>It is worth committing this formula to memory. To be honest, you can just accept that and move on if you like. But I will show you <em>why</em> this is true, because we can learn a bit more about op amp circuits from the derivation.</p>
 <h3 id="the-voltage-divider">The Voltage Divider</h3>
@@ -239,21 +263,27 @@ Ong saluri, CC BY-SA 3.0, via <a href="https://commons.wikimedia.org/wiki/File:O
 <a href="../images/synth/Resistive_divider2.png"><img src="../images/synth/Resistive_divider2.png" alt="A resistor voltage divider, two resistors in series." /></a>
 Krishnavedala, CC0, <a href="https://commons.wikimedia.org/wiki/File:Resistive_divider2.svg">via Wikimedia Commons</a>
 <p>In the case above, the voltage at V<sub>out</sub> is:<br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \end{align} $$</span></span><br />
+</span><br />
 </p>
 <p>The two resistors in series in the “amplifier” configuration form a voltage divider. In case that’s not clear, I’ll redraw the schematic slightly.</p>
-<a href="../images/synth/OpAmpAmplifierVoltageDivider.png"><img src="../images/synth/OpAmpAmplifierVoltageDivider.png" alt="Schematic diagram of an op amp in an amplifier configuration, with the resistors rearranged to make the voltage divider more obvious" width="300" /></a>
+<a href="../images/synth/OpAmpAmplifierVoltageDivider.png"><img src="../images/synth/OpAmpAmplifierVoltageDivider.png" width="300" alt="Schematic diagram of an op amp in an amplifier configuration, with the resistors rearranged to make the voltage divider more obvious" /></a>
 This Should Make the Voltage Divider More Obvious
 <p>I hope you agree that this “amplifier” circuit is the same circuit as the one I’ve been drawing all along, only with the resistors in a slightly different position. Now we can answer the question of “What voltage at <span class="math inline"><em>V</em><sub><em>output</em></sub></span> will cause the voltage at <span class="math inline"><em>V</em><sub>−</sub></span> to reach 1V?”</p>
 <p>Well, let’s just substitute in the values we know into the formula (5) above. In particular, let’s use 1V for V<sub>out</sub> in the voltage divider, which is the point we are connecting to the <code>-</code> input of the op amp. For <em>the voltage divider alone:</em><br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} \begin{split} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \\ 1V = V_{in} \times \cfrac {50} {100 + 50} \\ 1V = V_{in} \times \cfrac {1} {3} \\ V_{in} = 3V \end{split} \end{align}$$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \\ 1V = V_{in} \times \cfrac {50} {100 + 50} \\ 1V = V_{in} \times \cfrac {1} {3} \\ V_{in} = 3V \end{split} \end{align}$$</span></span><br />
+</span><br />
 So a voltage of 3V applied at V<sub>in</sub> will cause V<sub>out</sub> in the voltage divider.</p>
 <p>Therefore, if our op amp is sending 3V to its output (which corresponds to V<sub>in</sub> on the voltage divider), the voltage divider will result in sending 1V to the <code>-</code> input (labeled below as <span class="math inline"><em>V</em><sub>−</sub></span>, which corresponds to V<sub>out</sub> on the voltage divider diagram above). Just to make that clear, I ran it in a simulator and applied voltage probes to the output and to the <code>-</code> input:</p>
-<a href="../images/synth/OpAmpAmplifierLabeledVoltages.png"><img src="../images/synth/OpAmpAmplifierLabeledVoltages.png" alt="Schematic diagram of an op amp in an amplifier configuration, with the voltage at the output of the amplifier labled with a 3V and the voltage between the two resistors labled 1V" width="300" /></a>
+<a href="../images/synth/OpAmpAmplifierLabeledVoltages.png"><img src="../images/synth/OpAmpAmplifierLabeledVoltages.png" width="300" alt="Schematic diagram of an op amp in an amplifier configuration, with the voltage at the output of the amplifier labled with a 3V and the voltage between the two resistors labled 1V" /></a>
 Same Circuit with Two Voltage Probes Added
 <p>So, when we make the two input voltages to the op amp different by raising <span class="math inline"><em>V</em><sub><em>input</em></sub></span> to 1V, the op amp will note that <span class="math inline"><em>V</em><sub>+</sub> − <em>V</em><sub>−</sub></span> is positive, and will start to swing <span class="math inline"><em>V</em><sub><em>output</em></sub></span> way up, only stabilizing when <span class="math inline"><em>V</em><sub>−</sub></span> also reaches 1V, which happens when <span class="math inline"><em>V</em><sub><em>output</em></sub></span> reaches 3V. Hence, with the specific resistor values of 100k and 50k, the gain is:</p>
 <p><br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} \begin{split}Gain =\left(1 + \cfrac {R_f} {R_g}\right)\\=\left(1 + \cfrac {100k} {50k}\right)\\=\left(1 + 2\right)\\=3 \end{split} \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} \begin{split}Gain =\left(1 + \cfrac {R_f} {R_g}\right)\\=\left(1 + \cfrac {100k} {50k}\right)\\=\left(1 + 2\right)\\=3 \end{split} \end{align} $$</span></span><br />
+</span><br />
 </p>
 <p>As I mentioned previously, the “buffer” is just an extreme case of the amplifier; <span class="math inline"><em>R</em><sub><em>f</em></sub></span> is 0 Ohms and <span class="math inline"><em>R</em><sub><em>g</em></sub></span> is infinity. And that’s why the “amplifier” circuit can’t ever have a gain of less than 1; once you get to the point where your “amplifier” becomes a “buffer” there are no resistor values which you can plug in which will make your gain any lower.</p>
 <h2 id="level-8-impedance">Level 8: Impedance</h2>
@@ -272,7 +302,9 @@ Same Circuit with Two Voltage Probes Added
 <p>As we’ve seen, the buffer circuit is just a special case of the amplifier circuit, and as I hinted when I first mentioned the resistor values in the “inverting amplifier” configuration, the same thing is true of the inverter and the inverting amplifier; the inverter is just a special case of the inverting amplifier. Namely, it’s what you get when both resistors have the same value. But it’s not <em>the same</em> special case.</p>
 <p>To cut to the chase, the formula for the gain of an inverter is:</p>
 <p><br />
-<span class="math display"><br /><span class="math display">$$ \begin{align} V_{output} = -V_{input} \times \cfrac {R_f} {R_{input}} \end{align} $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$ \begin{align} V_{output} = -V_{input} \times \cfrac {R_f} {R_{input}} \end{align} $$</span></span><br />
+</span><br />
 </p>
 <p>As with the amplifier, it is worth memorizing this formula. Just like before, we will look at <em>why</em> this formula is true.</p>
 <h3 id="comparison-with-amplifiers">Comparison with Amplifiers</h3>
@@ -283,8 +315,8 @@ An Op Amp In an “Inverter” Configuration
 <p>These circuits, despite their superficial similarity, are just <em>different.</em></p>
 <table style="width:39%;">
 <colgroup>
-<col width="13%" />
-<col width="26%" />
+<col style="width: 13%" />
+<col style="width: 26%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -309,10 +341,14 @@ An Op Amp In an “Inverter” Configuration
 </tr>
 <tr class="even">
 <td><br />
-<span class="math display"><br /><span class="math display">$$V_{output} = V_{input}\left(1 +\cfrac {R_f} {R_g} \right)  $$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$V_{output} = V_{input}\left(1 +\cfrac {R_f} {R_g} \right)  $$</span></span><br />
+</span><br />
 </td>
 <td><br />
-<span class="math display"><br /><span class="math display">$$V_{output} = -V_{input}\cfrac {R_f} {R_{input}}$$</span><br /></span><br />
+<span class="math display"><br />
+<span class="math display"><span class="math display">$$V_{output} = -V_{input}\cfrac {R_f} {R_{input}}$$</span></span><br />
+</span><br />
 </td>
 </tr>
 </tbody>
@@ -329,7 +365,7 @@ An Op Amp In an “Inverter” Configuration
 <p>We are changing <em>both ends</em> of the voltage divider at the same time, one via <span class="math inline"><em>V</em><sub><em>input</em></sub></span> and one via the feedback loop, so we can’t use the “simple” voltage divider formula to know calculate the middle value — which we know anyway, since it’s held at 0V. It will turn out, in the next Level, that there are additional reasons not to analyze this circuit as a simple voltage divider. Instead the easiest way to understand what is happening in this circuit is to consider <a href="https://www.allaboutcircuits.com/textbook/direct-current/chpt-6/kirchhoffs-current-law-kcl/">Kirchhoff’s Current Law</a>, which says that the current going into and out of any point in a circuit must sum to 0. Let’s examine the point at the <code>-</code> input to the op amp, where we are measuring <span class="math inline"><em>V</em><sub>−</sub></span>.</p>
 <p>In this case the analysis is pretty simple! For an “ideal” op amp, the amount of current going into the op amp itself is 0 amps. (Remember, that’s what the “infinite input impedance” part of the description of an ideal op amp means.) Therefore, the amount of current coming from the input, <span class="math inline"><em>i</em><sub><em>input</em></sub></span>, must be exactly the same as the amount going to the output, <span class="math inline"><em>i</em><sub><em>feedback</em></sub></span>. (Don’t read too much into the direction of current flow here; pick a direction and then you can set the sign of the current positive or negative as needed. The important point is that the current is <em>the same</em> across both wires.)</p>
 <p>The currents are the same, the resistors are the same, and we know one voltage. Therefore, both voltages, per <a href="https://www.allaboutcircuits.com/textbook/direct-current/chpt-2/voltage-current-resistance-relate/">Ohm’s Law</a>, must also be the same magnitude! Only the signs are different. Any voltage we apply at <span class="math inline"><em>V</em><sub><em>input</em></sub></span> must drop to 0V at <span class="math inline"><em>V</em><sub>−</sub></span> due to:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>the fact that <span class="math inline"><em>V</em><sub>+</sub></span> is directly connected to ground and</li>
 <li>the feedback mechanism which makes the op amp hold its two inputs to the same value</li>
 </ol>
@@ -342,7 +378,7 @@ An Op Amp In an “Inverter” Configuration
 <p>Thus far we have examined why the non-inverting and inverting amplifier circuits have different formulas, but, as I’ve hinted, that’s not the end of the story. Let’s change the number of inputs from one to two.</p>
 <h3 id="non-inverting-passive-mixer">Non-inverting, Passive Mixer</h3>
 <p>Here’s the non-inverting configuration:</p>
-<a href="../images/synth/OpAmpPassiveMixer.png"><img src="../images/synth/OpAmpPassiveMixer.png" alt="Schematic diagram of an op amp in a non-inverting configuration with two inputs with a 100k resistor on each input" width="300" /></a>
+<a href="../images/synth/OpAmpPassiveMixer.png"><img src="../images/synth/OpAmpPassiveMixer.png" width="300" alt="Schematic diagram of an op amp in a non-inverting configuration with two inputs with a 100k resistor on each input" /></a>
 A Passive Mixer and a Buffer
 <p>This is a passive audio mixer followed by a buffer. Why use the resistors at all? Because if we connect one signal at 1V to one input and one signal at ground to the other input, we don’t want to just short the first voltage source to ground. The sending audio equipment will probably not be built to withstand that!</p>
 <p>This actually works, but it has a number of problems. If you build the <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-mixer/">mks x es.EDU Mixer kit</a> you get to explore these problems, but I will explain them here. All of them stem from the fact that the resistors between <span class="math inline"><em>V</em><sub>1</sub></span>, <span class="math inline"><em>V</em><sub>+</sub></span>, and <span class="math inline"><em>V</em><sub>2</sub></span> are a voltage divider – or, at least, they are when there is a connection to <span class="math inline"><em>V</em><sub>2</sub></span> at all, which may or may not be the case with an audio mixer!</p>
@@ -354,7 +390,7 @@ A Passive Mixer and a Buffer
 <p>So, maybe not the best design.</p>
 <h3 id="inverting-active-mixer">Inverting, Active Mixer</h3>
 <p>Instead, let’s try grafting the same “passive” mixer onto an op amp in an inverting amplifier configuration and see what we end up with?</p>
-<a href="../images/synth/OpAmpActiveMixer.png"><img src="../images/synth/OpAmpActiveMixer.png" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k resistor on each input" width="300" /></a>
+<a href="../images/synth/OpAmpActiveMixer.png"><img src="../images/synth/OpAmpActiveMixer.png" width="300" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k resistor on each input" /></a>
 Passive Mixer + Inverting Amplifier = Active Mixer
 <p>This is something else entirely! The <code>-</code> input, instead of just being at whatever voltage comes from the two “V” inputs, is now held at ground by the inverting op amp. How much voltage is required to hold the <code>-</code> input at ground? Precisely the same amount that the “V” inputs are supplying. Let’s examine the deficiencies of the “Passive/Non-inverting” mixer and compare:</p>
 <ul>
@@ -362,7 +398,7 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 <li>If you then connect 0V to <span class="math inline"><em>V</em><sub>2</sub></span>, no current flows through the resistor connected to <span class="math inline"><em>V</em><sub>2</sub></span>, because <span class="math inline"><em>V</em><sub>−</sub></span> is also held to ground. There is no voltage difference across the resistor and hence no voltage flows. The feedback voltage is still set to -1 V just like before to counteract the voltage from <span class="math inline"><em>V</em><sub>1</sub></span>.</li>
 <li>You can’t “replace” the two resistors with potentiometers, because potentiometers can be set to 0 ohms, and you need at least 100k (in the case pictured) to balance the resistor on the feedback loop. However, you can add a potentiometer in series with a 100k resistor:</li>
 </ul>
-<a href="../images/synth/OpAmpActiveMixerWithPots.png"><img src="../images/synth/OpAmpActiveMixerWithPots.png" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k potentiometer and a 100k resistor on each input" width="300" /></a>
+<a href="../images/synth/OpAmpActiveMixerWithPots.png"><img src="../images/synth/OpAmpActiveMixerWithPots.png" width="300" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k potentiometer and a 100k resistor on each input" /></a>
 Passive Mixer + Inverting Amplifier = Active Mixer
 <p>It’s probably worth talking about how I am choosing these resistor values. The exact resistance of any resistor in the circuit is not as important as its <em>relationship</em> to the values of other resistors. By equation (8) we know that the gain of an inverting amplifier is governed by the ratio between the feedback resistor and the input resistance. So in principal we could use 100 ohm or 100M ohm resistors in the circuit and it would be fine.</p>
 <p>Well, sort of: It turns out that using 100 ohms is asking the op amp to push a lot of current, which is not so great for its lifespan, and also has effects which show up as noise in the output. Using 100M ohms is also signing up for a lot of noise, for different reasons. The values used in this article are, to be honest, just copied from other examples, such as the mki x es.EDU schematics, which I have observed work well. But if all you have on hand are a bunch of 68k ohms resistors, you’ll be fine.</p>
@@ -372,16 +408,20 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 <h2 id="glossary">Glossary</h2>
 <dl>
 <dt>Closed loop gain</dt>
-<dd>The closed loop gain is the gain of an entire op amp circuit when wired in a feedback (that’s the “closed loop”) configuration. For example, if you use two resistors of the same value in an amplifier configuration, then the op amp has a closed loop gain of 2.
+<dd>
+The closed loop gain is the gain of an entire op amp circuit when wired in a feedback (that’s the “closed loop”) configuration. For example, if you use two resistors of the same value in an amplifier configuration, then the op amp has a closed loop gain of 2.
 </dd>
 <dt>Impedance</dt>
-<dd>Impedance is just resistance in a DC circuit and the sum of resistance plus reactance from capacitors, inductors, and the like in an AC or audio circuit. However, we tend to talk about a circuit’s “input impedance” and “output impedance,” and although the term “impedance” means the same thing in these contexts, saying “the sum of resistance and reactance” may not be the best mental model for understanding input and ouput impedance. I find it helpful to think of a circuit’s <strong>input impedance</strong> as “how much current can flow into the circuit?” Likewise, I think of a circuit’s <strong>output impedance</strong> as “How much current can the circuit supply?” These questions are of course the same as saying “the sum of resistance and reactance,” per Ohm’s Law, but I find them to be a more helpful model.
+<dd>
+Impedance is just resistance in a DC circuit and the sum of resistance plus reactance from capacitors, inductors, and the like in an AC or audio circuit. However, we tend to talk about a circuit’s “input impedance” and “output impedance,” and although the term “impedance” means the same thing in these contexts, saying “the sum of resistance and reactance” may not be the best mental model for understanding input and ouput impedance. I find it helpful to think of a circuit’s <strong>input impedance</strong> as “how much current can flow into the circuit?” Likewise, I think of a circuit’s <strong>output impedance</strong> as “How much current can the circuit supply?” These questions are of course the same as saying “the sum of resistance and reactance,” per Ohm’s Law, but I find them to be a more helpful model.
 </dd>
 <dt>Open loop gain</dt>
-<dd>The open loop gain is the gain of the op amp by itself, without anything connected to it. It’s typically a very large value in the neighborhood of 100,000
+<dd>
+The open loop gain is the gain of the op amp by itself, without anything connected to it. It’s typically a very large value in the neighborhood of 100,000
 </dd>
 <dt><a href></a>Virtual ground</dt>
-<dd>When an op amp is in an inverting configuration with the <code>+</code> input tied directly to ground, we say that the <code>-</code> input is “held to a virtual ground.” This is not the same thing as being connected directly to ground with a wire! If you connect the <code>-</code> input directly to ground with a wire, then your inverting amplifier will cease to function. The reason is that then the difference between the two inputs will <em>always</em> be <span class="math inline">0 − 0 = 0</span>, so there will never be any voltage output from the op amp. In order for an inverting amplifier to function, the op amp needs to detect the <code>-</code> input <em>trying</em> to increase in voltage so that it can note a difference between its two inputs and emit a voltage at the output to force it back down to 0V.
+<dd>
+When an op amp is in an inverting configuration with the <code>+</code> input tied directly to ground, we say that the <code>-</code> input is “held to a virtual ground.” This is not the same thing as being connected directly to ground with a wire! If you connect the <code>-</code> input directly to ground with a wire, then your inverting amplifier will cease to function. The reason is that then the difference between the two inputs will <em>always</em> be <span class="math inline">0 − 0 = 0</span>, so there will never be any voltage output from the op amp. In order for an inverting amplifier to function, the op amp needs to detect the <code>-</code> input <em>trying</em> to increase in voltage so that it can note a difference between its two inputs and emit a voltage at the output to force it back down to 0V.
 </dd>
 </dl>
 <h2 id="resources">Resources</h2>
@@ -403,6 +443,10 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 </ul>
 <div class="info">
 Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
+<div class="info">
+Tags:
 </div>
 </div>
 

@@ -3,17 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter 7: Building the Mixer</title>
+        <title>Craig Stuntz - 2023-03-05-building-a-synthesizer-7</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://types.pl/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -29,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        7
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the Mixer
-                </h1>
-            
+            <h1>2023-03-05-building-a-synthesizer-7</h1>
+
             <div class="info">
     Posted on March  5, 2023
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer-7">Building a Synthesizer,
+7</h3>
+<h1 class="chapterName" id="building-the-mixer">Building the Mixer</h1>
+<div class="info">
+Posted on March 5, 2023
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-01-22-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -69,7 +70,7 @@
 <h2 id="passive-vs.active-mixing">Passive vs. Active Mixing</h2>
 <p>The instructions make a valiant attempt to explain how the mixer works in its final configuration, when it uses an op amp in an inverting configuration. It mostly succeeds, but I do think portions of it could be clearer, so I will attempt to add some additional explanation.</p>
 <p>The instructions take us through three steps:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>A passive mixer</li>
 <li>An “active mixer” with an op amp in a non-inverting configuration</li>
 <li>An active mixer with an op amp in an inverting configuration</li>
@@ -82,10 +83,8 @@
 <p>Still, you will sometimes see passive mixers advertised as “summing mixers” and all sorts of audio fairy dust attributed to them, at a price.</p>
 <h3 id="active-mixers-with-scare-quotes">“Active” Mixers (with Scare Quotes)</h3>
 <figure class="inlineRight">
-<a href="../images/synth/OpAmpPassiveMixer.png"> <img src="../images/synth/OpAmpPassiveMixer.png" loading="lazy" width="300px" alt="Schematic diagram of an op amp in a non-inverting configuration with two inputs with a 100k resistor on each input"> </a>
-<figcaption>
-A Passive Mixer and a Buffer
-</figcaption>
+<a href="../images/synth/OpAmpPassiveMixer.png"><img src="../images/synth/OpAmpPassiveMixer.png" loading="lazy" width="300" alt="Schematic diagram of an op amp in a non-inverting configuration with two inputs with a 100k resistor on each input" /></a>
+<figcaption>A Passive Mixer and a Buffer</figcaption>
 </figure>
 <p>Klein introduces the notion of an “active” mixer by putting a op amp buffer in non-inverting mode after the passive mixer. While this is “active” in the sense that it contains active components, namely the op amp, it’s not what most people would consider an active mixer, because the mixer itself is still passive.</p>
 <p>In other words, using a non-inverting op amp configuration passively mixes the two (or more) signals, and then actively buffers the result using the op amp.</p>
@@ -95,10 +94,8 @@ A Passive Mixer and a Buffer
 </div>
 <h3 id="active-mixers-no-scare-quotes">Active Mixers (No Scare Quotes)</h3>
 <figure class="inlineRight">
-<a href="../images/synth/OpAmpActiveMixerWithPots.png"> <img src="../images/synth/OpAmpActiveMixerWithPots.png" loading="lazy" width="300px" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k potentiometer and a 100k resistor on each input"> </a>
-<figcaption>
-Passive Mixer + Inverting Amplifier = Active Mixer
-</figcaption>
+<a href="../images/synth/OpAmpActiveMixerWithPots.png"><img src="../images/synth/OpAmpActiveMixerWithPots.png" loading="lazy" width="300" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k potentiometer and a 100k resistor on each input" /></a>
+<figcaption>Passive Mixer + Inverting Amplifier = Active Mixer</figcaption>
 </figure>
 <p>When you swap the non-inverting op amp for an op amp in an inverting configuration, however, things change. Naïvely, this shouldn’t make a difference, because what good does inverting the signal do?</p>
 <p>But we’re not just inverting the signal, we are also moving the op amp’s feedback signal from the op amp input which doesn’t take the mix output to the one which does. And <em>that</em> is what makes the difference. In an inverting configuration the op amp must emit a voltage to bring its <code>-</code> input down to zero, hence the opposite voltage as its input(s). Because the op amp is always working to keep its <code>-</code> input at zero, it exactly balances the signal from all of its inputs (labeled <span class="math inline"><em>V</em>1</span> and <span class="math inline"><em>V</em>2</span> in the schematic at right).</p>
@@ -112,16 +109,12 @@ Passive Mixer + Inverting Amplifier = Active Mixer
 <h2 id="building-the-pc-board">Building the PC Board</h2>
 <p>Well there was no drama here at all. I soldered on the components and everything just worked. No complaints there!</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/MixerFaceplate.jpg"> <img src="../images/synth/MixerFaceplate.jpg" loading="lazy" height="300px" alt="The faceplate of the Mixer module. It has three potentiometer knobs and six jack sockets"> </a>
-<figcaption>
-Mixer Front
-</figcaption>
+<a href="../images/synth/MixerFaceplate.jpg"><img src="../images/synth/MixerFaceplate.jpg" loading="lazy" height="300" alt="The faceplate of the Mixer module. It has three potentiometer knobs and six jack sockets" /></a>
+<figcaption>Mixer Front</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/MixerBackPCBoard.jpg"> <img src="../images/synth/MixerBackPCBoard.jpg" loading="lazy" height="300px" alt="The back of the Mixer module, which is a PC board with two ICS and a number of discrete resistors and capacitors"> </a>
-<figcaption>
-Mixer Back
-</figcaption>
+<a href="../images/synth/MixerBackPCBoard.jpg"><img src="../images/synth/MixerBackPCBoard.jpg" loading="lazy" height="300" alt="The back of the Mixer module, which is a PC board with two ICS and a number of discrete resistors and capacitors" /></a>
+<figcaption>Mixer Back</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -129,20 +122,16 @@ Mixer Back
 <p>But there was…</p>
 <h3 id="that-one-weird-thing-with-the-zero-ohm-resistors">That One Weird Thing With the Zero Ohm Resistors</h3>
 <figure class="inlineRight">
-<a href="../images/synth/MixerOptionalOpAmp.png"> <img src="../images/synth/MixerOptionalOpAmp.png" width="156px" loading="lazy" alt="Schematic of optional op amp circuit with zero-Ohm resistors"> </a>
-<figcaption>
-Huh?
-</figcaption>
+<a href="../images/synth/MixerOptionalOpAmp.png"><img src="../images/synth/MixerOptionalOpAmp.png" loading="lazy" width="156" alt="Schematic of optional op amp circuit with zero-Ohm resistors" /></a>
+<figcaption>Huh?</figcaption>
 </figure>
 <p>The kit includes two <a href="https://en.wikipedia.org/wiki/Zero-ohm_link">zero Ohm resistors, which really are a thing</a>. That’s a little unusual, but what’s truly strange is that they’re totally unmentioned in the manual, and omitted from the bill of materials, but they are are in the schematic (see image at right) and in the pictures of the completed board in the directions. They are part of an “optional inverting/noninverting op amp circuit” which is not in the signal path of the rest of the mixer. (See schematic at right; R12 and R14 are zero Ohms. The remaining resistors should not be installed at all; “DNM” means “Do Not Mount.”)</p>
 <p>Installing the two zero-Ohm resistors puts the second op amp in the second TL072 into a buffer configuration, with the noninverting input set to ground. This is <a href="https://www.youtube.com/watch?v=WnDju2TwN5I" title="Handling Unused 
 Operational Amplifiers (ECE Design Fundamentals)">the correct way to set up an unused op amp</a>.</p>
 <p>I think the purpose of the zero Ohm resistors is they could be removed and replaced with a different value resistor, along with mounting additional resistors in the “DNM” positions, if you later decided to use the additional op amp for… something.</p>
 <figure>
-<a href="../images/synth/Mixer0Ohm.jpg"> <img src="../images/synth/Mixer0Ohm.jpg" width="300px" loading="lazy" alt="A close-up of the 0 Ohm resistors"> </a>
-<figcaption>
-Close-up of 0 Ohm resistors
-</figcaption>
+<a href="../images/synth/Mixer0Ohm.jpg"><img src="../images/synth/Mixer0Ohm.jpg" loading="lazy" width="300" alt="A close-up of the 0 Ohm resistors" /></a>
+<figcaption>Close-up of 0 Ohm resistors</figcaption>
 </figure>
 <p>Thanks for reading!</p>
 <h2 id="resources">Resources</h2>
@@ -169,10 +158,14 @@ Close-up of 0 Ohm resistors
 <li><a href="https://modwiggler.com/forum/viewtopic.php?t=263624">Mod Wiggler thread</a> (Pretty empty when I looked)</li>
 <li><a href="https://www.modulargrid.net/e/erica-synths-edu-mixer">ModularGrid page</a></li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+    Tags: 
     
 </div>
 

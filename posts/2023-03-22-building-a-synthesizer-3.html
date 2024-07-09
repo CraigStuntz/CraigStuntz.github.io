@@ -34,6 +34,22 @@
 <a href="../">Craig Stuntz</a>
 </div>
 <div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="building-a-synthesizer-3">2023-03-22-building-a-synthesizer-3</h1>
+<div class="info">
+Posted on March 22, 2023
+</div>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
 <a href="../">Home</a> <a href="../about.html">About</a> <a href="../presentations.html">Presentations</a> <a href="../archive.html">Archive</a>
 </div>
 </div>
@@ -51,8 +67,8 @@ Posted on March 22, 2023
 </div>
 </div>
 <div id="content">
-<h3 id="building-a-synthesizer-3" class="series">Building a Synthesizer, 3</h3>
-<h1 id="breadboarding-the-vco" class="chapterName">Breadboarding the VCO</h1>
+<h3 class="series" id="building-a-synthesizer-3">Building a Synthesizer, 3</h3>
+<h1 class="chapterName" id="breadboarding-the-vco">Breadboarding the VCO</h1>
 <div class="info">
 Posted on March 22, 2023
 </div>
@@ -77,7 +93,7 @@ Posted on March 22, 2023
 <p>The heart of the kit, in my opinion, is breadboarding. This is what distinguishes the mks x es.EDU kits from many other DIY synth kits. In contrast to other kits, where you build a completed circuit from start to finish and then power it on, with breadboarding you build <em>and evolve</em> the circuit for the VCO, adding features as you go.</p>
 <p>The breadboard constuction proceeds in several phases.</p>
 <h4 id="vco-core">VCO Core</h4>
-<a href="../images/synth/VCOOscillatorCore.jpg"><img src="../images/synth/VCOOscillatorCore.jpg" alt="The VCO core built on a breadboard. Next to it is an oscilliscope showing the oscillation on its display." width="140" /></a> It’s… oscillating!
+<a href="../images/synth/VCOOscillatorCore.jpg"><img src="../images/synth/VCOOscillatorCore.jpg" width="140" alt="The VCO core built on a breadboard. Next to it is an oscilliscope showing the oscillation on its display." /></a> It’s… oscillating!
 <p>Building the oscillator core on the breadboard went easily, and the circuit worked the first time I tried it. This part “just worked.”</p>
 <p>Note that the wave you can see in the image is sometimes called an “inverted” sawtooth: It shoots up to its maximum voltage and then falls slowly down to the minimum. This distinction (from a “ramp” or “regular” sawtooth wave, which grows slowly to its maximum and then falls quickly to the minimum) will be inaudible at audio frequencies, but it will be “different” if you’re using this oscillator as an <a href="https://en.wikipedia.org/wiki/Low-frequency_oscillation">LFO</a>.</p>
 <p>What frequency is the oscillator producing? Well, my oscilloscope tells me that the period of the period of the oscillation is 126.7 µS, so the frequency is the reciprocal of that, which is about 7893 Hz. This is approximately a B8 (a B on the 8th octave – about an octave above the range of a standard piano). So it’s a pretty high pitch!</p>
@@ -89,28 +105,28 @@ Posted on March 22, 2023
 <h4 id="add-output-buffer">Add Output Buffer</h4>
 <p>So now we have an oscillation, we’re done with the “VCO,” right? Not by a long stretch! The next step is to buffer the output so that you can connect headphones or another module and have the circuit keep working. Without this, the resistance of the headphones, etc., will change the frequency of vibration.</p>
 <p>The circuit is quite simple, but I encountered a few issues building it.</p>
-<a href="../images/synth/BreadboardWhatIsThis.png"><img src="../images/synth/BreadboardWhatIsThis.png" alt="Close-up of breadboard illustration showing a component which looks like an empty box" width="156" /></a> What is this component?
+<a href="../images/synth/BreadboardWhatIsThis.png"><img src="../images/synth/BreadboardWhatIsThis.png" width="156" alt="Close-up of breadboard illustration showing a component which looks like an empty box" /></a> What is this component?
 <p>One minor frustration I had with the instructions for this kit concerned the breadboard assembly. The breadboarding instructions were primarily hand-drawn illustrations, and there was no accompanying schematic at each breadboard step. (There is a schematic for the whole VCO as assembled on the PC board.) I spent more time than I’d like to admit staring at the component circled in red at left, trying to figure out what it was, before I eventually realized it was just a very short wire!</p>
-<a href="../images/synth/VCOOpAmpMisleading.png"><img src="../images/synth/VCOOpAmpMisleading.png" alt="Op amp from breadboard illustration in instructions showing incorrect text orientation" width="156" /></a> Actual diagram from instructions
+<a href="../images/synth/VCOOpAmpMisleading.png"><img src="../images/synth/VCOOpAmpMisleading.png" width="156" alt="Op amp from breadboard illustration in instructions showing incorrect text orientation" /></a> Actual diagram from instructions
 <p>A much bigger problem was that when I powered up the circuit the TL074 op amp chip became very hot. This tells me that power is going somewhere where it should not.</p>
 After a couple of minutes staring at the illustration, it traspired that I had installed the TL074 op amp chip upside down. <a href="https://modwiggler.com/forum/viewtopic.php?t=257249&amp;start=75">It turns out I’m not the first to make this mistake!</a> It’s a very easy mistake to make because the instructions are confusing. The two ICs are oriented differently on the breadboard (and probably need to be because of the locations of their power pins), and this is not called out in the instructions.
 <div style="clear: both;">
 
 </div>
-<a href="../images/synth/VCOOpAmpSuggestedChange.png"><img src="../images/synth/VCOOpAmpSuggestedChange.png" alt="A suggested change to the instructions showing the op amp text correctly oriented" width="156" /></a> Suggested/corrected diagram
+<a href="../images/synth/VCOOpAmpSuggestedChange.png"><img src="../images/synth/VCOOpAmpSuggestedChange.png" width="156" alt="A suggested change to the instructions showing the op amp text correctly oriented" /></a> Suggested/corrected diagram
 <p>Worse, the TL074 is pictured incorrectly in the instructions! The text is depicted upside down. Above and to the right is the actual diagram from the instructions showing the IC text printed in the inverse of how it actually appears on the chip, and below that is my suggestion for how the diagram could be changed to clarify the actual way the chips could be installed.</p>
 <p><em>Also,</em> a further warning, just because the instructions seem to be going out of their way to confuse you on this point: The orientation of the two ICs is <em>different</em> in the breadboard layout vs. the PC board layout. All I can say is to double and triple-check the orientations vs. the specific step you are building at every step before turning on power, because they are not always the same, and getting it wrong means a cooked op-amp chip.</p>
 <div style="clear: both;">
 
 </div>
-<a href="../images/synth/tl074-pinout-diagram.png"><img src="../images/synth/tl074-pinout-diagram.png" alt="A pinout diagram of the TL074 op amp chip" width="300" /></a> TL074 pinout
+<a href="../images/synth/tl074-pinout-diagram.png"><img src="../images/synth/tl074-pinout-diagram.png" width="300" alt="A pinout diagram of the TL074 op amp chip" /></a> TL074 pinout
 <p>So I “borrowed” another TL074 from a different kit installed the chip correctly, and the circuit worked. I could measure the signal with my oscilliscope, which looked exactly like it did without the buffer, only without the DC offset. The instructions say to:</p>
 <blockquote>
 <p>Plug some cheap headphones into the audio jack socket, and you should be able to hear a very high-pitched tone.</p>
 </blockquote>
 <p>When I plugged my headphones into the jack I heard… mostly a low-frequency (5-10 Hz) clicking sound. After… a lot of debugging, I found that I had connected the wire which runs from the output of the op amp to the 1 µF capacitor just above the headphone jack incorrectly. I had the wire running to pin 10, the + input of the op amp, instead of pin 8, the output. Correcting this wire fixed the click, and I could hear the correct oscillation.</p>
 <p>Let me spell this out with schematics, since <a href="https://modwiggler.com/forum/viewtopic.php?p=3696054#p3696054">it seems like others have had this problem</a>:</p>
-<a href="../images/synth/VCOWithOpAmpWrong.png"><img src="../images/synth/VCOWithOpAmpWrong.png" alt="Schematic of VCO core with op-amp connected to the output incorrectly by the + input pin on the op amp instead of the output pin" width="300" /></a> This causes 5-10 Hz clicking <a href="../images/synth/VCOWithOpAmp.png"><img src="../images/synth/VCOWithOpAmp.png" alt="Schematic of VCO core with op-amp correctly connected" width="300" /></a> Correctly wired circuit
+<a href="../images/synth/VCOWithOpAmpWrong.png"><img src="../images/synth/VCOWithOpAmpWrong.png" width="300" alt="Schematic of VCO core with op-amp connected to the output incorrectly by the + input pin on the op amp instead of the output pin" /></a> This causes 5-10 Hz clicking <a href="../images/synth/VCOWithOpAmp.png"><img src="../images/synth/VCOWithOpAmp.png" width="300" alt="Schematic of VCO core with op-amp correctly connected" /></a> Correctly wired circuit
 <div style="clear: both;">
 
 </div>
@@ -119,30 +135,30 @@ After a couple of minutes staring at the illustration, it traspired that I had i
 <p>(Note that the audio output is somewhat loud. If your headphones don’t have a volume control on them, I’d recommend keeping them off of your ears, at least at first.)</p>
 <h4 id="digression-an-optimization">Digression: An Optimization?</h4>
 <p>The VCO at this point has essentially three sub-circuits, identifed below:</p>
-<a href="../images/synth/VCOSubcircuits.png"><img src="../images/synth/VCOSubcircuits.png" alt="Schematic for the VCO with subcircuits of the VCO core, the buffer, and the DC high pass filter identified." width="500" /></a> Sub-circuits
+<a href="../images/synth/VCOSubcircuits.png"><img src="../images/synth/VCOSubcircuits.png" width="500" alt="Schematic for the VCO with subcircuits of the VCO core, the buffer, and the DC high pass filter identified." /></a> Sub-circuits
 <p>The oscillator core emits a sawtooth wave ranging from about 1.7 to 7.2V. This is well within the range of the op amp, but it’s not centered at 0. The DC (passive high pass) filter will center the oscillation around 0. I wondered if it would make more sense to switch the order? My thought had been that putting the DC filter before the buffer would result in the oscillator’s voltage range being more centered in the op amp’s range.</p>
 <p>Since I find it easier to think in schematics than in board layout, I first modeled this in the simulator, thinking that I would try it on my breadboard when I was happy with the result. It’s worth noting that the simulator is not perfect, and some things work in real life which look strange in the simulator. But in this case my “improved” circuit doesn’t work at all, and I could immediately see why:</p>
-<a href="../images/synth/VCOCoreBroken.png"><img src="../images/synth/VCOCoreBroken.png" alt="VCO with DC high pass filter before the buffer, which does not work." width="500" /></a> This does not work
+<a href="../images/synth/VCOCoreBroken.png"><img src="../images/synth/VCOCoreBroken.png" width="500" alt="VCO with DC high pass filter before the buffer, which does not work." /></a> This does not work
 <p>Instead of being two distinct sub-circuits separated by the buffer, the resistors and capacitors from the oscillator core and the passive high-pass filter are now a combined impedance, which breaks both sub-circuits! The oscillator now runs at the wrong rate, and the DC filtering doesn’t work at all. So much for that idea!</p>
 <h4 id="changing-the-frequency-with-a-potentiometer">Changing the Frequency with a Potentiometer</h4>
 <p>Next, we experiment with changing the frequency of oscillation by substituting different values for the capacitor and the resistor in the oscillator core, which does indeed change the pitch of the tone that’s generated. Then we substitute a transistor for the resistor, which allows us to have a variable pitch by using a potentiometer connected to the transistor’s base. This potentiometer will eventually become the tuning knob.</p>
 <p>The only real problem in this phase of the build was mounting the potentiometer to the breadboard; the pot I was given in the kit was much bigger than the pot drawn on the assembly diagram. I found a way to make it work (see below).</p>
-<a href="../images/synth/VCOWithVoltageControl.jpg"><img src="../images/synth/VCOWithVoltageControl.jpg" alt="A breadboard with the VCO circuit on it." width="400" /></a> VCO at the end of this stage
+<a href="../images/synth/VCOWithVoltageControl.jpg"><img src="../images/synth/VCOWithVoltageControl.jpg" width="400" alt="A breadboard with the VCO circuit on it." /></a> VCO at the end of this stage
 <p>I find it helpful to look at a schematic, but there is no (complete) schematic for this stage in the directions, so here’s one I made:</p>
-<a href="../images/synth/VCOCoreWithPot.png"><img src="../images/synth/VCOCoreWithPot.png" alt="Schematic of VCO core with potentiometer for pitch control" width="500" /></a>
+<a href="../images/synth/VCOCoreWithPot.png"><img src="../images/synth/VCOCoreWithPot.png" width="500" alt="Schematic of VCO core with potentiometer for pitch control" /></a>
 <h4 id="changing-the-frequency-with-a-voltage-control-input">Changing the Frequency with a Voltage Control Input</h4>
 <p>Here we just add a jack and use a passive mixing circuit – nothing more than a couple of resistors – so that we can control the pitch with <em>both</em> an external CV input and the potentiometer from the previous step. Really, they’re both just sources of variable voltage. Finally we tie the output to ground with a 4 or 14k resistor to bring the sum down a bit.</p>
 <p>Now here’s the schematic:</p>
-<a href="../images/synth/VCOCoreWithCVInput.png"><img src="../images/synth/VCOCoreWithCVInput.png" alt="Schematic of VCO core with CV input and potentiometer for pitch control" width="500" /></a>
+<a href="../images/synth/VCOCoreWithCVInput.png"><img src="../images/synth/VCOCoreWithCVInput.png" width="500" alt="Schematic of VCO core with CV input and potentiometer for pitch control" /></a>
 <h4 id="deal-with-component-temperature-variations">Deal with Component Temperature Variations</h4>
 <p>Having added a Control Voltage input in the previous step, we now must rip it out to add support for additonal components.</p>
 <p>Because the NPN transistor warming lowers its resistance to ground, raising the pitch of the oscillator, we add a PNP transistor, which has the opposite effect when warmed. The idea here is that the two transistors will counteract each other (hopefully!), producing a mostly steady pitch once the oscillator is tuned. The base of the PNP transistor is connected to ground because – well, because it’s handy at the moment, really. This is not how we will have it long-term.</p>
 <p>I really needed the schematic here:</p>
-<a href="../images/synth/VCOWithPNP.png"><img src="../images/synth/VCOWithPNP.png" alt="Schematic of VCO with PNP transistor added" width="500" /></a>
+<a href="../images/synth/VCOWithPNP.png"><img src="../images/synth/VCOWithPNP.png" width="500" alt="Schematic of VCO with PNP transistor added" /></a>
 <p>One thing to point out here is that the PNP transistor’s collector is connected to -12V, not ground! This is on purpose as we are trying to keep the voltage at the emitter within the 0-550mV range that is appropriate for the NPN transistor’s base, as you can see from the schematic. Connecting the PNP transistor’s collector to -12V instead of ground does that.</p>
 <h4 id="add-tuning">Add Tuning</h4>
 <p>Now we add the tuning knob and CV input back into the circuit, also adding a fine tuning adjustment.</p>
-<a href="../images/synth/VCOWithTrimmers.png"><img src="../images/synth/VCOWithTrimmers.png" alt="Schematic of VCO with tuning and fine-trimming potentiometers added" width="500" /></a>
+<a href="../images/synth/VCOWithTrimmers.png"><img src="../images/synth/VCOWithTrimmers.png" width="500" alt="Schematic of VCO with tuning and fine-trimming potentiometers added" /></a>
 <p>There’s a trim potentiometer which is connected to a 1.5kΩ resistor in the schematic, but I didn’t have any special symbol for that, so I just used a standard potentiometer symbol. That potentiometer is used for the oscillator’s fine tuning adjustment.</p>
 <p>The biggest problem I had with building this part of the circuit was that I couldn’t find the trim pot. There’s about a 95% chance I lost it while digging through the bag for a diode. I picked one up from my local supplier at a price which bordered on highway robbery, but <em>I don’t care,</em> because I can’t tell you how nice it is to have an electronics parts store within a few blocks of my house and I would very much like them to remain in business.</p>
 <p>The coarse tuning potentiometer has returned, now connected to -12V instead of ground. The oscillator has been fairly high-pitched, and the designer wants to bring the pitch down by lowering the voltage sent from the tuning potentiometer. How low?</p>
@@ -203,7 +219,7 @@ After a couple of minutes staring at the illustration, it traspired that I had i
 <p>So we can see that the voltage is indeed lower. More importantly, the range of the coarse tuning adjustment is now closer to a “musically useful” range, which is around 0-8V.</p>
 <h4 id="add-pwm-wave-shape">Add PWM Wave Shape</h4>
 <p>Other than the breadboard getting a bit crowded and the potentiometers not really fitting into the breadboard well as usual, this step went fairly easily.</p>
-<a href="../images/synth/OpAmpComparitor.png"><img src="../images/synth/OpAmpComparitor.png" alt="Schematic of op amp in comparitor mode with variable voltage input to inverting input and with PWM waveform on the output" width="300" /></a> Op amp comparitor, from the directions to the VCO kit
+<a href="../images/synth/OpAmpComparitor.png"><img src="../images/synth/OpAmpComparitor.png" width="300" alt="Schematic of op amp in comparitor mode with variable voltage input to inverting input and with PWM waveform on the output" /></a> Op amp comparitor, from the directions to the VCO kit
 <p>The general idea of this step is to use an op amp wired as a comparitor: a circuit which returns a high voltage if the <code>+</code> input is higher than the <code>-</code> input and a low voltage otherwise. Sending the sawtooth wave through such a circuit results in a pulse wave which we can vary the width of by adjusting the voltage going to the <code>-</code> input of the op amp.</p>
 <p>I do find the explanation of using an op amp as a comparitor in the directions a bit confusing, however. I much prefer this version, from <em>Make: Analog Synthesizers,</em> by Ray Wilson:</p>
 <blockquote>
@@ -244,6 +260,10 @@ After a couple of minutes staring at the illustration, it traspired that I had i
 </ul>
 <div class="info">
 Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
+<div class="info">
+Tags:
 </div>
 </div>
 <div class="info">

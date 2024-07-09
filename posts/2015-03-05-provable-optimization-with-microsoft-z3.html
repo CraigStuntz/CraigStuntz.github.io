@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Craig Stuntz - 2015-03-05-provable-optimization-with-microsoft-z3</title>
+        <title>Craig Stuntz - Provable Optimization with Microsoft Z3</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -32,36 +32,19 @@
         <div id="content">
             
             
-                <h1>2015-03-05-provable-optimization-with-microsoft-z3</h1>
+                <h1>Provable Optimization with Microsoft Z3</h1>
             
             <div class="info">
     Posted on March  5, 2015
     
 </div>
 
-<div id="header">
-<div id="logo">
-<a href="../">Craig Stuntz</a>
-</div>
-<div id="navigation">
-<a href="../">Home</a>
-<a href="../about.html">About</a>
-<a href="../presentations.html">Presentations</a>
-<a href="../archive.html">Archive</a>
-</div>
-</div>
-<div id="content">
-<h1 id="provable-optimization-with-microsoft-z3">Provable Optimization with Microsoft Z3</h1>
-<div class="info">
-Posted on March 5, 2015
-</div>
 <p>A few months ago, some coworkers sent around a Ruby challenge. It appears simple, but we can sometimes learn a lot from simple problems.</p>
 <blockquote>
 <p>Write a Ruby program that determines the smallest three digit number such that when said number is divided by the sum of its digits the answer is 20.</p>
 </blockquote>
 <p>In case that’s not clear, let’s pick a number, say, 123. The sum of the digits of 123 is 6, and 123/6 = 20.5, so 123 is not a solution. What is?</p>
 <p>Here’s some Ruby code I wrote to solve it:</p>
-<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> digitSum(num, base <span class="kw">=</span> <span class="dv">10</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    num<span class="at">.to_s</span>(base)<span class="at">.split</span>(<span class="ss">//</span>)<span class="at">.inject</span> <span class="kw">{|</span>z, x<span class="kw">|</span> z <span class="kw">+</span> x<span class="at">.to_i</span>(base)<span class="kw">}</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
@@ -71,30 +54,24 @@ Posted on March 5, 2015
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span> solution</span></code></pre></div>
-</div>
 <p>Problem solved, right?</p>
 <p>Well, no. For starters, it doesn’t even execute. There’s a really subtle type error in this code. You probably have to be fairly good with Ruby to figure out why without actually running it. Even when fixed, the cognitive overhead for understanding the code to even a simple problem is very high! It doesn’t look like the problem specification at all.</p>
 <p>Does this version, when the bug is fixed, actually produce a correct answer to the problem? Does it even produce an incorrect solution? It’s not quite clear.</p>
 <p>So maybe my solution isn’t so good. But one of my colleagues had an interesting solution:</p>
-<div id="cb2" class="sourceCode">
 <div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> the_solution</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">180</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
-</div>
 <p>Well, that looks really, really efficient, and it typechecks. But is it the correct answer? Will you know, six months down the road, what question it’s even trying to answer? Tests would help, but the word “smallest” in the problem turns out to be tricky to test well. Do you want methods like this in code you maintain?</p>
 <h2 id="the-best-of-both-worlds">The Best of Both Worlds</h2>
 <p>Is there a solution which is as efficient as just returning 180 but which also proves that 180 is, in fact, the correct solution to the problem?
 Let’s encode the specification for the problem in <a href="../posts/2014-07-07-test-only-development.html">a pure specification language, SMT-LIB</a>:</p>
-<div id="cb3" class="sourceCode">
 <div class="sourceCode" id="cb3"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(define-fun matches-problem ((n Int)) Bool</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">and</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    (<span class="op">&gt;=</span> n <span class="dv">100</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    (<span class="op">&lt;</span> n <span class="dv">1000</span>)                   <span class="co">; three digits</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    (<span class="op">=</span> <span class="fl">20.0</span> (<span class="op">/</span> n (digit-sum n)))))</span></code></pre></div>
-</div>
 <p>Z3/SMT-LIB doesn’t ship with a <code>digit-sum</code> function, so I had to write that. You can find that code in the full solution, below.</p>
 <p>That’s most of the problem, but not quite all. We also have to show that this is the smallest solution. So let’s also <code>assert</code> that there exists a “smallest” solution, which means that any other solution is larger:</p>
-<div id="cb4" class="sourceCode">
 <div class="sourceCode" id="cb4"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(declare-const num Int)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span></span>
@@ -103,33 +80,25 @@ Let’s encode the specification for the problem in <a href="../posts/2014-07-07
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    (forall ((other Int))</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        (implies (matches-problem other) (<span class="op">&gt;=</span> other num))) <span class="co">; any &quot;other&quot; solution is larger</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div>
-</div>
 <p>Now let’s ask Z3 if this specification even makes sense, and if it could be reduced into something more efficient:</p>
-<div id="cb5" class="sourceCode">
 <div class="sourceCode" id="cb5"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
-</div>
 <p>And Z3 replies…</p>
-<div id="cb6" class="sourceCode">
 <div class="sourceCode" id="cb6"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sat</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(model</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  (define-fun num () Int</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">180</span>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-</div>
 <p>A round of applause for the theorem prover, please! The full solution is at the
 bottom of this post. You can
 <a href="https://microsoft.github.io/z3guide/playground/Freeform%20Editing">try it yourself online</a>
 without installing anything.</p>
 <p>One interesting point here: The output language is SMT-LIB, just like the input language. The “compile” transforms a provably consistent and more obviously correct specification into an more efficient representation of the answer in the same language as the input. This is especially useful for problems which do not have a single answer. Z3 can return a function matching a specificationas easily as it can return an integer.</p>
 <p>What does it mean when I ask “if this specification even makes sense?” Well, let’s say I don’t like the number 180. I can exclude it with an additional <code>assert</code>:</p>
-<div id="cb7" class="sourceCode">
 <div class="sourceCode" id="cb7"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">&gt;</span> num <span class="dv">180</span>))</span></code></pre></div>
-</div>
 <p>This time, when I check-sat, Z3 replies <code>unsat</code>, meaning the model is not satisfiable, which means there’s definitely no solution. So 180 is not only the smallest solution to the original problem, it turns out to be the unique solution.</p>
 <p>Formal methods can show that your problem specifications are consistent and that your implementation is correct, and they can also guarantee that “extreme” optimizations are correct. This turns out to be <a href="http://research.microsoft.com/en-us/um/people/lamport/tla/formal-methods-amazon.pdf">really useful in real-world problems</a>.</p>
 <h2 id="appendix-full-solution">Appendix: Full Solution</h2>
-<div id="cb8" class="sourceCode">
 <div class="sourceCode" id="cb8"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">; Write a Ruby program that determines the smallest three digit number </span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">; such that when said number is divided by the sum of its digits </span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">; the answer is 20.</span></span>
@@ -150,15 +119,10 @@ without installing anything.</p>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  ))</span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
-</div>
-<div class="info">
-Tags: <a href="../tags/z3.html" rel="tag" title="All pages tagged 'z3'.">z3</a>, <a href="../tags/theorem%20provers.html" rel="tag" title="All pages tagged 'theorem provers'.">theorem provers</a>
-</div>
-</div>
 
 <div class="info">
     
-    Tags: 
+    Tags: <a title="All pages tagged 'z3'." href="../tags/z3.html" rel="tag">z3</a>, <a title="All pages tagged 'theorem provers'." href="../tags/theorem%20provers.html" rel="tag">theorem provers</a>
     
 </div>
 
