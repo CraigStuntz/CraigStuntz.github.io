@@ -28,7 +28,7 @@ the name suggests, building a type checker for the untyped lambda calculus would
 be rather useless, as there is only one type in the language and therefore any 
 syntactically valid program would type check: there are no type errors, only 
 syntax errors. Instead we will use this language to learn about
-normalization by evaluation, which will be used when we build a type checker for
+**normalization by evaluation**, which will be used when we build a type checker for
 the simply typed lambda calculus (next section) and *necessary* when we build a
 type checker for Tartlet.
 
@@ -181,14 +181,20 @@ of C#, allow type inference in some places but *require* it on named function
 declarations. 
 
 Bidirectional type checking combines type checking and type synthesis 
-(inference) in a principled way. In some cases, we can infer/synthesize a type 
-by following simple rules. For example, if we enounter a variable at a use site
-(in other words, after it is declared), we can synthesize the type by looking up
+(inference) in a principled way. Sometimes, given an expression we can 
+synthesize/infer its type. Other times we know what type we are expecting and 
+need to confirm (check) that the expression has an equivalent type. 
+Bidirectional type checking tells us whether we should be using type synthesis 
+or type checking in any given context.
+
+For example, if we enounter a variable at a use site (in other words, after it 
+is declared), we can synthesize the type by looking up
 the variable in the context, or list of variables in scope. In other cases, we
-must check the type against some existing type, for example a function must be
-of a function type. Bidirectional type checking makes it clear whether we should
-use synthesis or checking in any situation we might encounter in code. By doing 
-so, it is a guideline for how to write
+must check the type against some existing type, for example if there is a 
+function call in code then we must check that we are in fact calling a reference
+of a function type (and not, say, an integer). Bidirectional type checking makes 
+it clear whether we should use synthesis or checking in any situation we might 
+encounter in code. By doing so, it is a guideline for how to write
 a type checker which is sufficiently powerful to implement most features needed
 by contemporary programming languages, including some with advanced type
 systems.
@@ -206,25 +212,25 @@ if the expression is in the simplest possible form.
 That's a little abstract, so let's look at an example from Swift:
 
 ```swift
-func add1To(n: Int) -> Int {
+func increment(n: Int) -> Int {
     return n + 1
 }
 
 let zero: Int = 0;
 
-let one = add1To(n: zero)
+let one = increment(n: zero)
 ```
 
 So far, so good, but of course we could have written `one` as:
 
 ```swift
-let one: Int = 1 // because add1To(n: zero) == 1
+let one: Int = 1 // because increment(n: zero) == 1
 ```
 
 You might prefer one version of the *source code,* but in fact both versions are
 the same value in the end. We call the second version, with the literal `1`, the 
 **normalized** version because it is "less complicated" than the version with 
-the function call to `add1To`. We will formalize the definition of "less 
+the function call to `increment`. We will formalize the definition of "less 
 complicated" in the near future.
 
 ### What Is the Point of Normalization?
@@ -246,14 +252,14 @@ normalize!
 
 ### A Slightly More Complicated Example
 
-When calling `add1To` we want to pass a value, which we store in the variable `zero`
+When calling `increment` we want to pass a value, which we store in the variable `zero`
 and pass as the `n` argument. `zero` is a variable of type `Int` and in fact contains an 
 instance of type `Int`, so the type check should be successful. 
 
 Should this type check?
 
 ```swift
-let three = add1To(n: add1To(n: add1To(n: zero)))
+let three = increment(n: increment(n: increment(n: zero)))
 ```
 
 If you've been programming for a while I think you'll agree that the answer is
@@ -323,10 +329,21 @@ Sometimes people say that programming languages would be easier to learn if they
 had a simple core with fewer features. That might be right in some cases, but
 the untyped lambda calculus shows that there is a bottom bound to this idea. 
 There is basically *one* feature in the whole language, and it's quite difficult
-to write any meaningful programs in.[^TuringComplete] However, it's quite simple to write an 
+to write any meaningful programs in. However, it's quite simple to write an 
 expression evaluator for it due to its simplicity, and as that is what we are 
 aiming to do it is a good choice for our purposes. Still, this section is a bit
 complicated if it's your first exposure to the untyped lambda calculus!
+
+(One might fairly ask why David picked the untyped lambda calculus as an 
+example. Nothing in the tutorial depends on its use; it's just a simple example 
+here. The untyped lambda calculus is important in theoretical computer science
+and so one can presume that folks coming to the tutorial from a TCS background
+will be familiar with it already. This is perhaps less true when people approach the 
+tutorial from a "practitioner"/commercial programmer background. However, the 
+untyped lambda calculus does have at least one thing going for it, which is that 
+it's very simple to evaluate. We will be doing that very soon!)
+
+### The Simplest Value In the Untyped Lambda Calculus
 
 Let's consider the simplest possible value in the untyped lambda caculus, the 
 identity function. It just returns the value of its argument. Values in the 
@@ -339,7 +356,7 @@ like this:
 λx.x
 ```
 
-Think: "A function that when called with some value `x` returns that value `x`.
+Think: "An anonymous function that when called with some value `x` returns that value `x`.
 (In Swift it would look like `{ x in x }`; in JavaScript it would look like 
 `x => x`).
 
@@ -347,7 +364,7 @@ It's hard to even consider this in terms of other programming languages, which
 have, you know, integers, and booleans and stuff, because the untyped lambda 
 calculus very much does not have types for integers and booleans and stuff. 
 However, you can use these functions to perform computations which are the same 
-as in languages which *do* have those features.
+as in languages which *do* have those features.[^TuringComplete]
 
 <div class="highlight">
 Writing an evaluator requires the following steps:
@@ -361,6 +378,13 @@ In this case, for the untyped λ-calculus, the only values available are
 closures, and computation occurs when a closure is applied to another value.
 </div>
 
+Writing an evaluator means we will be interpreting the untyped lambda calculus. 
+If you're into compilers this should be familiar territory. We will be starting 
+with the code we are evaluating in the untyped lambda calculus "already parsed" 
+into an abstract syntax tree (AST); that is, the input to our evaluator will be 
+AST expressions instead of strings. But we require additional types 
+to hold values as we evaluate that AST. 
+
 You may have encountered the term 
 [**closure**](https://en.wikipedia.org/wiki/Closure_(computer_programming)) before,
 but it's a combination of a function and an environment which may include both
@@ -370,19 +394,21 @@ are defined externally to the function's body).
 "when a closure is applied to another value" means when the closure is invoked 
 using another value as an argument.
 
-If you want to do something more complicated 
-in your program, like add two numbers together, then you have to stop and think
+## What Even Is a Natural Number?
+
+If you want to do something more complicated in your program in the untyped 
+lambda calculus, like add two numbers together, then you have to stop and think
 about how you're going to represent numbers in a programming language which 
 doesn't have them.
 
-## What Even Is a Natural Number?
-
 The type of number that we're going to use is a **natural number**, and by this 
-we mean a number which is in the set $\{0, 1, 2, ..., \infty \}$
+we mean a number which is in the set $\{0, 1, 2, ..., \infty \}$ However, we 
+are going to have to think about how to represent these using anonymous 
+functions!
 
 Swift doesn't have a type like this. It has `UInt64`, but there are obviously
 values too large to store in a `UInt64`. It turns out that this really matters,
-because the type of `add1To` above is actually a bit more complicated than "Int".
+because the type of `increment` above is actually a bit more complicated than "Int".
 It's actually "an `Int` or perhaps it might throw an exception due to a numeric
 overflow."
 
@@ -390,8 +416,8 @@ overflow."
 ➜ swift repl  
 Welcome to Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4).
 Type :help for assistance.
-  1> func add1To(n: Int) -> Int { return n + 1 }
-  2> add1To(n: Int.max)
+  1> func increment(n: Int) -> Int { return n + 1 }
+  2> increment(n: Int.max)
 Execution interrupted. Enter code to recover and continue.
 Enter LLDB commands to investigate (type :help for assistance.)
   3>  
@@ -408,7 +434,7 @@ starting with a simpler language.
 
 The type checker must solve a problem which is very similar to the optimizer: Is
 it safe to replace one expression with a different expression, in every possible 
-case? As we have seen with `add1To` above, this can be a pertty subtle question,
+case? As we have seen with `increment` above, this can be a pertty subtle question,
 with edge cases which are not obvious from looking at source code. How can we 
 be sure that saying that a number is "a natural number" means that it can be 
 used *anywhere* a program expects a natural number to be used? 
@@ -423,7 +449,7 @@ to only two cases:
 `add1` means "given some value `n` which is certainly a natural number, the next 
 largest value, $n + 1$."[^Succ]
 
-So we can literally have a data type like:
+So (in Swift) we can literally have a data type like:
 
 ```swift
 indirect enum Nat {
@@ -462,21 +488,23 @@ three = λf.λx.f(f(f x))
 four  = λf.λx.f(f(f(f x)))
 ```
 
-...because (don't worry if you can't follow this derivation; I'll explain more
-below):
+...because (don't worry if you can't follow this derivation; we have computers
+to do this for us):
 
 ```
 one = add1 zero                                   because 1 = 1 + 0
-    = (λn.λf.λx.(f ((n f) x))) (λf.λx.x)          substitute defintions of add1 and zero
-    = λf.λx.(f (((λf.λx.x) f) x))                 substitute λf.λx.x for argument n
-    = λf.λx.(f ((λf.f) x))                        because (λx.x))f = f
-    = λf.λx.f x                                   because (λf.f))x = x
+    = (λn.λf.λx.f (n f x)) (λf.λx.x)              substitute defintions of add1 and zero
+    = λf.λx.f λf.λx.x f x                         substitute λf.λx.x for argument n
+    = λf.λx.f λf.f x                              because (λx.x) f = f
+    = λf.λx.f x                                   because (λf.f) x = x
 ```
 
-This way of storing natural 
-numbers is sometimes called a 
+This way of storing natural numbers is sometimes called a 
 "[Church numeral](https://en.wikipedia.org/wiki/Church_encoding#Church_numerals)."
-
+And this simplification of `add1 zero` into `λf.λx.f x` is exactly the sort of 
+evaluation we will be performing as part of "normalization by evaluation." 
+Clearly it's a pain to do this by hand, so we will be writing an expression 
+evaluator to do it for us!
 
 The way to think about Church numerals as expressed in the functions above is 
 that when invoked they run a function, call it `f`, as many times as the 

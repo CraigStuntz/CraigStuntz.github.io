@@ -28,7 +28,7 @@ I welcome emails from readers:
 
 <img src="images/ea.png" />
 
-<a rel="me" href="https://types.pl/web/@CraigStuntz">Follow me on Mastodon</a>.
+<a rel="me" href="https://discuss.systems/@CraigStuntz">Follow me on Mastodon</a>.
 You can ask questions there, as well.
 
 Please feel free to 
