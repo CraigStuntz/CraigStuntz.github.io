@@ -4,6 +4,7 @@
 
 :root {
     --main-bg-color: #f8f8f8;
+    --main-fg-color: #545454;
 }
   
 
@@ -52,7 +53,7 @@ div#header #navigation {
 }
 
 div#header #navigation a {
-    color: #BBBBBB;
+    color: #737373  ;
     font-family: Avenir, 'Open Sans', sans-serif;
     font-size: 1rem;
     margin-left: 45px;
@@ -86,15 +87,14 @@ div#content h1{
 
 div#content, /* this line for archives page */
 div#content p{
-    color: #666666;
+    color: var(--main-fg-color);
     font-family: Avenir, 'Open Sans', sans-serif;
     font-size: 1rem;
     font-weight: 400;
 }
 
 div#content a{
-  color: #428bca;
-  text-decoration: none;
+  color: #285685;
 }
 
 div#footer {
