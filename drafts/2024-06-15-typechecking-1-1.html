@@ -56,22 +56,23 @@
 </ul></li>
 </ul>
 </div>
-<p>My plan is that in each section of this series I’m going to give enough
-information that a competent programmer can understand a section of David’s
-tutorial. My goal for this post is to get you through the title and the first
-few paragraphs.</p>
-<h2 id="the-plan-for-learning">The Plan for Learning</h2>
-<p>This will be a long post because there are a lot of concepts
-introduced here! Feel free to skip the sections on any concepts you are already
-comfortable with!</p>
 <p>Today we will be learning about the untyped lambda calculus (and friends!). As
 the name suggests, building a type checker for the untyped lambda calculus would
 be rather useless, as there is only one type in the language and therefore any
 syntactically valid program would type check: there are no type errors, only
 syntax errors. Instead we will use this language to learn about
 <strong>normalization by evaluation</strong>, which will be used when we build a type checker for
-the simply typed lambda calculus (next section) and <em>necessary</em> when we build a
-type checker for Tartlet.</p>
+the simply typed lambda calculus (part 2) and <em>necessary</em> when we build a
+type checker for Tartlet (part 3).</p>
+<p>This will be a long post because there are a lot of concepts
+introduced here! Feel free to skip the sections on any concepts you are already
+comfortable with! Heck, skip the whole thing if you’d rather just dive into the
+code.</p>
+<p>My plan is that in each section of this series I’m going to give enough
+information that a programmer can understand a section of David’s
+tutorial. My goal for this post is to get you through the title and the first
+few paragraphs.</p>
+<h2 id="the-plan-for-learning">The Plan for Learning</h2>
 <p>A type checker needs to look an expression and find its type and then evaluate
 whether that type is compatible (equivalent) with the type it expecting in a
 certain situation. For example, if a function’s argument is typed <code>Int</code> then it
@@ -82,15 +83,14 @@ function which returns an <code>Int</code>, or some supertype of <code>Int</code
 more complicated in practice than it might seem and it will be easier if we can
 first <strong>normalize</strong> (simplify) the expression.</p>
 <p>Some of the concepts we will discuss in this section are both rather difficult
-to mentally evaluate (I’m looking at you, Church numerals) and not necessary to
-understand when
-building a type checker. One possible approach is to skim these sections, don’t
+to mentally evaluate and not necessary to understand when building a type
+checker. (I’m looking at you, Church numerals.) One possible approach is to skim these sections, don’t
 spend too much time trying to wrap your head around them, and just accept that the
 expected values we will use in unit tests are correct. I hope to give you enough
 information to distinguish between correct and incorrect outcomes even if you
 don’t mentally evaluate the Church numerals we will program in the untyped lambda
 calculus, which is rather challenging. This is a valid way to learn as building
-a type checker (at least, building it in the way that we are going to build it!)
+a type checker
 depends on understanding normalization but does not depend on understanding
 Church numerals.</p>
 <p>Another thing that you could do is spend time deeply understanding each section
@@ -150,6 +150,10 @@ will require an analysis which is a bit more
 complicated than just a simple structural equality check. This can be fairly
 subtle.</p>
 <h2 id="what-are-dependent-types">What Are Dependent Types?</h2>
+<p>It will be important to understand what dependent types are when we start
+building a type checker for Tartlet, which is the third and final part of the
+tutorial. Fell free to skip this section and come back to it before you start
+part 3.</p>
 <div class="highlight">
 <p>In particular, when types can contain programs, we need to be able to run
 these programs and check whether their outputs are the same.</p>
@@ -178,6 +182,8 @@ still be useful even if dependent types aren’t included in the programming
 language you’re checking.</p>
 <p>Speaking of which…</p>
 <h2 id="what-is-bidirectional-type-checking">What Is Bidirectional Type Checking?</h2>
+<p>Understanding bidirectional typechecking is whole point of the tutorial!
+However, we won’t actually work on a bidirectional type checker until part 2.</p>
 <div class="highlight">
 <p>Normalization by evaluation is one way of performing this sameness check,
 while bidirectional type checking guides the invocation of the checks.</p>
@@ -215,24 +221,26 @@ a type checker which is sufficiently powerful to implement most features needed
 by contemporary programming languages, including some with advanced type
 systems.</p>
 <h2 id="what-is-normalization">What Is Normalization?</h2>
-<p>The first thing we are going to do is to learn how to take an expression and
-convert it to a “simpler” form, called the normal form, in a process called
+<p>Understanding normalization is the goal of part 1. First I will explain it
+conceptually; later we will write some code and see how it works in practice.</p>
+<p>We are going to learn how to take an expression and
+convert it to a “simpler” form, called the <strong>normal form</strong>, in a process called
 <strong>normalization</strong>. The reason we need to do this is we have to decide if the type
 of an expression is equivalent to the type that we are expecting. This is easier
 if the expression is in the simplest possible form.</p>
 <h3 id="a-very-simple-example">A Very Simple Example</h3>
 <p>That’s a little abstract, so let’s look at an example from Swift:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="fu">increment</span><span class="op">(</span><span class="va">n</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> -&gt; <span class="fu">Int</span> <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> n <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">zero</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">zero</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="fu">increment</span><span class="op">(</span><span class="va">n</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> -&gt; <span class="fu">Int</span> <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> n <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span> <span class="op">=</span> increment<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)</span></span></code></pre></div>
 <p>So far, so good, but of course we could have written <code>one</code> as:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">1</span> <span class="co">// because increment(n: zero) == 1</span></span></code></pre></div>
 <p>You might prefer one version of the <em>source code,</em> but in fact both versions are
-the same value in the end. We call the second version, with the literal <code>1</code>, the
+the same <em>value</em> in the end. We call the second version, with the literal <code>1</code>, the
 <strong>normalized</strong> version because it is “less complicated” than the version with
 the function call to <code>increment</code>. We will formalize the definition of “less
 complicated” in the near future.</p>
@@ -286,7 +294,7 @@ that evaluating an expression will result in it eventually becoming normalized,
 because that is in fact true.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>We can’t always evaluate a function at compile time like this; some function
 results depend on values which are unknown until runtime. But we can do it often
-enough to be helpful, and in particular we can always do it with dependent types.</p>
+enough to be helpful, and in particular we can do it when type checking dependent types.</p>
 <h2 id="what-even-is-the-untyped-lambda-calculus">What Even Is the Untyped Lambda Calculus?</h2>
 <div class="highlight">
 <p><em>1 Evaluating Untyped λ-Calculus</em></p>
@@ -295,13 +303,17 @@ enough to be helpful, and in particular we can always do it with dependent types
 <p>In order to demonstrate normalization by evaluation, we will begin with
 something called “the untyped lambda calculus.”
 Don’t be put off by the Greek letters or a mention of “calculus”; we will not be
-computing integrals here!</p>
+computing integrals here! It’s worth knowing just a little bit about the untyped
+lambda calculus so that you recognize what is going on in the examples which we
+will use, but if you find yourself puzzling out individual derivations, just
+know that it’s not really necessary to understand the type checker which we are
+building.</p>
 <p>You can look at the untyped lambda calculus as a very tiny programming language, or you
-can look at it as an alternate model of computation. There is only one data
+can look at it as an alternate model of computation. Both are correct views. There is only one data
 type, which is an anonymous function taking a single argument and returning a
 single value. The type of this argument and returned value are, naturally,
-anonymous functions taking a single argument and returning a single value. There
-are no other types.</p>
+anonymous functions taking a single argument and returning a single value.
+<em>There are no other types.</em></p>
 <p>Sometimes people say that programming languages would be easier to learn if they
 had a simple core with fewer features. That might be right in some cases, but
 the untyped lambda calculus shows that there is a bottom bound to this idea.
@@ -309,15 +321,7 @@ There is basically <em>one</em> feature in the whole language, and it’s quite 
 to write any meaningful programs in. However, it’s quite simple to write an
 expression evaluator for it due to its simplicity, and as that is what we are
 aiming to do it is a good choice for our purposes. Still, this section is a bit
-complicated if it’s your first exposure to the untyped lambda calculus!</p>
-<p>(One might fairly ask why David picked the untyped lambda calculus as an
-example. Nothing in the tutorial depends on its use; it’s just a simple example
-here. The untyped lambda calculus is important in theoretical computer science
-and so one can presume that folks coming to the tutorial from a TCS background
-will be familiar with it already. This is perhaps less true when people approach the
-tutorial from a “practitioner”/commercial programmer background. However, the
-untyped lambda calculus does have at least one thing going for it, which is that
-it’s very simple to evaluate. We will be doing that very soon!)</p>
+complicated if it’s your first exposure to the untyped lambda calculus!<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <h3 id="the-simplest-value-in-the-untyped-lambda-calculus">The Simplest Value In the Untyped Lambda Calculus</h3>
 <p>Let’s consider the simplest possible value in the untyped lambda caculus, the
 identity function. It just returns the value of its argument. Values in the
@@ -333,7 +337,7 @@ like this:</p>
 have, you know, integers, and booleans and stuff, because the untyped lambda
 calculus very much does not have types for integers and booleans and stuff.
 However, you can use these functions to perform computations which are the same
-as in languages which <em>do</em> have those features.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+as in languages which <em>do</em> have those features.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <div class="highlight">
 <p>Writing an evaluator requires the following steps:</p>
 <ul>
@@ -364,13 +368,13 @@ lambda calculus, like add two numbers together, then you have to stop and think
 about how you’re going to represent numbers in a programming language which
 doesn’t have them.</p>
 <p>The type of number that we’re going to use is a <strong>natural number</strong>, and by this
-we mean a number which is in the set <span class="math inline">{0, 1, 2, ..., ∞}</span> However, we
+we mean a number which is in the set <span class="math inline">{0, 1, 2, ..., ∞}</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> However, we
 are going to have to think about how to represent these using anonymous
 functions!</p>
 <p>Swift doesn’t have a type like this. It has <code>UInt64</code>, but there are obviously
 values too large to store in a <code>UInt64</code>. It turns out that this really matters,
 because the type of <code>increment</code> above is actually a bit more complicated than “Int”.
-It’s actually “an <code>Int</code> or perhaps it might throw an exception due to a numeric
+It actually means “an <code>Int</code> or perhaps it might throw an exception due to a numeric
 overflow.”</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➜</span> swift repl  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Welcome</span> to Apple Swift version 5.10 <span class="er">(</span><span class="ex">swiftlang-5.10.0.13</span> clang-1500.3.9.4<span class="kw">)</span><span class="bu">.</span></span>
@@ -387,12 +391,16 @@ into the language, and makes the language design and implementation somewhat
 more difficult. Real languages have complicated types! Again, we will be
 starting with a simpler language.</p>
 <h2 id="what-even-is-a-church-numeral">What Even Is a Church Numeral?</h2>
+<p>You do not need to understand Church numerals to complete the tutorial.</p>
 <p>The type checker must solve a problem which is very similar to the optimizer: Is
 it safe to replace one expression with a different expression, in every possible
 case? As we have seen with <code>increment</code> above, this can be a pertty subtle question,
-with edge cases which are not obvious from looking at source code. How can we
+with edge cases which are not obvious from looking at source code.</p>
+<p>How can we
 be sure that saying that a number is “a natural number” means that it can be
-used <em>anywhere</em> a program expects a natural number to be used?</p>
+used <em>anywhere</em> a program expects a natural number to be used? Also, how can we
+represent natural numbers in a language which has functions as its sole data
+type?</p>
 <p>It would help if instead of considering, well, <span class="math inline">∞</span> cases, we could cut that
 list down a bit. And for the type of natural numbers, we can in fact cut it down
 to only two cases:</p>
@@ -401,30 +409,35 @@ to only two cases:</p>
 <li><code>add1 n</code></li>
 </ul>
 <p><code>add1</code> means “given some value <code>n</code> which is certainly a natural number, the next
-largest value, <span class="math inline"><em>n</em> + 1</span>.”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+largest value, <span class="math inline"><em>n</em> + 1</span>.”<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 <p>So (in Swift) we can literally have a data type like:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>indirect <span class="kw">enum</span> Nat <span class="op">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> zero</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> add1<span class="op">(</span>Nat<span class="op">)</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>And now Swift has a “natural numbers” data type!</p>
+<p>And now Swift has a “natural numbers” data type! You can store any natural number in
+this type, although you may eventually run out of memory.</p>
 <h3 id="church-numerals-in-the-untyped-lambda-calculus">Church Numerals In the Untyped Lambda Calculus</h3>
-<p>But we’re not here to learn Swift right now, we want to program in the untyped
-lambda calculus! We can represent the natural numbers in the untyped lambda
-calculus as follows:</p>
+<p>But we’re not here to learn Swift right now, and we aren’t even trying to
+produce a tutorial for the untyped lambda calculus. Instead we just need enough
+exposure to it to know if our evaluator is working correctly.</p>
+<p>We can represent the natural numbers in the untyped lambda calculus as follows:<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 <pre><code>zero = λf.λx.x
 add1 = λn.λf.λx.f (n f x)</code></pre>
 <p>This implies that, for example, <code>one</code> (a function representhing the natural
 number <code>1</code>) is:</p>
-<pre><code>one = λf.λx.f x</code></pre>
+<pre><code>one = add1 zero 
+    = λf.λx.f x</code></pre>
+<p>We will see the full derivation below.</p>
 <p>There are more examples; hopefully you can start to see a pattern here:</p>
 <pre><code>zero  = λf.λx.x
 one   = λf.λx.f x
 two   = λf.λx.f(f x)
 three = λf.λx.f(f(f x))
-four  = λf.λx.f(f(f(f x)))</code></pre>
-<p>…because (don’t worry if you can’t follow this derivation; we have computers
-to do this for us):</p>
+four  = λf.λx.f(f(f(f x)))
+five  = λf.λx.f(f(f(f(f x))))</code></pre>
+<p>Here is the worked out version of <code>add1 zero</code>. (Don’t worry if you can’t follow
+this derivation; we have computers to do this for us):</p>
 <pre><code>one = add1 zero                                   because 1 = 1 + 0
     = (λn.λf.λx.f (n f x)) (λf.λx.x)              substitute defintions of add1 and zero
     = λf.λx.f λf.λx.x f x                         substitute λf.λx.x for argument n
@@ -440,6 +453,20 @@ evaluator to do it for us!</p>
 that when invoked they run a function, call it <code>f</code>, as many times as the
 numeral. So <code>zero</code>, above, <em>never evaluates</em> <code>f</code> and so runs it <em>zero</em> times.
 But <code>one</code> must evaluates <code>f</code> <em>once</em> when invoked. And so on for larger numbers.</p>
+<p>Another handy function is <code>plus</code>:</p>
+<pre><code>plus = λj.λk.λf.λx.(j f) (k f x)</code></pre>
+<p>And in particular, we will be evaluating this specific expression in the
+tutorial:</p>
+<pre><code>plus two three = five</code></pre>
+<p>That is to say:</p>
+<pre><code>plus (λf.λx.f(f x)) (λf.λx.f(f(f x))) = λf.λx.f(f(f(f(f x))))</code></pre>
+<p>I am not going to try to derive this by hand and I don’t think there’s much to
+be gained by doing so unless you intend to study the untyped lambda calculus,
+which isn’t really the point of what we are doing here. Our goal is to build a
+type checker, and this is just a step along the way. If we can take the
+expression <code>plus two three</code> and evaluate it and get <code>λf.λx.f(f(f(f(f x))))</code> from
+our evaluator then we know that it is working and produces an expression in normal
+(simplest) form.</p>
 <h3 id="why-why-why-for-the-love-of-church-why">Why, Why, Why for the Love of Church, Why?</h3>
 <p>Of course, representing a number like <code>1000</code> would seem to be a little bit
 involved given such an encoding, but on the positive side we have made such
@@ -464,23 +491,45 @@ syntax tree (AST).</p>
 as:</p>
 <pre><code>λx.x</code></pre>
 <p>However this line of code written as an abstract syntax tree in Swift would be:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Expr<span class="op">.</span>lambda<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">,</span> <span class="op">.</span>variable<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">))</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Expr<span class="op">.</span>lambda<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">,</span> <span class="op">.</span>variable<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">))</span></span></code></pre></div>
 <p>…which is somewhat more challenging to mentally parse. Because of this I will
 usually put the “unparsed” (literal source code version) in comments near the
-“parsed” (AST) version.</p>
+“parsed” (AST) version, like this:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">//  id = λx.x</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">id</span> <span class="op">=</span> Expr<span class="op">.</span>lambda<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">,</span> <span class="op">.</span>variable<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">))</span></span></code></pre></div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
 <li id="fn1"><p>This is somewhat complicated to prove; see for example
 <a href="https://tidsskrift.dk/brics/article/view/20473">Normalization by Evaluation with Typed Abstract Syntax</a>
 for more information.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>It turns out that the untyped lambda calculus is
+<li id="fn2"><p>One might fairly ask why David picked the untyped lambda calculus as
+an example. Nothing in the tutorial depends on its use; it’s just a
+simple example here. The untyped lambda calculus is important in
+theoretical computer science and so one can presume that folks coming
+to the tutorial from a TCS background will be familiar with it
+already. This is perhaps less true when people approach the tutorial
+from a “practitioner”/commercial programmer background. However, the
+untyped lambda calculus does have at least one thing going for it,
+which is that it’s very simple to evaluate. We will be doing that
+very soon!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>It turns out that the untyped lambda calculus is
 <a href="https://www.youtube.com/watch?v=RPQD7-AOjMI">Turing complete</a>,
 and can compute literally anything that any other programming
 language can express. However, we won’t be making use of this
-fact in this series.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>It’s more common to call <code>add1</code> by the name <code>succ</code>, for “successor,”
-but David uses <code>add1</code>, so I will follow his lead),<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+fact in this series.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Mathematicians, somewhat inconveniently,
+<a href="https://mathworld.wolfram.com/NaturalNumber.html">use two different definitions of “natural numbers,”</a> namely <span class="math inline">{0, 1, 2, ..., ∞}</span>
+and <span class="math inline">{1, 2, 3, ..., ∞}</span>. We (and, indeed, nearly all
+computer scientists) will use only the former.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>It’s more common to call <code>add1</code> by the name <code>succ</code>, for “successor,”
+but David uses <code>add1</code>, so I will follow his lead),<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Unless you are going to study the untyped lambda calculus
+<em>per se,</em> it’s not worth looking too deeply into why we
+are using these specific functions. For our purposes, it’s
+enough to know that they will work for the specific
+example we will be evaulating with the evaluator that we
+are going to build.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

@@ -42,10 +42,10 @@
 <p>I made a huge mistake a while back, resulting in all preproduction environments being deleted from a client’s Azure subscription. That’s actually not so bad – we use terraform to create the environments, so we could just run the terraform again to put them back. And better preproduction than production, right? But Azure quirks and client rules made this considerably worse.</p>
 <p>This was complicated by the fact that I used the terraform to provision two different Azure subscriptions, with entirely different security policies. In “Subscription A” which I provisioned first, I could do more or less anything. “Subscription B” which I provisioned second was far more locked down. Of note, in Subscription B I couldn’t create an Azure Resource Group. Instead, I had to open a ticket with the client’s cloud team.</p>
 <p>I had terraform like:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode terraform"><code class="sourceCode terraform"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">resource</span> <span class="st">&quot;azurerm_resource_group&quot;</span> <span class="st">&quot;resource_group&quot;</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    name     <span class="op">=</span> <span class="va">var</span>.resource_group_name</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="va">var</span>.resource_group_location</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre class="terraform"><code>resource &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
+    name     = var.resource_group_name
+    location = var.resource_group_location
+}</code></pre>
 <p>…which ran fine on Subscription A, but which I could not run at all on Subscription B. There were actually two different resource groups in Subscription B, one for preproduction and one for production.</p>
 <p>Good terraform code is idempotent, which means that if you run it in an environment which already matches the script you supply, it won’t make any changes at all; it will just report that everything is up to date.</p>
 <h2 id="terraform-state">Terraform State</h2>
@@ -59,10 +59,10 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">terraform</span> import module_name.azurerm_resource_group.resource_group <span class="op">&lt;</span>id_of_resource_group<span class="op">&gt;</span></span></code></pre></div>
 <p>…for the preproduction resource group. That linked (in the terraform state file for the preproduction environment) the Resource Group in my terraform script with the Resource Group created by the client’s team in Azure.</p>
 <p><em>Months later,</em> while creating the production resources, I ran into the same issue (can’t create resource groups at all in Subscription B). Since Subscription B was the one we’d be taking to production, I decided that a better reflection of the actual environment would be to change the resource group to a data provider, so I edited the terraform script quoted above to read:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode terraform"><code class="sourceCode terraform"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="st">&quot;azurerm_resource_group&quot;</span> <span class="st">&quot;resource_group&quot;</span> {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    name     <span class="op">=</span> <span class="va">var</span>.resource_group_name</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="va">var</span>.resource_group_location</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre class="terraform"><code>data &quot;azurerm_resource_group&quot; &quot;resource_group&quot; {
+    name     = var.resource_group_name
+    location = var.resource_group_location
+}</code></pre>
 <p>(I’ve just changed the word <code>resource</code> to <code>data</code>. In terraform, a <code>resource</code> is something that terraform might create, whereas a <code>data</code> is something that terraform will <em>never</em> create; it must already exist in the environment. But you might need to refer to properties of the <code>data</code> so it will appear in your script.)</p>
 <p>I ran the terraform and of course it worked fine and I didn’t need to do the <code>terraform import</code>.</p>
 <h2 id="terraform-plan-and-apply">Terraform <code>plan</code> and <code>apply</code></h2>

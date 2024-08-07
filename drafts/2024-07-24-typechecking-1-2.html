@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Craig Stuntz - A Very Gentle Introduction to Type Checking, Chapter 1.2: </title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    A Very Gentle Introduction to Type Checking,
+                        1.2
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    Evaluating the Untyped Lambda Calculus
+                </h1>
+            
+            <div class="info">
+    Posted on July 24, 2024
+    
+</div>
+
+<div class="toc">
+<ul>
+<li>Introduction: Type checkin’</li>
+<li>1: The Untyped Lambda Calculus
+<ul>
+<li>1.1: What Even Is the Untyped Lambda Calculus (Etc.)?</li>
+<li>1.2: Evaluating the Untyped Lambda Calculus</li>
+<li>1.3: Understanding Normalization</li>
+</ul></li>
+<li>2: The Simply Typed Lambda Calculus
+<ul>
+<li>2.1: What Even Is the Simply Typed Lambda Calculus?</li>
+<li>2.2: Bidirectional Type Checking</li>
+</ul></li>
+<li>3: Tartlet</li>
+</ul>
+</div>
+<p>If you’ve made it this far, congratulations! The last article was a ton of
+concepts; from here on out we’ll be writing code, which I suspect will make
+many programmers feel far more comfortable.</p>
+<p>Many people seem surprised when I tell them that I write Swift programs without
+Xcode, so a few notes on that. First, you’ll need to
+<a href="https://github.com/CraigStuntz/bidi/">install the Swift command-line tools and the Apple swift-format utility</a>.</p>
+<p>I use VS Code to edit, with the <a href="https://marketplace.visualstudio.com/items?itemName=sswg.swift-lang">Swift extension</a>.
+If you want to use Xcode instead, that should work fine, too!</p>
+<p>Then you can:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir bidi</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd bidi</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> swift package init <span class="at">--type</span> executable</span></code></pre></div>
+<p>…to get a templated Swift project. However, you probably just want to clone
+<a href="https://github.com/CraigStuntz/bidi/">my repository</a> instead. From there you
+can type <code>swift run</code> or <code>swift test</code> to do what it says on the tin, and if
+you’re using the Swift extension in VS Code then it will generate
+<code>.vscode/launch.json</code> and <code>.vscode/tasks.json</code> files for you.</p>
+<div class="highlight">
+<p><strong>1 Evaluating Untyped λ-Calculus</strong></p>
+<p>Let’s start with an evaluator for the untyped λ-calculus. Writing an evaluator
+requires the following steps:</p>
+<ul>
+<li>Identify the values that are to be the result of evaluation</li>
+<li>Figure out which expressions become values immediately, and which require computation</li>
+<li>Implement datatypes for the values and helper functions for computation
+In this case, for the untyped λ-calculus, the only values available are closures,
+and computation occurs when a closure is applied to another value.</li>
+</ul>
+</div>
+<p>As I noted earlier, there is one and only one kind of value in the untyped
+lambda calculus, namely an anonymous closure (a function which can capture
+free variables, meaning variables which are not arguments) which takes a single argument and
+returns exactly one result. However, the <em>syntax</em> for the untyped lambda
+calculus also includes things like variables with names, so we must account for that when
+interpreting it.</p>
+<p>If we were to write a full evaluator for the untyped lambda calculus, it
+might look something like this:</p>
+<ol type="1">
+<li>Lex the source code.</li>
+<li>Parse lexemes into abstract syntax tree (AST).</li>
+<li>Interpret AST, producing a value.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Output result.</li>
+</ol>
+<p>But here we will be doing something a bit simpler, namely only step 3. In order
+to do that, we will need to start with a representation of the AST and the
+values.</p>
+<p>In the version of the untyped lambda calculus that we will be
+using, there are variable assignments followed by a single expression, which
+may contain subexpressions, as the body of the program. This
+final expression will be evaluated to produce the single value of
+output from the program.</p>
+<p>So let’s write a type for expressions and values.</p>
+<div class="highlight">
+<p><strong>1.1 Syntax</strong></p>
+<p>In this section, the following representation of the untyped λ-calculus is used:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="dt">Var</span> <span class="dt">Name</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">Lambda</span> <span class="dt">Name</span> <span class="dt">Expr</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">App</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">deriving</span> <span class="dt">Show</span></span></code></pre></div>
+</div>
+<p>Here’s the corresponding Swift:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> indirect <span class="kw">enum</span> Expr<span class="op">:</span> <span class="dt">Equatable</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/// Associated value is the variable name</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> variable<span class="op">(</span>Name<span class="op">)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">/// Associated values are the argument name and the lambda's body, respectively</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> lambda<span class="op">(</span>Name<span class="op">,</span> Expr<span class="op">)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">/// Associated values are bunction body and the argument, respectively</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> application<span class="op">(</span>Expr<span class="op">,</span> Expr<span class="op">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// more coming soon!</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Some notes on this:</p>
+<p>The <code>indirect</code> here is required by the Swift compiler to make a self-referential
+<code>enum</code>. Since <code>Expr</code> includes <code>Expr</code> as an
+<a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/enumerations/#Associated-Values">associated value</a>,
+<code>indirect</code> is required. The reason for this is that Swift must use a less optimal
+representation for the compiled <code>enum</code> when its size is not known, so this is an
+“opt-in” feature.</p>
+<p>As noted earlier, I’ve added <code>: Equatable</code> to the type definition so that we can
+do equality comparisons on values of type <code>Expr</code>. We will need to do that in the
+unit tests.</p>
+<p>Because the associated values in Swift are unnamed (like Haskell), I like to
+include docstrings to keep track of what their meanings are. This is especially
+important with <code>application</code>, where you have two different <code>Expr</code>s, and their
+order is reversed from <code>lambda</code>! I think ideally I would have put these into the
+same order, but I am trying to keep my code as close to David’s as possible.</p>
+<p>Swift enum members are conventionally lower case and <code>var</code> is a reserved word in
+Swift, so I spelled out <code>variable</code>. Having done that, it seemed inconsistent to
+use <code>app</code>, so I made it <code>application</code>. <code>lambda</code> is a function definition,
+whereas <code>application</code> means you’re applying (passing) an argument to the defined
+function.</p>
+<p>The Haskell code has <code>deriving Show</code>, which essentially means, “generate code to
+convert these instances to a string.” This isn’t necessary in Swift, but
+<a href="https://developer.apple.com/documentation/swift/dump(_:name:indent:maxdepth:maxitems:)">the <code>dump()</code> function in Swift</a> doesn’t handle <code>enum</code>s so well, so I use
+<a href="https://swiftpackageregistry.com/pointfreeco/swift-custom-dump">a third party package called <code>swift-custom-dump</code></a>
+which produces much nicer-looking output.</p>
+<div class="highlight">
+<p>This corresponds closely to the typical presentation as a grammar:</p>
+<pre class="bnf"><code>e ::= x
+    | λx.e
+    | (e e)</code></pre>
+<p>with the usual conventions regarding associativity and precedence of lambda
+and application, namely that the body of a λ extends as far as possible to the
+right and that function application associates to the left. For instance, <code>λf.f f f</code>
+corresponds to <code>λf.((f f) f)</code>, not <code>((λf.f) f) f</code> or <code>λf.(f (f f))</code>.</p>
+</div>
+<p>This is not Haskell; it’s <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">BNF</a>.
+This grammar means that an expression in the untyped lambda calculus (well, the
+version that we’ll be using) can any one
+of:</p>
+<ul>
+<li>a reference to a variable</li>
+<li>a definition of a lambda (closure)</li>
+<li>or an application of an argument to a closure (function application)</li>
+</ul>
+<p>Not included in this tiny grammar are variable definitions which we will handle separately.</p>
+<div class="highlight">
+<p><strong>1.2 Values and Runtime Environments</strong></p>
+<p>A closure packages an expression that has not yet been evaluated with the run-
+time environment in which the expression was created. Here, closures always
+represent expressions with a variable that will be instantiated with a value, so
+these closures additionally keep track of a name.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Value</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="dt">VClosure</span> (<span class="dt">Env</span> <span class="dt">Value</span>) <span class="dt">Name</span> <span class="dt">Expr</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> <span class="dt">Show</span></span></code></pre></div>
+<p>Runtime environments provide the values for each variable.</p>
+</div>
+<p>In Swift, this looks like:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">enum</span> Value <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/// The associated values here are the environment, the variable (function argument) name, and the body</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> vclosure<span class="op">(</span>Env<span class="op">,</span> Name<span class="op">,</span> Expr<span class="op">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...more to come!</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>I’ve made most types <code>public</code> here to facilitate exploration using Swift’s REPL.
+There will be examples of this usage following.</p>
+<p>Why use an <code>enum</code> for this? There will be other <code>Value</code>s coming soon. Why not
+make <code>Value</code> a <code>protocol</code> and <code>VClosure</code> an implementation? Mostly because of an
+annoying <a href="#huge-digression-on-swift-generics-feel-free-to-ignore">limitation with Swift’s generics</a>,
+but also this representation works and keeps fairly close to the Haskell code
+I’m transliterating.</p>
+<div class="highlight">
+<p>In this implementation, environments are association lists, containing pairs of
+variable names and values. Earlier values override later values in the list, and
+the initial environment is empty. The type of environments is polymorphic over
+the contained values so that it can be used for other value representations
+later.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Name</span> <span class="ot">=</span> <span class="dt">Name</span> <span class="dt">String</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Env</span> val <span class="ot">=</span> <span class="dt">Env</span> [(<span class="dt">Name</span>, val)]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> <span class="dt">Show</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ot">initEnv ::</span> <span class="dt">Env</span> val</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>initEnv <span class="ot">=</span> <span class="dt">Env</span> [ ]</span></code></pre></div>
+<p>It is possible to map a function over an <code>Env</code>, so it is a <code>Functor</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Env</span> <span class="kw">where</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmap</span> f (<span class="dt">Env</span> xs) <span class="ot">=</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Env</span> (<span class="fu">map</span> (λ(x, v) → (x, f v)) xs)</span></code></pre></div>
+</div>
+<p>My Swift version is:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">typealias</span> Name <span class="op">=</span> String</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">typealias</span> Env <span class="op">=</span> <span class="op">[</span>Name<span class="op">:</span> Value<span class="op">]</span></span></code></pre></div>
+<p>A subtle difference here is that David’s <code>Env</code> is generic over the <code>value</code>,
+whereas my <code>Env</code> is just an alias to a dictionary with specific values for the<br />
+<code>Key</code> and <code>Value</code> types. (For technical reasons, having a generic structure like
+David’s is <a href="#limitations-on-generic-constraints-in-extensions">hard in Swift</a>.)
+A Swift dictionary already has a <code>map</code> implementation.</p>
+<div class="highlight">
+<p>Looking up a value in an environment might fail, so the function that performs
+the lookup might return a message instead of a value.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Message</span> <span class="ot">=</span> <span class="dt">Message</span> <span class="dt">String</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> <span class="dt">Show</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ot">failure ::</span> <span class="dt">String</span> → <span class="dt">Either</span> <span class="dt">Message</span> a</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>failure msg <span class="ot">=</span> <span class="dt">Left</span> (<span class="dt">Message</span> msg)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ot">lookupVar ::</span> <span class="dt">Env</span> val → <span class="dt">Name</span> → <span class="dt">Either</span> <span class="dt">Message</span> val</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>lookupVar (<span class="dt">Env</span> [ ]) (<span class="dt">Name</span> x) <span class="ot">=</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  failure (<span class="st">&quot;Not found: &quot;</span> <span class="op">++</span> x)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>lookupVar (<span class="dt">Env</span> ((y, v) <span class="op">:</span> env′)) x</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> y <span class="op">==</span> x <span class="ot">=</span> <span class="dt">Right</span> v</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> lookupVar (<span class="dt">Env</span> env′) x</span></code></pre></div>
+</div>
+<p>In Swift we have
+<a href="https://developer.apple.com/documentation/swift/result">the built-in <code>Result&lt;Success, Failure&gt;</code> type</a>
+for such situations, so let’s use that:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">enum</span> Message<span class="op">:</span> <span class="dt">Error</span> <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> notFound<span class="op">(</span>Name<span class="op">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">extension</span> [Name<span class="op">:</span> <span class="dt">Value</span>] <span class="op">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="kw">func</span> <span class="fu">lookup</span><span class="op">(</span><span class="va">name</span><span class="op">:</span> <span class="dt">Name</span><span class="op">)</span> -&gt; <span class="fu">Result</span><span class="op">&lt;</span><span class="dt">Value</span>, <span class="dt">Message</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">guard</span> <span class="kw">let</span> <span class="va">value</span> <span class="op">=</span> <span class="kw">self</span><span class="op">[</span>name<span class="op">]</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>      <span class="kw">return</span> <span class="op">.</span>failure<span class="op">(.</span>notFound<span class="op">(</span>name<span class="op">))</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="op">.</span>success<span class="op">(</span>value<span class="op">)</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>And now we can try it out at the Swift REPL. Note that using a SwiftPM project
+with the Swift REPL requires that you start the REPL using:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> swift run <span class="at">--repl</span></span></code></pre></div>
+<p>…and <em>not</em> using <code>swift repl</code>, a “feature” which has confused me to no end.
+Just pretend <code>swift repl</code> doesn’t even exist and use <code>swift run --repl</code> instead.
+Anyway, you can do:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> swift run <span class="at">--repl</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="op">&gt;</span> import <span class="ex">Untyped</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span><span class="op">&gt;</span> let <span class="fu">env</span> = [<span class="st">&quot;id&quot;</span>: Value.vclosure<span class="er">(</span><span class="ex">[:],</span> <span class="st">&quot;x&quot;</span>, .lambda<span class="er">(</span><span class="st">&quot;x&quot;</span><span class="ex">,</span> .variable<span class="er">(</span><span class="st">&quot;x&quot;</span><span class="kw">)))</span><span class="ex">]</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">3</span><span class="op">&gt;</span> env.lookup<span class="kw">(</span><span class="ex">name:</span> <span class="st">&quot;id&quot;</span><span class="kw">)</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="va">$R0</span><span class="ex">:</span> Result<span class="op">&lt;</span>Untyped.Value, Untyped.Message<span class="op">&gt;</span> = success {</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">//</span> ...</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span><span class="op">&gt;</span> env.lookup<span class="kw">(</span><span class="ex">name:</span> <span class="st">&quot;blarf&quot;</span><span class="kw">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="va">$R1</span><span class="ex">:</span> Result<span class="op">&lt;</span>Untyped.Value, Untyped.Message<span class="op">&gt;</span> = failure {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">//</span> ...</span></code></pre></div>
+<p>So everything works as expected, including the REPL!</p>
+<h2 id="huge-digression-on-swift-generics-feel-free-to-ignore">Huge Digression on Swift Generics; Feel Free to Ignore</h2>
+<p>Swift generics are nice when they work, but they are somewhat limited in comparison
+with generic types in other languages. They are being improved, but they have
+some hard limits you just have to work around.</p>
+<h3 id="limitations-on-use-of-protocols-as-generic-constraints">Limitations On Use of Protocols as Generic Constraints</h3>
+<p>The Swift documentation <a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/#Protocols-as-Types">says</a>:</p>
+<blockquote>
+<p>The most common way to use a protocol as a type is to use a protocol as a
+generic constraint.</p>
+</blockquote>
+<p>Ok, let’s give that a spin! This works fine:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">protocol</span> SomeProtocol <span class="op">{}</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SomeGeneric<span class="op">&lt;</span><span class="dt">T</span><span class="op">&gt;</span> <span class="op">{}</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SomeGenericWithSpecificTypeParameter<span class="op">&lt;</span><span class="dt">T</span><span class="op">:</span> <span class="dt">SomeProtocol</span><span class="op">&gt;</span> <span class="op">{}</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">typealias</span> Instance <span class="op">=</span> SomeGeneric<span class="op">&lt;</span>SomeProtocol<span class="op">&gt;</span></span></code></pre></div>
+<p>This does not compile:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typealias</span> InstanceWithSpecific <span class="op">=</span> SomeGenericWithSpecificTypeParameter<span class="op">&lt;</span>SomeProtocol<span class="op">&gt;</span></span></code></pre></div>
+<p>Message:</p>
+<pre><code>type 'any SomeProtocol' cannot conform to 'SomeProtocol' sourcekitdprotocol-type-non-conformance main.swift(9, 34): only concrete types such as structs, enums and classes can conform to protocols</code></pre>
+<h3 id="limitations-on-generic-constraints-in-extensions">Limitations on Generic Constraints in Extensions</h3>
+<p>Let’s say you’re writing an extension for some existing class (e.g.,
+<code>Array&lt;Element&gt;</code> and you want to specify some arbitrary generic type parameter
+<code>T</code> as part of the specialization of <code>Element</code>. Say for example you would like to
+extend Array&lt;(String, T)&gt;. Well…. you can’t. Swift just doesn’t have that
+feature. See the end of
+<a href="https://github.com/swiftlang/swift-evolution/blob/main/proposals/0361-bound-generic-extensions.md#future-directions">this swift-evolution proposal</a> (which was implemented),
+discussing “future directions”:</p>
+<blockquote>
+<p>Writing the type parameter list after the extension keyword applies more
+naturally to extensions over structural types. With this syntax, an extension
+over all two-element tuples could be spelled</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">extension</span> <span class="op">&lt;</span><span class="dt">T</span>, <span class="dt">U</span><span class="op">&gt;</span> <span class="op">(</span><span class="va">T</span><span class="op">,</span> <span class="va">U</span><span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+</blockquote>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>A program in the untyped lambda calculus can include multiple values.
+For example, you might define variables and then use those variable
+definitions in an expression. The way the evaluator will be structured
+in David’s tutorial is to have a list of defintions which will be used
+to evaluate a single expression, producing a single result.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>
