@@ -15,23 +15,23 @@ interesting, I think, there is more to writing a compiler than parsing syntax!
 In this series I'll be explaining how to type check (and infer types from) code.
 Writing a compiler is a challenging problem, but there are recipes that you can
 follow, and if you follow these recipes, then anyone with a bit of programming 
-skill and some dedication can do it. Writing a typechecker is proving theorems 
-about code, which *sounds* challanging, but again, *you can do it* by following a
-recipe. 
+skill and some dedication can do it.
 
-A tutorial should be:
+A type checking tutorial should be:
 
-* Approachable, as in readable by someone without a CS degree.
-* Comprehensive, as in covering the basics of most of what you want a type
-  checker to do, and providing at least a path to more advanced features.
-* Concise. There's a place for books like 
+* **Approachable**, as in readable by someone without a CS degree.
+* **Comprehensive**, as in covering the basics of most of what you want a type
+  checker to do, and providing at least a path to more advanced features, but
+  also...
+* **Concise**. There's a place for books like 
   [Types and Programming Languages](https://www.cis.upenn.edu/~bcpierce/tapl/), 
   but someone who just wants to write a type checker to learn about compilers 
   should not have to read and understand a college course to do so.
-* Principled, as a type checker is a proving system about code. You don't want
+* **Principled**, as a type checker is a proving system about code. You don't want
   to ship the first thing which doesn't break your unit tests, such as they are.
-  Instead your type checker should be based around a core which works for all cases.
-* Modern, because type checking has changed in the last 20 years and we don't 
+  Instead your type checker should be based around mathematical theorems, and a 
+  core which works for all cases.
+* **Modern**, because type checking has changed in the last 20 years and we don't 
   want to leave out contemporary techniques.
 
 The best introduction to type checking, by the above criteria, that I know is called 
@@ -47,9 +47,11 @@ tutorial, but I will be adding a lot of explanations along the way.
 Perhaps you find my annotations and additions too verbose. That's fine! Just 
 [read David's tutorial](https://davidchristiansen.dk/tutorials/nbe/)! If you 
 *can* understand it without further explanation, then that's the most efficient 
-way to learn the material. My series is intended for people unfamiliar with some 
-of the knowledge that is assumed in David's version.
-
+way to learn the material. To be honest, if you can understand everything that 
+is in David's tutorial without help, you're wasting your time here. My series 
+is intended for people unfamiliar with some of the knowledge that is assumed in 
+David's version.
+ 
 ## Type Equivalence
 
 In order to learn to type check a program, you must learn how to decide whether
@@ -63,7 +65,11 @@ considerably more complex than this, and in fact when we get to dependent types
 we will see that there is *no general answer* to this question. However, we can 
 answer the question often enough to make a compiler that works for most of the 
 code that someone will want to write, and might time out when they do something 
-extremely odd, but won't ever produce incorrect results.
+extremely odd, but won't ever report that a program type checks when it should 
+not. Generally, it is far 
+better for a type checker to falsely report that a valid program is invalid than
+it is for a type checker to falsely report than an invalid program is valid, if
+one has to choose!
 
 Spoiler alert: Most of this tutorial will in fact be dedicated to judging when
 two types are "equivalent."
@@ -86,11 +92,21 @@ have to crawl before you can walk, as they say. But the principles we explore
 here should be helpful to you if you go farther, and, as we will see when we get
 into dependent typing, there is some real sophistication in this material. 
 
+The untyped lambda calculus and the simply typed lambda calculus are very well
+known in the theoretical computer science community, because they provide 
+simple, useful models of computation as well as being easy languages to 
+implement. If this is your first exposure to them, you have the option of not
+going super deep into them and just accepting that we should get the expected 
+results from our tests, although if you want to stop and learn those languages
+then you have that option and your life will be richer for it!
+
 The langauge Tartlet is a *toy language* which "is very much like the language 
 Pie from [the book] [*The Little Typer,*](https://thelittletyper.com/) except it 
 has fewer features and simpler rules." The only real documentation of the Pie 
 language is *The Little Typer* and the only real documentation of Tartlet is,
-well, you're reading it.
+well, you're reading it. Tartlet is essentially the simplest possible 
+dependently typed language, and is really only useful in the context of this 
+tutorial.
 
 The language Pie will not be used in this tutorial. However, it can be nice to 
 have Pie around if you'd like to try out Pie/Tartlet with a more humane syntax.
@@ -119,6 +135,11 @@ their own preferences! Swift is also more similar to many other "mainstream"
 languages such as C# and Java than Haskell and Racket are.  I am hoping that 
 this version will increase the number of people who want to learn from David's 
 tutorial. 
+
+One difference in the Swift implementation is that the Swift version has unit
+tests, which some may find helpful for understanding the code. The Haskell, 
+Racket, and Scala versions do not have unit tests, although the Racket version 
+has some interactive sessions in the REPL which are helpful for understanding.
 
 I tried to make this series not assume *too much* Swift knowledge. When I 
 introduce a feature which is "uniquely Swift," (as in, works differently than
@@ -192,4 +213,5 @@ Surveys in 2021.
 
 [^the]: `the` is a type declaration. The response declares that `'spinach` has the 
         type `Atom`. This declaration was inferred from the literal `'spinach` 
-        because it's the normalized type annotation for an `Atom`
+        because `(the Atom 'spinach)` is the normalized type annotation for an 
+        `Atom` named `'spinach`.

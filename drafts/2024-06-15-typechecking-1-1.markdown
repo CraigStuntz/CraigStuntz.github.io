@@ -12,25 +12,26 @@ tags: compilers, type checking
   * 1.1: What Even Is The Untyped Lambda Calculus (Etc.)?
 </div>
 
-My plan is that in each section of this series I'm going to give enough 
-information that a competent programmer can understand a section of David's 
-tutorial. My goal for this post is to get you through the title and the first 
-few paragraphs. 
-
-## The Plan for Learning
-
-This will be a long post because there are a lot of concepts 
-introduced here! Feel free to skip the sections on any concepts you are already
-comfortable with!
-
 Today we will be learning about the untyped lambda calculus (and friends!). As
 the name suggests, building a type checker for the untyped lambda calculus would
 be rather useless, as there is only one type in the language and therefore any 
 syntactically valid program would type check: there are no type errors, only 
 syntax errors. Instead we will use this language to learn about
 **normalization by evaluation**, which will be used when we build a type checker for
-the simply typed lambda calculus (next section) and *necessary* when we build a
-type checker for Tartlet.
+the simply typed lambda calculus (part 2) and *necessary* when we build a
+type checker for Tartlet (part 3).
+
+This will be a long post because there are a lot of concepts 
+introduced here! Feel free to skip the sections on any concepts you are already
+comfortable with! Heck, skip the whole thing if you'd rather just dive into the
+code. 
+
+My plan is that in each section of this series I'm going to give enough 
+information that a programmer can understand a section of David's 
+tutorial. My goal for this post is to get you through the title and the first 
+few paragraphs.
+
+## The Plan for Learning
 
 A type checker needs to look an expression and find its type and then evaluate 
 whether that type is compatible (equivalent) with the type it expecting in a 
@@ -43,15 +44,14 @@ more complicated in practice than it might seem and it will be easier if we can
 first **normalize** (simplify) the expression.
 
 Some of the concepts we will discuss in this section are both rather difficult 
-to mentally evaluate (I'm looking at you, Church numerals) and not necessary to 
-understand when
-building a type checker. One possible approach is to skim these sections, don't 
+to mentally evaluate and not necessary to understand when building a type 
+checker. (I'm looking at you, Church numerals.) One possible approach is to skim these sections, don't 
 spend too much time trying to wrap your head around them, and just accept that the
 expected values we will use in unit tests are correct. I hope to give you enough 
 information to distinguish between correct and incorrect outcomes even if you 
 don't mentally evaluate the Church numerals we will program in the untyped lambda
 calculus, which is rather challenging. This is a valid way to learn as building 
-a type checker (at least, building it in the way that we are going to build it!) 
+a type checker
 depends on understanding normalization but does not depend on understanding 
 Church numerals.
 
@@ -124,6 +124,11 @@ subtle.
 
 ## What Are Dependent Types?
 
+It will be important to understand what dependent types are when we start 
+building a type checker for Tartlet, which is the third and final part of the
+tutorial. Fell free to skip this section and come back to it before you start
+part 3.
+
 <div class="highlight">
 In particular, when types can contain programs, we need to be able to run 
 these programs and check whether their outputs are the same. 
@@ -157,6 +162,9 @@ language you're checking.
 Speaking of which...
 
 ## What Is Bidirectional Type Checking?
+
+Understanding bidirectional typechecking is whole point of the tutorial! 
+However, we won't actually work on a bidirectional type checker until part 2.
 
 <div class="highlight">
 Normalization by evaluation is one way of performing this sameness check, 
@@ -201,8 +209,11 @@ systems.
 
 ## What Is Normalization?
 
-The first thing we are going to do is to learn how to take an expression and 
-convert it to a "simpler" form, called the normal form, in a process called 
+Understanding normalization is the goal of part 1. First I will explain it 
+conceptually; later we will write some code and see how it works in practice. 
+
+We are going to learn how to take an expression and 
+convert it to a "simpler" form, called the **normal form**, in a process called 
 **normalization**. The reason we need to do this is we have to decide if the type 
 of an expression is equivalent to the type that we are expecting. This is easier
 if the expression is in the simplest possible form.
@@ -212,11 +223,11 @@ if the expression is in the simplest possible form.
 That's a little abstract, so let's look at an example from Swift:
 
 ```swift
+let zero: Int = 0;
+
 func increment(n: Int) -> Int {
     return n + 1
 }
-
-let zero: Int = 0;
 
 let one = increment(n: zero)
 ```
@@ -228,7 +239,7 @@ let one: Int = 1 // because increment(n: zero) == 1
 ```
 
 You might prefer one version of the *source code,* but in fact both versions are
-the same value in the end. We call the second version, with the literal `1`, the 
+the same *value* in the end. We call the second version, with the literal `1`, the 
 **normalized** version because it is "less complicated" than the version with 
 the function call to `increment`. We will formalize the definition of "less 
 complicated" in the near future.
@@ -303,7 +314,7 @@ because that is in fact true.[^NbE]
 
 We can't always evaluate a function at compile time like this; some function 
 results depend on values which are unknown until runtime. But we can do it often
-enough to be helpful, and in particular we can always do it with dependent types.
+enough to be helpful, and in particular we can do it when type checking dependent types.
 
 ## What Even Is the Untyped Lambda Calculus?
 
@@ -316,14 +327,18 @@ Let’s start with an evaluator for the untyped λ-calculus.
 In order to demonstrate normalization by evaluation, we will begin with 
 something called "the untyped lambda calculus."
 Don't be put off by the Greek letters or a mention of "calculus"; we will not be 
-computing integrals here!
+computing integrals here! It's worth knowing just a little bit about the untyped
+lambda calculus so that you recognize what is going on in the examples which we
+will use, but if you find yourself puzzling out individual derivations, just 
+know that it's not really necessary to understand the type checker which we are
+building. 
 
 You can look at the untyped lambda calculus as a very tiny programming language, or you 
-can look at it as an alternate model of computation. There is only one data 
+can look at it as an alternate model of computation. Both are correct views. There is only one data 
 type, which is an anonymous function taking a single argument and returning a
 single value. The type of this argument and returned value are, naturally, 
-anonymous functions taking a single argument and returning a single value. There
-are no other types.
+anonymous functions taking a single argument and returning a single value. 
+*There are no other types.*
 
 Sometimes people say that programming languages would be easier to learn if they
 had a simple core with fewer features. That might be right in some cases, but
@@ -332,16 +347,7 @@ There is basically *one* feature in the whole language, and it's quite difficult
 to write any meaningful programs in. However, it's quite simple to write an 
 expression evaluator for it due to its simplicity, and as that is what we are 
 aiming to do it is a good choice for our purposes. Still, this section is a bit
-complicated if it's your first exposure to the untyped lambda calculus!
-
-(One might fairly ask why David picked the untyped lambda calculus as an 
-example. Nothing in the tutorial depends on its use; it's just a simple example 
-here. The untyped lambda calculus is important in theoretical computer science
-and so one can presume that folks coming to the tutorial from a TCS background
-will be familiar with it already. This is perhaps less true when people approach the 
-tutorial from a "practitioner"/commercial programmer background. However, the 
-untyped lambda calculus does have at least one thing going for it, which is that 
-it's very simple to evaluate. We will be doing that very soon!)
+complicated if it's your first exposure to the untyped lambda calculus![^lambda]
 
 ### The Simplest Value In the Untyped Lambda Calculus
 
@@ -402,14 +408,14 @@ about how you're going to represent numbers in a programming language which
 doesn't have them.
 
 The type of number that we're going to use is a **natural number**, and by this 
-we mean a number which is in the set $\{0, 1, 2, ..., \infty \}$ However, we 
+we mean a number which is in the set $\{0, 1, 2, ..., \infty \}$.[^natural] However, we 
 are going to have to think about how to represent these using anonymous 
 functions!
 
 Swift doesn't have a type like this. It has `UInt64`, but there are obviously
 values too large to store in a `UInt64`. It turns out that this really matters,
 because the type of `increment` above is actually a bit more complicated than "Int".
-It's actually "an `Int` or perhaps it might throw an exception due to a numeric
+It actually means "an `Int` or perhaps it might throw an exception due to a numeric
 overflow."
 
 ```bash
@@ -432,12 +438,18 @@ starting with a simpler language.
 
 ## What Even Is a Church Numeral?
 
+You do not need to understand Church numerals to complete the tutorial. 
+
 The type checker must solve a problem which is very similar to the optimizer: Is
 it safe to replace one expression with a different expression, in every possible 
 case? As we have seen with `increment` above, this can be a pertty subtle question,
-with edge cases which are not obvious from looking at source code. How can we 
+with edge cases which are not obvious from looking at source code. 
+
+How can we 
 be sure that saying that a number is "a natural number" means that it can be 
-used *anywhere* a program expects a natural number to be used? 
+used *anywhere* a program expects a natural number to be used? Also, how can we
+represent natural numbers in a language which has functions as its sole data 
+type?
 
 It would help if instead of considering, well, $\infty$ cases, we could cut that
 list down a bit. And for the type of natural numbers, we can in fact cut it down
@@ -458,13 +470,16 @@ indirect enum Nat {
 }
 ```
 
-And now Swift has a "natural numbers" data type! 
+And now Swift has a "natural numbers" data type! You can store any natural number in 
+this type, although you may eventually run out of memory.
 
 ### Church Numerals In the Untyped Lambda Calculus
 
-But we're not here to learn Swift right now, we want to program in the untyped
-lambda calculus! We can represent the natural numbers in the untyped lambda 
-calculus as follows:
+But we're not here to learn Swift right now, and we aren't even trying to 
+produce a tutorial for the untyped lambda calculus. Instead we just need enough
+exposure to it to know if our evaluator is working correctly.
+
+We can represent the natural numbers in the untyped lambda calculus as follows:[^whythesefunctions]
 
 ```
 zero = λf.λx.x
@@ -475,8 +490,11 @@ This implies that, for example, `one` (a function representhing the natural
 number `1`) is:
 
 ```
-one = λf.λx.f x
+one = add1 zero 
+    = λf.λx.f x
 ```
+
+We will see the full derivation below. 
 
 There are more examples; hopefully you can start to see a pattern here:
 
@@ -486,10 +504,11 @@ one   = λf.λx.f x
 two   = λf.λx.f(f x)
 three = λf.λx.f(f(f x))
 four  = λf.λx.f(f(f(f x)))
+five  = λf.λx.f(f(f(f(f x))))
 ```
 
-...because (don't worry if you can't follow this derivation; we have computers
-to do this for us):
+Here is the worked out version of `add1 zero`. (Don't worry if you can't follow 
+this derivation; we have computers to do this for us):
 
 ```
 one = add1 zero                                   because 1 = 1 + 0
@@ -510,6 +529,33 @@ The way to think about Church numerals as expressed in the functions above is
 that when invoked they run a function, call it `f`, as many times as the 
 numeral. So `zero`, above, *never evaluates* `f` and so runs it *zero* times. 
 But `one` must evaluates `f` *once* when invoked. And so on for larger numbers. 
+
+Another handy function is `plus`:
+
+```
+plus = λj.λk.λf.λx.(j f) (k f x)
+```
+
+And in particular, we will be evaluating this specific expression in the 
+tutorial:
+
+```
+plus two three = five
+```
+
+That is to say:
+
+```
+plus (λf.λx.f(f x)) (λf.λx.f(f(f x))) = λf.λx.f(f(f(f(f x))))
+```
+
+I am not going to try to derive this by hand and I don't think there's much to 
+be gained by doing so unless you intend to study the untyped lambda calculus, 
+which isn't really the point of what we are doing here. Our goal is to build a
+type checker, and this is just a step along the way. If we can take the 
+expression `plus two three` and evaluate it and get `λf.λx.f(f(f(f(f x))))` from
+our evaluator then we know that it is working and produces an expression in normal
+(simplest) form.
 
 ### Why, Why, Why for the Love of Church, Why?
 
@@ -551,11 +597,28 @@ Expr.lambda("x", .variable("x"))
 
 ...which is somewhat more challenging to mentally parse. Because of this I will
 usually put the "unparsed" (literal source code version) in comments near the 
-"parsed" (AST) version.
+"parsed" (AST) version, like this:
+
+```swift
+//  id = λx.x
+let id = Expr.lambda("x", .variable("x"))
+```
+
 
 [^NbE]: This is somewhat complicated to prove; see for example 
         [Normalization by Evaluation with Typed Abstract Syntax](https://tidsskrift.dk/brics/article/view/20473)
         for more information.
+
+[^lambda]: One might fairly ask why David picked the untyped lambda calculus as 
+           an example. Nothing in the tutorial depends on its use; it's just a 
+           simple example here. The untyped lambda calculus is important in 
+           theoretical computer science and so one can presume that folks coming 
+           to the tutorial from a TCS background will be familiar with it 
+           already. This is perhaps less true when people approach the tutorial 
+           from a "practitioner"/commercial programmer background. However, the 
+           untyped lambda calculus does have at least one thing going for it, 
+           which is that it's very simple to evaluate. We will be doing that 
+           very soon!
 
 [^TuringComplete]: It turns out that the untyped lambda calculus is 
                    [Turing complete](https://www.youtube.com/watch?v=RPQD7-AOjMI), 
@@ -563,5 +626,17 @@ usually put the "unparsed" (literal source code version) in comments near the
                    language can express. However, we won't be making use of this 
                    fact in this series. 
 
+[^natural]: Mathematicians, somewhat inconveniently, 
+            [use two different definitions of "natural numbers,"](https://mathworld.wolfram.com/NaturalNumber.html) namely $\{0, 1, 2, ..., \infty \}$
+            and $\{1, 2, 3, ..., \infty \}$. We (and, indeed, nearly all 
+            computer scientists) will use only the former.
+
 [^Succ]: It's more common to call `add1` by the name `succ`, for "successor,"
          but David uses `add1`, so I will follow his lead),
+
+[^whythesefunctions]: Unless you are going to study the untyped lambda calculus 
+                      _per se,_ it's not worth looking too deeply into why we 
+                      are using these specific functions. For our purposes, it's 
+                      enough to know that they will work for the specific 
+                      example we will be evaulating with the evaluator that we 
+                      are going to build.

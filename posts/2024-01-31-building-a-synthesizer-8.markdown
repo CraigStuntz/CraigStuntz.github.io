@@ -189,7 +189,7 @@ resistors conveniently at hand" is as good of a reason as any, and meets the
 Doepfer requirements.
 
 I measured the output of my Novation SL MkIII's Gate output, and it's 5 V. People
-on [the previosly referenced thread](https://www.modwiggler.com/forum/viewtopic.php?t=259994) 
+on [the previously referenced thread](https://www.modwiggler.com/forum/viewtopic.php?t=259994) 
 claim that the <a href="https://www.youtube.com/watch?v=p5RSIWbZ6Vc" 
 title="B*hr*ng*r: The Edgelords Of Music Production">B\*hr\*ng\*r</a> Neutron is only 3.3 V. Which 
 "kind of almost" conforms to the Doepfer text ("usually/about"!), but is 
