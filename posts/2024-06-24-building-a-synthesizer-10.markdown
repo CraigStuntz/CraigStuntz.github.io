@@ -544,6 +544,10 @@ I'm very happy with the progress I've made!
 * [EDU DIY VCA](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vca/)
 * [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
 
+### Community
+* [Modwiggler thread](https://www.modwiggler.com/forum/viewtopic.php?t=258656)
+* [Modulargrid page](https://www.modulargrid.net/e/erica-synths-edu-vca)
+
 ### Simulations
 
 All of these simulations are by Moritz Klein

@@ -1,0 +1,71 @@
+---
+title: "Building a Synthesizer, Chapter 12: Building the VCF"
+series: Building a Synthesizer
+chapter: "12"
+chapterName: Building the VCF
+tags: synthesis, diy, electrical engineering
+---
+
+<div class="toc">
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
+* [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
+* [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
+* [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
+* [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
+* [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
+* [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
+* [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
+* 11: 
+* 12: Building the VCF
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
+</div>
+
+
+## Resources
+
+### Instructions
+
+* [mki x es.EDU VCF User Manual](https://www.ericasynths.lv/media/VCF_MANUAL_v2.pdf)
+
+### Product Pages
+* [EDU DIY VCF](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vcf/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
+### Community
+
+* [Modwiggler thread](https://modwiggler.com/forum/viewtopic.php?p=3771212)
+* [Modulargrid page](https://modulargrid.net/e/erica-synths-edu-vcf)
+
+### Simulations
+
+All of these simulations are by Moritz Klein
+
+* [Static cutoff/Variable cutoff](https://tinyurl.com/y5a8tc9l)
+* [Two stage LPF](https://tinyurl.com/y5x873gn)
+* [Active two-stage LPF](https://tinyurl.com/y2fcoqsj)
+* [Slightly resonant LPF](https://tinyurl.com/y4j2khjd)
+* [Variable resonance](https://tinyurl.com/2bfrjd36)
+* [Even number of stages/Odd number of stages](https://tinyurl.com/y5z9m64u)
+* [Downwards shift/Upwards shift/Driving the ladder](https://tinyurl.com/2alfoolb)
+* [The output stage](https://tinyurl.com/2yowgjq8)
+* [Properly processed CV](https://tinyurl.com/2xp8ey77)
+* [Resonance II](https://tinyurl.com/23mp8quc)
+
+### Videos
+
+* [Introducing the mki x es.edu DIY VCF kit](https://www.youtube.com/watch?v=wbG5lvBFCmA)
+  by Moritz Klein (5:04)
+* [Erica.EDU Diode Ladder Filter Kit!](https://www.youtube.com/watch?v=eMODpxvdtvs) by Quincas Moreira (16:05)
+
+The folling series of videos are iterations on the design of what is ultimately 
+a slightly different VCF that Moritz Klein built. I do think they are useful, 
+though:
+
+* [DIY SYNTH VCF Part 1: Analog Filtering Basics](https://www.youtube.com/watch?v=3tMGNI--ofU) (21:45)
+* [DIY SYNTH VCF Part 2: Active Filters & Resonance](https://www.youtube.com/watch?v=YNoj9Rrw_VM) (27:30)
+* [DIY SYNTH VCF Part 3: Resonant High-Pass & Vactrol-Based Voltage Control](https://www.youtube.com/watch?v=ITJX9jP-zm4) (29:20)
+* [Designing a diode ladder filter from scratch](https://www.youtube.com/watch?v=jvNNgUl3al0) (36:03)
+* [Turning my diode ladder filter into a eurorack module](https://www.youtube.com/watch?v=tWKLFcc_BJM) (34:46)
