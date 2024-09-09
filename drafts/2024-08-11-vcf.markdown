@@ -23,6 +23,137 @@ tags: synthesis, diy, electrical engineering
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
+Confusion about which jack is input
+Confusion regarding different capacitors in different steps.
+
+One really minor problem I had when breadboarding these was figuring out which 
+jack was "input" and which was "output." Here's the schematic, which is clear 
+enough:
+
+<figure>
+<a href="/images/synth/VCFFirstOrderSchematic.png">
+<img src="/images/synth/VCFFirstOrderSchematic.png" loading="lazy" width="300px" alt="A schematic, from the manual, for the first order passive filter. There are no units on the resistor or capacitor.">
+</a>
+<figcaption>Schematic</figcaption>
+</figure>
+
+However, the breadboard layout is quite a bit less clear. Quick, which jack is
+input?
+
+<figure>
+<a name="breadboardLayout" href="/images/synth/VCFFirstOrderBreadboard.png">
+<img src="/images/synth/VCFFirstOrderBreadboard.png" loading="lazy" width="300px" alt="A drawing, from the manual, of the breadboard layout of the first order passive filter">
+</a>
+<figcaption>Breadboard Layout</figcaption>
+</figure>
+
+(It's the one on the right.)
+
+Anyway, here's the square wave I used as the input to the filter for my testing. You'll
+soon see why I need to show this by itself first.
+
+<figure>
+<a href="/images/synth/VCFNoFilter.png">
+<img src="/images/synth/VCFNoFilter.png" loading="lazy" width="300px" alt="A trace of a square wave on the oscilloscope">
+</a>
+<figcaption>#NoFilter, Just a Square Wave</figcaption>
+</figure>
+
+First we build a passive, first order filter using just a resistor and a 
+capacitor. This does an OK job at filtering the output, but note that it also
+distorts the input signal as well, because the resistor and capacitor add 
+impedance to the input side of the circuit, since there is no isolation between
+the filter and the input:
+
+<figure>
+<a href="/images/synth/VCFFirstOrder500.png">
+<img src="/images/synth/VCFFirstOrder500.png" loading="lazy" width="300px" alt="The square wave, as a purple trace, and the output of a single order passive filter, as a yellow trace. This distorts the input as well as reshaping theo output.">
+</a>
+<figcaption>First Order Passive Filter 500 Hz Signal Input</figcaption>
+</figure>
+
+The filter doesn't just reshape the wave; it also reduces the output at higher
+input frequencies. Above I'm using a 500 Hz input; here's with a 2 kHz input.
+
+<figure>
+<a href="/images/synth/VCFFirstOrder2k.png">
+<img src="/images/synth/VCFFirstOrder2k.png" loading="lazy" width="300px" alt="The same filter at 2 kHz. The output of the filter is much lower in volume than at 500 Hz ">
+</a>
+<figcaption>First Order Passive Filter 2000 Hz Signal Input</figcaption>
+</figure>
+
+Then we add a second resistor and capacitor to make a second order filter. The 
+output is much more like a sine wave with the second order filter. However, the 
+input is even more distorted.
+
+<figure>
+<a href="/images/synth/VCFSecondOrder.png">
+<img src="/images/synth/VCFSecondOrder.png" loading="lazy" width="300px" alt="A second order filter, which both turns the output into a smooth sine wave and also distorts the input into a more curved shape">
+</a>
+<figcaption>Second Order Passive Filter</figcaption>
+</figure>
+
+Next we build the active filter. Here's the schematic:
+
+<figure>
+<a href="/images/synth/VCAActiveSchematic.png">
+<img src="/images/synth/VCAActiveSchematic.png" loading="lazy" width="300px" alt="A schematic for the second order active filter which has no units on the capacitors and units on only one of the three resistors">
+</a>
+<figcaption>Active Filter Schematic</figcaption>
+</figure>
+
+When I first build this filter, it didn't work. I got no output at all. After 
+some tracing, I finally noticed that we were supposed to replace the 1 µ 
+capacitors from the passive filter with 1 n capacitors for the active filter. 
+Unlike the real capacitors, which are visually very distinct, the "1 µ" and "1 n"
+are just very similar looking [white blocks](#breadboardLayout), and the 
+schematic immediately above omits their values altogether! 
+
+Anyway, with that sorted, I then had a respectable looking low-pass filter:
+
+<figure>
+<a href="/images/synth/VCFActiveTrace.png">
+<img src="/images/synth/VCFActiveTrace.png" loading="lazy" width="300px" alt="An oscilloscope trace from the active filter. The input is a square wave reprepresented in purple. The output is the yellow trace and is filtered, a bit, by the low pass filter ">
+</a>
+<figcaption>Active Filter Input and Output</figcaption>
+</figure>
+
+Next we make the filter resonant. We do this by feeding the output of the filter
+back into the first capacitor, replacing its connection to ground with the 
+filter's output. 
+
+<figure>
+<a href="/images/synth/VCFResonantTrace.png">
+<img src="/images/synth/VCFResonantTrace.png" loading="lazy" width="300px" alt="Oscilloscope trace of resonant filter output. The yellow trace mostly hides the purple trace, except at the leading edge of the square wave where the output has a resonant overshoot ">
+</a>
+<figcaption>Resonant Filter</figcaption>
+</figure>
+
+In the instructions and in his videos, Moritz notes 
+that this "is basically just the filter itself swinging at its set cutoff 
+frequency in addition and reaction to the oscillation it’s supposed to be
+filtering." That's correct, but it's only part of the story. In addition to the 
+filter "overreact[ing] to any sudden change in voltage at its input," the filter
+also introduces a delay in the signal as it passes through the filter and then
+gets partially routed back into the input of the filter. The portion of the 
+output which is fed back into the filter circuit is out of phase with the input.
+Both the delay/phasing and the amplification are responsible for the 
+characteristic sound of the resonance.
+
+<figure>
+<a href="/images/synth/VCFResonantNoResonance.png">
+<img src="/images/synth/VCFResonantNoResonance.png" loading="lazy" width="300px" alt="Oscilloscope trace showing the output at a lower level than the input, and the corners of the trace rounded off due to the low pass filter ">
+</a>
+<figcaption>Adjustable Resonant Filter, Set to No Resonance</figcaption>
+</figure>
+
+<figure>
+<a href="/images/synth/VCFResonantWithResonance.png">
+<img src="/images/synth/VCFResonantWithResonance.png" loading="lazy" width="300px" alt="Oscilloscope trace showing the output with the resonance level set to a higher level, causing an overshoot at the leading edge of the square wave   ">
+</a>
+<figcaption>Adjustable Resonant Filter, with Resonance</figcaption>
+</figure>
+
 
 ## Resources
 
@@ -61,7 +192,7 @@ All of these simulations are by Moritz Klein
 * [Erica.EDU Diode Ladder Filter Kit!](https://www.youtube.com/watch?v=eMODpxvdtvs) by Quincas Moreira (16:05)
 
 The folling series of videos are iterations on the design of what is ultimately 
-a slightly different VCF that Moritz Klein built. I do think they are useful, 
+a slightly different VCF built by Moritz Klein. I do think they are useful, 
 though:
 
 * [DIY SYNTH VCF Part 1: Analog Filtering Basics](https://www.youtube.com/watch?v=3tMGNI--ofU) (21:45)
