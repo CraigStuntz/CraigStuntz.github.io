@@ -93,7 +93,7 @@ Although 100% of secrets in an organization cannot be eliminated, a surprising
 number can. Let's take a look at some practical examples.
 
 * Get rid of old PII. The default of nearly every database is to store data 
-  forever, but ask yourself if you really need eery bit of data that you 
+  forever, but ask yourself if you really need every bit of data that you 
   captured years ago online. You can write a nightly sweep which deletes old 
   records or moves them into cold storage.
 * Use [identity based access to cloud resources instead of client IDs/secrets](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-identity)
@@ -186,7 +186,7 @@ particular the realization that everyone's threat model is different.
 
 A [passkey](https://passkey.org/) attempts to do a 1-for-1 substitution of 
 passwords with a secure, phish-resistant, usable alternative. Sounds great, 
-right! 
+right?
 
 Maybe! It's early days yet. Support for passkeys is both very new and 
 [varies by platform](https://www.corbado.com/blog/passkey-implementation-pitfalls-misconceptions-unknowns). 
@@ -205,8 +205,9 @@ prime time" bucket.
 ### Client Secrets
 
 A client secret is a secret which a service account can use to get access to a 
-resource. At first, it would seem to be the same as a password, but the rules 
-for keeping secure are totally different.
+resource, such as an AWS access key and secret pair. At first, it would seem to 
+be the same as a password, but the rules for keeping a client secret secure are 
+totally different.
 
 A _key property_ of a client secret is that it must be available in decrypted 
 form on the server. This is totally different from how passwords are stored.
@@ -238,7 +239,8 @@ because the chances are high that your adversaries already are.
 ### PII
 
 PII, or Personally Identifiable Information, is really simple to handle: Store as 
-little of it as possible, and delete it quickly as soon as you can.
+little of it as possible, and delete it quickly as soon as you can (note that 
+there may be legal rules requiring you to retain _or_ purge certain kinds of PII).
 
 Unlike most secrets, PII must typically be presenteed as plaintext in the user
 interface of an application. You should assume that it's compromised. It's 
@@ -249,11 +251,11 @@ headlines.
 Not all PII is the same, and it isn't the same for every site. If a site leaks 
 the name of its users, well, that's one thing if it's 
 [the names of voters](https://www.csoonline.com/article/554111/database-configuration-issues-expose-191-million-voter-records.html) and quite 
-another thing if they're the [users of Ashley Madison](https://krebsonsecurity.com/2015/07/online-cheating-site-ashleymadison-hacked/).
+another thing if they're the [customers of an addiction services provider](https://www.vpnmentor.com/news/report-confidanthealth-breach/).
 
 For every single piece of PII that you think you need, ask if there are no 
-alternatives and how long it’s needed. If you are told that you need some PII, and there 
-is no alternative, you can ask for legal review.
+alternatives and how long it’s needed. If you are told that you need some PII, 
+and there is no alternative, you can ask for legal review.
 
 ### Non-secrets
 
@@ -270,8 +272,9 @@ and use. For example, if your database server supports connections via managed
 identity, then use that feature instead of a password/secret to connect to the
 database, both as a developer and in production, from a service account.
 
-Be ruthless in eliminating PII in your system. Don't store it at all when 
-possible, and delete old PII when you must store it.
+Be ruthless in eliminating PII in your system. Don't store it at all when it's 
+not strictly necessary to keep it, and if you must keep it, delete it as soon
+as possible. 
 
 Assume compromise of your trade secrets, and make them as "not valuable" as 
 possible. For example, use a secret scanner in a pre-commit hook to keep other
@@ -342,7 +345,7 @@ One of the value-adds of third-party services for secret handling is that they
 will often consider additional signals when deciding when to accept a secret. 
 If you usually log into a site from Pennsylvania during working hours, and you 
 suddenly are connecting from overseas at 3 in the morning, the service may want
-additional verificaiton that it's really you.
+additional verification that it's really you.
 
 Many WAFs have built-in intelligence which can detect a brute-force password attack 
 against your site. There's not much you can do about these attacks besides block
