@@ -18,3 +18,4 @@ We haven't learned lessons about modularity yet -- small vs. trusted, composed
 Digital error correction is really great and analog computers don't have it, mostly
 Build a model in the simulator, compare it to real hardware
 Test components with a tester
+Spectrum analyzers.

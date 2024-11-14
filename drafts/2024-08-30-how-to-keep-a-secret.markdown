@@ -152,7 +152,7 @@ discuss later on. I feel the need to clarify this, because our industry has been
 a bit free with language, and calls, for example, "a secret which a service uses
 to access a database" a "password," when really it's a client secret. Anyway...
 
-Look, passwords are a disaster. Most users use same passwords in multiple sites.
+Look, passwords are a disaster. Most users use the same passwords in multiple sites.
 Passwords are phishable, without a password manager, which most people don’t 
 use.[^passwordPhishing] However, we're kind of stuck with them, both due to 
 legacy use and due to the disadvantages of some of the systems proposed to 
@@ -175,7 +175,7 @@ A password can be combined with MFA, but SMS MFA is also phishable.
 Beware of nebulous "best practices" regarding passwords, such as 
 [weird rules which are depressingly common in large sites](https://passwordshamer.com/).
 Instead, I invite you to read 
-[NIST 800-63](https://www.nist.gov/identity-access-management/nist-special-publication-800-63-digital-identity-guidelines), which is based on
+[NIST 800-63](https://pages.nist.gov/800-63-4/sp800-63.html), which is based on
 research, clearly explains why it makes the recommendations that it does, and 
 overall is one of the more enjoyable and informative government standards 
 publications which I have read. One really useful concept from NIST 800-63 is 
@@ -256,6 +256,14 @@ another thing if they're the [customers of an addiction services provider](https
 For every single piece of PII that you think you need, ask if there are no 
 alternatives and how long it’s needed. If you are told that you need some PII, 
 and there is no alternative, you can ask for legal review.
+
+Apple takes an interesting approach to protecting PII with their Private Cloud
+Compute servers which are used to do off-device queries for Apple Intelligence.
+They use special servers which have 
+[no persistent storage whatsoever](https://www.wired.com/story/apple-private-cloud-compute-ai/),
+which is a fantastic way to ensure that PII is not leaked by an internal process
+accidentally caching the data and an attaker being able to read that cache in the 
+future.
 
 ### Non-secrets
 
@@ -367,4 +375,20 @@ Questions to ask when you are dealing with a secret:
 Finally, this is less of a “Cheat Sheet” than a "Secret Management Longread," 
 but the OWASP Foundation has a [Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html).
 
+## Have Fewer Secrets!
+
+> "The man who can keep a secret may be wise, but he is not half as wise as the 
+> man with no secrets to keep."
+> -E. W. Howe[^Howe]
+
+As we have seen, secrets are complicated, and _keeping_ a secret is hard work.
+Whenever we can eliminate a secret, we nearly always improve the security of our
+software. So why don't we do this by default? It can seem difficult, because
+"now I have to go learn about managed identity." Let's just acknowledge that 
+this is true: Eliminating secrets is not free. But it's almost certainly cheaper
+than cleaning up after a secret is compromised.
+
 [^passwordPhishing]: See, for example, [this study from BitWarden](https://docs.google.com/presentation/d/1KaJtB4SBaZjeUiXrWzuioGKQgUWGm1oWPnWvb0FF6iw/edit#slide=id.g11b2737de95_0_325)
+
+[^Howe]: Howe, E.W., _Country Town Sayings,_ 1911
+
