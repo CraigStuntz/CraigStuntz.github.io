@@ -14,7 +14,7 @@ Your eyes and senses (look for bridges, cold solder joings. is anything hot? sme
 Use a speaker/amplifier as a probe
 Oscilliscope tips: Get your ground right, Remember DC coupling, learn the tool
 Test components with a tester
-Different oscilloscope probes, Power supplies, Signal generators, Vector network analyzers, Spectrum analyzers.
+Different oscilloscope probes, Power supplies, Signal generators, ESR meters, Vector network analyzers, Spectrum analyzers.
 We haven't learned lessons about modularity yet -- small vs. trusted, composed
 The triumph of error correction in digital computers
 Break it down into smaller parts (when possible, impedance)
