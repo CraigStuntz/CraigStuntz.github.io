@@ -35,7 +35,8 @@ Now is it right or wrong?
 
 The answer is: "You don't know if it's right or wrong, because I haven't told 
 you where `foo` is defined (in `computed` or in `methods`), and that matters 
-_a lot._
+_a lot._ It also matters whether you place this function call in a `v-on` (`@`) 
+or a `v-bind` (`:`) portion of the markup.
 
 All of the examples here are using functions which take no arguments, for 
 simplicity. Things get even more complicated when your function requires aguments!
@@ -54,12 +55,12 @@ From that playground we can derive this table, which I will explain below:
 If your function is defined in `computed`, then using `()` will result in a 
 syntax error (even though you have written a function). This is at least 
 consistent and can be summarized concisely. Also, a function defined in 
-`computed` cannot be used in a `v-on` (event) binding.
+`computed` cannot be used in a `v-on` (`@`) binding.
 
 When you write your function in `methods` things get much less clear. You can 
-use a `method` in either a `v-on` or a `v-bind` binding.
+use a `method` in either a `v-on` (`@`) or a `v-bind` (`:`) binding.
 
-For a `v-on` (event) binding, you are allowed to omit `()`, and the behavior
+For a `v-on` binding, you are allowed to omit `()`, and the behavior
 of the function will be exactly the same with or without it. That is:
 
 ```html
@@ -72,7 +73,7 @@ of the function will be exactly the same with or without it. That is:
 ```
 ...will behave the same. This is ["sort of" documented](https://vuejs.org/guide/essentials/event-handling#calling-methods-in-inline-handlers).
 
-However, with `v-bind` (data) binding, if you omit the `()` then you are just
+However, with `v-bind` binding, if you omit the `()` then you are just
 returning the method reference itself as a JavaScript expression, so if you have:
 
 ```html
