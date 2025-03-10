@@ -4,7 +4,7 @@ tags: homomorphic encrption, cryptography, Craig Gentry
 ---
 
 
-The [March 2010 issue of the Communications of the ACM](https://cacm.acm.org/magazines/2010/3) includes a technical paper with an introduction entitled "[A First Glance of Cryptography's Holy Grail](https://cacm.acm.org/magazines/2010/3/76275-technical-perspective-a-first-glimpse-of-cryptographys-holy-grail/fulltext)" (ACM subscription required). That's enough to catch my attention. The paper itself, [Computing Arbitrary Functions of Encrypted Data](Computing Arbitrary Functions of Encrypted Data), describes a relatively new algorithm for homomorphic encryption.
+The [March 2010 issue of the Communications of the ACM](https://cacm.acm.org/magazines/2010/3) includes a technical paper with an introduction entitled "[A First Glance of Cryptography's Holy Grail](https://cacm.acm.org/magazines/2010/3/76275-technical-perspective-a-first-glimpse-of-cryptographys-holy-grail/fulltext)." That's enough to catch my attention. The paper itself, [Computing Arbitrary Functions of Encrypted Data](https://crypto.stanford.edu/craig/easy-fhe.pdf), describes a relatively new algorithm for homomorphic encryption.
 
 Although these words may be unfamiliar to many, the subject matter is terribly important, because, like public-key encryption, which paved the way for secure transactions over the web, an efficient and fully homomorphic encryption scheme would enable new kinds of distributed computing. I'll explain more about this in a little bit.
 
