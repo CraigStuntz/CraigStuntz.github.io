@@ -39,7 +39,6 @@ div#header {
     }
 }
 
-
 div#logo a {
     color: #000000;
     float: left;
@@ -97,6 +96,12 @@ div#content p{
 div#content a{
   color: #285685;
 }
+
+a.footnote-ref {
+    text-decoration: none;
+}
+
+
 
 div#footer {
     border-top: 1px solid #DEDEE1;
