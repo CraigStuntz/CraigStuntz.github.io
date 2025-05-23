@@ -15,7 +15,7 @@ He pronounces it "ess queue ell ite," FWIW.
 
 "If you're not writing SQL statements which look like this, you're not doing it right."
 
-<img class="autowidth" src="/images/SQLite-complicated-query.jpeg" "A fairly complex SQL statement with subqueries, function calls, and COALESCEs" width="2048" height="1536" loading="lazy">
+<img class="autowidth" src="/images/SQLite-complicated-query.jpeg" alt="A fairly complex SQL statement with subqueries, function calls, and COALESCEs" width="2048" height="1536" loading="lazy">
 
 By this, I think he meant: SQLite is a SQL DB engine, not a document DB. It has features such as JOINs, functions, and 
 subqueries which you should use in your code.
