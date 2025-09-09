@@ -1,0 +1,37 @@
+---
+title: "Building a Synthesizer, Chapter 13: Building the VCF"
+series: Building a Synthesizer
+chapter: "13"
+chapterName: Building the VCF
+tags: synthesis, diy, electrical engineering
+---
+
+<div class="toc">
+* [Introduction: The World of DIY Synthesizers](2023-02-20-building-a-synthesizer-0.html)
+* [1: The mki x es.EDU DIY System](2023-02-21-building-a-synthesizer-1.html)
+* [2: Building the Power Supply](2023-02-22-building-a-synthesizer-2.html)
+* [3: Breadboarding the VCO](2023-03-02-building-a-synthesizer-3.html)
+* [4: A Gentle Introduction to Op Amps](2023-04-03-building-a-synthesizer-4.html)
+* [5: Building the VCO](2023-05-22-building-a-synthesizer-5.html)
+* [6: The Logic Circuits Model of Computation](2023-08-11-building-a-synthesizer-6.html)
+* [7: Building the Mixer](2023-09-21-building-a-synthesizer-7.html)
+* [8: Building the Envelope Generator](2024-01-31-building-a-synthesizer-8.html)
+* [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
+* [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
+* [11: Debugging Circuits and Software Debugging](2025-04-07-building-a-synthesizer-11.html)
+* [12: Breadboarding the VCF](2025-09-09-building-a-synthesizer-12.html)
+* 13: Building the VCF
+* [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
+</div>
+
+<!--
+<figure>
+<a href="/images/synth/VCFFirstOrderSchematic.png">
+<img src="/images/synth/VCFFirstOrderSchematic.png" loading="lazy" width="300px" alt="A schematic, from the manual, for the first order passive filter. There are no units on the resistor or capacitor.">
+</a>
+<figcaption>Schematic</figcaption>
+</figure>
+-->
+<video height="300" controls>
+  <source src="/images/synth/VCFCV.mp4" type="video/mp4">
+</video>

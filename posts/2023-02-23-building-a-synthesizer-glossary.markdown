@@ -19,6 +19,7 @@ tags: synthesis, diy, electrical engineering
 * [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
 * [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
 * [11: Debugging Circuits and Software Debugging](2025-04-07-building-a-synthesizer-11.html)
+* [12: Breadboarding the VCF](2025-09-09-building-a-synthesizer-12.html)
 * Glossary and Electrical Connections
 </div>
 

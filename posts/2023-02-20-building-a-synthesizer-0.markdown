@@ -19,6 +19,7 @@ tags: synthesis, diy, electrical engineering
 * [9: A Field Guide to Oscillators](2024-02-21-building-a-synthesizer-9.html)
 * [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
 * [11: Debugging Circuits and Software Debugging](2025-04-07-building-a-synthesizer-11.html)
+* [12: Breadboarding the VCF](2025-09-09-building-a-synthesizer-12.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
@@ -118,7 +119,7 @@ some kits that I considered.
   documentation.
 * There are many other options! I've tried to give a good range above, but 
   if you'd like to see a much longer list, you could do worse than browsing
-  [the DIY section of synthCube](https://synthcube.com/cart/diy-kits#/availability=1/sort=p.sort_order/order=ASC/limit=20).
+  [the DIY section of synthCube](https://synthcube.com/diy-kits/).
   synthCube is a bit more than just another online retailer. Besides carrying a
   very large assortment of DIY parts and kits, they have purchased 
   [Ray Wilson's](http://musicfromouterspace.com/) hardware and business, which 
