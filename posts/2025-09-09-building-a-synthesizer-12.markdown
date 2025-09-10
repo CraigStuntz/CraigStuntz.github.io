@@ -204,7 +204,7 @@ The manuals for the mki x es.EDU DIY kits are (really) great reading.
 In the images which follow, the input square wave is in yellow, the top and 
 bottom of the diode ladder are in purple and green, and the output is in cyan.
 
-Some things to not here. First, the scaling is a bit deceptive. The input signal
+Some things to note here. First, the scaling is a bit deceptive. The input signal
 is much hotter than the rest of the traces (note its vertical scaling is 2V/div).
 
 The output signal varies quite a bit in amplitude depending on where the filter 
