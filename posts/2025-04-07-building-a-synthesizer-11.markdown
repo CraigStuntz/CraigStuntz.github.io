@@ -270,7 +270,7 @@ to it. You must remove it from the circuit to get an accurate measurement.
 
 Beyond that, we get into "optional, but nice to have, depending on what you're 
 doing" hardware. A power supply might seem like a must, although the circuit 
-you're working on probably already has one. A waveform generator is handy to 
+you're working on might already have one. A waveform generator is handy to
 have around, and I've gotten a lot of mileage from mine while working on different
 synthesizer modules, but I could have just used the VCO module that I built if 
 I didn't have it. 
@@ -281,6 +281,9 @@ and a few relevant characteristics. I don't use this very often. Going further
 down this road, you might want an LCR or ESR meter if you are testing capacitors,
 or a spectrum analyzer or vector network analyzer if you're dealing with radio/RF 
 signals. But I have never needed them.
+
+A logic analyzer is super-useful if you're working on digital circuits, and
+probably unnecessary if you're not. 
 
 ### Testing Components "In Circuit"
 
