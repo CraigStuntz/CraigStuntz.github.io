@@ -79,7 +79,6 @@ main = hakyll $ do
             posts <- fmap (take 25) . recentFirst =<< loadAll "posts/*"
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    constField "title" ""                    `mappend`
                     defaultContext
 
             getResourceBody

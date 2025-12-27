@@ -1,9 +1,9 @@
 ---
-title: "Building a Synthesizer, Chapter 13: Building the VCF"
+title: "Building a Synthesizer, Chapter 14: Building the Sequencer"
 series: Building a Synthesizer
 chapter: "13"
-chapterName: Building the VCF
-tags: synthesis, diy, electrical engineering
+chapterName: Building the Sequencer
+tags: synthesis, diy, electrical engineering, sequencer
 ---
 
 <div class="toc">
@@ -24,14 +24,30 @@ tags: synthesis, diy, electrical engineering
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 
-<!--
-<figure>
-<a href="/images/synth/VCFFirstOrderSchematic.png">
-<img src="/images/synth/VCFFirstOrderSchematic.png" loading="lazy" width="300px" alt="A schematic, from the manual, for the first order passive filter. There are no units on the resistor or capacitor.">
-</a>
-<figcaption>Schematic</figcaption>
-</figure>
--->
-<video height="300" controls>
-  <source src="/images/synth/VCFCV.mp4" type="video/mp4">
-</video>
+
+## Resources
+
+### Instructions
+
+* [mki x es.EDU Sequencer User Manual](https://www.ericasynths.lv/media/SEQ_MANUAL_v3.pdf)
+
+### Product Pages
+* [EDU DIY Sequencer](https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-sequencer/)
+* [mki x es.EDU DIY System](https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/)
+
+### Community
+
+* [Modwiggler thread](https://www.modwiggler.com/forum/viewtopic.php?t=261156)
+* [Modulargrid page](https://modulargrid.net/e/erica-synths-edu-sequencer)
+
+### Simulations
+
+These simulations are by Moritz Klein
+
+* [Basic Op Amp Examples/Op Amp-Based Clock](https://tinyurl.com/2yk6obr5)
+
+### Videos
+
+* [Introducing the mki x es.edu DIY sequencer kit](https://www.youtube.com/watch?v=QN_JhVcCBvI) by Moritz Klein (5:51)
+* [Designing a simple 5-step sequencer from scratch](https://www.youtube.com/watch?v=vHNQQ6yUGyo)
+  by Moritz Klein (32:07)

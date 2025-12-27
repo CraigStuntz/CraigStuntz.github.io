@@ -20,6 +20,7 @@ tags: synthesis, diy, electrical engineering
 * [10: Building the VCA](2024-06-24-building-a-synthesizer-10.html)
 * [11: Debugging Circuits and Software Debugging](2025-04-07-building-a-synthesizer-11.html)
 * [12: Breadboarding the VCF](2025-09-09-building-a-synthesizer-12.html)
+* [13: Building the VCF](2025-12-27-building-a-synthesizer-13.html)
 * Glossary and Electrical Connections
 </div>
 
@@ -77,10 +78,13 @@ synths or modules.
 
 ## Modules
 
-* **VCA** Voltage Controlled Amplifier
-* **VCF** Voltage Controlled Filter
-* **VCO** Voltage Controlled Oscillator
-* **EG** Envelope Generator
+<dl>
+<dt>VCA</dt> <dd>Voltage Controlled Amplifier</dd>
+<dt>VCF</dt> <dd>Voltage Controlled Filter</dd>
+<dt>VCO</dt> <dd>Voltage Controlled Oscillator</dd>
+<dt>EG</dt> <dd>Envelope Generator</dd>
+<dt>Mixer</dt> <dd>Combines signals from up to three modules, also has distortion/clipping and signal inverting features</dd>
+</dl>
 
 ## Voltage Control 
 
