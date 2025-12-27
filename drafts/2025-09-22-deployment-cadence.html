@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
+        <title>Deployment Cadence - Craig Stuntz</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css">
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+            
+                <h1>Deployment Cadence</h1>
+            
+            <div class="info">
+    Posted on September 22, 2025
+    
+</div>
+
+<blockquote>
+<p>“It was the best of times, it was the worst of times…”
+-Charles Dickens</p>
+</blockquote>
+<p>My first professional software development job was producing statistical analysis
+and simulations of physics experiments at the
+<a href="https://www.bnl.gov/rhic/ags.php">AGS accelerator</a>. My deliverable was the
+<em>output</em> of the software, not the software itself. Therefore, a “deployment”
+meant “recompiling and executing the software on my local machine.” This was
+awesome, in spite of the fact that I wrote the software in FORTRAN. My cycle
+time was soooo low!</p>
+<p>My second professional software development job was working for an
+<a href="https://en.wikipedia.org/wiki/Independent_software_vendor">ISV</a> starting in
+1999 (Y2K fixes!). We produced client/server software which other businesses
+would install on their local networks. A deployment meant building the software
+(during my stay there we went from building it on a developer’s local machine to
+using a dedicated build system) and burning it onto a CD-ROM. After some testing
+the CD-ROM would be mailed to customers (yes, through the postal system, and
+accompanied by printed, bound manuals), who could
+then (optionally!) install it on their systems. We did this roughly once per
+quarter.</p>
+<p>Decades later, these two jobs represent the fastest and slowest release cycles,
+respectively, I’ve experienced.</p>
+<h2 id="continuous-deployment">Continuous Deployment</h2>
+<p>I will be using the phrase “continuous deployment” in this post to mean
+“as soon as you push a commit, that change is integrated and deployed to
+customers.” I want to call this out because it is different from continuous
+integration or continuous delivery, which do not necessarily result in your
+changes being immediately visible to customers.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/DevOps_Research_and_Assessment#DORA_Four_Key_Metrics">DORA metrics</a>
+encourage us to optimize the deployment process as much as possible. Three of
+the four metrics, “Change Lead Time,” “Deployment Frequency,” and
+“Mean Time to Recovery” tend to improve if you can get code changes in front of
+customers as quickly and as frequently as possible. For good reason, I think.
+<a href="https://itrevolution.com/product/accelerate/">Others have written about this</a>,
+so I won’t go into detail, but I do think that shipping software frequently
+minimizes both the time to receive feedback and the overall impact of any bugs
+in the new version. It forces you to think about how to make the overall
+experience of an upgrade to a customer as non-disruptive as possible.</p>
+<p>However, and this is what I <em>actually</em> want to examine in this post, the phrase
+“<strong>as frequently as possible</strong>” is doing a lot of heavy lifting here. What does “as
+frequently as possible” actually mean?</p>
+<p>It depends.</p>
+<h2 id="constraints-on-deployment-frequency">Constraints on Deployment Frequency</h2>
+<p>Let’s assume, for the sake of argument, that your goal is to deploy as fast as
+possible: You change a line of code, and you can instantly
+test it in production. (Perhaps you disagree that this is a good idea, but I think
+it does represent an extreme case of deployment speed, so it’s a <em>useful</em>
+scenario to examine.) One big advantage of this model is that it forces you
+to eliminate customer downtime in deployments.</p>
+<h3 id="inefficiency">Inefficiency</h3>
+<p>There are some things that tend to slow this down which we can handwave away as
+inefficiency. For example, a compile/build/automated test/deploy step might
+<em>take time,</em> but perhaps this could be greatly optimized? Some very lengthy
+tests, such as fuzzing, can be run post-deployment or split into pre- and
+post-deployment phases. I think “testing in
+production” can actually be a very correct and practical thing to do in many
+cases. It can be the only way that you find certain performance issues prior to
+customers finding them. You can fix these with another update, hopefully before
+a customer sees them.</p>
+<h3 id="trust">Trust</h3>
+<p>Other factors are harder to dismiss as inefficiency, though. Remember my second
+job? The customers would decide when <em>or if</em> they wanted to install the update
+on <em>their hardware.</em> We live in an age where vendors seem to want to control
+which updates are installed on hardware we own, but I do cling to a somewhat
+romantic notion that we should control our own devices. Now I may <em>choose</em> to
+let the OS vendor install critical security patches without notifying me first,
+but it is my choice. Similarly, you need to build a lot of trust with a customer
+who has hundreds or thousands of employees working on software that you produce
+before they will let you update it on your schedule, during their critical work.
+If you tend to badly break
+the software during an “upgrade,” the customer will want to minimize updates or
+confine them to less critical times.</p>
+<h3 id="complexity">Complexity</h3>
+<p>Also, deploying to a customer environment might not be simple! I loved
+<a href="https://www.youtube.com/watch?v=M-ZLz8Wg34s&amp;t=1s">this talk, “Update on Update,” by David Pacheco</a>
+about how <a href="https://oxide.computer/">Oxide</a> is improving their update process. Their existing
+process is essentially “an Oxide employee updates the software remotely.” The
+process they want to move to is “a customer can download and run a self-service program which
+will do the update.” <em>Both</em> of these scenarios currently involve downtime on the
+rack, but they would like to minimize or eliminate downtime. Automating the
+update, unsurprisingly, turns out to be a <em>very hard problem,</em> for reasons
+which <em>mostly</em> boil down to “there are <em>a lot</em> of interdependent components on an Oxide
+rack.” One other limitation discussed in the talk is that some of the production
+Oxide racks are air-gapped; simply pushing software over the internet is not an
+option for these. So there are two overall limits on deployment frequency here:
+The first is that the upgrade process is not currently simple and Oxide is working very
+hard to make it an “execute a script” experience. The second is that the Oxide
+rack owners will still get to choose when to apply an update. Dave’s talk is
+fantastic; I recommend you watch it!</p>
+<h3 id="gates">Gates</h3>
+<p>If you’re developing a native mobile app (or another app store with a review
+process), deploying to an end user might be a
+several weeks long back and forth between you and an app store reviewer in the
+worst case, and <a href="https://www.runway.team/appreviewtimes">many hours on average</a>.
+“Instant” deployment to a mobile user is simply not possible with a native app.
+<a href="https://developer.apple.com/documentation/Xcode/About-Continuous-Integration-and-Delivery-with-Xcode-Cloud">Apple recommends continuous delivery</a> rather than
+continuous deployment.</p>
+<p>For other types of applications, even the hardware owner might not have the
+option of saying “please update our systems
+continuously.” I have worked in heavily regulated environments (utility billing)
+where upgrades to some parts of the system needed to be reviewed by government
+regulators before they could be deployed. This imposed a hard limit on
+deployment frequency. I have heard similar stories about people who produce
+software which is used in classified environments. In such cases you can
+<em>discuss</em> increasing the deployment frequency with the gate managers, but it’s
+never guaranteed that they will say yes!</p>
+<h2 id="how-fast-is-too-fast">How Fast Is Too Fast?</h2>
+<p>Above, I assumed that you are trying to deploy changes to production as fast as
+possible: “You change a line of code, and you can instantly test it in
+production.” I do not actually believe this is a good idea! In practice, I want
+to, at a minimum, run a compiler, linter, unit tests, integration tests, security
+scans, etc., before deploying. In other words, the standard integration process.
+Before I do that, I’m going to manually test my changes locally, and in many
+cases I will ask another developer to review them. This takes time, which I
+think is time well spent!</p>
+<blockquote>
+<p>“Any observed statistical regularity will tend to collapse once pressure is
+placed upon it for control purposes.” -<a href="https://en.wikipedia.org/wiki/Goodhart's_law">Charles Goodhart</a></p>
+</blockquote>
+<p>The danger with metrics, of course, is that you can pursue them to make the
+“line go up” instead of looking at what you are actually trying to measure. I
+do think that the DORA metrics are some of the most useful measurements that
+one can make about a software project, but the results should be discussed,
+rather than shown on a dashboard. Skipping peer review of important changes to
+shave a few hours off of your Change Lead Time would be a bad trade, I think!</p>
+<p>Similarly, some of the hours spent waiting for app store approval is Apple or
+Google doing automated vulnerability scans on your apps. A developer can of course do
+do this themselves, but experience has shown that not everybody bothers.</p>
+<p>So when you hear phrases like “you should deploy changes to customers as fast
+as possible,” I think it’s important to hear “as fast <strong>as possible</strong>” rather
+than “<strong>as fast</strong> as …”</p>
+<h2 id="one-size-fits-most">One Size Fits Most</h2>
+<p>“One size fits all” clothes tend to be a compromise. They never fit as well as a
+tailored garment. Similarly, I am suspicious of people who assure me
+that continuous deployment is always possible or even desirable in <em>every
+situation.</em> I think that continuous deployment is a <em>reasonable default position</em>
+for starting a discussion about deployment, but I do not think that it is always
+the best strategy. Continuous deployment can be useful as an “ideal” even in
+cases where a huge (and perhaps insurmountable, given other business needs)
+amount of work is necessary to make it happen.</p>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'devops'." href="../tags/devops.html" rel="tag">devops</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>

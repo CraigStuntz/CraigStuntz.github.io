@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
+        <title>Building a Synthesizer, Chapter 14: Building the Sequencer - Craig Stuntz</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css">
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+                <h3 class="series">
+                    Building a Synthesizer,
+                        13
+                    
+                </h3>
+            
+            
+                <h1 class="chapterName">
+                    Building the Sequencer
+                </h1>
+            
+            <div class="info">
+    Posted on December 19, 2025
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
+<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
+<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
+<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
+<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
+<li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
+<li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li>13: Building the VCF</li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<h2 id="resources">Resources</h2>
+<h3 id="instructions">Instructions</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/media/SEQ_MANUAL_v3.pdf">mki x es.EDU Sequencer User Manual</a></li>
+</ul>
+<h3 id="product-pages">Product Pages</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-sequencer/">EDU DIY Sequencer</a></li>
+<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">mki x es.EDU DIY System</a></li>
+</ul>
+<h3 id="community">Community</h3>
+<ul>
+<li><a href="https://www.modwiggler.com/forum/viewtopic.php?t=261156">Modwiggler thread</a></li>
+<li><a href="https://modulargrid.net/e/erica-synths-edu-sequencer">Modulargrid page</a></li>
+</ul>
+<h3 id="simulations">Simulations</h3>
+<p>These simulations are by Moritz Klein</p>
+<ul>
+<li><a href="https://tinyurl.com/2yk6obr5">Basic Op Amp Examples/Op Amp-Based Clock</a></li>
+</ul>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=QN_JhVcCBvI">Introducing the mki x es.edu DIY sequencer kit</a> by Moritz Klein (5:51)</li>
+<li><a href="https://www.youtube.com/watch?v=vHNQQ6yUGyo">Designing a simple 5-step sequencer from scratch</a>
+by Moritz Klein (32:07)</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'synthesis'." href="../tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged 'diy'." href="../tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged 'electrical engineering'." href="../tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>

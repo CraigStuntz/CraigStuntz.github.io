@@ -8,8 +8,205 @@
         <name>Craig Stuntz</name>
         
     </author>
-    <updated>2025-09-09T00:00:00Z</updated>
+    <updated>2025-12-27T00:00:00Z</updated>
     <entry>
+    <title>Building a Synthesizer, Chapter 13: Building the VCF</title>
+    <link href="https://www.craigstuntz.com/posts/2025-12-27-building-a-synthesizer-13.html" />
+    <id>https://www.craigstuntz.com/posts/2025-12-27-building-a-synthesizer-13.html</id>
+    <published>2025-12-27T00:00:00Z</published>
+    <updated>2025-12-27T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on December 27, 2025
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
+<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
+<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
+<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
+<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
+<li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
+<li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li>13: Building the VCF</li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>This is the second chapter discussing the VCF build; if you haven’t already read
+the first, you might want to <a href="2025-09-09-building-a-synthesizer-12.html">start there</a>.
+As a reminder, “VCF” stands for “Voltage Controlled Filter.” A VCF can be any
+kind of filter; the mki x es.EDU VCF is just a lowpass filter. The “Voltage
+Controlled” for this kit means that we can control the filter’s cutoff using a
+control voltage signal, such as one produced by the
+<a href="2024-01-31-building-a-synthesizer-8.html">envelope generator</a>. Using an envelope
+generator allows us to vary the filter’s cutoff over the course of a note, which
+makes it sound more interesting. Of course there are many, many more ways to use
+a VCF!</p>
+<h2 id="assembling-the-pc-board">Assembling the PC Board</h2>
+<p>This turned out to be a fairly easy build. Everything worked correctly after
+initial assembly. I made one mistake, which was accidentally melting two of the
+capacitor housings a bit with my soldering iron (I work under a magnifiying lens,
+and this was out of sight!):</p>
+<figure>
+<a href="/images/synth/VCFPCBoard.jpeg">
+<img src="/images/synth/VCFPCBoard.jpeg" loading="lazy" height="300px" alt="The completed PC board. In the middle of the board there are three red capacitors next to each other, and the corner of these are melted a little">
+</a>
+<figcaption>
+PC Board with Slightly Melted Capacitors
+</figcaption>
+</figure>
+<p>One tip I found handy: Before installing the trimpot resistor, set it to the
+middle of its range using your ohmmeter, because it’s hard to tell where it’s
+set once it’s in the circuit. From there you can easily adjust it up or down as
+needed. I found it needed not adjustment at all, however!</p>
+<p>A couple of other views:</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCFFinishedFront.jpeg">
+<img src="/images/synth/VCFFinishedFront.jpeg" loading="lazy" height="300px" alt="A front view of the finished VCF, showing many knobs and jacks">
+</a>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCFFinishedSide.jpeg">
+<img src="/images/synth/VCFFinishedSide.jpeg" loading="lazy" height="150px" alt="A side view of the finished VCF, showing potentiometers, capacitors, ICs, and resistors">
+</a>
+</figure>
+<div style="clear:both  ;">
+
+</div>
+<h2 id="matching-diodes">Matching Diodes?</h2>
+<p>While I was building this PC board, I noticed something a bit strange at the
+top. There were two spaces for diodes, for which no extra diodes were supplied in the
+kit.</p>
+<figure>
+<a href="/images/synth/VCFDiodes.jpeg">
+<img src="/images/synth/VCFDiodes.jpeg" loading="lazy" height="300px" alt="A photo of the PC board. There are two unpopulated spaces for diodes.">
+</a>
+<figcaption>
+Missing Diodes?
+</figcaption>
+</figure>
+<p>This was not mentioned in the directions, but I found reference to them on the
+schematic:</p>
+<figure>
+<a href="/images/synth/VCFDiodesSchematic.png">
+<img src="/images/synth/VCFDiodesSchematic.png" loading="lazy" height="300px" alt="A detail of the schematic, showing the diode testing circuit">
+</a>
+<figcaption>
+Mystery… Solved?
+</figcaption>
+</figure>
+<p>There are two links on the schematic, and they go to
+<a href="https://makingcircuits.com/blog/diode-matching-circuit-pairing-circuit/">an article on diode matching</a>
+and another on
+<a href="https://www.fluke.com/en/learn/blog/digital-multimeters/how-to-test-diodes">how to measure diodes with your multimeter</a>.
+The latter is clearly aimed at people who have never used diode mode on their
+meter before. (No shade intended here! We all need to learn!) The former is sort
+of interesting, but I can’t understand why this little circuit is on the board
+at all, because,
+<a href="https://modwiggler.com/forum/viewtopic.php?p=3862109&amp;sid=3fec989e512c1ea72847f75c828e1e43#p3862109">as Moritz notes</a>:</p>
+<ul>
+<li>Careful matching of diodes is not needed for this circuit</li>
+<li>If you were going to build the circuit from the first link to carefully match
+diodes, it would make a lot more sense to do it on a breadboard than to
+solder the diodes onto a PC board temporarily!</li>
+</ul>
+<p>So, I didn’t bother to match my diodes. I guess it might make sense to do that
+if I was trying to build the cleanest filter imaginable, but in this case I
+prefer a kind of crunchy sound!</p>
+<h2 id="finished">Finished!</h2>
+<p>Here we have a square wave input and three possible settings of the filter: No
+filtering at all, a low pass filter without resonance, and no filtering but a
+“medium” amount of resonance:</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCFFinishedNoFilter.jpg">
+<img src="/images/synth/VCFFinishedNoFilter.jpg" loading="lazy" height="200px" alt="A square wave displayed on the oscilloscope">
+</a>
+<figcaption>
+#NoFilter
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCFFinishedLowPass.jpg">
+<img src="/images/synth/VCFFinishedLowPass.jpg" loading="lazy" height="200px" alt="The square wave with a low pass filter applied, which rounds off the sharp edges of the wave">
+</a>
+<figcaption>
+Low Pass
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/VCFFinishedResonance.jpg">
+<img src="/images/synth/VCFFinishedResonance.jpg" loading="lazy" height="200px" alt="The square wave with a low pass filter and resonance filter applied, which shows an up and down line at the start of each wave">
+</a>
+<figcaption>
+Resonance
+</figcaption>
+</figure>
+<div style="clear:both  ;">
+
+</div>
+<p>If you turn up the resonance still further you hear a high-pitched feedback.</p>
+<p>Next, I connected the output of the Envelope Generator to the CV1 input of this
+kit, which caused the cutoff to cycle back and forth between “no low-pass
+filtering, but some resonance,” and
+and “a low-pass filter with resonance” (this is a video, press play to see it):</p>
+<video height="300" controls>
+<source src="/images/synth/VCFCV.mp4" type="video/mp4">
+</video>
+<p>At this point you may be wondering how it sounds. Pretty nice! I want to put
+some demos together, but I will save that for a future post. Hopefully soon!</p>
+<h2 id="resources">Resources</h2>
+<h3 id="instructions">Instructions</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/media/VCF_MANUAL_v2.pdf">mki x es.EDU VCF User Manual</a></li>
+</ul>
+<h3 id="product-pages">Product Pages</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vcf/">EDU DIY VCF</a></li>
+<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">mki x es.EDU DIY System</a></li>
+</ul>
+<h3 id="community">Community</h3>
+<ul>
+<li><a href="https://modwiggler.com/forum/viewtopic.php?p=3771212">Modwiggler thread</a></li>
+<li><a href="https://modulargrid.net/e/erica-synths-edu-vcf">Modulargrid page</a></li>
+</ul>
+<h3 id="simulations">Simulations</h3>
+<p>This simulation by Moritz Klein is the closest to the entire kit as built on the
+PC board</p>
+<ul>
+<li><a href="https://tinyurl.com/23mp8quc">Resonance II</a></li>
+</ul>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=wbG5lvBFCmA">Introducing the mki x es.edu DIY VCF kit</a>
+by Moritz Klein (5:04)</li>
+<li><a href="https://www.youtube.com/watch?v=eMODpxvdtvs">Erica.EDU Diode Ladder Filter Kit!</a> by Quincas Moreira (16:05)</li>
+</ul>
+<p>The folling series of videos are iterations on the design of what is ultimately
+a slightly different VCF built by Moritz Klein. I do think they are useful,
+though:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=3tMGNI--ofU">DIY SYNTH VCF Part 1: Analog Filtering Basics</a> (21:45)</li>
+<li><a href="https://www.youtube.com/watch?v=YNoj9Rrw_VM">DIY SYNTH VCF Part 2: Active Filters &amp; Resonance</a> (27:30)</li>
+<li><a href="https://www.youtube.com/watch?v=ITJX9jP-zm4">DIY SYNTH VCF Part 3: Resonant High-Pass &amp; Vactrol-Based Voltage Control</a> (29:20)</li>
+<li><a href="https://www.youtube.com/watch?v=jvNNgUl3al0">Designing a diode ladder filter from scratch</a> (36:03)</li>
+<li><a href="https://www.youtube.com/watch?v=tWKLFcc_BJM">Turning my diode ladder filter into a eurorack module</a> (34:46)</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Building a Synthesizer, Chapter 12: Breadboarding the VCF</title>
     <link href="https://www.craigstuntz.com/posts/2025-09-09-building-a-synthesizer-12.html" />
     <id>https://www.craigstuntz.com/posts/2025-09-09-building-a-synthesizer-12.html</id>
@@ -35,6 +232,7 @@
 <li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li>12: Breadboarding the VCF</li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -434,6 +632,7 @@ though:</p>
 <li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li>11: Debugging Circuits and Software Debugging</li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -642,7 +841,7 @@ to it. You must remove it from the circuit to get an accurate measurement.</p>
 <h4 id="other-tools">Other Tools</h4>
 <p>Beyond that, we get into “optional, but nice to have, depending on what you’re
 doing” hardware. A power supply might seem like a must, although the circuit
-you’re working on probably already has one. A waveform generator is handy to
+you’re working on might already have one. A waveform generator is handy to
 have around, and I’ve gotten a lot of mileage from mine while working on different
 synthesizer modules, but I could have just used the VCO module that I built if
 I didn’t have it.</p>
@@ -652,6 +851,8 @@ and a few relevant characteristics. I don’t use this very often. Going further
 down this road, you might want an LCR or ESR meter if you are testing capacitors,
 or a spectrum analyzer or vector network analyzer if you’re dealing with radio/RF
 signals. But I have never needed them.</p>
+<p>A logic analyzer is super-useful if you’re working on digital circuits, and
+probably unnecessary if you’re not.</p>
 <h3 id="testing-components-in-circuit">Testing Components “In Circuit”</h3>
 <p>Software developers will be familiar with the distinction between a unit test
 and an integration test; a similar distinction exists in hardware.</p>
@@ -870,6 +1071,7 @@ assigning the disabled attribute.</p>
 <li>10: Building the VCA</li>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1421,6 +1623,7 @@ discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backl
 <li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1600,6 +1803,7 @@ on the subject.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩�
 <li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -2388,6 +2592,7 @@ because you’re trying to solve with weird naming what would be better solved w
 <li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -2623,251 +2828,6 @@ by Moritz Klein (26:38)</li>
 <div class="info">
     
     Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Building a Synthesizer, Chapter 6: The Logic Circuits Model of Computation</title>
-    <link href="https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html" />
-    <id>https://www.craigstuntz.com/posts/2023-08-11-building-a-synthesizer-6.html</id>
-    <published>2023-08-11T00:00:00Z</published>
-    <updated>2023-08-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on August 11, 2023
-    
-</div>
-
-<div class="toc">
-<ul>
-<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
-<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
-<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
-<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
-<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
-<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
-<li>6: The Logic Circuits Model of Computation</li>
-<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
-<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
-<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
-<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
-<li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
-<li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
-<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
-</ul>
-</div>
-<p>I’m going to step aside from circuit building to talk about the logic circuits
-model of computation. This may surprise you, reader, as it would at first seem
-to have nothing to do with building an analog synthesizer. I have a few
-reasons for doing so. One is that I’ll be talking about analog computers in a
-future post, so think of this post as a gentle introduction to the topic of
-alternative computing models. The second is that we can see a synthesizer,
-whether digital or analog, as a dedicated piece of hardware which can solve a
-restricted set of computing problems (producing sounds), and I find it
-interesting to look at a synth from a computing point of view. But analog
-synthesizers, anyway, are not engineered like most computers!</p>
-<p>If you’re strictly interested in synthesis or electrical engineering, then you
-might want to skip ahead to the next chapter, but if you’re reading my blog then
-you migth find the following interesting!</p>
-<h2 id="von-neumann-machines">Von Neumann Machines</h2>
-<p>One model of computation, which we’re all very familar with, though perhaps not
-by this name, is the <a href="https://en.wikipedia.org/wiki/Von_Neumann_machine">Von Neumann machine</a>.
-You are reading this post on a Von Neumann machine right now. It’s so common
-that we generally just call it a “computer.” Nearly all “computers” produced
-today are Von Neumann machines, because they are digital computers with a
-processor, a control unit, memory, mass storage, and I/O. But other computing
-architectures are possible, and occasionally even useful!</p>
-<h2 id="turing-machines">Turing Machines</h2>
-<p>As a kind of a mental warm-up, consider the
-<a href="https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/turing-machine/one.html">Turing machine</a>.
-The Turing machine was invented years before the Von Neumann machine, and it was
-not intended to be constructed. Rather, it was a system for modeling
-computations which we might otherwise think about in our heads. It uses a
-different system for computation (see the link for details), without memory or
-random-access storage, but it’s provably equivalent to Von Neumann machines in
-terms of its computing capabilities. So in this case we have two different
-models of computation which can solve the same problems, at least if you ignore
-performance.</p>
-<h2 id="logic-circuits">Logic Circuits</h2>
-<p>Another model, which used to be somewhat common, but is far less so given that
-powerful CPUs can be had for pennies these days, is the logic circuits model.
-In this case instead of a CPU with an instruction pointer which goes through a
-list of instructions, fetches data from memory, operates on that data, saves it
-back to memory, etc., we have a far simpler device which is just a bunch of
-logic gates. This is so simple, in fact, that it can be efficiently
-simulated on a Von Neumann machine, so we can either build a logic circuit
-from raw gates or we can simulate it on a general purpose computer; the result
-of the computation will be the same either way.</p>
-<h3 id="an-example-circuit">An Example Circuit</h3>
-<p>Having said that, it’s still an interesting model, and it still has applications
-today. So let’s give a quick example. Consider the following function in
-TypeScript:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">doTheThing</span>(a<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span> c<span class="op">:</span> <span class="dt">boolean</span>)<span class="op">:</span> <span class="dt">boolean</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (c) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">&amp;&amp;</span> b<span class="op">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">||</span> b<span class="op">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>This function is of questionable utility, but will serve as a simple example
-which we can easily translate to a circuits model. It uses a control boolean, <code>c</code>
-to decide whether to do a boolean <code>AND</code> operation or an <code>OR</code> operation on its other
-two inputs.</p>
-<p>What would a circuits model of this function look like? Well, we have <code>AND</code> and
-<code>OR</code> as fundamental operators in a circuit, so we can just use those:</p>
-<figure>
-<a href="/images/synth/2Gates.png">
-<img src="/images/synth/2Gates.png" loading="lazy" alt="An AND and an XOR gate.">
-</a>
-<figcaption>
-A good start!
-</figcaption>
-</figure>
-<p>So far, so good, but how do we handle the if/then logic? One way is to compute
-both values, and then decide on which one to use based on the <code>c</code> value:</p>
-<figure>
-<a href="/images/synth/LogicCircuit.png">
-<img src="/images/synth/LogicCircuit.png" loading="lazy" alt="A logic circuit equivalent to the TypeScript code above.">
-</a>
-<figcaption>
-Logically correct
-</figcaption>
-</figure>
-<p>Progress! We have a working circuit. From left to right, we compute both the
-<code>AND</code> and <code>OR</code>ed values, then look at <code>c</code>. We put it directly into one <code>AND</code>
-gate, and also into another <code>AND</code> gate after first passing it through a <code>NOT</code>
-gate. Finally we take the <code>OR</code> of both <code>AND</code> gates to see if the output should
-be high/on/true.</p>
-<p>We can prove this works via the following truth table:</p>
-<table>
-<thead>
-<tr class="header">
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>output</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>F</td>
-<td>F</td>
-<td>F</td>
-<td>F</td>
-</tr>
-<tr class="even">
-<td>T</td>
-<td>F</td>
-<td>F</td>
-<td>T</td>
-</tr>
-<tr class="odd">
-<td>F</td>
-<td>T</td>
-<td>F</td>
-<td>T</td>
-</tr>
-<tr class="even">
-<td>T</td>
-<td>T</td>
-<td>F</td>
-<td>T</td>
-</tr>
-<tr class="odd">
-<td>F</td>
-<td>F</td>
-<td>T</td>
-<td>F</td>
-</tr>
-<tr class="even">
-<td>T</td>
-<td>F</td>
-<td>T</td>
-<td>F</td>
-</tr>
-<tr class="odd">
-<td>F</td>
-<td>T</td>
-<td>T</td>
-<td>F</td>
-</tr>
-<tr class="even">
-<td>T</td>
-<td>T</td>
-<td>T</td>
-<td>T</td>
-</tr>
-</tbody>
-</table>
-<p>You can take a moment and work through the truth table for both the original
-TypeScript code and the circuit above to prove that they’re the same in all
-cases. We could leave it at that and be done with it, but looking at
-the truth table we can see that a somewhat simpler circuit would do:</p>
-<figure>
-<a href="/images/synth/EquivalentLogicCircuit.png">
-<img src="/images/synth/EquivalentLogicCircuit.png" loading="lazy" alt="An equivalent logic circuit to the circuit above, but with five gates instead of six.">
-</a>
-<figcaption>
-Same output, fewer gates
-</figcaption>
-</figure>
-<p>This circuit uses only five gates, instead of six in the original.
-If you like, you can take a second to convince yourself that the circuit above
-returns the same values as the truth table, the first circuit, and the
-TypeScript code. They’re all equivalent.</p>
-<p>So even though it might <em>seem</em>
-inefficient to compute both branches of the <code>if</code> and then pick one, appearances
-can be deceiving. In general, I worry far more about whether my programs are
-<em>correct</em> than I do if they are performing as fast as possible (but possibly
-returning an incorrect result!). If you do need to optimize some routine, it is
-important to compare the optimized versions in a profiler, not just squint at
-the code.</p>
-<h3 id="applications-of-the-logic-circuits-model">Applications of the Logic Circuits Model</h3>
-<p>This is sort of intellectually interesting, but is there any point in the
-equivalences above? Why would we bother doing this when general-purpose CPUs are
-so cheap? It would literally cost more to build a non-trivial circuit with
-distinct gates than it would to build it on an Arduino or similar, so why am I
-bothering explaining all of this?</p>
-<p>Aside from, you know, building logic circuits, which is sometimes a thing that
-people do, there are a few cases I can think of where thinking in this model is
-directly useful:</p>
-<h4 id="compiler-optimizations">Compiler Optimizations</h4>
-<p>If you’re writing a compiler optimizer, you might directly use boolean
-equivalences such as <a href="https://en.wikipedia.org/wiki/De_Morgan%27s_laws">DeMorgan’s laws</a>
-to rewrite expressions into other expressions which are guaranteed to
-return the same result.</p>
-<h4 id="gpu-programming">GPU Programming</h4>
-<p><a href="https://developer.nvidia.com/gpugems/gpugems2/part-iv-general-purpose-computation-gpus-primer/chapter-34-gpu-flow-control-idioms">In GPU programming, you often need to write branch-free code whenever possible.</a>
-Note that the circuits model in the above example was branch-free, whereas the
-<code>if</code>/<code>then</code> in the TypeScript code was a branch.</p>
-<h4 id="homomorphic-encryption">Homomorphic Encryption</h4>
-<p><a href="2010-03-18-what-is-homomorphic-encryption.html">Homomorphic encryption</a> refers
-to performing a computation on encrypted data, resulting in the cyphertext of
-the result of the computation, without ever decrypting the data. It sounds
-impossible, but turns out to be merely very difficult. With a little thought you
-will see that if you can’t decrypt the data, then you can’t do a conditinal
-branch based on some intermediate value (because that would require you to know
-what the value is, and you don’t; it’s encrypted).</p>
-<p>So homomorphic encryption systems often use a logic circuits model of
-computation, which can be branch free, as shown above. In particular,
-<a href="https://crypto.stanford.edu/craig/">Craig Gentry’s 2010 thesis</a>, which
-introduced the first fully homomorphic cryptosystem, used this model.</p>
-<h2 id="mental-exercise">Mental Exercise</h2>
-<p>My real agenda here is to get you thinking about different kinds of computing
-models, because next we’re going to talk about analog computers, and they’re far
-weirder than logic circuits!</p>
-<p>In the next post in this series I’ll <a href="2023-09-21-building-a-synthesizer-7.html">building the Mixer module</a>.</p>
-<h2 id="references">References</h2>
-<ul>
-<li><a href="https://cs.brown.edu/people/jsavage//book/home.html">Models of Computation: Exploring the Power of Computing</a>,
-chapter 2:
-<a href="https://cs.brown.edu/people/jsavage//book/pdfs/ModelsOfComputation_Chapter2.pdf">Logic Circuits</a>,
-Savage, John E., Addison-Wesley, 1998</li>
-</ul>
-
-<div class="info">
-    
-    Tags: <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>, <a title="All pages tagged &#39;computer science&#39;." href="/tags/computer%20science.html" rel="tag">computer science</a>, <a title="All pages tagged &#39;homomorphic encryption&#39;." href="/tags/homomorphic%20encryption.html" rel="tag">homomorphic encryption</a>
     
 </div>
 ]]></summary>
