@@ -133,8 +133,8 @@ filtering at all, a low pass filter without resonance, and no filtering but a
 </figure>
 
 <figure class="horizontalTiles">
-<a href="/images/synth/VCFFinishedResonance.jpg">
-<img src="/images/synth/VCFFinishedResonance.jpg" loading="lazy" height="200px" alt="The square wave with a low pass filter and resonance filter applied, which shows an up and down line at the start of each wave">
+<a href="/images/synth/VCFFinishedResonant.jpg">
+<img src="/images/synth/VCFFinishedResonant.jpg" loading="lazy" height="200px" alt="The square wave with a low pass filter and resonance filter applied, which shows an up and down line at the start of each wave">
 </a>
 <figcaption>Resonance</figcaption>
 </figure>
