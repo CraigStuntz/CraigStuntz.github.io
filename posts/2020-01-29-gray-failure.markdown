@@ -3,7 +3,7 @@ title: Gray Failure
 tags: failure, cloud, papers
 ---
 
-[Gray Failure: The Achilles’ Heel of Cloud-Scale Systems](https://www.cs.jhu.edu/~huang/paper/grayfailure-hotos17.pdf) is a delightful paper because it's easy to read, the findings are directly useful in my day job, and because it reframes an important issue in a way which is not intuitive at first but simplifies it and leads to solutions. 
+[Gray Failure: The Achilles’ Heel of Cloud-Scale Systems](https://www.microsoft.com/en-us/research/wp-content/uploads/2017/06/paper-1.pdf) is a delightful paper because it's easy to read, the findings are directly useful in my day job, and because it reframes an important issue in a way which is not intuitive at first but simplifies it and leads to solutions. 
 
 All software fails from time to time, but evidence indicates that cloud scale services fail differently than other software which might be less distributed. The authors characterize this failure mode as "gray failure," in which "component failures whose manifestations are fairly subtle, and thus defy quick and definitive detection." This is in contrast to hard failure when a service simply stops working altogether. Examples include "severe performance degradation, random packet loss, flaky I/O, memory thrashing, capacity pressure, and non-fatal exceptions."
 
