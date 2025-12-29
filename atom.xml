@@ -8,8 +8,50 @@
         <name>Craig Stuntz</name>
         
     </author>
-    <updated>2025-12-27T00:00:00Z</updated>
+    <updated>2025-12-28T00:00:00Z</updated>
     <entry>
+    <title>Learning Computer Science Via Building Analog Synthesizers at Codemash 2026</title>
+    <link href="https://www.craigstuntz.com/posts/2025-12-28-learning-cs-via-building-analog-synthesizers.html" />
+    <id>https://www.craigstuntz.com/posts/2025-12-28-learning-cs-via-building-analog-synthesizers.html</id>
+    <published>2025-12-28T00:00:00Z</published>
+    <updated>2025-12-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on December 28, 2025
+    
+</div>
+
+<p>Being as you are a devoted reader of my blog, I presume that you already know a
+thing or two about computer science? But what if you didn’t know anything about
+computer science? What if you decided to learn about it by
+<a href="2023-02-20-building-a-synthesizer-0.html">building analog synthesizers</a>?</p>
+<p>That’s the premise of <a href="https://events.codemash.org/2026CodeMashConference#/agenda?day=3&amp;lang=en&amp;sessionId=76186000008389209&amp;viewMode=2">my upcoming talk at CodeMash</a>.</p>
+<blockquote>
+<p>This presentation is an alternate history of your own journey learning
+computer science. If you started learning all over again, and instead of
+reading books on C# development or watching videos about Vue.js, you decided
+to become a developer by building hardware analog synthesizers instead, what
+would the programming world look like to you? Imagine that the first computer
+you used was analog instead of digital, that you learned about abstraction
+from op amps instead of base classes, and you had to solve problems with an
+oscilloscope instead of a debugger. You might be very good at understanding
+computational abstractions! Building an analog synthesizer from electronic
+components is a fun way to learn about electrical engineering, but it also
+holds many lessons about computer science. In this delightfully strange talk,
+we will build several computational models from the transistors up, learn how
+to debug from first principles, understand dynamic typing in terms of modular
+synthesis, and also have a bunch of beeps, blorps, and solder.</p>
+</blockquote>
+<p>My goal is to have the strangest presentation at CodeMash. We will see if I
+succeed. If I don’t, I hope I’m in the audience for the even weirder one.</p>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged &#39;CodeMash&#39;." href="/tags/CodeMash.html" rel="tag">CodeMash</a>, <a title="All pages tagged &#39;presentations&#39;." href="/tags/presentations.html" rel="tag">presentations</a>, <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>
+    
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Building a Synthesizer, Chapter 13: Building the VCF</title>
     <link href="https://www.craigstuntz.com/posts/2025-12-27-building-a-synthesizer-13.html" />
     <id>https://www.craigstuntz.com/posts/2025-12-27-building-a-synthesizer-13.html</id>
@@ -2562,272 +2604,6 @@ because you’re trying to solve with weird naming what would be better solved w
 <div class="info">
     
     Tags: <a title="All pages tagged &#39;compilers&#39;." href="/tags/compilers.html" rel="tag">compilers</a>, <a title="All pages tagged &#39;computer science&#39;." href="/tags/computer%20science.html" rel="tag">computer science</a>, <a title="All pages tagged &#39;programming languages&#39;." href="/tags/programming%20languages.html" rel="tag">programming languages</a>, <a title="All pages tagged &#39;plt&#39;." href="/tags/plt.html" rel="tag">plt</a>
-    
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Building a Synthesizer, Chapter 7: Building the Mixer</title>
-    <link href="https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html" />
-    <id>https://www.craigstuntz.com/posts/2023-09-21-building-a-synthesizer-7.html</id>
-    <published>2023-09-21T00:00:00Z</published>
-    <updated>2023-09-21T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on September 21, 2023
-    
-</div>
-
-<div class="toc">
-<ul>
-<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
-<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
-<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
-<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
-<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
-<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
-<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
-<li>7: Building the Mixer</li>
-<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
-<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
-<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
-<li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
-<li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
-<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
-<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
-</ul>
-</div>
-<p>There are two “mixer” modules in the mki x es.EDU system, the “Mixer” module and
-the “Output” module. Both can combine multiple audio signals into one, but they
-do it somewhat differently and the use cases are different. This “Mixer” module
-will combine up to three mono signals into a single mono output, and it can also
-optinally clip or invert the signal. The “Output” module will combine up to two
-mono signals into a stereo line level and headphones output, with panning.</p>
-<p>A mixer is a pretty handy module to have, and there are different reasons to use
-a mixer, hence different mixers. You can obviously use this one to blend the
-two oscillators in the kit, making a hybrid sound with both a PWM and noise
-sound. But you can also use it, for example, to combine the two different
-envelope generators, producing one envelope which is far more complex than you
-could make with just one envelope generator. You could combine a key-triggered
-and a looped envelope, for example.</p>
-<p>Another big difference between the two modules is the directions. The directions
-for the “Mixer” module were written by Moritz Klein and very much follow the
-style set out in most of the rest of the mki x es.EDU modules, with an emphasis
-on breadboarding before soldering, and a folksy style. Moritz frequently says,
-in both the printed directions and his videos, approximately, “you could use
-math to calculate these values, but I prefer to use trial and error.”
-I’ll discuss the Output module in a future post, but for now let’s just say that
-the directions are day-and-night different. The Output module directions were
-not written by Moritz and there is math involved. Good thing I enjoy that sort
-of thing.</p>
-<p>This module, however, has directions written by Moritz Klein in his usual style.
-I like that, too!</p>
-<h2 id="its-all-about-the-op-amps">It’s All About the Op Amps</h2>
-<p>It might seem like I don’t have much to say about this kit. You’ll note that
-this post is far shorter than many of the others in the series. In truth,
-however, building this kit inspired me to write
-<a href="2023-04-03-building-a-synthesizer-4.html">the chapter on op amps</a>, which is
-by far the longest post I’ve written. So there is a lot to say, so much so that
-it took an extra post.</p>
-<p>The mixer module is a very simple introduction to op amps, which gives just a
-couple of use cases. If you’d like to know more,
-<a href="2023-04-03-building-a-synthesizer-4.html" title="A Gentle Introduction to Op Amps">I’ve got you covered</a>.</p>
-<h2 id="passive-vs.-active-mixing">Passive vs. Active Mixing</h2>
-<p>The instructions make a valiant attempt to explain how the mixer works in its
-final configuration, when it uses an op amp in an inverting configuration. It
-mostly succeeds, but I do think portions of it could be clearer, so I will
-attempt to add some additional explanation.</p>
-<p>The instructions take us through three steps:</p>
-<ol type="1">
-<li>A passive mixer</li>
-<li>An “active mixer” with an op amp in a non-inverting configuration</li>
-<li>An active mixer with an op amp in an inverting configuration</li>
-</ol>
-<h3 id="passive-mixers-and-why-theyre-not-so-great">Passive Mixers, and Why They’re Not So Great</h3>
-<p>The manual correctly identifies low output volume of the signal
-(caused by a high output impedance) as one problem with the passive mixer
-design. But it’s not the only problem. One of the problems with a passive
-mixer is that if you have a musical signal connected to one of the inputs and
-then you connect a 0V signal into another input, the level of the music on the
-output goes down! This sort of makes sense as the new level is the average of
-the signal and the 0V input, but it’s not what any musician would
-actually want!</p>
-<p>Also about that output: Due to the lack of any kind of buffer, the amount of
-current in this circuit will change quite a lot depending upon what you have
-connected to it.</p>
-<p>It’s even worse when you have more than two inputs. If you have three inputs,
-and you have two of them connected to music inputs, and you set the levels
-appropriately, then you will be very surprised when you plug in a third input
-and the levels change relative to each other.</p>
-<p>Why? A passive mixer is just a voltage divider in disguise.
-And it’s not much of a disguise. A voltage divider with one input connected to
-ground is a regular voltage divider, whereas the same circuit with the same input entirely
-disconnected is just a single resistor. End users of your mixer will not expect
-this behavior.</p>
-<p>Still, you will sometimes see passive mixers advertised as “summing mixers” and
-all sorts of audio fairy dust attributed to them, at a high price.</p>
-<h3 id="active-mixers-with-scare-quotes">“Active” Mixers (with Scare Quotes)</h3>
-<figure class="inlineRight">
-<a href="/images/synth/OpAmpPassiveMixer.png">
-<img src="/images/synth/OpAmpPassiveMixer.png" loading="lazy" width="300px" alt="Schematic diagram of an op amp in a non-inverting configuration with two inputs with a 100k resistor on each input">
-</a>
-<figcaption>
-A Passive Mixer and a Buffer
-</figcaption>
-</figure>
-<p>Klein introduces the notion of an “active” mixer by putting a op amp buffer in
-non-inverting mode after the passive mixer. While this is “active” in the sense
-that it contains active components, namely the op amp, it’s not what most people
-would consider an active mixer, because the mixer itself is still passive.</p>
-<p>In other words, using a non-inverting op amp configuration passively mixes the
-two (or more) signals, and then actively buffers the result using the op amp.</p>
-<p>To be honest I’m not sure why you would use this configuration, because it
-doesn’t fix the problems caused by the passive mixer. But it does provide one
-advantage, namely that plugging in a random module to the output can’t change
-the behavior of the mixer, due to the op amp acting as a buffer.</p>
-<div style="clear: both;">
-
-</div>
-<h3 id="active-mixers-no-scare-quotes">Active Mixers (No Scare Quotes)</h3>
-<figure class="inlineRight">
-<a href="/images/synth/OpAmpActiveMixerWithPots.png">
-<img src="/images/synth/OpAmpActiveMixerWithPots.png" loading="lazy" width="300px" alt="Schematic diagram of an op amp in an inverting configuration with two inputs with a 100k potentiometer and a 100k resistor on each input">
-</a>
-<figcaption>
-Passive Mixer + Inverting Amplifier = Active Mixer
-</figcaption>
-</figure>
-<p>When you swap the non-inverting op amp for an op amp in an inverting
-configuration, however, things change. Naïvely, this shouldn’t make a
-difference, because what good does inverting the signal do?</p>
-<p>But we’re not just inverting the signal, we are also moving the op amp’s
-feedback signal from the op amp
-input which doesn’t take the mix output to the one which does. And <em>that</em> is
-what makes the difference. In an inverting configuration the op amp must emit
-a voltage to bring its <code>-</code> input down to zero, hence the opposite voltage as its
-input(s). Because the op amp is always working to keep its <code>-</code> input at zero, it
-exactly balances the signal from all of its inputs (labeled <span class="math inline"><em>V</em>1</span> and <span class="math inline"><em>V</em>2</span> in
-the schematic at right).</p>
-<p>This means that if you have just one input connected at <span class="math inline"><em>V</em>1</span> then the op amp
-will emit at its output the exact opposite of that signal; it’s an inverter.
-It will do this whether you have no connection at all at <span class="math inline"><em>V</em>2</span> or if you have
-a wire connected at ground level, carrying no audio signal. If you have two or
-more inputs connected, say an audio signal on <span class="math inline"><em>V</em>1</span> and <span class="math inline"><em>V</em>2</span>, then the op amp
-will emit exactly the opposite of their sum.</p>
-<p><a href="2023-04-03-building-a-synthesizer-4.html#level-10-passive-and-active-mixers">I wrote about this in my op amps post</a>.</p>
-<p>However, although the inversion is inaudible with audio signals, if you’re using
-the mixer with a lower-frequency signal such as an LFO or some envelope
-generators then you might notice the inversion. So the next step is to add
-another inverting op amp to fix the inversion. Klein also adds an ouput for the
-inverted signal in case you want that.</p>
-<h2 id="distortion">Distortion</h2>
-<p>The last bit added to the circuit is a diode distortion circuit, which adds a
-small bit of distortion to a dedicated output in case you want that. The
-circuit is essentially two diodes and a trimpot, and there’s an op amp to bring
-the level back up to match the other outputs.</p>
-<p>We think of diodes as “one way valves” for current, but they don’t open linearly,
-and the distortion circuit exploits this nonlinearity to produce a distorted
-sound that can be pleasing in some cases.</p>
-<p>I’m not sure why the distortion level is set with a trimpot instead of a
-regular front-panel potentiometer; this is the sort of control which you might
-want to change for different synthesizer sounds, and having to remove the
-module from the rack and adjust the clip threshold with a screwdriver is going
-to discourage that.</p>
-<h2 id="building-the-pc-board">Building the PC Board</h2>
-<p>Well there was no drama here at all. I soldered on the components and everything
-just worked. No complaints there!</p>
-<figure class="horizontalTiles">
-<a href="/images/synth/MixerFaceplate.jpg">
-<img src="/images/synth/MixerFaceplate.jpg" loading="lazy" height="300px" alt="The faceplate of the Mixer module. It has three potentiometer knobs and six jack sockets">
-</a>
-<figcaption>
-Mixer Front
-</figcaption>
-</figure>
-<figure class="horizontalTiles">
-<a href="/images/synth/MixerBackPCBoard.jpg">
-<img src="/images/synth/MixerBackPCBoard.jpg" loading="lazy" height="300px" alt="The back of the Mixer module, which is a PC board with two ICS and a number of discrete resistors and capacitors">
-</a>
-<figcaption>
-Mixer Back
-</figcaption>
-</figure>
-<div style="clear:both  ;">
-
-</div>
-<p>But there was…</p>
-<h3 id="that-one-weird-thing-with-the-zero-ohm-resistors">That One Weird Thing With the Zero Ohm Resistors</h3>
-<figure class="inlineRight">
-<a href="/images/synth/MixerOptionalOpAmp.png">
-<img src="/images/synth/MixerOptionalOpAmp.png" width="156px" loading="lazy" alt="Schematic of optional op amp circuit with zero-Ohm resistors">
-</a>
-<figcaption>
-Huh?
-</figcaption>
-</figure>
-<p>The kit includes two <a href="https://en.wikipedia.org/wiki/Zero-ohm_link">zero Ohm resistors, which really are a thing</a>.
-That’s a little unusual, but what’s truly strange is that they’re totally
-unmentioned in the manual, and omitted from the
-bill of materials. They are are in the schematic (see image at right) and
-in the pictures of the completed board in the directions. They are part of an
-“optional inverting/noninverting op amp circuit” which
-is not in the signal path of the rest of the mixer. (See schematic at right;
-R12 and R14 are zero Ohms. The remaining resistors should not be
-installed at all; “DNM” means “Do Not Mount.”)</p>
-<p>Installing the two zero-Ohm resistors puts the second op amp in the second TL072
-into a buffer configuration, with the noninverting input set to ground. This is
-<a href="https://www.youtube.com/watch?v=WnDju2TwN5I" title="Handling Unused 
-Operational Amplifiers (ECE Design Fundamentals)">the correct way
-to set up an unused op amp</a>.</p>
-<p>I think the purpose of the zero Ohm resistors is they could be removed and
-replaced with a different value resistor, along with mounting additional
-resistors in the “DNM” positions, if you later decided to use the additional
-op amp for… something. They are a wire which happens to be shaped like a
-resistor, and hence useful when you might want to replace them with a real
-resistor in the future.</p>
-<figure>
-<a href="/images/synth/Mixer0Ohm.jpg">
-<img src="/images/synth/Mixer0Ohm.jpg" width="300px" loading="lazy" alt="A close-up of the 0 Ohm resistors">
-</a>
-<figcaption>
-Close-up of 0 Ohm resistors
-</figcaption>
-</figure>
-<p>Thanks for reading!</p>
-<h2 id="resources">Resources</h2>
-<h3 id="instructions">Instructions</h3>
-<ul>
-<li><a href="https://www.ericasynths.lv/media/MIXER_MANUAL.pdf">mki x es.EDU Mixer User Manual</a></li>
-</ul>
-<h3 id="product-pages">Product Pages</h3>
-<ul>
-<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-mixer/">EDU DIY Mixer</a></li>
-<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">mki x es.EDU DIY System</a></li>
-</ul>
-<h3 id="simulations">Simulations</h3>
-<p>All of these simulations are by Moritz Klein</p>
-<ul>
-<li><a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWK0AcB2ATATjAZhbgGy6aR64iFYhIAsFCApgLRhgBQAHjSkmpBRRhIIfoRC0QuDCACCAYQAqASQBqAUQA6AZwCyygBrqASuwDulWiJSFJt61nGRzlkVgwpXIFI6jtjNIRuHjRgMu6eInZwNFBxMAjsAE5eEYHBkeDwcP7p3rahMjaSIhS4MUgiVdCJKQhB+XZWjXHC2exWFLQFaAgy9dZgTjQA+igjkCNh2LQjtNBYi0tLKCgY0rgTsHBgI6wjGCMII7gdAhIFWGjiA1nNpWMTUxgzcwvLy6vr61vwu-uHTanACGlFW3hQ1hiq2s4BkrBkbWyIAw0AwCEWaDQVgECEgWG6aBRaKC2R2GFoWDxSCROQshHBxTBniEThcDJZQ280K5zgskMG4gFEKq7MZvns3l8zgA8tzrJCpULFaLOt5aCyYgTJEyRGBZuNJtMCW9lnj4Ph1mBDdsyHtdhwAEYSLmEBBExZ6yAEPxAA">A simple “active” mixer</a> (passive mixer with an op amp output buffer)</li>
-<li><a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWK0AcB2ATATjAZhbgGy6aR64iFYhIAsFCApgLRhgBQAHjYUoSpBApaKSgRC0QuDCACSAOQBqAUQBKAFQUBxADoBnALKyAGmvYB3SrUEEZha0PtQLVm1kKvHkyO1U83HghgMijuUBKUcDThgjAI7ABOnqGBhAHhYPBwvv5C0jTBeTKCFLhRSLHI8UkIaUXJ+YKZWezWFLROpLlowuEIAPoo-ZD9wdi0-bTQWFhZcBi0GPa4uMOwcGD9rP0Y-QO4rZDtTli0krVNcKIlg8OjGOOT07NzC0v0uAMw8Jvbu6sHACGYlEKAEQiiYJs4BkrBkzSyIGYuGg+AEZTAIjYGDQCDQuBYGAglxaln4oKc5KEYA8PksAhsNIhNnBdJBXmSTh8AHlmUJwSl+ZUfG0hCI+adJCgueBVkMRmNTv0sNMEFg0GQiSQMAgUGA0GsfltNhwAObswVUyUxRJ8vUeKn2jJzdgAIwkYGoxCQWBQSEyuucQA">“Inverting” mixer</a> (an active mixer with an op amp in an inverting configuration)</li>
-<li><a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWK0AcB2ATATjAZhbgGy6aR64iFYhIAsFCApgLRhgBQAHjQhpStSyE+VPrRC4+AEQDyAVQBCAGQCiAHQDOAORUBxAIIAVAJIA1dRoCyxgBoqASuwDulWpBAERbj4XGRnru44Xu4ovlDs9jSEQVh8CGB8WHFQIOIx7kju2dAI7ABOgSDJ8THFKe5g8HCR0aGSNIkeDe4UuHA0qTl5hQhlnkUDldX+bhS04aR1IGgofjQA+igLkAuJ2LQLtNDJu3tYaFSQyzDwYAusCxgLCAu47GNp4VUY4n3DKCipuEsraxgbLY7fZ7Q5YSBoFawODnS7XH73ACG-C+n1CHTRHnAfFYfCqIxAzFOMLIuDJE0kuDiJAOqXx8AChE+PnSzJQYEIERcKAxHI8GJ5XJRLMG4X8AHNhQJOUyvlhaPN-IUeaE+bKPHzhtUCuU+ANMUNwCN2JLMcEPIKhNkIjJdR4hEa2Q7sgESs0kilpUKDYKDS12MiDQ63V6vk1cUaCcSyKTcGB6IRCFUEJAELM6cblQLQr7BVqGY8qt52Zy2EQLdawJCTv9AVVYGgyQIMGBkmgyCdoWQLucONzs-zhpgbYOjcO2JBxFVhy7C6nOW62LwjX1Uq9fqt1vK1qdGwhwUy0GgELQEJ2zj21ozvG7fEEmkrpua78UH5GGVF3q-4k1zZU0imnTWjAeSPPg4iYrQloKmuyw1lumzbPs+BxrQWBzEQUIXnCVzLPcABGEjli+bDoOA8ZfP4QA">“Double negative” mixer</a> (has another inverting op amp to allow for a non-inverting output)</li>
-<li><a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWK0AcB2ATATjAZhbgGy6aR64iFYhIAsFCApgLRhgBQAHjW5VrSH7UqaEANwYQAQQAiAKQCqAZQAqUgEIAZAKIAdAM4BJAHIAFBSoM6Aats1L2Ad0q1IIApMKv3XqE5duOJ7eKL6Q7ABKYiiBWJL0klhxUGKUcDQpbjAI7ABOAYLJCISxkm5g8HCR0W4eYhLuDW4UuOlIWcg5+cW1DV69ZeCV4a4tKAKkNSBo4ykIAPoo85DzYBjYtPO00Em7u5hYmBibMPBg86zzGPMLuOyjIPgCFcdTFSgoKbiLy6vr-Fsdnt9tgjidYHBzpdrt87gBDSgfdwxdzpD61cCSViSCrDEDMU7wBCuSBoMAIHAzOKEBCicrDfyEJGhARMz4oMCEPzOGK1Tmo2oo8LONk+VkhMLsADmiPZWC5ov4AiyeQF7n5oo5XPplVVSUkdXRjUGuPg0uRgTWFsEJUy7AA8oUDfKhsyXSrnPrjU73O7-EaAyi6uEEQGXV6UC7PlbsUM8YTECSSmgsJBabhaMSMO042b8rzrYGOqaqg8KiF+WwiNbymgfis1ht5oRoAhaZBXGAUMVsyhjssIWQLucODy0UH0hVMH5HQWpzjy0Npyqy2muV62AgcWuUv2lg3-psW22yWSJF5sAgSAOzsPVozvF7+oIreFuraggVPzqzVFaCjPwSF8TTEBA3BzLJW3uSAWg7a0SUEWhlRADAln3P4mwWBMoXOa5UPmO4wDQAR-wGGhUO9H90hgNBCDQVphmGCATHMFRwH8BArS1HgDWo81iQEOoBPcf87WcTjePA20C2FGhpLaaSmg46SUR6YDuR4601KNcIZWEz99Ioj1NMjLkJJrdgiJIgCrS3T5v1zajoCIMASUYyokBYiwUMs4ipi9OyfSoyDEBALy2LucSrUOMzottXSaCQn1hNxT5jPM+UpMCeLlOyrKgvYAAjFDiRcaMMEnckVSAA">“Adjustable” mixer</a> (has adjustable input levels, plus inverting and non-inverting outputs)</li>
-<li><a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWK0AcB2ATATjAZhbgGy6aR64iFYhIAsFCApgLRhgBQAHiLStYSgzg4-FHRBEQAdQCSAFQASAHQDOAZQDyAMTmqAwgBkZABWMBRACKqNAVTnG77AO6VakEASGE3H71Geu7jhePih+kOwASjwoQVhC9EJY8VA8lHA0qe4wCOwAToEgyUIIhHFC7mDwcFEx7p48uEIN7hS4GUjZyLkFpfVNhS3C1exubSi0IKR1UxOpCAD6KAuQC2AY2LQLtNBYfMkHWLQbaDgrsHBgC6wLGAuLuKOQ45NVGJO8lZAoKKm4Sys1hsjttdvtDkcTmcYPArjc7v9HgBDSg-DyxDwZH71cBCVhCKrVbIXOD0U6EDCxU6JLCk1KE+ABAS-MKTZkeMCEfwuWL1TmY+oYiIudmswbhdgAc1RLKwXPZR0m2XyAo58rRKH5XxGBWKHgG2P1FWGjOlhuC6KCZSy7A0RRSfC5bEgk0dNpceoanrl3MtfsNLXYKIDPu9XN+6xA+JN8CjMPgZKwCDcvDCGFw62o2sZBV5-oxhuzNTGwlKavAYAQzSF4DQANW602C0I0FoaFox3wkHJJHw51h1yuHB5WILGSqmH8drzE4JVVe3eNERLVTLerYVdLXPc73rQKbLbbtAQCCacvoeywdfjZEHayZPj13iCkYivWtFufRVfMYi0U+34JAMFqVDwCDuJ0WTQLkJbtK6GJuEEHapJSe6NiCOwQvgGa0OeSb9pcd53KhjxgO2MwNFWLIDEWxLtmgSAyAAcg4cjgAECCRpqXKcc0GQRNKyaugMQkeLw7o0FxHTWnmwo0DJ0n9BUHEyRifSAb6vF+uphZSjQyEWqJ8S-MqLhaW65lCuwZEfBihmUhptHIEQYCIUSRKMSxdggBg1nkQBepUfaxoMvxFyeaxEgcZGV48TF1oCfpkyBchhImZp8UQR+CUqVaWXlL6FrrOJbrFSZASGmVHg+lVETcFQlSUv0TqUhQryTIYJiqMxchmExajyAAmqociRDIACyXAeBgSB4FiuHgO0bXgJMGCQAA0hVfh4FxNUZspPLbU1vivPt-g2dVLUlUdPo7tU3S4HK7lEhAmg6CAnXGCAPV9QNciDSqM5rYKjX8aiIzSoqi0GalJDbv4uqpcdUN4MhO5oIyLiri1-LY7iVmI68x14+sNahXJKPpkkSNWWae27U6uBo1OW64rj85s-DFORusGSU-xQZFEjuOQGW6z8tQkbRuTxK0GRaAEJ8uHYAQrnIHLCvPDtpxwJSTpEhVGK8y+BLA-4AAmGlVUVZsEkxcu8OwluVWbLviXbDsoAEYbBRWa2FSkbD+zOvO+iHwfjmby7PKzbCSBuptgwgWBocCWwYNAGCuR255gHKGNhARt43BwABGPknpQGAtS6K3vP4QA">Entire circuit</a> (as breadboarded, adds diode clipping)</li>
-</ul>
-<h3 id="videos">Videos</h3>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=_vrc4qgBqbA">Introducing the mki x es.edu DIY S&amp;H/Noise and Mixer kits</a>,
-by Moritz Klein (3:57)</li>
-<li><a href="https://www.youtube.com/watch?v=q8tmUgaXrEQ">Designing a 3-channel mixer with diode distortion from scratch</a>
-by Moritz Klein (26:38)</li>
-</ul>
-<h3 id="web-sites">Web Sites</h3>
-<ul>
-<li><a href="https://modwiggler.com/forum/viewtopic.php?t=263624">Mod Wiggler thread</a> (Pretty empty when I looked)</li>
-<li><a href="https://www.modulargrid.net/e/erica-synths-edu-mixer">ModularGrid page</a></li>
-</ul>
-
-<div class="info">
-    
-    Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
     
 </div>
 ]]></summary>
