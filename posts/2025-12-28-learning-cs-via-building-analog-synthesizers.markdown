@@ -1,5 +1,5 @@
 ---
-title: "Learning Computer Science Via Building Analog Synthesizers at Codemash 2026"
+title: "Learning Computer Science Via Building Analog Synthesizers at CodeMash 2026"
 tags: CodeMash, presentations, synthesis
 ---
 
