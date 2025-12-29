@@ -3,6 +3,25 @@ title: Presentations
 tags: presentations
 ---
 
+### Learning Computer Science Via Building Analog Synthesizers
+* [CodeMash](http://codemash.org) (accepted)
+· 15 Jan 2026
+
+This presentation is an alternate history of your own journey learning computer 
+science. If you started learning all over again, and instead of reading books on 
+C# development or watching videos about Vue.js, you decided to become a 
+developer by building hardware analog synthesizers instead, what would the 
+programming world look like to you? Imagine that the first computer you used was 
+analog instead of digital, that you learned about abstraction from op amps 
+instead of base classes, and you had to solve problems with an oscilloscope 
+instead of a debugger. You might be very good at understanding computational 
+abstractions! Building an analog synthesizer from electronic components is a fun 
+way to learn about electrical engineering, but it also holds many lessons about 
+computer science. In this delightfully strange talk, we will build several 
+computational models from the transistors up, learn how to debug from first 
+principles, understand dynamic typing in terms of modular synthesis, and also 
+have a bunch of beeps, blorps, and solder.
+
 ### What On Earth Is Quantum Computing?!? (And will it break all my encryption?)
 * [Stir Trek](https://stirtrek.com/)
 · 7 May 2021
@@ -192,10 +211,3 @@ This is the promise of homomorphic encryption. The idea has been around for some
 
 Central Ohio Cloud Computing User Group ·10 November 2014 · Slides
 Machine learning allows you to find solutions to problems which are not solvable by other means. Azure Machine Learning provides a mix of features designed to allow you to easily create "predictions as a service. This presentation is both an introduction to machine learning concepts for developers new to the field and an example of how to solve real problems with Azure ML. We will build an experiment to predict cancer diagnoses based on observed characteristics of diagnostic imaging. We will also compare what we have built with other systems which attempt to solve the same class of problems and give pointers for learning more.
-
-### Dealing with Outside Pressure - Staying Scrum
-* [Agile.Next](http://www.agiledotnext.com/)
-· 24 October 2014
-· [Slides](https://speakerdeck.com/craigstuntz/dealing-with-outside-pressure)
-
-Along the Agile adoption journey, Scrum teams are faced with both internal and external obstacles to fully embracing Scrum and reaping the benefits. Internally, teams may compromise on the essential elements of Scrum, such as not holding a retrospective at the end of a sprint or holding stand-ups only when the entire team is present rather than on a daily basis. Collectively, these compromises are known as “ScrumButs” and are all too common and dilute the benefits that Scrum provides to software projects. These obstacles may also be applied externally, such as a requirement for a detailed project plan or “gate reviews” for the project to proceed to the next “phase.” Managing these obstacles to ensure that the benefits of Scrum are fully realized while understanding and managing the organizational culture are important to a successful adoption and maintaining continuous improvement.
