@@ -497,7 +497,9 @@ Schematic and Breadboard
 </figcaption>
 </figure>
 <p>These are <em>mostly</em> the same as the diagrams from the manual, only I have added
-all of the colored annotations. Note, especially, the red circles. The
+all of the colored annotations.
+<span class="warning" title="Instructions require clarification">⚠</span>
+Note, especially, the red circles. The
 breadboard version of the circuit does not include the switch (the components
 for the Gate input section are on the board, but they’re “permanently switched
 off” in this version), and in the breadboard version the resistor goes to the
@@ -540,7 +542,12 @@ More importantly, I would need to tweak the resistor/capacitor values in the
 lowpass filter at the input so that the range of the pot was correct for both
 the pulse length and the attack curve across the full range of the stereo pot.</p>
 <h2 id="building-the-pc-board">Building the PC Board</h2>
-<p>This all went very smoothly except at one point I mixed up a 100 k and a 100
+<p><span class="warning" title="Instructions require clarification">⚠</span>
+The PC board I received was labeled “EDUENV2.” The board in the instructions is
+“EDUENV1.” (This despite the fact that the instructions are <code>EG_MANUAL_v3.pdf</code>.
+Versioning is hard!) The component layouts are substantially different between
+EDUENV2 and EDUENV1.</p>
+<p>Building the PC board went very smoothly except at one point I mixed up a 100 k and a 100
 ohm resistor. These two are very different! I fixed this before powering the
 circuit.</p>
 <figure>

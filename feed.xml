@@ -7,8 +7,170 @@
         <description><![CDATA[Craig Stuntz's blog]]></description>
         <atom:link href="https://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 28 Dec 2025 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 31 Jan 2026 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Deployment Cadence</title>
+    <link>https://www.craigstuntz.com/posts/2026-01-31-deployment-cadence.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on January 31, 2026
+    
+</div>
+
+<blockquote>
+<p>“It was the best of times, it was the worst of times…”
+-Charles Dickens</p>
+</blockquote>
+<p>My first professional software development job was producing statistical analysis
+and simulations of physics experiments at the
+<a href="https://www.bnl.gov/rhic/ags.php">AGS accelerator</a>. My deliverable was the
+<em>output</em> of the software, not the software itself. Therefore, a “deployment”
+meant “recompiling and executing the software on my local machine.” This was
+awesome, in spite of the fact that I wrote the software in FORTRAN. My cycle
+time was soooo low!</p>
+<p>My second professional software development job was working for an
+<a href="https://en.wikipedia.org/wiki/Independent_software_vendor">ISV</a> starting in
+1999 (Y2K fixes!). We produced client/server software which other businesses
+would install on their local networks. A deployment meant building the software
+(during my stay there we went from building it on a developer’s local machine to
+using a dedicated build system) and burning it onto a CD-ROM. After some testing
+the CD-ROM would be mailed to customers (yes, through the postal system, and
+accompanied by printed, bound manuals), who could
+then (optionally!) install it on their systems. We did this roughly once per
+quarter.</p>
+<p>Decades later, these two jobs represent the fastest and slowest release cycles,
+respectively, I’ve experienced.</p>
+<h2 id="continuous-deployment">Continuous Deployment</h2>
+<p>I will be using the phrase “continuous deployment” in this post to mean
+“as soon as you push a commit, that change is integrated and deployed to
+customers.” I want to call this out because it is different from continuous
+integration or continuous delivery, which do not necessarily result in your
+changes being immediately visible to customers.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/DevOps_Research_and_Assessment#DORA_Four_Key_Metrics">DORA metrics</a>
+encourage us to optimize the deployment process as much as possible. Three of
+the four metrics, “Change Lead Time,” “Deployment Frequency,” and
+“Mean Time to Recovery” tend to improve if you can get code changes in front of
+customers as quickly and as frequently as possible. For good reason, I think.
+<a href="https://itrevolution.com/product/accelerate/">Others have written about this</a>,
+so I won’t go into detail, but I do think that shipping software frequently
+minimizes both the time to receive feedback and the overall impact of any bugs
+in the new version. It forces you to think about how to make the overall
+experience of an upgrade to a customer as non-disruptive as possible.</p>
+<p>However, and this is what I <em>actually</em> want to examine in this post, the phrase
+“<strong>as frequently as possible</strong>” is doing a lot of heavy lifting here. What does “as
+frequently as possible” actually mean?</p>
+<p>It depends.</p>
+<h2 id="constraints-on-deployment-frequency">Constraints on Deployment Frequency</h2>
+<p>Let’s assume, for the sake of argument, that your goal is to deploy as fast as
+possible: You change a line of code, and you can instantly
+test it in production. (Perhaps you disagree that this is a good idea, but I think
+it does represent an extreme case of deployment speed, so it’s a <em>useful</em>
+scenario to examine.) One big advantage of this model is that it forces you
+to eliminate customer downtime in deployments.</p>
+<h3 id="inefficiency">Inefficiency</h3>
+<p>There are some things that tend to slow this down which we can handwave away as
+inefficiency. For example, a compile/build/automated test/deploy step might
+<em>take time,</em> but perhaps this could be greatly optimized? Some very lengthy
+tests, such as fuzzing, can be run post-deployment or split into pre- and
+post-deployment phases. I think “testing in
+production” can actually be a very correct and practical thing to do in many
+cases. It can be the only way that you find certain performance issues prior to
+customers finding them. Depending on the scale of your production system, doing
+a load test in a preproduction environment may not be representative of the
+actual user experience in production. You can fix these with another update,
+hopefully before a customer sees them.</p>
+<h3 id="trust">Trust</h3>
+<p>Other factors are harder to dismiss as inefficiency, though. Remember my second
+job? The customers would decide when <em>or if</em> they wanted to install the update
+on <em>their hardware.</em> We live in an age where vendors seem to want to control
+which updates are installed on hardware we own, but I do cling to a somewhat
+romantic notion that we should control our own devices. Now I may <em>choose</em> to
+let the OS vendor install critical security patches without notifying me first,
+but it is my choice. Similarly, you need to build a lot of trust with a customer
+who has hundreds or thousands of employees working on software that you produce
+before they will let you update it on your schedule, during their critical work.
+If you tend to badly break
+the software during an “upgrade,” the customer will want to minimize updates or
+confine them to less critical times.</p>
+<h3 id="complexity">Complexity</h3>
+<p>Also, deploying to a customer environment might not be simple! I loved
+<a href="https://www.youtube.com/watch?v=M-ZLz8Wg34s&amp;t=1s">this talk, “Update on Update,” by David Pacheco</a>
+about how <a href="https://oxide.computer/">Oxide</a> is improving their update process. Their existing
+process is essentially “an Oxide employee updates the software remotely.” The
+process they want to move to is “a customer can download and run a self-service program which
+will do the update.” <em>Both</em> of these scenarios currently involve downtime on the
+rack, but they would like to minimize or eliminate downtime. Automating the
+update, unsurprisingly, turns out to be a <em>very hard problem,</em> for reasons
+which <em>mostly</em> boil down to “there are <em>a lot</em> of interdependent components on an Oxide
+rack.” One other limitation discussed in the talk is that some of the production
+Oxide racks are air-gapped; simply pushing software over the internet is not an
+option for these. So there are two overall limits on deployment frequency here:
+The first is that the upgrade process is not currently simple and Oxide is working very
+hard to make it an “execute a script” experience. The second is that the Oxide
+rack owners will still get to choose when to apply an update. Dave’s talk is
+fantastic; I recommend you watch it!</p>
+<h3 id="gates">Gates</h3>
+<p>If you’re developing a native mobile app (or another app store with a review
+process), deploying to an end user might be a
+several weeks long back and forth between you and an app store reviewer in the
+worst case, and <a href="https://www.runway.team/appreviewtimes">many hours on average</a>.
+“Instant” deployment to a mobile user is simply not possible with a native app.
+<a href="https://developer.apple.com/documentation/Xcode/About-Continuous-Integration-and-Delivery-with-Xcode-Cloud">Apple recommends continuous delivery</a> rather than
+continuous deployment.</p>
+<p>For other types of applications, even the hardware owner might not have the
+option of saying “please update our systems
+continuously.” I have worked in heavily regulated environments (utility billing)
+where upgrades to some parts of the system needed to be reviewed by government
+regulators before they could be deployed. This imposed a hard limit on
+deployment frequency. I have heard similar stories about people who produce
+software which is used in classified environments. In such cases you can
+<em>discuss</em> increasing the deployment frequency with the gate managers, but it’s
+never guaranteed that they will say yes!</p>
+<h2 id="how-fast-is-too-fast">How Fast Is Too Fast?</h2>
+<p>Above, I assumed that you are trying to deploy changes to production as fast as
+possible: “You change a line of code, and you can instantly test it in
+production.” I do not actually believe this is a good idea! In practice, I want
+to, at a minimum, run a compiler, linter, unit tests, integration tests, security
+scans, etc., before deploying. In other words, the standard integration process.
+Before I do that, I’m going to manually test my changes locally, and in many
+cases I will ask another developer to review them. This takes time, which I
+think is time well spent!</p>
+<blockquote>
+<p>“Any observed statistical regularity will tend to collapse once pressure is
+placed upon it for control purposes.” -<a href="https://en.wikipedia.org/wiki/Goodhart&#39;s_law">Charles Goodhart</a></p>
+</blockquote>
+<p>The danger with metrics, of course, is that you can pursue them to make the
+“line go up” instead of looking at what you are actually trying to measure. I
+do think that the DORA metrics are some of the most useful measurements that
+one can make about a software project, but the results should be discussed,
+rather than shown on a dashboard. Skipping peer review of important changes to
+shave a few hours off of your Change Lead Time would be a bad trade, I think!</p>
+<p>Similarly, some of the hours spent waiting for app store approval is Apple or
+Google doing automated vulnerability scans on your apps. A developer can of course do
+do this themselves, but experience has shown that not everybody bothers.</p>
+<p>So when you hear phrases like “you should deploy changes to customers as fast
+as possible,” I think it’s important to hear “as fast <strong>as possible</strong>” rather
+than “<strong>as fast</strong> as …”</p>
+<h2 id="one-size-fits-most">One Size Fits Most</h2>
+<p>“One size fits all” clothes tend to be a compromise. They never fit as well as a
+tailored garment. Similarly, I am suspicious of people who assure me
+that continuous deployment is always possible or even desirable in <em>every
+situation.</em> I think that continuous deployment is a <em>reasonable default position</em>
+for starting a discussion about deployment, but I do not think that it is always
+the best strategy. Continuous deployment can be useful as an “ideal” even in
+cases where a huge (and perhaps insurmountable, given other business needs)
+amount of work is necessary to make it happen.</p>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged &#39;devops&#39;." href="/tags/devops.html" rel="tag">devops</a>, <a title="All pages tagged &#39;deployment&#39;." href="/tags/deployment.html" rel="tag">deployment</a>
+    
+</div>
+]]></description>
+    <pubDate>Sat, 31 Jan 2026 00:00:00 UT</pubDate>
+    <guid>https://www.craigstuntz.com/posts/2026-01-31-deployment-cadence.html</guid>
+    <dc:creator>Craig Stuntz</dc:creator>
+</item>
+<item>
     <title>Learning Computer Science Via Building Analog Synthesizers at CodeMash 2026</title>
     <link>https://www.craigstuntz.com/posts/2025-12-28-learning-cs-via-building-analog-synthesizers.html</link>
     <description><![CDATA[<div class="info">
@@ -2277,7 +2439,9 @@ Schematic and Breadboard
 </figcaption>
 </figure>
 <p>These are <em>mostly</em> the same as the diagrams from the manual, only I have added
-all of the colored annotations. Note, especially, the red circles. The
+all of the colored annotations.
+<span class="warning" title="Instructions require clarification">⚠</span>
+Note, especially, the red circles. The
 breadboard version of the circuit does not include the switch (the components
 for the Gate input section are on the board, but they’re “permanently switched
 off” in this version), and in the breadboard version the resistor goes to the
@@ -2320,7 +2484,12 @@ More importantly, I would need to tweak the resistor/capacitor values in the
 lowpass filter at the input so that the range of the pot was correct for both
 the pulse length and the attack curve across the full range of the stereo pot.</p>
 <h2 id="building-the-pc-board">Building the PC Board</h2>
-<p>This all went very smoothly except at one point I mixed up a 100 k and a 100
+<p><span class="warning" title="Instructions require clarification">⚠</span>
+The PC board I received was labeled “EDUENV2.” The board in the instructions is
+“EDUENV1.” (This despite the fact that the instructions are <code>EG_MANUAL_v3.pdf</code>.
+Versioning is hard!) The component layouts are substantially different between
+EDUENV2 and EDUENV1.</p>
+<p>Building the PC board went very smoothly except at one point I mixed up a 100 k and a 100
 ohm resistor. These two are very different! I fixed this before powering the
 circuit.</p>
 <figure>
@@ -2449,162 +2618,6 @@ because you’re trying to solve with weird naming what would be better solved w
 ]]></description>
     <pubDate>Sat, 11 Nov 2023 00:00:00 UT</pubDate>
     <guid>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</guid>
-    <dc:creator>Craig Stuntz</dc:creator>
-</item>
-<item>
-    <title>On Learning Compilers and Creating Programming Languages</title>
-    <link>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</link>
-    <description><![CDATA[<div class="info">
-    Posted on October 13, 2023
-    
-</div>
-
-<p>When I first started learning about compilers, there was something important which I didn’t understand: Designing a programming language and writing a compiler are two almost entirely different skills. There is obviously some overlap between them, but less than you might think at first!</p>
-<p>I think it’s important to know this because they are both very challenging problems! It’s easier to learn these skills if you take them one at a time. Your first solution to a hard problem is likely to be… well, not as good as your tenth! However, it’s pretty common for developers to build out a toy language as they write their first compiler, which means they are making mistakes and learning stuff on two hard problems at once. Worse, those two problems are correlated: A mistake on one will make your life harder on the other. Also, as we will see, although compilers are challenging at first they’re essentially a solved problem, whereas PL design is, let’s say, an area of ongoing research.</p>
-<p>I think it’s easier to learn to write a compiler first, and then (if you want) learn to design programming languages. It will be harder to learn to design a good programming language if you don’t have experience with compiler design challenges (amongst other things), so if you want to learn both skills I recommend doing it in that order: Compiler, then PLs. Compiler construction is useful to nearly all software engineers, even (especially?) those who will not build compilers as part of their daytime job. Knowing the challenges of PL design is also useful, but I think in a more abstract way.</p>
-<h2 id="challenges-in-compiler-design">Challenges in Compiler Design</h2>
-<p>When I say that compiler design is a “solved problem,” I don’t mean that there will never be any more innovation in the space. Instead I mean that there are published solutions to all of these problems, and you can just look them up and use them/learn from them. Also, compiler design is mostly a technical problem. While there are human factors to consider, as there are in every area of software engineering (“Which error messages would be most helpful in a given situation, and how can I be sure I’m producing those?”), many of the problems that you will be solving will be strictly technical (“When a user attempts to compile a large file, does that work or does the compiler become very slow/run out of memory?”).</p>
-<p>Specific design decisions you will have to make include:</p>
-<ul>
-<li><strong>Error handling</strong> (“When I encounter code which is incomplete or erroneous, I would like to present the user with a helpful message for each error in the program instead of immediately dying with an unhelpful message at the first error.”)</li>
-<li><strong>Syntax challenges</strong> (“When you encounter a <code>-</code>, is it unary negation or a minus sign?”)</li>
-<li><strong>Semantics challenges</strong> (“Can I correctly resolve function overloads per the PL specification for each invocation?”)</li>
-<li><strong>Typing challenges</strong> (“Does the compiler determine type correctness via type inference, type checking, or ‘both’?”)</li>
-</ul>
-<p>Some of the things which make one compiler better than another are quite measureable, such as speed. Others, such as the clarity of error messages, are a bit more challenging to measure, but nevertheless can be compared.</p>
-<h2 id="challenges-in-programming-language-design">Challenges in Programming Language Design</h2>
-<p>When I say that PL design is a largely unsolved problem, I mean two things.</p>
-<p>First, although there are published solutions for some of these problems (such as <a href="https://kframework.org/">K Framework</a> or <a href="https://redex.racket-lang.org/">PLT Redex</a>), they are not necessarily used by every designer. It is very common for PL designers to simply not use them. This is less true with compiler implementers, who tend to use off-the-shelf patterns if not libraries. Sometimes the PL designer will carefully construct a formal calculus of the language using a different system, whereas other designers will just “wing it.” Using an “informal” design process can lead to disastrous omissions in the PL design, such as <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)">the Shellshock bugs</a>. However, “informally designed” languages such as bash and PHP have been incredibly successful by many measures. I am not here to throw shade at them. I am just saying that PL design is complicated in terms of producing a language which is secure, usable, and popular. Using a formal model such as K Framework or PLT Redex might make your language more secure, but it won’t by itself make it any more or less popular. There is no formal solution for popularity that I can imagine.</p>
-<p>Second, it’s not clear what makes one programming language more usable than another (although there have been <a href="https://quorumlanguage.com/evidence.html">some studies</a>). It’s not entirely clear what “usable” even means here, as many of the criteria seem contradictory. (“Is the programming language easy for beginners to use, and does it restrict the production of invalid programs?”) There is still a ton of room for innovation and discovery in this design space.</p>
-<p>Specific design decisions you will have to make include:</p>
-<ul>
-<li><strong>Syntax challenges</strong> (“How do I want my PL to look? What identifiers/symbols should it use?”) Folks who are new to PL design often spend a lot of time thinking about such matters, but I’ll just say that there are considerably more challenges to come!</li>
-<li><strong>Semantics challenges</strong> (“When a function is both overloaded and has default arguments, which version should a given call to that function having a given list of arguments invoke?”)</li>
-<li><strong>Typing questions</strong> (Should you use gradual typing? Refinement types, dependent types, etc.?)</li>
-<li><strong>Error handling</strong> (“It would be good to design my language such that error recovery is easier for implementers”)</li>
-</ul>
-<p>There are standard formal solutions for some of this. Syntax questions can be answered, for example, using a formal grammar, such as <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>.</p>
-<p>One of the more popular languages that I know of had a Java-like syntax imposed on the designer by management in the late stages of its design. This sounds like a recipe for disaster. Yet it became quite popular anyway. PL design seems to be roughly an equal mix of understanding formalisms, fine art, and good luck. This is not so dissimilar from other areas of computer programming; it just seems to be a more extreme case of this bifurcation of skills.</p>
-<h2 id="so-what-do-you-recommend">So What Do You Recommend?</h2>
-<p>I would recommend that you start your first compiler with a “toy” language. Toy languages are on purpose simple; they often have few types (as few as one), and features that are trickier to implement are either omitted entirely or are introduced a little bit at a time. They are intended to get you up and going with a working compiler quickly.</p>
-<p>Here are some toy languages you can use. This list isn’t intended to be comprehensive, or even selective; rather, I just want to give you the sense that there are a lot of languages to choose from. Pick any one of them (or any other pre-designed toy language) and I guarantee you’ll be more successful in your first compiler implementation than if you just make something up as you go along!</p>
-<table>
-<colgroup>
-<col style="width: 57%" />
-<col style="width: 42%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Language</th>
-<th>Family</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="https://releases.llvm.org/9.0.0/docs/tutorial/LangImpl01.html">Kaleidoscope</a></td>
-<td>ALGOL</td>
-</tr>
-<tr class="even">
-<td><a href="https://craftinginterpreters.com/the-lox-language.html">Lox</a></td>
-<td>ALGOL</td>
-</tr>
-<tr class="odd">
-<td><a href="https://anoopsarkar.github.io/compilers-class/decafspec.html">Decaf</a></td>
-<td>ALGOL</td>
-</tr>
-<tr class="even">
-<td><a href="https://fsl.cs.illinois.edu/assets/CS422-Spring-2020-02a-IMP-BigStep-SmallStep.pdf">Imp</a></td>
-<td>ALGOL</td>
-</tr>
-<tr class="odd">
-<td><a href="https://github.com/kanaka/mal">MAL [Make a Lisp]</a></td>
-<td>Lisp</td>
-</tr>
-<tr class="even">
-<td><a href="https://beautifulracket.com/stacker/intro.html">Stacker</a></td>
-<td>FORTH</td>
-</tr>
-</tbody>
-</table>
-<p>Jeremy Siek’s <em>Essentials of Compilation</em> describes a series of Lisps which grow progressively more full-featured as the book goes on</p>
-<p>Andrej Bauer and Matija Pretnar’s <em>The PL Zoo</em> is “a collection of miniature programming languages which demonstrates various concepts and techniques used in programming language design and implementation.” There are a variety of different styles of languages represented there, as well as implementations in OCaml.</p>
-<p>Some of these languages will seem quite simple! They might not have features which you want, such as generic variance or monads or whatever. This is on purpose! If you want to add those features after you’ve implemented the languages, please do try and do so. But it’s a good idea to get through the simple stuff first.</p>
-<h3 id="some-books-you-can-follow-if-you-want-to-read-formal-instructions-while-building-your-first-compiler">Some books you can follow if you want to read formal instructions while building your first compiler:</h3>
-<p>No one book is right for everyone. Here are a few I’ve liked.</p>
-<table>
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 18%" />
-<col style="width: 71%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Book</th>
-<th>Authors</th>
-<th>Compilers implemented in…</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="https://craftinginterpreters.com/"><em>Crafting Interpreters</em></a></td>
-<td>Robert Nystrom</td>
-<td>Java</td>
-</tr>
-<tr class="even">
-<td><a href="https://wphomes.soic.indiana.edu/jsiek/"><em>Essentials of Compilation</em></a></td>
-<td>Jeremy Siek</td>
-<td>Racket</td>
-</tr>
-<tr class="odd">
-<td><a href="https://www.cs.princeton.edu/~appel/modern/ml/"><em>Modern Compiler Implementation in ML</em></a></td>
-<td>Andrew W. Appel</td>
-<td>ML</td>
-</tr>
-<tr class="even">
-<td><a href="https://www.plai.org/"><em>Programming Languages: Application and Interpretation</em></a></td>
-<td>Shriram Krishnamurthi</td>
-<td>Racket</td>
-</tr>
-<tr class="odd">
-<td><a href="https://www.itu.dk/~sestoft/plc/"><em>Programming Language Concepts</em></a></td>
-<td>Peter Sestoft</td>
-<td>F#</td>
-</tr>
-</tbody>
-</table>
-<p>People tend to recommend <a href="https://suif.stanford.edu/dragonbook/">the Dragon Book</a>, especially people who have not read it. I have read it, and I do not recommend it when implementing your first compiler because I want you to succeed and enjoy the journey. The Dragon Book is a much better read if you already know everything that is in it. I don’t think it’s a terrible book, but it should not be the first book you read on the topic.</p>
-<h3 id="language-design-booksresources">Language design books/resources?</h3>
-<p>This is hard. It’s not my personal interest, so I haven’t read as much in this area. There is a mistake which I have seen developers make over and over again, which is related to the “I will invent a toy language while I build my first compiler” mistake, namely, to invent a programming language and then expect the world to beat a path to your door to use it. There is a difference between getting your programming language to compile toy examples and producing something which will easily and efficiently handle any case that a programmer’s mind can produce.</p>
-<p>When you write a programming language you need to specify it in such a way that every program that someone might write (even, say, <a href="https://en.wikipedia.org/wiki/Duff%27s_device">Duff’s device</a>) produces sensible results. If you don’t then you are building a door to the Shellshock bugs. This is hard! And to produce a language which not only handles arbitrary input in a way which doesn’t tend to surprise the user as well as being aesthetically interesting and unique enough for people to even be interested in checking out borders on mysticism to me.</p>
-<p>There’s a big leap in difficulty between easier books which show you the basics of certain paradigms, such as</p>
-<ul>
-<li><em>Programming Languages: Application and Interpretation</em> (linked above)</li>
-<li><a href="https://www.cs.rochester.edu/~scott/pragmatics/"><em>Programming Language Pragmatics</em></a></li>
-</ul>
-<p>…and more difficult reading which explains the formalities of PLT such as:</p>
-<ul>
-<li>Benjamin Pierce’s <a href="https://www.cis.upenn.edu/~bcpierce/tapl/"><em>Types and Programming Languages</em></a> (totally worth the effort, though)</li>
-<li><a href="https://redex.racket-lang.org/sewpr-toc.html"><em>Semantics Engineering with PLT Redex</em></a></li>
-</ul>
-<p>…which teach you the plumbing about how programming languages work at a semantic level.</p>
-<p>One recent paper which is a good bridge between these worlds is <a href="https://www.cs.nott.ac.uk/~pszgmh/123.pdf">Programming Language Semantics: It’s Easy As 1,2,3</a>, by Graham Hutton. I wouldn’t call it a basic read, but it does exist in between the two worlds described above.</p>
-<p>Perhaps this all seems like too much, when you just want to make a DSL for your text adventure game? Check out <a href="https://queue.acm.org/detail.cfm?id=2068896">Creating Languages in Racket</a>, by Matthew Flatt.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>I realize that the discussion above got into some fairly technical material, but please don’t let that put you off. I’m confident that if you follow one of the books or tutorials I listed you can produce a working compiler. You will learn a ton in the process and it will benefit all of the software you write, even if it doesn’t (apparently!) involve the creation of a programming language. Have fun!</p>
-<h3 id="comments-on-this-post-elsewhere">Comments on this post elsewhere</h3>
-<ul>
-<li><a href="https://lobste.rs/s/tpe028/on_learning_compilers_creating">lobste.rs</a></li>
-<li><a href="https://news.ycombinator.com/item?id=38001041">The orange site</a></li>
-</ul>
-
-<div class="info">
-    
-    Tags: <a title="All pages tagged &#39;compilers&#39;." href="/tags/compilers.html" rel="tag">compilers</a>, <a title="All pages tagged &#39;computer science&#39;." href="/tags/computer%20science.html" rel="tag">computer science</a>, <a title="All pages tagged &#39;programming languages&#39;." href="/tags/programming%20languages.html" rel="tag">programming languages</a>, <a title="All pages tagged &#39;plt&#39;." href="/tags/plt.html" rel="tag">plt</a>
-    
-</div>
-]]></description>
-    <pubDate>Fri, 13 Oct 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-10-13-learning-compilers-and-programming-languages.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 
