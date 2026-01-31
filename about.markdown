@@ -45,7 +45,7 @@ You can look at the [source code](https://github.com/CraigStuntz/CraigStuntz.git
 Caricature of me by [Nate Lovett](https://nate-lovett.com/).
 
 Substantial portions of CSS borrowed from
-<a href="https://github.com/katychuang/hakyll-cssgarden/blob/master/default_theme/css/composeconference.css">Compose Conference theme</a> by [Katy Chuang](https://katychuang.com/).
+<a href="https://github.com/katychuang/hakyll-cssgarden/blob/master/default_theme/css/composeconference.css">Compose Conference theme</a> by Katy Chuang.
 
 ### Legal Information
 
