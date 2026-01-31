@@ -471,7 +471,9 @@ finally pushed past the point where I could keep track of this in my head.
 </figure>
 
 These are _mostly_ the same as the diagrams from the manual, only I have added
-all of the colored annotations. Note, especially, the red circles. The 
+all of the colored annotations. 
+<span class="warning" title="Instructions require clarification">⚠</span>
+Note, especially, the red circles. The 
 breadboard version of the circuit does not include the switch (the components 
 for the Gate input section are on the board, but they're "permanently switched 
 off" in this version), and in the breadboard version the resistor goes to the 
@@ -521,7 +523,13 @@ the pulse length and the attack curve across the full range of the stereo pot.
 
 ## Building the PC Board
 
-This all went very smoothly except at one point I mixed up a 100 k and a 100 
+<span class="warning" title="Instructions require clarification">⚠</span>
+The PC board I received was labeled "EDUENV2." The board in the instructions is
+"EDUENV1." (This despite the fact that the instructions are `EG_MANUAL_v3.pdf`. 
+Versioning is hard!) The component layouts are substantially different between 
+EDUENV2 and EDUENV1. 
+
+Building the PC board went very smoothly except at one point I mixed up a 100 k and a 100 
 ohm resistor. These two are very different! I fixed this before powering the 
 circuit. 
 

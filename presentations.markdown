@@ -4,8 +4,9 @@ tags: presentations
 ---
 
 ### Learning Computer Science Via Building Analog Synthesizers
-* [CodeMash](http://codemash.org) (accepted)
+* [CodeMash](http://codemash.org)
 · 15 Jan 2026
+· [Slides](https://speakerdeck.com/craigstuntz/learning-computer-science-via-building-analog-synthesizers)
 
 This presentation is an alternate history of your own journey learning computer 
 science. If you started learning all over again, and instead of reading books on 

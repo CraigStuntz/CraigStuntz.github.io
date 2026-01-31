@@ -71,8 +71,10 @@ tests, such as fuzzing, can be run post-deployment or split into pre- and
 post-deployment phases. I think "testing in 
 production" can actually be a very correct and practical thing to do in many 
 cases. It can be the only way that you find certain performance issues prior to 
-customers finding them. You can fix these with another update, hopefully before
-a customer sees them. 
+customers finding them. Depending on the scale of your production system, doing 
+a load test in a preproduction environment may not be representative of the 
+actual user experience in production. You can fix these with another update, 
+hopefully before a customer sees them. 
 
 ### Trust
 
