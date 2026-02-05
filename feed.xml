@@ -7,8 +7,336 @@
         <description><![CDATA[Craig Stuntz's blog]]></description>
         <atom:link href="https://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 31 Jan 2026 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Thu, 05 Feb 2026 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Building a Synthesizer, Chapter 14: Building the Sequencer</title>
+    <link>https://www.craigstuntz.com/posts/2026-02-05-building-a-synthesizer-14.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on February  5, 2026
+    
+</div>
+
+<div class="toc">
+<ul>
+<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
+<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
+<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
+<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
+<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
+<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
+<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
+<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
+<li><a href="2024-01-31-building-a-synthesizer-8.html">8: Building the Envelope Generator</a></li>
+<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
+<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
+<li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
+<li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
+<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
+<li>14: Building the Sequencer</li>
+<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
+</ul>
+</div>
+<p>The mxi x es.EDU sequencer can play loops of 3, 4, or 5 notes. It can output a
+new control voltage, which is commonly routed to
+<a href="2023-03-02-building-a-synthesizer-3.html">oscillator</a> pitch, and a gate, which is
+commonly routed to an
+<a href="2024-01-31-building-a-synthesizer-8.html">envelope generator</a>, on each step of the sequence. Why 5?
+In the instructions, Moritz Klein says, “I simply made the decision to build a
+sequencer with five steps exactly,” although I suspect the fact that this is
+already a fairly complicated build and adding more steps would have only
+increased the complexity might have figured into it.</p>
+<p>Also, why limit your sequencer to only 4 steps? This one goes to <s>11</s> 5!</p>
+<p>Commercial hardware sequencers often feature maximum sequence lengths of 16, 32,
+64, or even higher number of steps, but that would make the module very large,
+both in terms of the number of components you would need to assemble and in
+terms of its physical size. As it is, this is the first module I have built from
+this series which requires two full-sized breadboards to prototype.</p>
+<h2 id="breadboarding">Breadboarding</h2>
+<p>The headings in this section correspond to the headings in
+<a href="https://www.ericasynths.lv/media/SEQ_MANUAL_v3.pdf">the instructions for this kit</a>,
+in case you would like to follow along.</p>
+<p>Breadboarding the sequencer gave me a somewhat surprising amount of trouble!
+Part of this is due to the fact that I didn’t have two full-size breadboards
+available. Instead I used a full sized breadboard and two half-sized
+breadboards. This meant that I had to perform some mental arithmetic when
+connecting leads to the op amp chip, which is a great opportunity to make
+mistakes!</p>
+<h3 id="counting-with-chips-and-the-clock-generator">Counting with Chips and the Clock Generator</h3>
+<p>The first step is to build a five step LED counter and clock generator. When I
+turned on this circuit, I saw no LEDs lighting.</p>
+<p>Well, this was a good opportunity to practice
+<a href="2025-04-07-building-a-synthesizer-11.html">my debugging workflow</a>. The first step
+is to look for obvious problems such as power. And this very well could have
+been the issue as this module requires two breadboards, and the power
+distribution of +12V, -12V, and GND across two breadboards is somewhat complex!
+But testing with my multimeter showed I had wired this correctly. I also checked
+that I had connected the correct IC pins to the power rails, which is a little
+bit tricky here as there are two ICs with different power pins, but I had done
+that correctly as well.</p>
+<p>The second step is to have a model of the circuit. Here, my model is quite
+simple: A square wave clock generator makes the sequencer step with every pulse,
+causing the LEDs to light up one at a time. So given my observation that none of
+the LEDs were lighting up, the issue could have been that I had miswired all of
+them, that the sequencer IC was dead, or that the clock generator was not
+pulsing.</p>
+<p>I suspected the clock generator, and testing with my oscilloscope confirmed that
+it was not generating a square wave. Looking closer at that IC it turned out
+that I had made an “off by one” error on some of the wiring on the breadboard –
+I had used pin 51 instead of pin 50, for example. Fixing this made the LEDs
+light up.</p>
+<h3 id="resetting-the-loop">Resetting the Loop</h3>
+<p>The next step was to limit the sequence to 5 steps (instead of 8 steps,
+supported by the chip, but not required for this module). The instructions say:</p>
+<blockquote>
+<p>So by connecting step six to the reset pin, we
+jump back to the first step as soon as we try to move
+past step five. Testing this on the breadboard is as easy
+as connecting step six and the reset pin with a jumper.</p>
+</blockquote>
+<p>In fact, an additional step is necessary.
+I added a jumper as described and I found that it had no effect! I turned
+off the circuit, and tested continuity between the IC pins; there was no problem
+there. I thought that perhaps the breadboard wasn’t making a good connection,
+but this was fine.</p>
+<p>(I will use this symbol <span title="Instructions require clarification" style="color: red;">⚠</span>
+when I discuss areas where I think the instructions require clarification.)</p>
+<p>Next, I turned on the power and tested the voltage along this wire with my
+oscilloscope. I saw no jump when the sequencer got to step 6, although further
+testing showed that it did jump on step 7 and 8. Then a light went on for me.
+The reason that the voltage didn’t change was that in the previous step we had
+wired the reset pin to ground. Jumpering the reset pin to pin 6 meant that pin
+6 was now wired to ground, which is where all the electrons were now going!
+<span class="warning" title="Instructions require clarification">⚠</span>
+So looking more closely at the instructions, the diagram does show the jumper
+to ground removed in this step, but it’s not mentioned in the text. Removing the
+connection between ground and the reset pin made the circuit work.</p>
+<figure>
+<a href="/images/synth/SequencerResettingBreadboard.jpeg">
+<img src="/images/synth/SequencerResettingBreadboard.jpeg" loading="lazy" height="300px" alt="Three breadboards, one full sized and two half size below it. There are five LEDs along the top. The first one is lit">
+</a>
+</figure>
+<h3 id="the-cv-output">The CV Output</h3>
+<p>Next we (temporarily!) disconnect the LEDs and instead wire up five
+potentiometers for setting the pitch CV at each step of the sequence.</p>
+<p>This was challenging due to breadboard issues. Both the “split” lower breadboard
+and the usual breadboard issues (poor connections) presented difficulties, but
+I eventually got it working. It transpired that the five potentiometers along the
+bottom of the board were not making good electrical contact with the inside of
+the breadboard, but figuring out which components were not connecting well was
+challenging!</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerFiveSteps.png">
+<img src="/images/synth/SequencerFiveSteps.png" loading="lazy" height="300px" alt="The oscilloscope, showing the output CV, which has five visible steps, going up">
+</a>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerCVOutputBreadboard.jpeg">
+<img src="/images/synth/SequencerCVOutputBreadboard.jpeg" loading="lazy" height="300px" alt="The breadboard at the CV output stage, showing five new potentiometers and a jack socket with a red wire connected to it">
+</a>
+</figure>
+<div style="clear:both  ;">
+
+</div>
+<h3 id="cv-scaling">CV Scaling</h3>
+<p>The next step is to scale the range of the sequencer output down from 0-12V to
+0-5V. We do this by adding a resistor and a trimpot to reduce the voltage going
+into the buffer op amp at the output. I had a couple of problems here. The first
+was that the indicated placement of the trimpot was right on the border between
+my two half breadboards. <span class="warning" title="Instructions require clarification">⚠</span> The second was that the indicated placement wouldn’t
+have worked even if I had a full-sized breadboard, because the instructions call
+for a trimpot which takes only a single row of the breadboard (like the trimpots
+supplied with other kits in this series) and there are only two rows on the
+breadboard free for it in the suggested layout, but the actual trimpot supplied with
+this kit is square and needs three rows:</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerTrimpot.png">
+<img src="/images/synth/SequencerTrimpot.png" loading="lazy" height="150px" alt="A detail from the instructions, showing the trimpot spread across a single row of the breadboard">
+</a>
+<figcaption>
+Instructions, one row
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerTrimpotBreadboard.jpg">
+<img src="/images/synth/SequencerTrimpotBreadboard.jpg" loading="lazy" height="150px" alt="A photo of the actual trimpot supplied with the kit, which requires 5 rows on the breadboard">
+</a>
+<figcaption>
+Supplied component, three rows
+</figcaption>
+</figure>
+<div style="clear:both  ;">
+
+</div>
+<p>So I had to do some gymnastics with my breadboard routing.</p>
+<p>Second, I had a momentary heart attack because the bill of materials says that
+two 2kΩ trimpots (and one 5kΩ) are supplied, and I only got one.
+<span class="warning" title="Instructions require clarification">⚠</span>
+But this seems
+to be an error, as only one 5kΩ and one 2kΩ trimpots are needed to build or
+breadboard the kit.</p>
+<p>In the end, though, everything worked, and this step gave the five potentiometers
+used to adjust the pitch of the sequenced notes a more useful range.</p>
+<h3 id="status-leds">Status LEDs</h3>
+<p><span class="warning" title="Instructions require clarification">⚠</span>
+Wiring the LEDs again <em>seemed</em> pretty simple, but at first they didn’t work.
+The directions, which so carefully specified their orientation when we first
+placed them on the breadboard, don’t mention moving them, and more importantly don’t
+mention that you have to rotate them 180º, which is less than obvious in the
+illustration:</p>
+<figure>
+<a href="/images/synth/SequencerLEDsFirst.png">
+<img src="/images/synth/SequencerLEDsFirst.png" loading="lazy" height="137px" alt="Detail of the instructions, from early on in the kit assembly. The cathode of the LEDs, indicated by a flat surface, is on the right">
+</a>
+<figcaption>
+We started like this…
+</figcaption>
+</figure>
+<figure>
+<a href="/images/synth/SequencerLEDsSecond.png">
+<img src="/images/synth/SequencerLEDsSecond.png" loading="lazy" height="141px" alt="Detail of the instructions, from the current step. The cathode of the LEDs is on the left">
+</a>
+<figcaption>
+…and here is the current step
+</figcaption>
+</figure>
+<p>However, once I figured out what my mistake was, everything worked:</p>
+<figure>
+<a href="/images/synth/SequencerStatusLEDsBreadboard.jpeg">
+<img src="/images/synth/SequencerStatusLEDsBreadboard.jpeg" loading="lazy" height="300px" alt="Three breadboards, one full sized and two half size below it. There are five LEDs along the top. The first one is lit">
+</a>
+</figure>
+<h3 id="the-gate-output">The Gate Output</h3>
+<p>I found this section of the directions a little difficult to understand until I
+skipped backwards in the directions to the section entitled “Sequencer Basics.”
+My confusion mostly stemmed from the fact that we don’t connect the gate switches
+when breadboarding. This is quite understandable given how full the breadboards
+are without them, but it made understanding the reason for the gate output
+sub-circuit more difficult to intuit.
+That section clarified how the switches were supposed to work, which, in turn,
+made the explanation of how this sub-circuit worked clearer. Also, looking at
+<a href="https://tinyurl.com/yatgsglm">the simulation</a> helped. After that, it was just
+a lot of wiring, which did indeed produce a square wave output at the gate jack.
+Which feels like a lot of work given that we already have a square wave at the
+clock output, but the switches, which we don’t wire when breadboarding the
+circuit, will allow us to “disable/suppress” some of the square wave cycles when
+we build the actual circuit, resulting in only some of the five notes triggering
+the gate output.</p>
+<h3 id="the-failsafe-gate-output">The Failsafe Gate Output</h3>
+<p>This step was quite easy to breadboard. In order to change the gate output from
+one (breadboarded in the step above) which ranges from 0V-6V to one which ranges
+from 0V-12V, we replace the op amp with a voltage
+divider at the input with a comparitor (which changes the output to either -12V or 12V),
+followed by a diode and resisitor (limiting the voltage to just positive values,
+so that it becomes either 0V or 12V), followed by a
+transistor emitter-follower buffer. Why this configuration (comparitor, diode,
+and transistor) and not just replace the op amp buffer before
+the gate output with an op amp in amplifier configuration? I don’t know (I guess
+maybe you might be concerned that an external source would give you a gate which
+is not a square wave, and hence you might want the comparitor in the signal path?), but in
+the end the circuit works well enough.</p>
+<figure>
+<a href="/images/synth/SequencerFailsafeGate.png">
+<img src="/images/synth/SequencerFailsafeGate.png" loading="lazy" height="300px" alt="An oscilloscope display, showing a square wave">
+</a>
+<figcaption>
+It goes up and it goes down. It’s a gate!
+</figcaption>
+</figure>
+<h2 id="building-the-sequencer">Building the Sequencer</h2>
+<p>In contrast to the other modules I have built from the mki x es.EDU series, the
+sequencer has only two horizontally mounted resistors, and the rest of the
+resistors are mounted vertically in order to squeeze all of the components onto
+the board. Although it doesn’t look much more complicated, perhaps due to the
+vertical resistors, there are probably 50% more parts on this board than in the
+other modules I have built so far. In general this module required more soldering than other modules
+from the series. Despite this, assembly went smoothly and everything worked the
+first time I tried powering it up.</p>
+<p><span class="warning" title="Instructions require clarification">⚠</span>
+The 1nF capacitor (C2) was ceramic, per the supplied parts and the bill of
+materials. However, the soldering instructions and the photos showed a film
+capacitor instead. Because the soldering instructions have you insert ceramic
+capacitors and film capacitors in separate steps, they only show 5 ceramic
+capacitors (C3-C8) in the first, ceramic capacitor step. This means that they
+don’t call out the fact that one of the supplied ceramic capacitors is a 1nF
+capacitor, in contrast to the remaining 5, which are 0.1µF, although all of them
+look identical except for the printed values on the side.</p>
+<p>When soldering non-flush-mounted components, such as vertical resistors and
+transistors, I find it helpful to solder one lead, then turn the board over to correct
+the position of the component, then solder the other leads.</p>
+<p>Here are some photos of the finished build:</p>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerFrontPanel.jpeg">
+<img src="/images/synth/SequencerFrontPanel.jpeg" loading="lazy" height="300px" alt="The front panel of the sequencer. There is a switch for step count, a pot for rate, five switches for gate with five pots for level, unoccupied jacks for clock in, out, and reset, and jacks with cables connected for gate out and CV out. A switch for 2.5V or 5V is hidden by the bottom cable.">
+</a>
+<figcaption>
+Front
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerPCBoard.jpeg">
+<img src="/images/synth/SequencerPCBoard.jpeg" loading="lazy" height="100px" alt="A side view of the completed module. At the top we can see a bank of switches, below that is a circuit board where we can see ICs, capacitors, and resistors.">
+</a>
+<figcaption>
+Back
+</figcaption>
+</figure>
+<figure class="horizontalTiles">
+<a href="/images/synth/SequencerSide.jpeg">
+<img src="/images/synth/SequencerSide.jpeg" loading="lazy" height="100px" alt="A photo of the completed circuit board showing two ICs, a power connector, and a large number of resistors, capacitors, diodes, transistors, and trimpots">
+</a>
+<figcaption>
+Side
+</figcaption>
+</figure>
+<div style="clear:both  ;">
+
+</div>
+<p>Using the sequencer is somewhat challenging as you have to set the pitch of each note – from
+a range of 5 octaves or so – with just a single potentiometer. And the pitch
+will drift as the transistors warm up! Analog synthesis has its advantages and
+disadvantages!</p>
+<h2 id="resources">Resources</h2>
+<h3 id="instructions">Instructions</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/media/SEQ_MANUAL_v3.pdf">mki x es.EDU Sequencer User Manual</a></li>
+</ul>
+<h3 id="product-pages">Product Pages</h3>
+<ul>
+<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-sequencer/">EDU DIY Sequencer</a></li>
+<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">mki x es.EDU DIY System</a></li>
+</ul>
+<h3 id="community">Community</h3>
+<ul>
+<li><a href="https://www.modwiggler.com/forum/viewtopic.php?t=261156">Modwiggler thread</a></li>
+<li><a href="https://modulargrid.net/e/erica-synths-edu-sequencer">Modulargrid page</a></li>
+</ul>
+<h3 id="simulations">Simulations</h3>
+<p>These simulations are by Moritz Klein</p>
+<ul>
+<li><a href="https://tinyurl.com/2yk6obr5">Basic Op Amp Examples/Op Amp-Based Clock</a></li>
+<li><a href="https://tinyurl.com/y8v7mrkr">Basic Gate to Trigger/Cut Out Negative Spike</a></li>
+<li><a href="https://tinyurl.com/ycvhha6h">Scaled CV Output</a></li>
+<li><a href="https://tinyurl.com/yatgsglm">Simple Individual Gates</a></li>
+<li><a href="https://tinyurl.com/y6vasvt7">Comparators/Emitter Followers/The Failsafe Gate Output</a></li>
+</ul>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=QN_JhVcCBvI">Introducing the mki x es.edu DIY sequencer kit</a> by Moritz Klein (5:51)</li>
+<li><a href="https://www.youtube.com/watch?v=vHNQQ6yUGyo">Designing a simple 5-step sequencer from scratch</a>
+by Moritz Klein (32:07)</li>
+</ul>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>, <a title="All pages tagged &#39;sequencer&#39;." href="/tags/sequencer.html" rel="tag">sequencer</a>
+    
+</div>
+]]></description>
+    <pubDate>Thu, 05 Feb 2026 00:00:00 UT</pubDate>
+    <guid>https://www.craigstuntz.com/posts/2026-02-05-building-a-synthesizer-14.html</guid>
+    <dc:creator>Craig Stuntz</dc:creator>
+</item>
+<item>
     <title>Deployment Cadence</title>
     <link>https://www.craigstuntz.com/posts/2026-01-31-deployment-cadence.html</link>
     <description><![CDATA[<div class="info">
@@ -236,6 +564,7 @@ succeed. If I don’t, I hope I’m in the audience for the even weirder one.</p
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
 <li>13: Building the VCF</li>
+<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -360,7 +689,9 @@ and “a low-pass filter with resonance” (this is a video, press play to see i
 <source src="/images/synth/VCFCV.mp4" type="video/mp4">
 </video>
 <p>At this point you may be wondering how it sounds. Pretty nice! I want to put
-some demos together, but I will save that for a future post. Hopefully soon!</p>
+some demos together, but I will save that for a future post. Hopefully soon!
+However, it would be nice to have a CV source for the VCO to record a demo,
+so first let’s <a href="2026-02-05-building-a-synthesizer-14.html">build the sequencer!</a></p>
 <h2 id="resources">Resources</h2>
 <h3 id="instructions">Instructions</h3>
 <ul>
@@ -433,6 +764,7 @@ though:</p>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li>12: Breadboarding the VCF</li>
 <li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
+<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -833,6 +1165,7 @@ though:</p>
 <li>11: Debugging Circuits and Software Debugging</li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
 <li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
+<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1272,6 +1605,7 @@ assigning the disabled attribute.</p>
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
 <li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
+<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -1824,6 +2158,7 @@ discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backl
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
 <li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
+<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -2004,6 +2339,7 @@ on the subject.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩�
 <li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
 <li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
 <li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
+<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
 <li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
 </ul>
 </div>
@@ -2577,47 +2913,6 @@ LFO.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></
 ]]></description>
     <pubDate>Wed, 31 Jan 2024 00:00:00 UT</pubDate>
     <guid>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</guid>
-    <dc:creator>Craig Stuntz</dc:creator>
-</item>
-<item>
-    <title>On Authoring Presets for u-He Diva</title>
-    <link>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</link>
-    <description><![CDATA[<div class="info">
-    Posted on November 11, 2023
-    
-</div>
-
-<p>I know this is screaming into the void, and of interest to maybe a handful of people on Earth, but:</p>
-<p>I’ve purchased a number of commercial preset packs for <a href="https://u-he.com/products/diva/">u-he Diva</a>. And
-<em>every single one of them</em> is full of great, useful presets, but seems to make the same mistakes:</p>
-<ul>
-<li>The output levels are wrong, because the output level control isn’t set correctly. Your presets don’t sound great when
-they’re clipping.</li>
-<li>The metadata are wrong or missing. (Metadata refers to the “Description,” “Usage,” “Categories,” “Features,” and “Character” of the
-preset. They are used when searching and are so, so, so very helpful when you’re searching for the perfect sound
-amongst thousands of presets … if they’re set at all!)</li>
-<li>The presets are drowning in effects. I understand you want your presets to sound great, but how about having a “Dry”
-folder for those of us who actually want to hear the core tone?</li>
-<li>The naming uses a completely ideosyncratic prefixing scheme shared by no other Diva preset. (E.g. “SQ” for “Presets which are good for sequences.”) This is an annoyance, mostly
-because you’re trying to solve with weird naming what would be better solved with metadata. For the “SQ” example, how about adding “Categories -&gt; Seq+Arp -&gt; &lt;pick one of the options there&gt;”?)</li>
-<li>Nice to have: If your demo automates the filter cutoff or something, maybe mention that in the Usage?</li>
-</ul>
-<p>Here is a checklist you can use before releasing your Diva presets:</p>
-<ul>
-<li>Have I normalized the output level so that all the presets sound at an appropriate perceived loudness? (Hint: Your DAW probably has a LUFS meter which will help)</li>
-<li>Have I set appropriate metadata on each preset?</li>
-<li>Have I made any suggestions for how the presets might be used in Usage? (E.g., “Mod wheel controls filter cutoff” or “Try changing Env2 attack” or whatever.)</li>
-<li>Have I added a “Dry” folder which has the same presets without effects?</li>
-</ul>
-
-<div class="info">
-    
-    Tags: <a title="All pages tagged &#39;u-he Diva&#39;." href="/tags/u-he%20Diva.html" rel="tag">u-he Diva</a>, <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>
-    
-</div>
-]]></description>
-    <pubDate>Sat, 11 Nov 2023 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2023-11-11-diva-presets.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 
