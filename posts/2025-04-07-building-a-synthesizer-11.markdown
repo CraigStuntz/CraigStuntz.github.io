@@ -21,6 +21,7 @@ tags: diy, electrical engineering, computer science, debugging
 * 11: Debugging Circuits and Software Debugging
 * [12: Breadboarding the VCF](2025-09-09-building-a-synthesizer-12.html)
 * [13: Building the VCF](2025-12-27-building-a-synthesizer-13.html)
+* [14: Building the Sequencer](2026-02-05-building-a-synthesizer-14.html)
 * [Glossary and Electrical Connections](2023-02-23-building-a-synthesizer-glossary.html)
 </div>
 

@@ -35,6 +35,8 @@ sequencer with five steps exactly," although I suspect the fact that this is
 already a fairly complicated build and adding more steps would have only 
 increased the complexity might have figured into it. 
 
+Also, why limit your sequencer to only 4 steps? This one goes to <s>11</s> 5!
+
 Commercial hardware sequencers often feature maximum sequence lengths of 16, 32, 
 64, or even higher number of steps, but that would make the module very large, 
 both in terms of the number of components you would need to assemble and in 
@@ -220,6 +222,10 @@ However, once I figured out what my mistake was, everything worked:
 
 I found this section of the directions a little difficult to understand until I
 skipped backwards in the directions to the section entitled "Sequencer Basics."
+My confusion mostly stemmed from the fact that we don't connect the gate switches
+when breadboarding. This is quite understandable given how full the breadboards
+are without them, but it made understanding the reason for the gate output 
+sub-circuit more difficult to intuit.
 That section clarified how the switches were supposed to work, which, in turn,
 made the explanation of how this sub-circuit worked clearer. Also, looking at 
 [the simulation](https://tinyurl.com/yatgsglm) helped. After that, it was just
@@ -235,11 +241,14 @@ the gate output.
 This step was quite easy to breadboard. In order to change the gate output from 
 one (breadboarded in the step above) which ranges from 0V-6V to one which ranges 
 from 0V-12V, we replace the op amp with a voltage 
-divider at the input with a comparitor (which changes the output from -12V-12V), 
-followed by a diode and resisitor (changing it to 0V-12V), followed by a 
+divider at the input with a comparitor (which changes the output to either -12V or 12V), 
+followed by a diode and resisitor (limiting the voltage to just positive values, 
+so that it becomes either 0V or 12V), followed by a 
 transistor emitter-follower buffer. Why this configuration (comparitor, diode, 
 and transistor) and not just replace the op amp buffer before
-the gate output with an op amp in amplifier configuration? I don't know, but in 
+the gate output with an op amp in amplifier configuration? I don't know (I guess
+maybe you might be concerned that an external source would give you a gate which 
+is not a square wave, and hence you might want the comparitor in the signal path?), but in 
 the end the circuit works well enough.
 
 <figure>
@@ -254,7 +263,9 @@ the end the circuit works well enough.
 In contrast to the other modules I have built from the mki x es.EDU series, the
 sequencer has only two horizontally mounted resistors, and the rest of the 
 resistors are mounted vertically in order to squeeze all of the components onto
-the board. In general this module required more soldering than other modules 
+the board. Although it doesn't look much more complicated, perhaps due to the 
+vertical resistors, there are probably 50% more parts on this board than in the 
+other modules I have built so far. In general this module required more soldering than other modules 
 from the series. Despite this, assembly went smoothly and everything worked the
 first time I tried powering it up. 
 
@@ -272,28 +283,35 @@ When soldering non-flush-mounted components, such as vertical resistors and
 transistors, I find it helpful to solder one lead, then turn the board over to correct 
 the position of the component, then solder the other leads. 
 
+Here are some photos of the finished build:
+
 <figure class="horizontalTiles">
-<a href="/images/synth/SequencerTrimpot.png">
-<img src="/images/synth/SequencerTrimpot.png" loading="lazy" height="150px" alt="A detail from the instructions, showing the trimpot spread across a single row of the breadboard">
+<a href="/images/synth/SequencerFrontPanel.jpeg">
+<img src="/images/synth/SequencerFrontPanel.jpeg" loading="lazy" height="300px" alt="The front panel of the sequencer. There is a switch for step count, a pot for rate, five switches for gate with five pots for level, unoccupied jacks for clock in, out, and reset, and jacks with cables connected for gate out and CV out. A switch for 2.5V or 5V is hidden by the bottom cable.">
 </a>
-<figcaption>One</figcaption>
+<figcaption>Front</figcaption>
 </figure>
 
 <figure class="horizontalTiles">
-<a href="/images/synth/SequencerTrimpotBreadboard.jpg">
-<img src="/images/synth/SequencerTrimpotBreadboard.jpg" loading="lazy" height="150px" alt="A photo of the actual trimpot supplied with the kit, which requires 5 rows on the breadboard">
+<a href="/images/synth/SequencerPCBoard.jpeg">
+<img src="/images/synth/SequencerPCBoard.jpeg" loading="lazy" height="100px" alt="A side view of the completed module. At the top we can see a bank of switches, below that is a circuit board where we can see ICs, capacitors, and resistors.">
 </a>
-<figcaption>Two</figcaption>
+<figcaption>Back</figcaption>
 </figure>
 
 <figure class="horizontalTiles">
-<a href="/images/synth/SequencerTrimpotBreadboard.jpg">
-<img src="/images/synth/SequencerTrimpotBreadboard.jpg" loading="lazy" height="150px" alt="A photo of the actual trimpot supplied with the kit, which requires 5 rows on the breadboard">
+<a href="/images/synth/SequencerSide.jpeg">
+<img src="/images/synth/SequencerSide.jpeg" loading="lazy" height="100px" alt="A photo of the completed circuit board showing two ICs, a power connector, and a large number of resistors, capacitors, diodes, transistors, and trimpots">
 </a>
-<figcaption>Three</figcaption>
+<figcaption>Side</figcaption>
 </figure>
 
 <div style="clear:both  ;"></div>
+
+Using the sequencer is somewhat challenging as you have to set the pitch of each note -- from
+a range of 5 octaves or so -- with just a single potentiometer. And the pitch
+will drift as the transistors warm up! Analog synthesis has its advantages and
+disadvantages!
 
 ## Resources
 
