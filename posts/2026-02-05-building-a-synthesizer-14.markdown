@@ -310,7 +310,7 @@ Here are some photos of the finished build:
 
 Using the sequencer is somewhat challenging as you have to set the pitch of each note -- from
 a range of 5 octaves or so -- with just a single potentiometer. And the pitch
-will drift as the transistors warm up! Analog synthesis has its advantages and
+will drift as the components warm up! Analog synthesis has its advantages and
 disadvantages!
 
 ## Resources
