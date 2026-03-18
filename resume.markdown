@@ -41,11 +41,15 @@ for DOmedia
 </td>
 </tr>
 <td>
+* Lead team of nearshore programmers
+* Use Claude Code and JavaParser to perform large-scale code refactoring and 
+  modernization, making thousands of changes across hundreds of files without 
+  any user-visible changes
 * Write Java code to integrate DO's proprietary buying platform with 
-  occasionally-documented APIs from their integration partners. 
+  occasionally-documented APIs from their integration partners
 </td>
 <td class="right">
-Java, JavaScript, MariaDB, AWS
+Claude Code, Java, JavaScript, MariaDB, Vue.js
 </td>
 </tr>
 
@@ -81,7 +85,7 @@ for WillowTree (formerly Dynamit)
   customer engagement application
 </td>
 <td class="right">
-Ansible, C#, Java, JavaScript, Kafka, Kubernetes, MySQL, Python, Scala, SQL Server, terraform, TypeScript, vert.x
+Ansible, C#, Java, JavaScript, Kafka, Kubernetes, MySQL, OpenAI, Python, Scala, SQL Server, terraform, TypeScript, vert.x
 </td>
 </tr>
 
@@ -174,6 +178,7 @@ Fortran!
 Please see my list of current presentations ([https://www.craigstuntz.com/presentations.html](presentations.html)) for full 
 details, slide decks, and video, but here is a selected list of talks I do:
 
+* Learning Computer Science Via Building Analog Synthesizers
 * What On Earth Is Quantum Computing?!? (And will it break all my encryption?)
 * Shifting Application Security Left
 * .NET IL: Into the Marianas Trench
