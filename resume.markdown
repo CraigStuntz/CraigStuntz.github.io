@@ -9,8 +9,11 @@ Columbus, OH
 
 [https://www.craigstuntz.com](https://www.craigstuntz.com) 
 
-My interests are math, compilers, provers, fuzzers, security, formal methods, 
-quantum computing, and homomorphic encryption
+Director-level consultant and technical leader with 30 years experience building 
+software across finance, insurance, media, and hospitality. Expertise in 
+compilers, security, and AI tooling. Frequent speaker on quantum 
+computing, fuzzing, and language design. Interested in math, formal methods, and 
+homomorphic encryption.
 
 ## Employment
 
@@ -41,11 +44,13 @@ for DOmedia
 </td>
 </tr>
 <td>
-* Lead team of nearshore programmers
-* Use Claude Code and JavaParser to perform large-scale code refactoring and 
-  modernization, making thousands of changes across hundreds of files without 
-  any user-visible changes
-* Write Java code to integrate DO's proprietary buying platform with 
+* Led a team of 3 nearshore developers, serving as technical lead with 
+  responsibility for code review, requirements review, and hands-on development
+* Migrated a large Java codebase from active-record-style entity persistence 
+  to Spring Repositories, along with broader modernization work, using Claude Code 
+  and JavaParser to execute thousands of changes across hundreds of files with no 
+  user-visible regressions
+* Wrote Java code to integrate DO’s proprietary buying platform with
   occasionally-documented APIs from their integration partners
 </td>
 <td class="right">
@@ -61,25 +66,25 @@ for WillowTree (formerly Dynamit)
 </tr>
 <td>
 * For an auto manufacturer, developed web services in Python/Chalice/AWS Lambda,
-  and identified areas in the code which would be barriers to the business 
-  changes they saw coming in the near future
-* For a textbook publisher, built an interactive training system using 
-  TypeScript and OpenAI/ChatGPT. Worked to ensure the safety of using a chatbot
-  in this context
+  and performed forward-looking architecture assessment to identify technical 
+  barriers to anticipated business changes
+* Built an interactive training system for med students in TypeScript/OpenAI; 
+  proposed and implemented an inversion of the standard chatbot role (LLM as 
+  patient, student as doctor) to eliminate the risk of the model generating 
+  harmful medical misinformation
 * For a national restaurant chain, rewrote their public web site with TypeScript,
   AWS Lambda functions, terraform, and C# (Optimizely CMS) code. Established a
   "security-first" culture within the team
-* For a national convenience store chain, implemented a custom Kafka Connect 
-  Sink to replicate data from Kafka to segment.io. Hosted this on AWS EKS with 
-  Helm. I actually implemented this twice, which is a fun story too long to 
-  include here; ask me!
+* Built a custom Kafka Connect Sink for a national convenience store chain; 
+  delivered two implementations (one per spec, one per my own design 
+  recommendation) and the architecture team adopted mine
 * For an international beverage producer, wrote Azure Functions in TypeScript to 
   import data from Salesforce to SQL Server Azure
-* For a major utility, did a complete rewrite of their web site/middle tier 
-  after two other organizations had tried and failed, using Spring Boot and 
-  Ansible
-* For a national hotel brand, did C# code optimization to fix blocking production
-  issues
+* Led bill payment microservices and mainframe integration for a major 
+  utility's customer-facing website — the organization's third modernization 
+  attempt, and the first to ship successfully
+* Diagnosed and resolved blocking production performance issues in C# for a 
+  national hotel brand
 * For a national hotel brand, wrote a Salesforce to Tableau data synchronizer 
 * Wrote an Android application and Java server for Village, an employee and 
   customer engagement application
@@ -140,7 +145,7 @@ Jan 1999 - Feb 2012
 <tr>
 <td>
 * Transitioned the company and development team from Win32 legacy applications 
-  to modern web products using contemporary technology
+  to modern web products using C# and SQL Server
 * Wrote a DIBOL-to-DIBOL compiler in Delphi which generated code for Y2K dates,
   meeting an "impossible" deadline and saving the company
 </td>
@@ -178,19 +183,18 @@ Fortran!
 Please see my list of current presentations ([https://www.craigstuntz.com/presentations.html](presentations.html)) for full 
 details, slide decks, and video, but here is a selected list of talks I do:
 
-* Learning Computer Science Via Building Analog Synthesizers
-* What On Earth Is Quantum Computing?!? (And will it break all my encryption?)
-* Shifting Application Security Left
-* .NET IL: Into the Marianas Trench
-* Secure Applications, by Design
-* High Speed Bug Discovery with Fuzzing
-* Mashing Up QA and Security
-* Incredibly Strange Programming Languages
-* Programs that Write Programs: How Compilers Work
-* How to Use Real Computer Science in Your Day Job
-* Your Flying Car is Ready: Amazing Programming Tools of the Future, Today!
-* Cloud Security, For Real This Time: Homomorphic Encryption and the Future of Online Privacy
-
+* Learning Computer Science Via Building Analog Synthesizers (CodeMash 2026)
+* What On Earth Is Quantum Computing?!? (And will it break all my encryption?) (Stir Trek 2021, others)
+* Shifting Application Security Left (Central Ohio InfoSec Summit 2018, others)
+* .NET IL: Into the Marianas Trench (CodeMash 2018)
+* Secure Applications, by Design (Stir Trek, CodeMash 2018)
+* High Speed Bug Discovery with Fuzzing (Stir Trek 2017, others)
+* Mashing Up QA and Security (CodeMash 2017)
+* Incredibly Strange Programming Languages (CodeMash, Stir Trek 2017)
+* Programs that Write Programs: How Compilers Work (CodeMash 2016, others)
+* How to Use Real Computer Science in Your Day Job (Lambda Jam 2015)
+* Your Flying Car is Ready: Amazing Programming Tools of the Future, Today! (CodeMash 2015)
+* Cloud Security, For Real This Time: Homomorphic Encryption and the Future of Online Privacy (Papers We Love, others)
 
 ## Selected Projects
 
