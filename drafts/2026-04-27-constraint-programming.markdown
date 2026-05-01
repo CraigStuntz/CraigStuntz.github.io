@@ -141,8 +141,8 @@ and then reduce the output by running a [corpus minimization](https://arxiv.org/
 When doing agent driven development, we can generate many programs very quickly,
 but they might be incorrect! If we have a formal proof of correctness then we 
 can reduce the set of candidate programs to those which satisfy the 
-specification. Agents turn out to be quite good at finding such programs, for 
-example, [getting Lean to prove `False`](https://tristan.st/blog/in_search_of_falsehood).
+specification. Agents turn out to be quite good at finding such programs.
+But without a proof, we might end up with something sloppy!
 
 In classic TDD, we start with a system under test which we are modifying
 (in effect, generating lots of candidate programs). Our restriction is the test
