@@ -1,12 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - 2024-02-17-vca</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
+        <title>2024-02-17-vca - Craig Stuntz</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css">
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -22,13 +30,31 @@
         </div>
 
         <div id="content">
-            <h1>2024-02-17-vca</h1>
-
+            
+            
+                <h1>2024-02-17-vca</h1>
+            
             <div class="info">
     Posted on February 17, 2024
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="vca">2024-02-17-vca</h1>
+<div class="info">
+Posted on February 17, 2024
+</div>
 <div id="header">
 <div id="logo">
 <a href="../">Craig Stuntz</a>
@@ -238,7 +264,7 @@ consider the same phenomenon.</p>
 <a href="https://www.mheducation.com/highered/product/practical-electronics-inventors-fourth-edition-scherz-monk/9781259587542.html"><em>Practical Electronics for Inventors, Fourth Edition,</em></a>
 by Scherz and Monk.</p>
 <p>The gain of a transistor, by definition, is:</p>
-<p><span class="math display"><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></span></p>
+<p><span class="math display"><span class="math display"><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></span></span></p>
 <p>Where <span class="math inline"><em>V</em><sub><em>C</em></sub></span> is equal to the voltage at the collector, <span class="math inline"><em>R</em><sub><em>C</em></sub></span> is equal to the
 resistance at the collector, and similarly for the emitter. However, that’s not
 quite the full story, because a transistor has a small internal
@@ -246,12 +272,12 @@ quite the full story, because a transistor has a small internal
 in its emitter region, and one way you can think about thermal instability in a
 transistor is that the transreistance changes with temperature. So a somewhat
 more accurate model is:</p>
-<p><span class="math display"><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></span></p>
+<p><span class="math display"><span class="math display"><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></span></span></p>
 <p>Where <span class="math inline"><em>r</em><sub><em>tr</em></sub></span> is the transresistance value, which, again, is not constant. This
 is not 100% accurate as there is some small current flowing from the base to the
 emitter. But this does tell us that we can minimize the effect of <span class="math inline"><em>r</em><sub><em>tr</em></sub></span> by
 making <span class="math inline"><em>R</em><sub><em>E</em></sub></span> comparatively large relative to it.</p>
-<p><span class="math display"><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></span></p>
+<p><span class="math display"><span class="math display"><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></span></span></p>
 <p>How much is that? Well, we have <span class="math inline"><em>I</em><sub><em>E</em></sub></span> <em>apporximately</em> 600 μA, which works out to
 arount 46Ω. So a 10KΩ resistor should make its effects very small indeed. Scherz
 and Monk say, “In practice, <span class="math inline"><em>R</em><sub><em>E</em></sub></span> should be chosen to place <span class="math inline"><em>V</em><sub><em>E</em></sub></span> around 1 V
@@ -494,6 +520,10 @@ discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backl
 </section>
 <div class="info">
 Tags: <a href="../tags/synthesis.html" rel="tag" title="All pages tagged 'synthesis'.">synthesis</a>, <a href="../tags/diy.html" rel="tag" title="All pages tagged 'diy'.">diy</a>, <a href="../tags/electrical%20engineering.html" rel="tag" title="All pages tagged 'electrical engineering'.">electrical engineering</a>
+</div>
+</div>
+<div class="info">
+Tags:
 </div>
 </div>
 

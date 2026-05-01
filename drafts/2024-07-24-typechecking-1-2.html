@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
-        <title>A Very Gentle Introduction to Type Checking, Chapter 1.2:  - Craig Stuntz</title>
+        <title>2024-07-24-typechecking-1-2 - Craig Stuntz</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css">
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -31,22 +31,32 @@
 
         <div id="content">
             
-                <h3 class="series">
-                    A Very Gentle Introduction to Type Checking,
-                        1.2
-                    
-                </h3>
             
-            
-                <h1 class="chapterName">
-                    Evaluating the Untyped Lambda Calculus
-                </h1>
+                <h1>2024-07-24-typechecking-1-2</h1>
             
             <div class="info">
     Posted on July 24, 2024
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="a-very-gentle-introduction-to-type-checking-1.2">A Very Gentle Introduction to Type Checking,
+1.2</h3>
+<h1 class="chapterName" id="evaluating-the-untyped-lambda-calculus">Evaluating the Untyped Lambda Calculus</h1>
+<div class="info">
+Posted on July 24, 2024
+</div>
 <div class="toc">
 <ul>
 <li>Introduction: Type checkin’</li>
@@ -73,9 +83,11 @@ Xcode, so a few notes on that. First, you’ll need to
 <p>I use VS Code to edit, with the <a href="https://marketplace.visualstudio.com/items?itemName=sswg.swift-lang">Swift extension</a>.
 If you want to use Xcode instead, that should work fine, too!</p>
 <p>Then you can:</p>
+<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir bidi</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd bidi</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> swift package init <span class="at">--type</span> executable</span></code></pre></div>
+</div>
 <p>…to get a templated Swift project. However, you probably just want to clone
 <a href="https://github.com/CraigStuntz/bidi/">my repository</a> instead. From there you
 can type <code>swift run</code> or <code>swift test</code> to do what it says on the tin, and if
@@ -104,7 +116,7 @@ might look something like this:</p>
 <ol type="1">
 <li>Lex the source code.</li>
 <li>Parse lexemes into abstract syntax tree (AST).</li>
-<li>Interpret AST, producing a value.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Interpret AST, producing a value.<a href="#fn1" id="fnref1" class="footnote-ref" role="doc-noteref"><sup>1</sup></a></li>
 <li>Output result.</li>
 </ol>
 <p>But here we will be doing something a bit simpler, namely only step 3. In order
@@ -119,13 +131,16 @@ output from the program.</p>
 <div class="highlight">
 <p><strong>1.1 Syntax</strong></p>
 <p>In this section, the following representation of the untyped λ-calculus is used:</p>
+<div id="cb2" class="sourceCode">
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="dt">Var</span> <span class="dt">Name</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">Lambda</span> <span class="dt">Name</span> <span class="dt">Expr</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">App</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">deriving</span> <span class="dt">Show</span></span></code></pre></div>
 </div>
+</div>
 <p>Here’s the corresponding Swift:</p>
+<div id="cb3" class="sourceCode">
 <div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> indirect <span class="kw">enum</span> Expr<span class="op">:</span> <span class="dt">Equatable</span> <span class="op">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/// Associated value is the variable name</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> variable<span class="op">(</span>Name<span class="op">)</span></span>
@@ -136,6 +151,7 @@ output from the program.</p>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// more coming soon!</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
 <p>Some notes on this:</p>
 <p>The <code>indirect</code> here is required by the Swift compiler to make a self-referential
 <code>enum</code>. Since <code>Expr</code> includes <code>Expr</code> as an
@@ -187,18 +203,22 @@ of:</p>
 time environment in which the expression was created. Here, closures always
 represent expressions with a variable that will be instantiated with a value, so
 these closures additionally keep track of a name.</p>
+<div id="cb5" class="sourceCode">
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Value</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="dt">VClosure</span> (<span class="dt">Env</span> <span class="dt">Value</span>) <span class="dt">Name</span> <span class="dt">Expr</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> <span class="dt">Show</span></span></code></pre></div>
+</div>
 <p>Runtime environments provide the values for each variable.</p>
 </div>
 <p>In Swift, this looks like:</p>
+<div id="cb6" class="sourceCode">
 <div class="sourceCode" id="cb6"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">enum</span> Value <span class="op">{</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/// The associated values here are the environment, the variable (function argument) name, and the body</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> vclosure<span class="op">(</span>Env<span class="op">,</span> Name<span class="op">,</span> Expr<span class="op">)</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...more to come!</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
 <p>I’ve made most types <code>public</code> here to facilitate exploration using Swift’s REPL.
 There will be examples of this usage following.</p>
 <p>Why use an <code>enum</code> for this? There will be other <code>Value</code>s coming soon. Why not
@@ -212,6 +232,7 @@ variable names and values. Earlier values override later values in the list, and
 the initial environment is empty. The type of environments is polymorphic over
 the contained values so that it can be used for other value representations
 later.</p>
+<div id="cb7" class="sourceCode">
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Name</span> <span class="ot">=</span> <span class="dt">Name</span> <span class="dt">String</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -220,14 +241,19 @@ later.</p>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ot">initEnv ::</span> <span class="dt">Env</span> val</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>initEnv <span class="ot">=</span> <span class="dt">Env</span> [ ]</span></code></pre></div>
+</div>
 <p>It is possible to map a function over an <code>Env</code>, so it is a <code>Functor</code>.</p>
+<div id="cb8" class="sourceCode">
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Env</span> <span class="kw">where</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmap</span> f (<span class="dt">Env</span> xs) <span class="ot">=</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Env</span> (<span class="fu">map</span> (λ(x, v) → (x, f v)) xs)</span></code></pre></div>
 </div>
+</div>
 <p>My Swift version is:</p>
+<div id="cb9" class="sourceCode">
 <div class="sourceCode" id="cb9"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">typealias</span> Name <span class="op">=</span> String</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">typealias</span> Env <span class="op">=</span> <span class="op">[</span>Name<span class="op">:</span> Value<span class="op">]</span></span></code></pre></div>
+</div>
 <p>A subtle difference here is that David’s <code>Env</code> is generic over the <code>value</code>,
 whereas my <code>Env</code> is just an alias to a dictionary with specific values for the<br />
 <code>Key</code> and <code>Value</code> types. (For technical reasons, having a generic structure like
@@ -236,6 +262,7 @@ A Swift dictionary already has a <code>map</code> implementation.</p>
 <div class="highlight">
 <p>Looking up a value in an environment might fail, so the function that performs
 the lookup might return a message instead of a value.</p>
+<div id="cb10" class="sourceCode">
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Message</span> <span class="ot">=</span> <span class="dt">Message</span> <span class="dt">String</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> <span class="dt">Show</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -249,9 +276,11 @@ the lookup might return a message instead of a value.</p>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> y <span class="op">==</span> x <span class="ot">=</span> <span class="dt">Right</span> v</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> lookupVar (<span class="dt">Env</span> env′) x</span></code></pre></div>
 </div>
+</div>
 <p>In Swift we have
 <a href="https://developer.apple.com/documentation/swift/result">the built-in <code>Result&lt;Success, Failure&gt;</code> type</a>
 for such situations, so let’s use that:</p>
+<div id="cb11" class="sourceCode">
 <div class="sourceCode" id="cb11"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">enum</span> Message<span class="op">:</span> <span class="dt">Error</span> <span class="op">{</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> notFound<span class="op">(</span>Name<span class="op">)</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -264,12 +293,16 @@ for such situations, so let’s use that:</p>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="op">.</span>success<span class="op">(</span>value<span class="op">)</span></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
 <p>And now we can try it out at the Swift REPL. Note that using a SwiftPM project
 with the Swift REPL requires that you start the REPL using:</p>
+<div id="cb12" class="sourceCode">
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> swift run <span class="at">--repl</span></span></code></pre></div>
+</div>
 <p>…and <em>not</em> using <code>swift repl</code>, a “feature” which has confused me to no end.
-Just pretend <code>swift repl</code> doesn’t even exist and use <code>swift run --repl</code> instead.
+Just pretend <code>swift repl</code> doesn’t even exist and use <code>swift run –repl</code> instead.
 Anyway, you can do:</p>
+<div id="cb13" class="sourceCode">
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> swift run <span class="at">--repl</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="op">&gt;</span> import <span class="ex">Untyped</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span><span class="op">&gt;</span> let <span class="fu">env</span> = [<span class="st">&quot;id&quot;</span>: Value.vclosure<span class="er">(</span><span class="ex">[:],</span> <span class="st">&quot;x&quot;</span>, .lambda<span class="er">(</span><span class="st">&quot;x&quot;</span><span class="ex">,</span> .variable<span class="er">(</span><span class="st">&quot;x&quot;</span><span class="kw">)))</span><span class="ex">]</span> </span>
@@ -279,6 +312,7 @@ Anyway, you can do:</p>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span><span class="op">&gt;</span> env.lookup<span class="kw">(</span><span class="ex">name:</span> <span class="st">&quot;blarf&quot;</span><span class="kw">)</span></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="va">$R1</span><span class="ex">:</span> Result<span class="op">&lt;</span>Untyped.Value, Untyped.Message<span class="op">&gt;</span> = failure {</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">//</span> ...</span></code></pre></div>
+</div>
 <p>So everything works as expected, including the REPL!</p>
 <h2 id="huge-digression-on-swift-generics-feel-free-to-ignore">Huge Digression on Swift Generics; Feel Free to Ignore</h2>
 <p>Swift generics are nice when they work, but they are somewhat limited in comparison
@@ -291,12 +325,16 @@ some hard limits you just have to work around.</p>
 generic constraint.</p>
 </blockquote>
 <p>Ok, let’s give that a spin! This works fine:</p>
+<div id="cb14" class="sourceCode">
 <div class="sourceCode" id="cb14"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">protocol</span> SomeProtocol <span class="op">{}</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SomeGeneric<span class="op">&lt;</span><span class="dt">T</span><span class="op">&gt;</span> <span class="op">{}</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SomeGenericWithSpecificTypeParameter<span class="op">&lt;</span><span class="dt">T</span><span class="op">:</span> <span class="dt">SomeProtocol</span><span class="op">&gt;</span> <span class="op">{}</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">typealias</span> Instance <span class="op">=</span> SomeGeneric<span class="op">&lt;</span>SomeProtocol<span class="op">&gt;</span></span></code></pre></div>
+</div>
 <p>This does not compile:</p>
+<div id="cb15" class="sourceCode">
 <div class="sourceCode" id="cb15"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typealias</span> InstanceWithSpecific <span class="op">=</span> SomeGenericWithSpecificTypeParameter<span class="op">&lt;</span>SomeProtocol<span class="op">&gt;</span></span></code></pre></div>
+</div>
 <p>Message:</p>
 <pre><code>type 'any SomeProtocol' cannot conform to 'SomeProtocol' sourcekitdprotocol-type-non-conformance main.swift(9, 34): only concrete types such as structs, enums and classes can conform to protocols</code></pre>
 <h3 id="limitations-on-generic-constraints-in-extensions">Limitations on Generic Constraints in Extensions</h3>
@@ -311,22 +349,30 @@ discussing “future directions”:</p>
 <p>Writing the type parameter list after the extension keyword applies more
 naturally to extensions over structural types. With this syntax, an extension
 over all two-element tuples could be spelled</p>
+<div id="cb17" class="sourceCode">
 <div class="sourceCode" id="cb17"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">extension</span> <span class="op">&lt;</span><span class="dt">T</span>, <span class="dt">U</span><span class="op">&gt;</span> <span class="op">(</span><span class="va">T</span><span class="op">,</span> <span class="va">U</span><span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+</div>
 </blockquote>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>A program in the untyped lambda calculus can include multiple values.
+<li><div id="fn1">
+<p>A program in the untyped lambda calculus can include multiple values.
 For example, you might define variables and then use those variable
 definitions in an expression. The way the evaluator will be structured
 in David’s tutorial is to have a list of defintions which will be used
-to evaluate a single expression, producing a single result.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+to evaluate a single expression, producing a single result.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
 </ol>
 </section>
+<div class="info">
+Tags: <a href="../tags/compilers.html" rel="tag" title="All pages tagged 'compilers'.">compilers</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
+    Tags: 
     
 </div>
 

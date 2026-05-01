@@ -41,6 +41,22 @@
 </div>
 </div>
 <div id="content">
+<h1 id="building-a-synthesizer-9">2024-06-24-building-a-synthesizer-9</h1>
+<div class="info">
+Posted on June 24, 2024
+</div>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
 <h3 class="series" id="building-a-synthesizer-10">Building a Synthesizer,
 10</h3>
 <h1 class="chapterName" id="building-the-vca">Building the VCA</h1>
@@ -238,7 +254,7 @@ consider the same phenomenon.</p>
 <a href="https://www.mheducation.com/highered/product/practical-electronics-inventors-fourth-edition-scherz-monk/9781259587542.html"><em>Practical Electronics for Inventors, Fourth Edition,</em></a>
 by Scherz and Monk.</p>
 <p>The gain of a transistor, by definition, is:</p>
-<p><span class="math display"><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></span></p>
+<p><span class="math display"><span class="math display"><span class="math display">$$ \begin{align} Gain = \cfrac {V_{out}} {V_{in}} = \cfrac {\Delta V_{C}} {\Delta V_{E}} \approx \cfrac {R_{C}} {R_{E}} \end{align} $$</span></span></span></p>
 <p>Where <span class="math inline"><em>V</em><sub><em>C</em></sub></span> is equal to the voltage at the collector, <span class="math inline"><em>R</em><sub><em>C</em></sub></span> is equal to the
 resistance at the collector, and similarly for the emitter. However, that’s not
 quite the full story, because a transistor has a small internal
@@ -246,12 +262,12 @@ quite the full story, because a transistor has a small internal
 in its emitter region, and one way you can think about thermal instability in a
 transistor is that the transreistance changes with temperature. So a somewhat
 more accurate model is:</p>
-<p><span class="math display"><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></span></p>
+<p><span class="math display"><span class="math display"><span class="math display">$$ \begin{align} Gain \approx \cfrac {R_{C}} {R_{E} + r_{tr}} \end{align} $$</span></span></span></p>
 <p>Where <span class="math inline"><em>r</em><sub><em>tr</em></sub></span> is the transresistance value, which, again, is not constant. This
 is not 100% accurate as there is some small current flowing from the base to the
 emitter. But this does tell us that we can minimize the effect of <span class="math inline"><em>r</em><sub><em>tr</em></sub></span> by
 making <span class="math inline"><em>R</em><sub><em>E</em></sub></span> comparatively large relative to it.</p>
-<p><span class="math display"><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></span></p>
+<p><span class="math display"><span class="math display"><span class="math display">$$ \begin{align} r_{tr} \approx \cfrac {0.026 V} {I_E} \end{align} $$</span></span></span></p>
 <p>How much is that? Well, we have <span class="math inline"><em>I</em><sub><em>E</em></sub></span> <em>apporximately</em> 600 μA, which works out to
 arount 46Ω. So a 10KΩ resistor should make its effects very small indeed. Scherz
 and Monk say, “In practice, <span class="math inline"><em>R</em><sub><em>E</em></sub></span> should be chosen to place <span class="math inline"><em>V</em><sub><em>E</em></sub></span> around 1 V
@@ -494,6 +510,10 @@ discussion which follows.<a href="#fnref1" class="footnote-back" role="doc-backl
 </section>
 <div class="info">
 Tags: <a href="../tags/synthesis.html" rel="tag" title="All pages tagged 'synthesis'.">synthesis</a>, <a href="../tags/diy.html" rel="tag" title="All pages tagged 'diy'.">diy</a>, <a href="../tags/electrical%20engineering.html" rel="tag" title="All pages tagged 'electrical engineering'.">electrical engineering</a>
+</div>
+</div>
+<div class="info">
+Tags:
 </div>
 </div>
 

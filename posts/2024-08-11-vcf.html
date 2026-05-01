@@ -3,18 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Craig Stuntz - Building a Synthesizer, Chapter 12: Breadboarding the VCF</title>
+        <title>Craig Stuntz - 2024-08-11-vcf</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://discuss.systems/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -30,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        12
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Breadboarding the VCF
-                </h1>
-            
+            <h1>2024-08-11-vcf</h1>
+
             <div class="info">
     Posted on August 11, 2024
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer-12">Building a Synthesizer,
+12</h3>
+<h1 class="chapterName" id="breadboarding-the-vcf">Breadboarding the VCF</h1>
+<div class="info">
+Posted on August 11, 2024
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -83,22 +83,14 @@ should be possible.</p>
 component was which, e.g., which jack was “input” and which was “output.” Here’s
 the schematic, which is clear enough:</p>
 <figure>
-<a href="../images/synth/VCFFirstOrderSchematic.png">
-<img src="../images/synth/VCFFirstOrderSchematic.png" loading="lazy" width="300px" alt="A schematic, from the manual, for the first order passive filter. There are no units on the resistor or capacitor.">
-</a>
-<figcaption>
-Schematic
-</figcaption>
+<a href="../images/synth/VCFFirstOrderSchematic.png"><img src="../images/synth/VCFFirstOrderSchematic.png" loading="lazy" width="300" alt="A schematic, from the manual, for the first order passive filter. There are no units on the resistor or capacitor." /></a>
+<figcaption>Schematic</figcaption>
 </figure>
 <p>However, the breadboard layout is quite a bit less clear, and the jacks are for
 whatever reason never labeled in the manual. Quick, which jack is input?</p>
 <figure>
-<a name="breadboardLayout" href="../images/synth/VCFFirstOrderBreadboard.png">
-<img src="../images/synth/VCFFirstOrderBreadboard.png" loading="lazy" width="300px" alt="A drawing, from the manual, of the breadboard layout of the first order passive filter">
-</a>
-<figcaption>
-Breadboard Layout
-</figcaption>
+<a href="../images/synth/VCFFirstOrderBreadboard.png" id="breadboardLayout"><img src="../images/synth/VCFFirstOrderBreadboard.png" loading="lazy" width="300" alt="A drawing, from the manual, of the breadboard layout of the first order passive filter" /></a>
+<figcaption>Breadboard Layout</figcaption>
 </figure>
 <p>(It’s the one on the right.)</p>
 <p>This becomes considerably harder when we start using seven op amps split
@@ -107,12 +99,8 @@ across two different ICs!</p>
 <p>Anyway, here’s the square wave I used as the input to the filter for my testing. You’ll
 soon see why I need to show this by itself first.</p>
 <figure>
-<a href="../images/synth/VCFNoFilter.png">
-<img src="../images/synth/VCFNoFilter.png" loading="lazy" width="300px" alt="A trace of a square wave on the oscilloscope">
-</a>
-<figcaption>
-#NoFilter, Just a Square Wave
-</figcaption>
+<a href="../images/synth/VCFNoFilter.png"><img src="../images/synth/VCFNoFilter.png" loading="lazy" width="300" alt="A trace of a square wave on the oscilloscope" /></a>
+<figcaption>#NoFilter, Just a Square Wave</figcaption>
 </figure>
 <p>First we build a passive, first order filter using just a resistor and a
 capacitor. This does an OK job at filtering the output, but note that it also
@@ -120,46 +108,30 @@ distorts the input signal as well, because the resistor and capacitor add
 impedance to the input side of the circuit, since there is no isolation between
 the filter and the input:</p>
 <figure>
-<a href="../images/synth/VCFFirstOrder500.png">
-<img src="../images/synth/VCFFirstOrder500.png" loading="lazy" width="300px" alt="The square wave, as a purple trace, and the output of a single order passive filter, as a yellow trace. This distorts the input as well as reshaping theo output.">
-</a>
-<figcaption>
-First Order Passive Filter 500 Hz Signal Input
-</figcaption>
+<a href="../images/synth/VCFFirstOrder500.png"><img src="../images/synth/VCFFirstOrder500.png" loading="lazy" width="300" alt="The square wave, as a purple trace, and the output of a single order passive filter, as a yellow trace. This distorts the input as well as reshaping theo output." /></a>
+<figcaption>First Order Passive Filter 500 Hz Signal Input</figcaption>
 </figure>
 <p>The purple trace above is the input square wave (distorted due to the passive circuit
 here), and the output of the filter is the yellow trace.</p>
 <p>The filter doesn’t just reshape the wave; it also reduces the output at higher
 input frequencies. Above I’m using a 500 Hz input; here’s with a 2 kHz input.</p>
 <figure>
-<a href="../images/synth/VCFFirstOrder2k.png">
-<img src="../images/synth/VCFFirstOrder2k.png" loading="lazy" width="300px" alt="The same filter at 2 kHz. The output of the filter is much lower in volume than at 500 Hz ">
-</a>
-<figcaption>
-First Order Passive Filter 2000 Hz Signal Input
-</figcaption>
+<a href="../images/synth/VCFFirstOrder2k.png"><img src="../images/synth/VCFFirstOrder2k.png" loading="lazy" width="300" alt="The same filter at 2 kHz. The output of the filter is much lower in volume than at 500 Hz " /></a>
+<figcaption>First Order Passive Filter 2000 Hz Signal Input</figcaption>
 </figure>
 <h3 id="second-order-passive-filter">Second Order Passive Filter</h3>
 <p>Then we add a second resistor and capacitor to make a second order filter. The
 output is much more like a sine wave with the second order filter. However, the
 input is even more distorted.</p>
 <figure>
-<a href="../images/synth/VCFSecondOrder.png">
-<img src="../images/synth/VCFSecondOrder.png" loading="lazy" width="300px" alt="A second order filter, which both turns the output into a smooth sine wave and also distorts the input into a more curved shape">
-</a>
-<figcaption>
-Second Order Passive Filter
-</figcaption>
+<a href="../images/synth/VCFSecondOrder.png"><img src="../images/synth/VCFSecondOrder.png" loading="lazy" width="300" alt="A second order filter, which both turns the output into a smooth sine wave and also distorts the input into a more curved shape" /></a>
+<figcaption>Second Order Passive Filter</figcaption>
 </figure>
 <h3 id="active-filter">Active Filter</h3>
 <p>Next we build the active filter. Here’s the schematic:</p>
 <figure>
-<a href="../images/synth/VCAActiveSchematic.png">
-<img src="../images/synth/VCAActiveSchematic.png" loading="lazy" width="300px" alt="A schematic for the second order active filter which has no units on the capacitors and units on only one of the three resistors">
-</a>
-<figcaption>
-Active Filter Schematic
-</figcaption>
+<a href="../images/synth/VCAActiveSchematic.png"><img src="../images/synth/VCAActiveSchematic.png" loading="lazy" width="300" alt="A schematic for the second order active filter which has no units on the capacitors and units on only one of the three resistors" /></a>
+<figcaption>Active Filter Schematic</figcaption>
 </figure>
 <p>When I first build this filter, it didn’t work. I got no output at all. After
 some tracing, I finally noticed that we were supposed to replace the 1 µ
@@ -169,24 +141,16 @@ are just very similar looking <a href="#breadboardLayout">white blocks in the br
 and the schematic immediately above omits their values altogether!</p>
 <p>Anyway, with that sorted, I then had a respectable looking low-pass filter:</p>
 <figure>
-<a href="../images/synth/VCFActiveTrace.png">
-<img src="../images/synth/VCFActiveTrace.png" loading="lazy" width="300px" alt="An oscilloscope trace from the active filter. The input is a square wave reprepresented in purple. The output is the yellow trace and is filtered, a bit, by the low pass filter ">
-</a>
-<figcaption>
-Active Filter Input and Output
-</figcaption>
+<a href="../images/synth/VCFActiveTrace.png"><img src="../images/synth/VCFActiveTrace.png" loading="lazy" width="300" alt="An oscilloscope trace from the active filter. The input is a square wave reprepresented in purple. The output is the yellow trace and is filtered, a bit, by the low pass filter " /></a>
+<figcaption>Active Filter Input and Output</figcaption>
 </figure>
 <h3 id="adding-resonance">Adding Resonance</h3>
 <p>Next we make the filter resonant. We do this by feeding the output of the filter
 back into the first capacitor, replacing its connection to ground with the
 filter’s output.</p>
 <figure>
-<a href="../images/synth/VCFResonantTrace.png">
-<img src="../images/synth/VCFResonantTrace.png" loading="lazy" width="300px" alt="Oscilloscope trace of resonant filter output. The yellow trace mostly hides the purple trace, except at the leading edge of the square wave where the output has a resonant overshoot ">
-</a>
-<figcaption>
-Resonant Filter
-</figcaption>
+<a href="../images/synth/VCFResonantTrace.png"><img src="../images/synth/VCFResonantTrace.png" loading="lazy" width="300" alt="Oscilloscope trace of resonant filter output. The yellow trace mostly hides the purple trace, except at the leading edge of the square wave where the output has a resonant overshoot " /></a>
+<figcaption>Resonant Filter</figcaption>
 </figure>
 <p>In the instructions and in his videos, Moritz notes
 that this “is basically just the filter itself swinging at its set cutoff
@@ -199,20 +163,12 @@ output which is fed back into the filter circuit is out of phase with the input.
 Both the delay/phasing and the amplification are responsible for the
 characteristic sound of the resonance.</p>
 <figure>
-<a href="../images/synth/VCFResonantNoResonance.png">
-<img src="../images/synth/VCFResonantNoResonance.png" loading="lazy" width="300px" alt="Oscilloscope trace showing the output at a lower level than the input, and the corners of the trace rounded off due to the low pass filter ">
-</a>
-<figcaption>
-Adjustable Resonant Filter, Set to No Resonance
-</figcaption>
+<a href="../images/synth/VCFResonantNoResonance.png"><img src="../images/synth/VCFResonantNoResonance.png" loading="lazy" width="300" alt="Oscilloscope trace showing the output at a lower level than the input, and the corners of the trace rounded off due to the low pass filter " /></a>
+<figcaption>Adjustable Resonant Filter, Set to No Resonance</figcaption>
 </figure>
 <figure>
-<a href="../images/synth/VCFResonantWithResonance.png">
-<img src="../images/synth/VCFResonantWithResonance.png" loading="lazy" width="300px" alt="Oscilloscope trace showing the output with the resonance level set to a higher level, causing an overshoot at the leading edge of the square wave   ">
-</a>
-<figcaption>
-Adjustable Resonant Filter, with Resonance
-</figcaption>
+<a href="../images/synth/VCFResonantWithResonance.png"><img src="../images/synth/VCFResonantWithResonance.png" loading="lazy" width="300" alt="Oscilloscope trace showing the output with the resonance level set to a higher level, causing an overshoot at the leading edge of the square wave " /></a>
+<figcaption>Adjustable Resonant Filter, with Resonance</figcaption>
 </figure>
 <h3 id="adding-the-diode-ladder">Adding the Diode Ladder</h3>
 <p>We want to make the filter adjustable using control voltage. The first step is
@@ -222,12 +178,8 @@ is very well covered in <a href="https://www.ericasynths.lv/media/VCF_MANUAL_v2.
 which I encourage you to read if this project is at all interesting to you.
 The manuals for the mki x es.EDU DIY kits are (really) great reading.</p>
 <figure>
-<a href="../images/synth/VCFDiodeLadder.jpg">
-<img src="../images/synth/VCFDiodeLadder.jpg" loading="lazy" width="300px" alt="A photo of the breadboarded VCF circuit">
-</a>
-<figcaption>
-Filter with Diode Ladder At Upper Left
-</figcaption>
+<a href="../images/synth/VCFDiodeLadder.jpg"><img src="../images/synth/VCFDiodeLadder.jpg" loading="lazy" width="300" alt="A photo of the breadboarded VCF circuit" /></a>
+<figcaption>Filter with Diode Ladder At Upper Left</figcaption>
 </figure>
 <h3 id="adding-the-output-stage">Adding the Output Stage</h3>
 <p>In the images which follow, the input square wave is in yellow, the top and
@@ -239,28 +191,16 @@ cutoff is set, which isn’t ideal. We will fix that in the next section.</p>
 <p>There’s a low-frequency noise, probably 60 Hz, in the output. I blame this on
 the noisy breadboard and low output level.</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFOutputStage1.jpg">
-<img src="../images/synth/VCFOutputStage1.jpg" loading="lazy" height="200px" alt="An oscilloscope trace showing an output with a fairly square wave signal, like the input">
-</a>
-<figcaption>
-High Cutoff
-</figcaption>
+<a href="../images/synth/VCFOutputStage1.jpg"><img src="../images/synth/VCFOutputStage1.jpg" loading="lazy" height="200" alt="An oscilloscope trace showing an output with a fairly square wave signal, like the input" /></a>
+<figcaption>High Cutoff</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFOutputStage2.jpg">
-<img src="../images/synth/VCFOutputStage2.jpg" loading="lazy" height="200px" alt="An oscilloscope trace showing an output with a somwhat rounded signal">
-</a>
-<figcaption>
-Middle Cutoff
-</figcaption>
+<a href="../images/synth/VCFOutputStage2.jpg"><img src="../images/synth/VCFOutputStage2.jpg" loading="lazy" height="200" alt="An oscilloscope trace showing an output with a somwhat rounded signal" /></a>
+<figcaption>Middle Cutoff</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFOutputStage3.jpg">
-<img src="../images/synth/VCFOutputStage3.jpg" loading="lazy" height="200px" alt="An oscilloscope trace showing an output with an output which looks fairly close to a sine wave">
-</a>
-<figcaption>
-Low Cutoff
-</figcaption>
+<a href="../images/synth/VCFOutputStage3.jpg"><img src="../images/synth/VCFOutputStage3.jpg" loading="lazy" height="200" alt="An oscilloscope trace showing an output with an output which looks fairly close to a sine wave" /></a>
+<figcaption>Low Cutoff</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -270,12 +210,8 @@ wires were in the wrong breadboard sockets, and then after a considerable amount
 of troubleshooting I found a couple of resistor leads which contacted each other due
 to “leaning” on the breadboard. Which is, frankly, an easy mistake to make:</p>
 <figure>
-<a href="../images/synth/VCFOutputStageBreadboard.jpg">
-<img src="../images/synth/VCFOutputStageBreadboard.jpg" loading="lazy" width="600px" alt="A photo of the breadboarded VCF circuit with output stage">
-</a>
-<figcaption>
-VCF with Output Stage
-</figcaption>
+<a href="../images/synth/VCFOutputStageBreadboard.jpg"><img src="../images/synth/VCFOutputStageBreadboard.jpg" loading="lazy" width="600" alt="A photo of the breadboarded VCF circuit with output stage" /></a>
+<figcaption>VCF with Output Stage</figcaption>
 </figure>
 <p>Still, this gave me ample opportunity to put
 <a href="2025-04-07-building-a-synthesizer-11.html">my ideas about debugging circuits</a>
@@ -288,20 +224,12 @@ vs. which parts need to remain.</p>
 <p>I think this example will show you what I mean. These two steps follow each
 other sequentially in the manual.</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFBreadboardCV.png">
-<img src="../images/synth/VCFBreadboardCV.png" loading="lazy" height="200px" alt="A hand-drawn picture of a breadboard with many components on it">
-</a>
-<figcaption>
-“CV Processing” Step
-</figcaption>
+<a href="../images/synth/VCFBreadboardCV.png"><img src="../images/synth/VCFBreadboardCV.png" loading="lazy" height="200" alt="A hand-drawn picture of a breadboard with many components on it" /></a>
+<figcaption>“CV Processing” Step</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFBreadboardResonance.png">
-<img src="../images/synth/VCFBreadboardResonance.png" loading="lazy" height="200px" alt="Another hand-drawn picture of the same breadboard, with even more components on it, and a few removed">
-</a>
-<figcaption>
-“Resonance II” Step
-</figcaption>
+<a href="../images/synth/VCFBreadboardResonance.png"><img src="../images/synth/VCFBreadboardResonance.png" loading="lazy" height="200" alt="Another hand-drawn picture of the same breadboard, with even more components on it, and a few removed" /></a>
+<figcaption>“Resonance II” Step</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -316,20 +244,12 @@ the top and bottom of the diode ladder), and 10* less magnification than the
 50 mv/div vertical resolution of the cyan trace (output, again) of the previous
 section.</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFCV2.jpg">
-<img src="../images/synth/VCFCV2.jpg" loading="lazy" height="200px" alt="An oscilloscope trace showing an output with a fairly square wave signal, like the input">
-</a>
-<figcaption>
-High Cutoff
-</figcaption>
+<a href="../images/synth/VCFCV2.jpg"><img src="../images/synth/VCFCV2.jpg" loading="lazy" height="200" alt="An oscilloscope trace showing an output with a fairly square wave signal, like the input" /></a>
+<figcaption>High Cutoff</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFCV1.jpg">
-<img src="../images/synth/VCFCV1.jpg" loading="lazy" height="200px" alt="An oscilloscope trace showing an output with with a somwhat rounded signal">
-</a>
-<figcaption>
-Low Cutoff
-</figcaption>
+<a href="../images/synth/VCFCV1.jpg"><img src="../images/synth/VCFCV1.jpg" loading="lazy" height="200" alt="An oscilloscope trace showing an output with with a somwhat rounded signal" /></a>
+<figcaption>Low Cutoff</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -351,32 +271,20 @@ effort adjusting the trimpot, which is fiddly enough without all of these other
 cables to bump into. Still, I can see the effect of the resonance on the leading
 edge of the square wave here, even if it is a bit subtle:</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFResonanceHigh.jpg">
-<img src="../images/synth/VCFResonanceHigh.jpg" loading="lazy" height="200px" alt="An oscilloscope trace which shows the output wave with the resonance knob set high, showing a small spike at the head of the wave">
-</a>
-<figcaption>
-High Resonance
-</figcaption>
+<a href="../images/synth/VCFResonanceHigh.jpg"><img src="../images/synth/VCFResonanceHigh.jpg" loading="lazy" height="200" alt="An oscilloscope trace which shows the output wave with the resonance knob set high, showing a small spike at the head of the wave" /></a>
+<figcaption>High Resonance</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFResonanceLow.jpg">
-<img src="../images/synth/VCFResonanceLow.jpg" loading="lazy" height="200px" alt="An oscilloscope trace which shows the output wave with the resonance knob set low, showing a smooth round edge at the heaed of the wave">
-</a>
-<figcaption>
-Low Resonance
-</figcaption>
+<a href="../images/synth/VCFResonanceLow.jpg"><img src="../images/synth/VCFResonanceLow.jpg" loading="lazy" height="200" alt="An oscilloscope trace which shows the output wave with the resonance knob set low, showing a smooth round edge at the heaed of the wave" /></a>
+<figcaption>Low Resonance</figcaption>
 </figure>
 <div style="clear:both  ;">
 
 </div>
 <p>Anyway, now we are finished with the breadboarding!</p>
 <figure>
-<a href="../images/synth/VCFBreadboardFinished.jpg">
-<img src="../images/synth/VCFBreadboardFinished.jpg" loading="lazy" height="200px" alt="The completed breadboard">
-</a>
-<figcaption>
-All Finished!
-</figcaption>
+<a href="../images/synth/VCFBreadboardFinished.jpg"><img src="../images/synth/VCFBreadboardFinished.jpg" loading="lazy" height="200" alt="The completed breadboard" /></a>
+<figcaption>All Finished!</figcaption>
 </figure>
 <p>The breadboard is by now getting quite crowded. I think this kit might be
 better built across two breadboards.</p>
@@ -427,10 +335,14 @@ though:</p>
 <li><a href="https://www.youtube.com/watch?v=jvNNgUl3al0">Designing a diode ladder filter from scratch</a> (36:03)</li>
 <li><a href="https://www.youtube.com/watch?v=tWKLFcc_BJM">Turning my diode ladder filter into a eurorack module</a> (34:46)</li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html" rel="tag" title="All pages tagged 'synthesis'.">synthesis</a>, <a href="../tags/diy.html" rel="tag" title="All pages tagged 'diy'.">diy</a>, <a href="../tags/electrical%20engineering.html" rel="tag" title="All pages tagged 'electrical engineering'.">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'synthesis'." href="../tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged 'diy'." href="../tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged 'electrical engineering'." href="../tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
+    Tags: 
     
 </div>
 

@@ -41,6 +41,22 @@
 </div>
 </div>
 <div id="content">
+<h1 id="building-a-synthesizer-4">2023-02-18-building-a-synthesizer-4</h1>
+<div class="info">
+Posted on February 18, 2023
+</div>
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
 <h3 class="series" id="building-a-synthesizer-4">Building a Synthesizer,
 4</h3>
 <h1 class="chapterName" id="the-logic-circuits-model-of-computation">The Logic Circuits Model of Computation</h1>
@@ -57,6 +73,7 @@ Posted on February 18, 2023
 <p>Another model, which used to be somewhat common, but is far less so given that powerful CPUs can be had for pennies these days, is the logic circuits model. In this case instead of a CPU with an instruction pointer which goes through a list of instructions, fetches data from memory, operates on that data, saves it back to memory, etc., we have a far simpler device which is just a bunch of logic gates. This is so simple, in fact, that it can be efficiently simulated on a Von Neumann machine, so we can either build a logic circuit from raw gates or we can simulate it on a general purpose computer; the result of the computation will be the same either way.</p>
 <h3 id="an-example-circuit">An Example Circuit</h3>
 <p>Having said that, it’s still an interesting model, and it still has applications today. So let’s give a quick example. Consider the following function in TypeScript:</p>
+<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">doTheThing</span>(a<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span> c<span class="op">:</span> <span class="dt">boolean</span>)<span class="op">:</span> <span class="dt">boolean</span> {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (c) {</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">&amp;&amp;</span> b<span class="op">;</span></span>
@@ -64,6 +81,7 @@ Posted on February 18, 2023
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">||</span> b<span class="op">;</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
 <p>This function is of questionable utility, but will serve as a simple example which we can easily translate to a circuits model. It uses a control boolean, <code>c</code> to decide whether to do a boolean <code>AND</code> operation or an <code>OR</code> operation on its other two inputs.</p>
 <p>What would a circuits model of this function look like? Well, we have <code>AND</code> and <code>OR</code> as fundamental operators in a circuit, so we can just use those:</p>
 <figure>
@@ -158,6 +176,10 @@ Posted on February 18, 2023
 <p>My real agenda here is to get you thinking about different kinds of computing models, because next we’re going to talk about analog computers, and they’re far weirder than logic circuits!</p>
 <div class="info">
 Tags: <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>, <a href="../tags/computer%20science.html">computer science</a>, <a href="../tags/homomorphic%20encryption.html">homomorphic encryption</a>
+</div>
+</div>
+<div class="info">
+Tags:
 </div>
 </div>
 

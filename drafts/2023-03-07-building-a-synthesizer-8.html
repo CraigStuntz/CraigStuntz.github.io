@@ -1,12 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Craig Stuntz - 2023-03-07-building-a-synthesizer-8</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
+        <title>2023-03-07-building-a-synthesizer-8 - Craig Stuntz</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css">
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -22,13 +30,31 @@
         </div>
 
         <div id="content">
-            <h1>2023-03-07-building-a-synthesizer-8</h1>
-
+            
+            
+                <h1>2023-03-07-building-a-synthesizer-8</h1>
+            
             <div class="info">
     Posted on March  7, 2023
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="building-a-synthesizer-8">2023-03-07-building-a-synthesizer-8</h1>
+<div class="info">
+Posted on March 7, 2023
+</div>
 <div id="header">
 <div id="logo">
 <a href="../">Craig Stuntz</a>
@@ -180,7 +206,7 @@ An Op Amp In a “Comparator” Configuration
 <p>I am calling the voltages applied to the inputs “V<sub>input</sub>” and “V<sub>ref</sub>”</p>
 <p>When the voltage at the <code>+</code> input (V<sub>input</sub>) is higher than the voltage at the <code>-</code> input (V<sub>ref</sub>), the difference:<br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} V_{input} - V_{ref} \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} V_{input} - V_{ref} \end{align} $$</span></span></span><br />
 </span><br />
 …is a positive number. Let’s say that V<sub>input</sub> is 5 and V<sub>ref</sub> is 3. The op amp multiplies this result, 2, by the very large gain, and immediately sets the output voltage to 200000V. Or tries to. Remember, the output voltage is limited by the voltage going into the V<sub>cc+</sub> power input, which is something far more reasonable, like 12V. So the op amp does the best it can and sets the output to about 10.5V, which is the largest amount of voltage it <em>can</em> emit.</p>
 <p>If V<sub>input</sub> was <em>smaller</em> than V<sub>ref</sub>, then their difference would be negative and the op amp would swing the output hard in the other direction, attempting to set the output voltage to -200000V or so, but quickly hitting the limit of V<sub>cc-</sub>.</p>
@@ -222,7 +248,7 @@ An Op Amp In a “Buffer” Configuration
 <p>How does this work internally? Let’s examine the voltages over time. It will help to remember that, due to the wire, the output voltage and the voltage at the <code>-</code> will <em>always</em> be the same. In general, it is helpful, when looking at these circuits, to ask yourself if there are any things which are always true, and this is an example: The ouptut and the <code>-</code> input will always have the same voltage, in this case.</p>
 <p>Initally, all voltages are at 0. The voltage we’re sending into the <code>+</code> input is at 0V, and, presuming we’ve just powered up the chip, so is the output. Consequently, the voltage at the <code>-</code> input, which is literally “hard-wired” to the output, is also at 0V. T Given our new understanding of the op amp, we can see that nothing needs to change, because the output voltage should be:<br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (0V-0V) \times 100000 \\ = 0V \end{split} \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (0V-0V) \times 100000 \\ = 0V \end{split} \end{align} $$</span></span></span><br />
 </span><br />
 The buffer has “done its job” of copying 0V at its input to 0V at its output. All is well!</p>
 <p>Now, let’s say I raise the signal at the <code>+</code> input on the op amp to 5V. What happens then? Well, the output of the op amp had been at 0V, and it’s connected to the <code>-</code> input by a wire, so the <code>-</code> input sits at 0V. The difference between the two inputs is 5V - 0V = 5V, so the op amp will attempt to set the output to 5V * 100000, give or take a decimal place, and will crank up the voltage, really quickly. A cheap TL074 op amp has a slew rate of 20V/µs, which is to say, far too fast for you to even notice how long it takes to start increasing the voltage.</p>
@@ -244,7 +270,7 @@ An Op Amp In an “Amplifier” Configuration
 <p>If the voltage at the input is 0V, then <em>all</em> voltages are 0V, for much the same reasons as in the “buffer” case. There’s a resistor between the output and the <code>-</code> input, but that doesn’t matter considering that both ends of it are at 0V. Everything stays at 0V, at least until we change the voltage at the input.</p>
 <p>What will happen if we set the input to 1V? Well, just like with the buffer, the op amp will try to set the output voltage to:<br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (1V-0V) \times 100000 \\ = 100000V \end{split} \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{output} = (V_{in+} - V_{in-}) \times Gain \\ = (1V-0V) \times 100000 \\ = 100000V \end{split} \end{align} $$</span></span></span><br />
 </span><br />
 So, a huge number. But to get there, it has to start climbing, and that’s when the fun begins. It’s time to start talking about those resistor values.</p>
 <p>There are two resistors in the circuit. We can label them R<sub>f</sub> (the <code>f</code> is for “feedback”) and R<sub>g</sub> (the <code>g</code> is for “ground”). We are using 100k and 50k Ohm value resistors for these two, respectively. By changing the values that you use, you can change the amount of gain in the circuit.</p>
@@ -253,7 +279,7 @@ Ong saluri, CC BY-SA 3.0, via <a href="https://commons.wikimedia.org/wiki/File:O
 <p>The <em>formula</em> for the voltage output by an op amp in an “amplifier” circuit is:</p>
 <p><br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \left(1 + \cfrac {R_f} {R_g}\right) \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \left(1 + \cfrac {R_f} {R_g}\right) \end{align} $$</span></span></span><br />
 </span><br />
 </p>
 <p>It is worth committing this formula to memory. To be honest, you can just accept that and move on if you like. But I will show you <em>why</em> this is true, because we can learn a bit more about op amp circuits from the derivation.</p>
@@ -264,7 +290,7 @@ Ong saluri, CC BY-SA 3.0, via <a href="https://commons.wikimedia.org/wiki/File:O
 Krishnavedala, CC0, <a href="https://commons.wikimedia.org/wiki/File:Resistive_divider2.svg">via Wikimedia Commons</a>
 <p>In the case above, the voltage at V<sub>out</sub> is:<br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \end{align} $$</span></span></span><br />
 </span><br />
 </p>
 <p>The two resistors in series in the “amplifier” configuration form a voltage divider. In case that’s not clear, I’ll redraw the schematic slightly.</p>
@@ -273,7 +299,7 @@ This Should Make the Voltage Divider More Obvious
 <p>I hope you agree that this “amplifier” circuit is the same circuit as the one I’ve been drawing all along, only with the resistors in a slightly different position. Now we can answer the question of “What voltage at <span class="math inline"><em>V</em><sub><em>output</em></sub></span> will cause the voltage at <span class="math inline"><em>V</em><sub>−</sub></span> to reach 1V?”</p>
 <p>Well, let’s just substitute in the values we know into the formula (5) above. In particular, let’s use 1V for V<sub>out</sub> in the voltage divider, which is the point we are connecting to the <code>-</code> input of the op amp. For <em>the voltage divider alone:</em><br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \\ 1V = V_{in} \times \cfrac {50} {100 + 50} \\ 1V = V_{in} \times \cfrac {1} {3} \\ V_{in} = 3V \end{split} \end{align}$$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} \begin{split} V_{out} = V_{in} \times \cfrac {R_2} {R_1 + R_2} \\ 1V = V_{in} \times \cfrac {50} {100 + 50} \\ 1V = V_{in} \times \cfrac {1} {3} \\ V_{in} = 3V \end{split} \end{align}$$</span></span></span><br />
 </span><br />
 So a voltage of 3V applied at V<sub>in</sub> will cause V<sub>out</sub> in the voltage divider.</p>
 <p>Therefore, if our op amp is sending 3V to its output (which corresponds to V<sub>in</sub> on the voltage divider), the voltage divider will result in sending 1V to the <code>-</code> input (labeled below as <span class="math inline"><em>V</em><sub>−</sub></span>, which corresponds to V<sub>out</sub> on the voltage divider diagram above). Just to make that clear, I ran it in a simulator and applied voltage probes to the output and to the <code>-</code> input:</p>
@@ -282,7 +308,7 @@ Same Circuit with Two Voltage Probes Added
 <p>So, when we make the two input voltages to the op amp different by raising <span class="math inline"><em>V</em><sub><em>input</em></sub></span> to 1V, the op amp will note that <span class="math inline"><em>V</em><sub>+</sub> − <em>V</em><sub>−</sub></span> is positive, and will start to swing <span class="math inline"><em>V</em><sub><em>output</em></sub></span> way up, only stabilizing when <span class="math inline"><em>V</em><sub>−</sub></span> also reaches 1V, which happens when <span class="math inline"><em>V</em><sub><em>output</em></sub></span> reaches 3V. Hence, with the specific resistor values of 100k and 50k, the gain is:</p>
 <p><br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} \begin{split}Gain =\left(1 + \cfrac {R_f} {R_g}\right)\\=\left(1 + \cfrac {100k} {50k}\right)\\=\left(1 + 2\right)\\=3 \end{split} \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} \begin{split}Gain =\left(1 + \cfrac {R_f} {R_g}\right)\\=\left(1 + \cfrac {100k} {50k}\right)\\=\left(1 + 2\right)\\=3 \end{split} \end{align} $$</span></span></span><br />
 </span><br />
 </p>
 <p>As I mentioned previously, the “buffer” is just an extreme case of the amplifier; <span class="math inline"><em>R</em><sub><em>f</em></sub></span> is 0 Ohms and <span class="math inline"><em>R</em><sub><em>g</em></sub></span> is infinity. And that’s why the “amplifier” circuit can’t ever have a gain of less than 1; once you get to the point where your “amplifier” becomes a “buffer” there are no resistor values which you can plug in which will make your gain any lower.</p>
@@ -303,7 +329,7 @@ Same Circuit with Two Voltage Probes Added
 <p>To cut to the chase, the formula for the gain of an inverter is:</p>
 <p><br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$ \begin{align} V_{output} = -V_{input} \times \cfrac {R_f} {R_{input}} \end{align} $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$ \begin{align} V_{output} = -V_{input} \times \cfrac {R_f} {R_{input}} \end{align} $$</span></span></span><br />
 </span><br />
 </p>
 <p>As with the amplifier, it is worth memorizing this formula. Just like before, we will look at <em>why</em> this formula is true.</p>
@@ -342,12 +368,12 @@ An Op Amp In an “Inverter” Configuration
 <tr class="even">
 <td><br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$V_{output} = V_{input}\left(1 +\cfrac {R_f} {R_g} \right)  $$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$V_{output} = V_{input}\left(1 +\cfrac {R_f} {R_g} \right)  $$</span></span></span><br />
 </span><br />
 </td>
 <td><br />
 <span class="math display"><br />
-<span class="math display"><span class="math display">$$V_{output} = -V_{input}\cfrac {R_f} {R_{input}}$$</span></span><br />
+<span class="math display"><span class="math display"><span class="math display">$$V_{output} = -V_{input}\cfrac {R_f} {R_{input}}$$</span></span></span><br />
 </span><br />
 </td>
 </tr>
@@ -443,6 +469,10 @@ When an op amp is in an inverting configuration with the <code>+</code> input ti
 </ul>
 <div class="info">
 Tags: <a href="../tags/synthesis.html">synthesis</a>, <a href="../tags/diy.html">diy</a>, <a href="../tags/electrical%20engineering.html">electrical engineering</a>
+</div>
+</div>
+<div class="info">
+Tags:
 </div>
 </div>
 <div class="info">

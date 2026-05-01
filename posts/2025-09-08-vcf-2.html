@@ -1,20 +1,12 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
-        <title>Building a Synthesizer, Chapter 13: Building the VCF - Craig Stuntz</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - 2025-09-08-vcf-2</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://discuss.systems/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -30,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        13
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the VCF
-                </h1>
-            
+            <h1>2025-09-08-vcf-2</h1>
+
             <div class="info">
     Posted on September  8, 2025
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer-13">Building a Synthesizer,
+13</h3>
+<h1 class="chapterName" id="building-the-vcf">Building the VCF</h1>
+<div class="info">
+Posted on September 8, 2025
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -82,12 +82,8 @@ initial assembly. I made one mistake, which was accidentally melting two of the
 capacitor housings a bit with my soldering iron (I work under a magnifiying lens,
 and this was out of sight!):</p>
 <figure>
-<a href="../images/synth/VCFPCBoard.jpeg">
-<img src="../images/synth/VCFPCBoard.jpeg" loading="lazy" height="300px" alt="The completed PC board. In the middle of the board there are three red capacitors next to each other, and the corner of these are melted a little">
-</a>
-<figcaption>
-PC Board with Slightly Melted Capacitors
-</figcaption>
+<a href="../images/synth/VCFPCBoard.jpeg"><img src="../images/synth/VCFPCBoard.jpeg" loading="lazy" height="300" alt="The completed PC board. In the middle of the board there are three red capacitors next to each other, and the corner of these are melted a little" /></a>
+<figcaption>PC Board with Slightly Melted Capacitors</figcaption>
 </figure>
 <p>One tip I found handy: Before installing the trimpot resistor, set it to the
 middle of its range using your ohmmeter, because it’s hard to tell where it’s
@@ -95,14 +91,10 @@ set once it’s in the circuit. From there you can easily adjust it up or down a
 needed. I found it needed not adjustment at all, however!</p>
 <p>A couple of other views:</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFFinishedFront.jpeg">
-<img src="../images/synth/VCFFinishedFront.jpeg" loading="lazy" height="300px" alt="A front view of the finished VCF, showing many knobs and jacks">
-</a>
+<a href="../images/synth/VCFFinishedFront.jpeg"><img src="../images/synth/VCFFinishedFront.jpeg" loading="lazy" height="300" alt="A front view of the finished VCF, showing many knobs and jacks" /></a>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFFinishedSide.jpeg">
-<img src="../images/synth/VCFFinishedSide.jpeg" loading="lazy" height="150px" alt="A side view of the finished VCF, showing potentiometers, capacitors, ICs, and resistors">
-</a>
+<a href="../images/synth/VCFFinishedSide.jpeg"><img src="../images/synth/VCFFinishedSide.jpeg" loading="lazy" height="150" alt="A side view of the finished VCF, showing potentiometers, capacitors, ICs, and resistors" /></a>
 </figure>
 <div style="clear:both  ;">
 
@@ -112,22 +104,14 @@ needed. I found it needed not adjustment at all, however!</p>
 top. There were two spaces for diodes, for which no diodes were supplied in the
 kit.</p>
 <figure>
-<a href="../images/synth/VCFDiodes.jpeg">
-<img src="../images/synth/VCFDiodes.jpeg" loading="lazy" height="300px" alt="A photo of the PC board. There are two unpopulated spaces for diodes.">
-</a>
-<figcaption>
-Missing Diodes?
-</figcaption>
+<a href="../images/synth/VCFDiodes.jpeg"><img src="../images/synth/VCFDiodes.jpeg" loading="lazy" height="300" alt="A photo of the PC board. There are two unpopulated spaces for diodes." /></a>
+<figcaption>Missing Diodes?</figcaption>
 </figure>
 <p>This was not mentioned in the directions, but I found reference to them on the
 schematic:</p>
 <figure>
-<a href="../images/synth/VCFDiodesSchematic.png">
-<img src="../images/synth/VCFDiodesSchematic.png" loading="lazy" height="300px" alt="A detail of the schematic, showing the diode testing circuit">
-</a>
-<figcaption>
-Mystery… Solved?
-</figcaption>
+<a href="../images/synth/VCFDiodesSchematic.png"><img src="../images/synth/VCFDiodesSchematic.png" loading="lazy" height="300" alt="A detail of the schematic, showing the diode testing circuit" /></a>
+<figcaption>Mystery… Solved?</figcaption>
 </figure>
 <p>There are two links on the schematic, and they go to
 <a href="https://makingcircuits.com/blog/diode-matching-circuit-pairing-circuit/">an article on diode matching</a>
@@ -152,28 +136,16 @@ prefer a kind of crunchy sound!</p>
 filtering at all, a low pass filter without resonance, and no filtering but a
 “medium” amount of resonance:</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFFinishedNoFilter.jpg">
-<img src="../images/synth/VCFFinishedNoFilter.jpg" loading="lazy" height="200px" alt="A square wave displayed on the oscilloscope">
-</a>
-<figcaption>
-#NoFilter
-</figcaption>
+<a href="../images/synth/VCFFinishedNoFilter.jpg"><img src="../images/synth/VCFFinishedNoFilter.jpg" loading="lazy" height="200" alt="A square wave displayed on the oscilloscope" /></a>
+<figcaption>#NoFilter</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFFinishedLowPass.jpg">
-<img src="../images/synth/VCFFinishedLowPass.jpg" loading="lazy" height="200px" alt="The square wave with a low pass filter applied, which rounds off the sharp edges of the wave">
-</a>
-<figcaption>
-Low Pass
-</figcaption>
+<a href="../images/synth/VCFFinishedLowPass.jpg"><img src="../images/synth/VCFFinishedLowPass.jpg" loading="lazy" height="200" alt="The square wave with a low pass filter applied, which rounds off the sharp edges of the wave" /></a>
+<figcaption>Low Pass</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/VCFFinishedResonance.jpg">
-<img src="../images/synth/VCFFinishedResonance.jpg" loading="lazy" height="200px" alt="The square wave with a low pass filter and resonance filter applied, which shows an up and down line at the start of each wave">
-</a>
-<figcaption>
-Resonance
-</figcaption>
+<a href="../images/synth/VCFFinishedResonance.jpg"><img src="../images/synth/VCFFinishedResonance.jpg" loading="lazy" height="200" alt="The square wave with a low pass filter and resonance filter applied, which shows an up and down line at the start of each wave" /></a>
+<figcaption>Resonance</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -225,10 +197,14 @@ though:</p>
 <li><a href="https://www.youtube.com/watch?v=jvNNgUl3al0">Designing a diode ladder filter from scratch</a> (36:03)</li>
 <li><a href="https://www.youtube.com/watch?v=tWKLFcc_BJM">Turning my diode ladder filter into a eurorack module</a> (34:46)</li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html" rel="tag" title="All pages tagged 'synthesis'.">synthesis</a>, <a href="../tags/diy.html" rel="tag" title="All pages tagged 'diy'.">diy</a>, <a href="../tags/electrical%20engineering.html" rel="tag" title="All pages tagged 'electrical engineering'.">electrical engineering</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'synthesis'." href="../tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged 'diy'." href="../tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged 'electrical engineering'." href="../tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
+    Tags: 
     
 </div>
 

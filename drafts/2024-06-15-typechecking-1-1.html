@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
-        <title>A Very Gentle Introduction to Type Checking, Chapter 1.1:  - Craig Stuntz</title>
+        <title>2024-06-15-typechecking-1-1 - Craig Stuntz</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css">
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -31,22 +31,32 @@
 
         <div id="content">
             
-                <h3 class="series">
-                    A Very Gentle Introduction to Type Checking,
-                        1.1
-                    
-                </h3>
             
-            
-                <h1 class="chapterName">
-                    The Untyped Lambda Calculus (and Friends!)
-                </h1>
+                <h1>2024-06-15-typechecking-1-1</h1>
             
             <div class="info">
     Posted on June 15, 2024
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="a-very-gentle-introduction-to-type-checking-1.1">A Very Gentle Introduction to Type Checking,
+1.1</h3>
+<h1 class="chapterName" id="the-untyped-lambda-calculus-and-friends">The Untyped Lambda Calculus (and Friends!)</h1>
+<div class="info">
+Posted on June 15, 2024
+</div>
 <div class="toc">
 <ul>
 <li>Introduction: Type checkin’</li>
@@ -115,6 +125,7 @@ structural equality check, but as the expressive power of a type system
 increases, this equality check becomes more difficult.</p>
 </div>
 <figure class="inlineRight">
+<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>implicit <span class="kw">enum</span> Type<span class="op">:</span> <span class="dt">Equatable</span> <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> int</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> boolean</span>
@@ -128,10 +139,9 @@ increases, this equality check becomes more difficult.</p>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">t3</span> <span class="op">=</span> Type<span class="op">.</span>list<span class="op">(</span>t1<span class="op">)</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">t4</span> <span class="op">=</span> Type<span class="op">.</span>list<span class="op">(</span>t2<span class="op">)</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">(</span>t3 <span class="op">==</span> t4<span class="op">)</span></span></code></pre></div>
-<figcaption>
-Structural equality; different instances are equal when they contain
-the same values
-</figcaption>
+</div>
+<figcaption>Structural equality; different instances are equal when they contain
+the same values</figcaption>
 </figure>
 <p>As noted earlier, if the only types your programming language contained were
 <code>Int</code> and <code>Boolean</code> then this would indeed be very easy. <code>Int == Int</code> and
@@ -230,6 +240,7 @@ of an expression is equivalent to the type that we are expecting. This is easier
 if the expression is in the simplest possible form.</p>
 <h3 id="a-very-simple-example">A Very Simple Example</h3>
 <p>That’s a little abstract, so let’s look at an example from Swift:</p>
+<div id="cb2" class="sourceCode">
 <div class="sourceCode" id="cb2"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">zero</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> <span class="fu">increment</span><span class="op">(</span><span class="va">n</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> -&gt; <span class="fu">Int</span> <span class="op">{</span></span>
@@ -237,8 +248,11 @@ if the expression is in the simplest possible form.</p>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span> <span class="op">=</span> increment<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)</span></span></code></pre></div>
+</div>
 <p>So far, so good, but of course we could have written <code>one</code> as:</p>
+<div id="cb3" class="sourceCode">
 <div class="sourceCode" id="cb3"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">one</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">1</span> <span class="co">// because increment(n: zero) == 1</span></span></code></pre></div>
+</div>
 <p>You might prefer one version of the <em>source code,</em> but in fact both versions are
 the same <em>value</em> in the end. We call the second version, with the literal <code>1</code>, the
 <strong>normalized</strong> version because it is “less complicated” than the version with
@@ -263,7 +277,9 @@ normalize!</p>
 and pass as the <code>n</code> argument. <code>zero</code> is a variable of type <code>Int</code> and in fact contains an
 instance of type <code>Int</code>, so the type check should be successful.</p>
 <p>Should this type check?</p>
+<div id="cb4" class="sourceCode">
 <div class="sourceCode" id="cb4"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">three</span> <span class="op">=</span> increment<span class="op">(</span>n<span class="op">:</span> increment<span class="op">(</span>n<span class="op">:</span> increment<span class="op">(</span>n<span class="op">:</span> zero<span class="op">)))</span></span></code></pre></div>
+</div>
 <p>If you’ve been programming for a while I think you’ll agree that the answer is
 “yes,” but it’s not quite so simple for the type checker to answer. In this case
 we must know that we are allowed to pass a function call, with all required
@@ -280,7 +296,9 @@ have used a language with an <code>eval</code> function. We will interpret the s
 the code and by doing so reduce it to a “simpler” form. For example, references
 to a variable will be substituted with the value of that variable.</p>
 <p>If you evaluate the expression above, you get a normalized form, which is:</p>
+<div id="cb5" class="sourceCode">
 <div class="sourceCode" id="cb5"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">three</span><span class="op">:</span> Int <span class="op">=</span> <span class="dv">3</span></span></code></pre></div>
+</div>
 <p>We normally think of such evaluations as happening at runtime, but this is not
 strictly correct. There is no reason the example given can’t be evaluated at
 compile time and in fact in most languages the optimizer will do exactly that
@@ -291,7 +309,7 @@ in normalized form!</p>
 <p>I’m not going to discuss this much more for now because we will cover it in
 great detail in the near future, but I just want to put into your mind the idea
 that evaluating an expression will result in it eventually becoming normalized,
-because that is in fact true.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+because that is in fact true.<a href="#fn1" id="fnref1" class="footnote-ref" role="doc-noteref"><sup>1</sup></a></p>
 <p>We can’t always evaluate a function at compile time like this; some function
 results depend on values which are unknown until runtime. But we can do it often
 enough to be helpful, and in particular we can do it when type checking dependent types.</p>
@@ -321,7 +339,7 @@ There is basically <em>one</em> feature in the whole language, and it’s quite 
 to write any meaningful programs in. However, it’s quite simple to write an
 expression evaluator for it due to its simplicity, and as that is what we are
 aiming to do it is a good choice for our purposes. Still, this section is a bit
-complicated if it’s your first exposure to the untyped lambda calculus!<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+complicated if it’s your first exposure to the untyped lambda calculus!<a href="#fn2" id="fnref2" class="footnote-ref" role="doc-noteref"><sup>2</sup></a></p>
 <h3 id="the-simplest-value-in-the-untyped-lambda-calculus">The Simplest Value In the Untyped Lambda Calculus</h3>
 <p>Let’s consider the simplest possible value in the untyped lambda caculus, the
 identity function. It just returns the value of its argument. Values in the
@@ -337,7 +355,7 @@ like this:</p>
 have, you know, integers, and booleans and stuff, because the untyped lambda
 calculus very much does not have types for integers and booleans and stuff.
 However, you can use these functions to perform computations which are the same
-as in languages which <em>do</em> have those features.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+as in languages which <em>do</em> have those features.<a href="#fn3" id="fnref3" class="footnote-ref" role="doc-noteref"><sup>3</sup></a></p>
 <div class="highlight">
 <p>Writing an evaluator requires the following steps:</p>
 <ul>
@@ -368,7 +386,7 @@ lambda calculus, like add two numbers together, then you have to stop and think
 about how you’re going to represent numbers in a programming language which
 doesn’t have them.</p>
 <p>The type of number that we’re going to use is a <strong>natural number</strong>, and by this
-we mean a number which is in the set <span class="math inline">{0, 1, 2, ..., ∞}</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> However, we
+we mean a number which is in the set <span class="math inline">{0, 1, 2, …, ∞}</span>.<a href="#fn4" id="fnref4" class="footnote-ref" role="doc-noteref"><sup>4</sup></a> However, we
 are going to have to think about how to represent these using anonymous
 functions!</p>
 <p>Swift doesn’t have a type like this. It has <code>UInt64</code>, but there are obviously
@@ -376,6 +394,7 @@ values too large to store in a <code>UInt64</code>. It turns out that this reall
 because the type of <code>increment</code> above is actually a bit more complicated than “Int”.
 It actually means “an <code>Int</code> or perhaps it might throw an exception due to a numeric
 overflow.”</p>
+<div id="cb7" class="sourceCode">
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">➜</span> swift repl  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Welcome</span> to Apple Swift version 5.10 <span class="er">(</span><span class="ex">swiftlang-5.10.0.13</span> clang-1500.3.9.4<span class="kw">)</span><span class="bu">.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Type</span> :help for assistance.</span>
@@ -384,6 +403,7 @@ overflow.”</p>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Execution</span> interrupted. Enter code to recover and continue.</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Enter</span> LLDB commands to investigate <span class="er">(</span><span class="bu">type</span> :help for assistance.<span class="kw">)</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">3</span><span class="op">&gt;</span>  </span></code></pre></div>
+</div>
 <p>You might think I’m being overly picky here, but a type checker must understand
 every possible case for the types in use. Does this mean that Swift is unsound?
 Not really, this notion of “or may throw a numeric overflow exception” is built
@@ -409,19 +429,21 @@ to only two cases:</p>
 <li><code>add1 n</code></li>
 </ul>
 <p><code>add1</code> means “given some value <code>n</code> which is certainly a natural number, the next
-largest value, <span class="math inline"><em>n</em> + 1</span>.”<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+largest value, <span class="math inline"><em>n</em> + 1</span>.”<a href="#fn5" id="fnref5" class="footnote-ref" role="doc-noteref"><sup>5</sup></a></p>
 <p>So (in Swift) we can literally have a data type like:</p>
+<div id="cb8" class="sourceCode">
 <div class="sourceCode" id="cb8"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>indirect <span class="kw">enum</span> Nat <span class="op">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> zero</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> add1<span class="op">(</span>Nat<span class="op">)</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
 <p>And now Swift has a “natural numbers” data type! You can store any natural number in
 this type, although you may eventually run out of memory.</p>
 <h3 id="church-numerals-in-the-untyped-lambda-calculus">Church Numerals In the Untyped Lambda Calculus</h3>
 <p>But we’re not here to learn Swift right now, and we aren’t even trying to
 produce a tutorial for the untyped lambda calculus. Instead we just need enough
 exposure to it to know if our evaluator is working correctly.</p>
-<p>We can represent the natural numbers in the untyped lambda calculus as follows:<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>We can represent the natural numbers in the untyped lambda calculus as follows:<a href="#fn6" id="fnref6" class="footnote-ref" role="doc-noteref"><sup>6</sup></a></p>
 <pre><code>zero = λf.λx.x
 add1 = λn.λf.λx.f (n f x)</code></pre>
 <p>This implies that, for example, <code>one</code> (a function representhing the natural
@@ -491,19 +513,26 @@ syntax tree (AST).</p>
 as:</p>
 <pre><code>λx.x</code></pre>
 <p>However this line of code written as an abstract syntax tree in Swift would be:</p>
+<div id="cb17" class="sourceCode">
 <div class="sourceCode" id="cb17"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Expr<span class="op">.</span>lambda<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">,</span> <span class="op">.</span>variable<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">))</span></span></code></pre></div>
+</div>
 <p>…which is somewhat more challenging to mentally parse. Because of this I will
 usually put the “unparsed” (literal source code version) in comments near the
 “parsed” (AST) version, like this:</p>
+<div id="cb18" class="sourceCode">
 <div class="sourceCode" id="cb18"><pre class="sourceCode swift"><code class="sourceCode swift"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">//  id = λx.x</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="va">id</span> <span class="op">=</span> Expr<span class="op">.</span>lambda<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">,</span> <span class="op">.</span>variable<span class="op">(</span><span class="st">&quot;x&quot;</span><span class="op">))</span></span></code></pre></div>
+</div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>This is somewhat complicated to prove; see for example
+<li><div id="fn1">
+<p>This is somewhat complicated to prove; see for example
 <a href="https://tidsskrift.dk/brics/article/view/20473">Normalization by Evaluation with Typed Abstract Syntax</a>
-for more information.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>One might fairly ask why David picked the untyped lambda calculus as
+for more information.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
+<li><div id="fn2">
+<p>One might fairly ask why David picked the untyped lambda calculus as
 an example. Nothing in the tutorial depends on its use; it’s just a
 simple example here. The untyped lambda calculus is important in
 theoretical computer science and so one can presume that folks coming
@@ -512,30 +541,43 @@ already. This is perhaps less true when people approach the tutorial
 from a “practitioner”/commercial programmer background. However, the
 untyped lambda calculus does have at least one thing going for it,
 which is that it’s very simple to evaluate. We will be doing that
-very soon!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>It turns out that the untyped lambda calculus is
+very soon!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
+<li><div id="fn3">
+<p>It turns out that the untyped lambda calculus is
 <a href="https://www.youtube.com/watch?v=RPQD7-AOjMI">Turing complete</a>,
 and can compute literally anything that any other programming
 language can express. However, we won’t be making use of this
-fact in this series.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Mathematicians, somewhat inconveniently,
-<a href="https://mathworld.wolfram.com/NaturalNumber.html">use two different definitions of “natural numbers,”</a> namely <span class="math inline">{0, 1, 2, ..., ∞}</span>
-and <span class="math inline">{1, 2, 3, ..., ∞}</span>. We (and, indeed, nearly all
-computer scientists) will use only the former.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>It’s more common to call <code>add1</code> by the name <code>succ</code>, for “successor,”
-but David uses <code>add1</code>, so I will follow his lead),<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Unless you are going to study the untyped lambda calculus
+fact in this series.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
+<li><div id="fn4">
+<p>Mathematicians, somewhat inconveniently,
+<a href="https://mathworld.wolfram.com/NaturalNumber.html">use two different definitions of “natural numbers,”</a> namely <span class="math inline">{0, 1, 2, …, ∞}</span>
+and <span class="math inline">{1, 2, 3, …, ∞}</span>. We (and, indeed, nearly all
+computer scientists) will use only the former.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
+<li><div id="fn5">
+<p>It’s more common to call <code>add1</code> by the name <code>succ</code>, for “successor,”
+but David uses <code>add1</code>, so I will follow his lead),<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
+<li><div id="fn6">
+<p>Unless you are going to study the untyped lambda calculus
 <em>per se,</em> it’s not worth looking too deeply into why we
 are using these specific functions. For our purposes, it’s
 enough to know that they will work for the specific
 example we will be evaulating with the evaluator that we
-are going to build.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+are going to build.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
 </ol>
 </section>
+<div class="info">
+Tags: <a href="../tags/compilers.html" rel="tag" title="All pages tagged 'compilers'.">compilers</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
+    Tags: 
     
 </div>
 

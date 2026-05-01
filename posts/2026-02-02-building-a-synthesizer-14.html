@@ -1,20 +1,12 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
-        <title>Building a Synthesizer, Chapter 14: Building the Sequencer - Craig Stuntz</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - 2026-02-02-building-a-synthesizer-14</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://discuss.systems/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -30,23 +22,31 @@
         </div>
 
         <div id="content">
-            
-                <h3 class="series">
-                    Building a Synthesizer,
-                        13
-                    
-                </h3>
-            
-            
-                <h1 class="chapterName">
-                    Building the Sequencer
-                </h1>
-            
+            <h1>2026-02-02-building-a-synthesizer-14</h1>
+
             <div class="info">
     Posted on February  2, 2026
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h3 class="series" id="building-a-synthesizer-13">Building a Synthesizer,
+13</h3>
+<h1 class="chapterName" id="building-the-sequencer">Building the Sequencer</h1>
+<div class="info">
+Posted on February 2, 2026
+</div>
 <div class="toc">
 <ul>
 <li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
@@ -76,7 +76,7 @@ In the instructions, Moritz Klein says, “I simply made the decision to build a
 sequencer with five steps exactly,” although I suspect the fact that this is
 already a fairly complicated build and adding more steps would have only
 increased the complexity might have figured into it.</p>
-<p>Also, why limit your sequencer to only 4 steps? This one goes to <s>11</s> 5!</p>
+<p>Also, why limit your sequencer to only 4 steps? This one goes to <del>11</del> 5!</p>
 <p>Commercial hardware sequencers often feature maximum sequence lengths of 16, 32,
 64, or even higher number of steps, but that would make the module very large,
 both in terms of the number of components you would need to assemble and in
@@ -142,9 +142,7 @@ So looking more closely at the instructions, the diagram does show the jumper
 to ground removed in this step, but it’s not mentioned in the text. Removing the
 connection between ground and the reset pin made the circuit work.</p>
 <figure>
-<a href="../images/synth/SequencerResettingBreadboard.jpeg">
-<img src="../images/synth/SequencerResettingBreadboard.jpeg" loading="lazy" height="300px" alt="Three breadboards, one full sized and two half size below it. There are five LEDs along the top. The first one is lit">
-</a>
+<a href="../images/synth/SequencerResettingBreadboard.jpeg"><img src="../images/synth/SequencerResettingBreadboard.jpeg" loading="lazy" height="300" alt="Three breadboards, one full sized and two half size below it. There are five LEDs along the top. The first one is lit" /></a>
 </figure>
 <h3 id="the-cv-output">The CV Output</h3>
 <p>Next we (temporarily!) disconnect the LEDs and instead wire up five
@@ -156,14 +154,10 @@ bottom of the board were not making good electrical contact with the inside of
 the breadboard, but figuring out which components were not connecting well was
 challenging!</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerFiveSteps.png">
-<img src="../images/synth/SequencerFiveSteps.png" loading="lazy" height="300px" alt="The oscilloscope, showing the output CV, which has five visible steps, going up">
-</a>
+<a href="../images/synth/SequencerFiveSteps.png"><img src="../images/synth/SequencerFiveSteps.png" loading="lazy" height="300" alt="The oscilloscope, showing the output CV, which has five visible steps, going up" /></a>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerCVOutputBreadboard.jpeg">
-<img src="../images/synth/SequencerCVOutputBreadboard.jpeg" loading="lazy" height="300px" alt="The breadboard at the CV output stage, showing five new potentiometers and a jack socket with a red wire connected to it">
-</a>
+<a href="../images/synth/SequencerCVOutputBreadboard.jpeg"><img src="../images/synth/SequencerCVOutputBreadboard.jpeg" loading="lazy" height="300" alt="The breadboard at the CV output stage, showing five new potentiometers and a jack socket with a red wire connected to it" /></a>
 </figure>
 <div style="clear:both  ;">
 
@@ -180,20 +174,12 @@ supplied with other kits in this series) and there are only two rows on the
 breadboard free for it in the suggested layout, but the actual trimpot supplied with
 this kit is square and needs three rows:</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerTrimpot.png">
-<img src="../images/synth/SequencerTrimpot.png" loading="lazy" height="150px" alt="A detail from the instructions, showing the trimpot spread across a single row of the breadboard">
-</a>
-<figcaption>
-Instructions, one row
-</figcaption>
+<a href="../images/synth/SequencerTrimpot.png"><img src="../images/synth/SequencerTrimpot.png" loading="lazy" height="150" alt="A detail from the instructions, showing the trimpot spread across a single row of the breadboard" /></a>
+<figcaption>Instructions, one row</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerTrimpotBreadboard.jpg">
-<img src="../images/synth/SequencerTrimpotBreadboard.jpg" loading="lazy" height="150px" alt="A photo of the actual trimpot supplied with the kit, which requires 5 rows on the breadboard">
-</a>
-<figcaption>
-Supplied component, three rows
-</figcaption>
+<a href="../images/synth/SequencerTrimpotBreadboard.jpg"><img src="../images/synth/SequencerTrimpotBreadboard.jpg" loading="lazy" height="150" alt="A photo of the actual trimpot supplied with the kit, which requires 5 rows on the breadboard" /></a>
+<figcaption>Supplied component, three rows</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -215,26 +201,16 @@ placed them on the breadboard, don’t mention moving them, and more importantly
 mention that you have to rotate them 180º, which is less than obvious in the
 illustration:</p>
 <figure>
-<a href="../images/synth/SequencerLEDsFirst.png">
-<img src="../images/synth/SequencerLEDsFirst.png" loading="lazy" height="137px" alt="Detail of the instructions, from early on in the kit assembly. The cathode of the LEDs, indicated by a flat surface, is on the right">
-</a>
-<figcaption>
-We started like this…
-</figcaption>
+<a href="../images/synth/SequencerLEDsFirst.png"><img src="../images/synth/SequencerLEDsFirst.png" loading="lazy" height="137" alt="Detail of the instructions, from early on in the kit assembly. The cathode of the LEDs, indicated by a flat surface, is on the right" /></a>
+<figcaption>We started like this…</figcaption>
 </figure>
 <figure>
-<a href="../images/synth/SequencerLEDsSecond.png">
-<img src="../images/synth/SequencerLEDsSecond.png" loading="lazy" height="141px" alt="Detail of the instructions, from the current step. The cathode of the LEDs is on the left">
-</a>
-<figcaption>
-…and here is the current step
-</figcaption>
+<a href="../images/synth/SequencerLEDsSecond.png"><img src="../images/synth/SequencerLEDsSecond.png" loading="lazy" height="141" alt="Detail of the instructions, from the current step. The cathode of the LEDs is on the left" /></a>
+<figcaption>…and here is the current step</figcaption>
 </figure>
 <p>However, once I figured out what my mistake was, everything worked:</p>
 <figure>
-<a href="../images/synth/SequencerStatusLEDsBreadboard.jpeg">
-<img src="../images/synth/SequencerStatusLEDsBreadboard.jpeg" loading="lazy" height="300px" alt="Three breadboards, one full sized and two half size below it. There are five LEDs along the top. The first one is lit">
-</a>
+<a href="../images/synth/SequencerStatusLEDsBreadboard.jpeg"><img src="../images/synth/SequencerStatusLEDsBreadboard.jpeg" loading="lazy" height="300" alt="Three breadboards, one full sized and two half size below it. There are five LEDs along the top. The first one is lit" /></a>
 </figure>
 <h3 id="the-gate-output">The Gate Output</h3>
 <p>I found this section of the directions a little difficult to understand until I
@@ -266,12 +242,8 @@ maybe you might be concerned that an external source would give you a gate which
 is not a square wave, and hence you might want the comparitor in the signal path?), but in
 the end the circuit works well enough.</p>
 <figure>
-<a href="../images/synth/SequencerFailsafeGate.png">
-<img src="../images/synth/SequencerFailsafeGate.png" loading="lazy" height="300px" alt="An oscilloscope display, showing a square wave">
-</a>
-<figcaption>
-It goes up and it goes down. It’s a gate!
-</figcaption>
+<a href="../images/synth/SequencerFailsafeGate.png"><img src="../images/synth/SequencerFailsafeGate.png" loading="lazy" height="300" alt="An oscilloscope display, showing a square wave" /></a>
+<figcaption>It goes up and it goes down. It’s a gate!</figcaption>
 </figure>
 <h2 id="building-the-sequencer">Building the Sequencer</h2>
 <p>In contrast to the other modules I have built from the mki x es.EDU series, the
@@ -296,28 +268,16 @@ transistors, I find it helpful to solder one lead, then turn the board over to c
 the position of the component, then solder the other leads.</p>
 <p>Here are some photos of the finished build:</p>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerFrontPanel.jpeg">
-<img src="../images/synth/SequencerFrontPanel.jpeg" loading="lazy" height="300px" alt="The front panel of the sequencer. There is a switch for step count, a pot for rate, five switches for gate with five pots for level, unoccupied jacks for clock in, out, and reset, and jacks with cables connected for gate out and CV out. A switch for 2.5V or 5V is hidden by the bottom cable.">
-</a>
-<figcaption>
-Front
-</figcaption>
+<a href="../images/synth/SequencerFrontPanel.jpeg"><img src="../images/synth/SequencerFrontPanel.jpeg" loading="lazy" height="300" alt="The front panel of the sequencer. There is a switch for step count, a pot for rate, five switches for gate with five pots for level, unoccupied jacks for clock in, out, and reset, and jacks with cables connected for gate out and CV out. A switch for 2.5V or 5V is hidden by the bottom cable." /></a>
+<figcaption>Front</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerPCBoard.jpeg">
-<img src="../images/synth/SequencerPCBoard.jpeg" loading="lazy" height="100px" alt="A side view of the completed module. At the top we can see a bank of switches, below that is a circuit board where we can see ICs, capacitors, and resistors.">
-</a>
-<figcaption>
-Back
-</figcaption>
+<a href="../images/synth/SequencerPCBoard.jpeg"><img src="../images/synth/SequencerPCBoard.jpeg" loading="lazy" height="100" alt="A side view of the completed module. At the top we can see a bank of switches, below that is a circuit board where we can see ICs, capacitors, and resistors." /></a>
+<figcaption>Back</figcaption>
 </figure>
 <figure class="horizontalTiles">
-<a href="../images/synth/SequencerSide.jpeg">
-<img src="../images/synth/SequencerSide.jpeg" loading="lazy" height="100px" alt="A photo of the completed circuit board showing two ICs, a power connector, and a large number of resistors, capacitors, diodes, transistors, and trimpots">
-</a>
-<figcaption>
-Side
-</figcaption>
+<a href="../images/synth/SequencerSide.jpeg"><img src="../images/synth/SequencerSide.jpeg" loading="lazy" height="100" alt="A photo of the completed circuit board showing two ICs, a power connector, and a large number of resistors, capacitors, diodes, transistors, and trimpots" /></a>
+<figcaption>Side</figcaption>
 </figure>
 <div style="clear:both  ;">
 
@@ -356,10 +316,14 @@ disadvantages!</p>
 <li><a href="https://www.youtube.com/watch?v=vHNQQ6yUGyo">Designing a simple 5-step sequencer from scratch</a>
 by Moritz Klein (32:07)</li>
 </ul>
+<div class="info">
+Tags: <a href="../tags/synthesis.html" rel="tag" title="All pages tagged 'synthesis'.">synthesis</a>, <a href="../tags/diy.html" rel="tag" title="All pages tagged 'diy'.">diy</a>, <a href="../tags/electrical%20engineering.html" rel="tag" title="All pages tagged 'electrical engineering'.">electrical engineering</a>, <a href="../tags/sequencer.html" rel="tag" title="All pages tagged 'sequencer'.">sequencer</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'synthesis'." href="../tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged 'diy'." href="../tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged 'electrical engineering'." href="../tags/electrical%20engineering.html" rel="tag">electrical engineering</a>, <a title="All pages tagged 'sequencer'." href="../tags/sequencer.html" rel="tag">sequencer</a>
+    Tags: 
     
 </div>
 

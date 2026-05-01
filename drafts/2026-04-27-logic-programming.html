@@ -1,20 +1,12 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
-        <title>You've Been Doing Logic Programming All Along - Craig Stuntz</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Craig Stuntz - 2026-04-27-logic-programming</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
-        <link rel="me" href="https://discuss.systems/@CraigStuntz">
-        <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
-            <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
     </head>
     <body>
         <div id="header">
@@ -30,15 +22,29 @@
         </div>
 
         <div id="content">
-            
-            
-                <h1>You've Been Doing Logic Programming All Along</h1>
-            
+            <h1>2026-04-27-logic-programming</h1>
+
             <div class="info">
     Posted on April 27, 2026
     
 </div>
 
+<div id="header">
+<div id="logo">
+<a href="../">Craig Stuntz</a>
+</div>
+<div id="navigation">
+<a href="../">Home</a>
+<a href="../about.html">About</a>
+<a href="../presentations.html">Presentations</a>
+<a href="../archive.html">Archive</a>
+</div>
+</div>
+<div id="content">
+<h1 id="youve-been-doing-logic-programming-all-along">You’ve Been Doing Logic Programming All Along</h1>
+<div class="info">
+Posted on April 27, 2026
+</div>
 <p>There’s a pattern which shows up everywhere in programming, often disguised as
 something else. Once you see it, you can’t unsee it. I don’t <em>think</em> it has a
 single name. But I can give many examples! The pattern is, in an abstract sense:</p>
@@ -65,11 +71,12 @@ actually solve the problem.”<br />
 brute force method to solve <a href="https://projecteuler.net/problem=9">problem 9 of Project Euler</a>:</p>
 <blockquote>
 <p>A Pythagorean triplet is a set of three natural numbers, <span class="math inline"><em>a</em> &lt; <em>b</em> &lt; <em>c</em></span>, for which
-<span class="math display">$$ \begin{align} a^2 + b^2 = c^2 \end{align} $$</span>
+<span class="math display"><span class="math display">$$ \begin{align} a^2 + b^2 = c^2 \end{align} $$</span></span>
 For example, <span class="math inline">3<sup>2</sup> + 4<sup>2</sup> = 9 + 16 = 25 = 5<sup>2</sup></span>.<br />
 There exists exactly one Pythagorean triplet for which <span class="math inline"><em>a</em> + <em>b</em> + <em>c</em> = 1000</span>.<br />
-Find the product <span class="math inline"><em>a</em><em>b</em><em>c</em></span>.</p>
+Find the product <span class="math inline"><em>abc</em></span>.</p>
 </blockquote>
+<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Generate numbers [a, b, c] where a + b + c = 1000 and a &lt; b &lt; c</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Array</span>(<span class="dv">1000</span>)<span class="op">.</span><span class="fu">keys</span>()<span class="op">.</span><span class="fu">flatMap</span>(a <span class="kw">=&gt;</span> <span class="bu">Array</span>(<span class="dv">1000</span>)<span class="op">.</span><span class="fu">keys</span>()<span class="op">.</span><span class="fu">filter</span>(b <span class="kw">=&gt;</span> a <span class="op">&lt;</span> b <span class="op">&amp;&amp;</span> b <span class="op">&lt;</span> <span class="dv">1000</span><span class="op">-</span>a<span class="op">-</span>b)<span class="op">.</span><span class="fu">map</span>(b <span class="kw">=&gt;</span> [a<span class="op">,</span> b<span class="op">,</span> <span class="dv">1000</span><span class="op">-</span>a<span class="op">-</span>b]))</span>
@@ -77,6 +84,7 @@ Find the product <span class="math inline"><em>a</em><em>b</em><em>c</em></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>(([a<span class="op">,</span>b<span class="op">,</span>c]) <span class="kw">=&gt;</span> a<span class="op">*</span>a <span class="op">+</span> b<span class="op">*</span>b <span class="op">===</span> c<span class="op">*</span>c) </span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Reduce to the product</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(([a<span class="op">,</span>b<span class="op">,</span>c]) <span class="kw">=&gt;</span> a<span class="op">*</span>b<span class="op">*</span>c)<span class="op">.</span><span class="fu">take</span>(<span class="dv">1</span>)<span class="op">.</span><span class="fu">toArray</span>()[<span class="dv">0</span>]</span></code></pre></div>
+</div>
 <p>This looks incredibly simple! It’s not a “pattern,” it’s one line of code!</p>
 <p>The abstraction really is that simple, and the implementations try to stay close to
 that abstraction as much as possible. However, there can be a surprising amount
@@ -95,6 +103,7 @@ certainly see how the “map” (generate + restrict) and “reduce” fit in he
 <h3 id="smt-libz3">SMT-LIB/Z3</h3>
 <p>Are you ready to get weird? Here is the same Problem 9 from Project
 Euler implemented in SMT-LIB, a pure specification language:</p>
+<div id="cb2" class="sourceCode">
 <div class="sourceCode" id="cb2"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">; SMT-LIB is pretty basic and doesn't have exponentiation built in</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">; So we'll define this for legibility</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>(define-fun square ((num Int)) Int (<span class="op">*</span> num num))</span>
@@ -119,6 +128,7 @@ Euler implemented in SMT-LIB, a pure specification language:</p>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">; This returns the solution</span></span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
+</div>
 <p>If we hand this specification to a solver such as <a href="../tags/z3.html">Z3</a>, it will
 use decision procedures to solve the constraints directly rather than enumerate
 with brute force. <a href="https://microsoft.github.io/z3guide/playground/Freeform%20Editing/">Try it!</a></p>
@@ -128,6 +138,7 @@ we are generating possible assignments to <code>a</code>, <code>b</code>, and <c
 to those which <em>correctly satisfy the specification we have given.</em></p>
 <h3 id="prolog">Prolog</h3>
 <p>Similarly, Prolog lets us directly encode the problem from the specification:</p>
+<div id="cb3" class="sourceCode">
 <div class="sourceCode" id="cb3"><pre class="sourceCode prolog"><code class="sourceCode prolog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>answer(<span class="dt">Product</span>) <span class="kw">:-</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a &lt; b</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    between(<span class="dv">0</span><span class="kw">,</span> <span class="dv">998</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">,</span></span>
@@ -138,6 +149,7 @@ to those which <em>correctly satisfy the specification we have given.</em></p>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a^2 + b^2 = c^2</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">A</span><span class="fu">*</span><span class="dt">A</span> <span class="fu">+</span> <span class="dt">B</span><span class="fu">*</span><span class="dt">B</span> <span class="dt">=:=</span> <span class="dt">C*C</span><span class="kw">,</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Product</span> <span class="dt">is</span> <span class="dt">A</span> <span class="dt">*</span> <span class="dt">B</span> <span class="dt">*</span> <span class="dt">C</span><span class="kw">.</span></span></code></pre></div>
+</div>
 <p>One way to think about what Prolog is doing here is that we are not so much
 writing a generator and restriction function as we are <em>binding</em> the input
 arguments <code>A</code>, <code>B</code>, and <code>C</code> to the output <code>Product</code>. This might not at first <em>look</em>
@@ -160,6 +172,7 @@ suite, and we reduce this via a pass/fail verdict – do the tests pass?</p>
 <h2 id="measuring-generation-and-restriction-efficiency">Measuring Generation and Restriction Efficiency</h2>
 <p>The last example, TDD, might feel a bit unsatisfactory. One can imagine trying
 to solve Project Euler problem 9 via TDD:</p>
+<div id="cb4" class="sourceCode">
 <div class="sourceCode" id="cb4"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Arrange -- choose some random inputs as a first trial</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
@@ -173,6 +186,7 @@ to solve Project Euler problem 9 via TDD:</p>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertTrue</span><span class="op">(</span>b <span class="op">&lt;</span> c<span class="op">);</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertEquals</span><span class="op">(</span><span class="dv">1000</span><span class="op">,</span> a <span class="op">+</span> b <span class="op">+</span> c<span class="op">);</span> <span class="co">// Fail!</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertEquals</span><span class="op">(</span>c <span class="op">*</span> c<span class="op">,</span> actual<span class="op">);</span>   <span class="co">// Fail!</span></span></code></pre></div>
+</div>
 <p>I kid, I kid. Java can do brute force, just like JavaScript, even if TDD purists
 might sincerely suggest the above as a good starting point. But nonetheless,
 this example does indicate a difficulty with TDD: Finding meaningful inputs for
@@ -192,89 +206,53 @@ Generation can be too sparse to find bugs or so dense it overwhelms you.
 Restriction can let real bugs through or flag false positives. Both axes can fail
 in two directions.</p>
 <table style="border: none;">
-<tr>
-<td style="border: none;">
-</td>
-<td style="border: none;">
-</td>
-<th colspan="3">
-Restriction
-</th>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="border: none"></td>
+<td style="border: none"></td>
+<td colspan="3">Restriction</td>
 </tr>
-<tr>
-<td style="border: none;">
-</td>
-<td style="border: none;">
-</td>
-<th>
-Not restrictive enough
-</th>
-<th>
-“Just right”
-</th>
-<th>
-Too restrictive
-</th>
+<tr class="even">
+<td style="border: none"></td>
+<td style="border: none"></td>
+<td>Not restrictive enough</td>
+<td>“Just right”</td>
+<td>Too restrictive</td>
 </tr>
-<tr>
-<th rowspan="4" style="overflow-wrap: break-word;">
-Generator<br /><span style="font-weight: normal;">(number of cases considered)</span>
-</th>
-<th>
-Sampled
-</th>
-<td>
-TDD
-</td>
-<td>
-Property-based testing
-</td>
-<td>
-Overfitted unit tests
-</td>
+<tr class="odd">
+<td rowspan="4" style="overflow-wrap: break-word">Generator<br />
+<span style="font-weight: normal;">(number of cases considered)</span></td>
+<td>Sampled</td>
+<td>TDD</td>
+<td>Property-based testing</td>
+<td>Overfitted unit tests</td>
 </tr>
-<tr>
-<th>
-“Just right”
-</th>
-<td>
-Smoke testing
-</td>
-<td>
-Correctness proofs
-</td>
-<td>
-Rust’s borrow checker<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
-</td>
+<tr class="even">
+<td>“Just right”</td>
+<td>Smoke testing</td>
+<td>Correctness proofs</td>
+<td>Rust’s borrow checker<a href="#fn1" id="fnref1" class="footnote-ref" role="doc-noteref"><sup>1</sup></a></td>
 </tr>
-<tr>
-<th>
-“A lot”
-</th>
-<td>
-<code>printf</code> debugging
-</td>
-<td>
-Profile-guided fuzzing
-</td>
-<td>
-Static analysis
-</td>
+<tr class="odd">
+<td>“A lot”</td>
+<td><code>printf</code> debugging</td>
+<td>Profile-guided fuzzing</td>
+<td>Static analysis</td>
 </tr>
-<tr>
-<th>
-Too much
-</th>
-<td>
-Manually skimming a log file
-</td>
-<td>
-Symbolic execution
-</td>
-<td>
-Mutation testing
-</td>
+<tr class="even">
+<td>Too much</td>
+<td>Manually skimming a log file</td>
+<td>Symbolic execution</td>
+<td>Mutation testing</td>
 </tr>
+</tbody>
 </table>
 <p>Lest you consider me too judgy for the table above, I don’t mean to suggest that
 you should not, for example, use static analysis due to false positives!
@@ -296,15 +274,21 @@ failure mode you can live with for the problem in front of you.</p>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Especially the <a href="https://oneuptime.com/blog/post/2026-01-25-non-lexical-lifetimes-rust/view">pre-NLL borrow checker</a>,
+<li><div id="fn1">
+<p>Especially the <a href="https://oneuptime.com/blog/post/2026-01-25-non-lexical-lifetimes-rust/view">pre-NLL borrow checker</a>,
 although safe Rust will always reject valid (but not provably memory-safe)
-programs. To be clear, I think this is a good thing!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+programs. To be clear, I think this is a good thing!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</div></li>
 </ol>
 </section>
+<div class="info">
+Tags: <a href="../tags/computer%20science.html" rel="tag" title="All pages tagged 'computer science'.">computer science</a>, <a href="../tags/z3.html" rel="tag" title="All pages tagged 'z3'.">z3</a>
+</div>
+</div>
 
 <div class="info">
     
-    Tags: <a title="All pages tagged 'computer science'." href="../tags/computer%20science.html" rel="tag">computer science</a>, <a title="All pages tagged 'z3'." href="../tags/z3.html" rel="tag">z3</a>
+    Tags: 
     
 </div>
 
