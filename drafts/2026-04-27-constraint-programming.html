@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
+        <title>You've Been Constraint-Solving All Along - Craig Stuntz</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css">
+        <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
+        <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
+        <link rel="me" href="https://discuss.systems/@CraigStuntz">
+        <!-- KaTeX -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+            <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Craig Stuntz</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../presentations.html">Presentations</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            
+            
+                <h1>You've Been Constraint-Solving All Along</h1>
+            
+            <div class="info">
+    Posted on April 27, 2026
+    
+</div>
+
+<p>There’s a pattern which shows up everywhere in programming, often disguised as
+something else. Once you see it, you can’t unsee it. I don’t <em>think</em> it has a
+single name. But I can give many examples! The pattern is, in an abstract sense:</p>
+<ol type="1">
+<li>Take an input dataset and apply a function to project it into a different shape</li>
+<li>Write another function which restricts the results of that function to only
+those which are “interesting”</li>
+<li>(Optional): Write yet another function which reduces this to a single value,
+say, by summing the results or picking the minimum, or just taking the first
+result that comes in</li>
+</ol>
+<p>The Prolog community called the naïve form of this “generate-and-test” since at least
+the 1980s:</p>
+<blockquote>
+<p>“Generate-and-test is a common technique in algorithm design and programming.
+Here is how generate-and-test works for problem solving. One process or
+routine generates candidate solutions to the problem, and another process or
+routine tests the candidates, trying to find one or all candidates that
+actually solve the problem.”<br />
+– <em>The Art of Prolog</em> by Leon Sterling and Ehud Shapiro (1986)</p>
+</blockquote>
+<p>Formally, this is called the <a href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">constraint satisfaction problem</a>.</p>
+<h2 id="the-abstraction">The Abstraction</h2>
+<p>In case this isn’t absolutely clear, let’s look at some JavaScript which uses the
+brute force method to solve <a href="https://projecteuler.net/problem=9">problem 9 of Project Euler</a>:</p>
+<blockquote>
+<p>A Pythagorean triplet is a set of three natural numbers, <span class="math inline"><em>a</em> &lt; <em>b</em> &lt; <em>c</em></span>, for which
+<span class="math display">$$ \begin{align} a^2 + b^2 = c^2 \end{align} $$</span>
+For example, <span class="math inline">3<sup>2</sup> + 4<sup>2</sup> = 9 + 16 = 25 = 5<sup>2</sup></span>.<br />
+There exists exactly one Pythagorean triplet for which <span class="math inline"><em>a</em> + <em>b</em> + <em>c</em> = 1000</span>.<br />
+Find the product <span class="math inline"><em>a</em><em>b</em><em>c</em></span>.</p>
+</blockquote>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Generate numbers [a, b, c] where a + b + c = 1000 and a &lt; b &lt; c</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Array</span>(<span class="dv">1000</span>)<span class="op">.</span><span class="fu">keys</span>()<span class="op">.</span><span class="fu">flatMap</span>(a <span class="kw">=&gt;</span> <span class="bu">Array</span>(<span class="dv">1000</span>)<span class="op">.</span><span class="fu">keys</span>()<span class="op">.</span><span class="fu">filter</span>(b <span class="kw">=&gt;</span> a <span class="op">&lt;</span> b <span class="op">&amp;&amp;</span> b <span class="op">&lt;</span> <span class="dv">1000</span><span class="op">-</span>a<span class="op">-</span>b)<span class="op">.</span><span class="fu">map</span>(b <span class="kw">=&gt;</span> [a<span class="op">,</span> b<span class="op">,</span> <span class="dv">1000</span><span class="op">-</span>a<span class="op">-</span>b]))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// restrict to Pythagorean triples</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>(([a<span class="op">,</span>b<span class="op">,</span>c]) <span class="kw">=&gt;</span> a<span class="op">*</span>a <span class="op">+</span> b<span class="op">*</span>b <span class="op">===</span> c<span class="op">*</span>c) </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Reduce to the product</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(([a<span class="op">,</span>b<span class="op">,</span>c]) <span class="kw">=&gt;</span> a<span class="op">*</span>b<span class="op">*</span>c)<span class="op">.</span><span class="fu">take</span>(<span class="dv">1</span>)<span class="op">.</span><span class="fu">toArray</span>()[<span class="dv">0</span>]</span></code></pre></div>
+<p>This looks incredibly simple! It’s not a “pattern,” it’s one line of code!</p>
+<p>The abstraction really is that simple, and the implementations try to stay close to
+that abstraction as much as possible. However, there can be a surprising amount
+of complexity in how the code is executed.</p>
+<h2 id="worked-out-examples">Worked Out Examples</h2>
+<p>The same thing keeps coming up, over and over again. Also, the implementations
+of this pattern vary quite a lot, so there is depth behind the seeming
+simplicity. You can implement this pattern in various languages, and they will
+be executed differently!</p>
+<h3 id="mapreduce">MapReduce</h3>
+<p><a href="https://en.wikipedia.org/wiki/MapReduce">Classic MapReduce</a> would seem to be a
+direct mapping of the pattern above, but I will note that it’s more of a
+distributed execution paradigm. Running a Project Euler problem on a cluster
+would be a bit silly and missing the point of Project Euler. But you can
+certainly see how the “map” (generate + restrict) and “reduce” fit in here.</p>
+<h3 id="smt-libz3">SMT-LIB/Z3</h3>
+<p>Are you ready to get weird? Here is the same Problem 9 from Project
+Euler implemented in SMT-LIB, a pure specification language:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">; SMT-LIB is pretty basic and doesn't have exponentiation built in</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">; So we'll define this for legibility</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>(define-fun square ((num Int)) Int (<span class="op">*</span> num num))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">; The &quot;generation&quot; is &quot;all possible assignments to a, b, c&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>(declare-const a Int)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>(declare-const b Int)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>(declare-const c Int)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">; We restrict it to &quot;those which satisfy the specification&quot; by just writing it out!</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">; We are looking for a set of three natural numbers, a &lt; b &lt; c</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">0</span>) (<span class="op">&lt;</span> a b) (<span class="op">&lt;</span> b c)))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">; for which a^2 + b^2 = c^2</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">+</span> (square a) (square b)) (square c)))</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">; for which a + b + c = 1000</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">+</span> a b c) <span class="dv">1000</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">; And we want to return the product, since Project Euler needs a single number</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>(declare-const product Int)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">*</span> a b c)))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">; This checks if there's any solution at all</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">; This returns the solution</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
+<p>If we hand this specification to a solver such as <a href="../tags/z3.html">Z3</a>, it will
+use decision procedures to solve the constraints directly rather than enumerate
+with brute force. <a href="https://microsoft.github.io/z3guide/playground/Freeform%20Editing/">Try it!</a></p>
+<p>It is less the case here that we are “generating” triples of integers and
+restricting them to those for which <span class="math inline"><em>a</em><sup>2</sup> + <em>b</em><sup>2</sup> = <em>c</em><sup>2</sup></span> and more the case that
+we are generating possible assignments to <code>a</code>, <code>b</code>, and <code>c</code> and restricting them
+to those which <em>correctly satisfy the specification we have given.</em></p>
+<h3 id="prolog">Prolog</h3>
+<p>Similarly, Prolog lets us directly encode the problem from the specification:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode prolog"><code class="sourceCode prolog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>answer(<span class="dt">Product</span>) <span class="kw">:-</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a &lt; b</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    between(<span class="dv">0</span><span class="kw">,</span> <span class="dv">998</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    between(<span class="dt">A</span><span class="kw">,</span> <span class="dv">998</span><span class="kw">,</span> <span class="dt">B</span>)<span class="kw">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a + b + c = 1000</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">C</span> <span class="dt">is</span> <span class="dv">1000</span> <span class="dt">-</span> <span class="dt">A</span> <span class="dt">-</span> <span class="dt">B</span><span class="kw">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">B</span> <span class="dt">&lt;</span> <span class="dt">C</span><span class="kw">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a^2 + b^2 = c^2</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">A</span><span class="fu">*</span><span class="dt">A</span> <span class="fu">+</span> <span class="dt">B</span><span class="fu">*</span><span class="dt">B</span> <span class="dt">=:=</span> <span class="dt">C*C</span><span class="kw">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Product</span> <span class="dt">is</span> <span class="dt">A</span> <span class="dt">*</span> <span class="dt">B</span> <span class="dt">*</span> <span class="dt">C</span><span class="kw">.</span></span></code></pre></div>
+<p>One way to think about what Prolog is doing here is that we are not so much
+writing a generator and restriction function as we are <em>binding</em> the input
+arguments <code>A</code>, <code>B</code>, and <code>C</code> to the output <code>Product</code>.</p>
+<h2 id="still-more-examples">Still More Examples</h2>
+<p>I will spare you the implementation of Project Euler problem 9 in SQL, but this
+pattern is applicable to many problems in programming!</p>
+<p>For example, when fuzzing, we take a bunch of random inputs, restrict them to
+those which crash or trigger <a href="https://github.com/google/sanitizers/wiki/addresssanitizer">AddressSanitizer</a>,
+and then reduce the output by running a <a href="https://arxiv.org/abs/1905.13055">corpus minimization</a>.</p>
+<p>When doing agent driven development, we can generate many programs very quickly,
+but they might be incorrect! If we have a formal proof of correctness then we
+can reduce the set of candidate programs to those which satisfy the
+specification. Agents turn out to be quite good at finding such programs, for
+example, <a href="https://tristan.st/blog/in_search_of_falsehood">getting Lean to prove <code>False</code></a>.</p>
+<p>In classic TDD, we start with a system under test which we are modifying
+(in effect, generating lots of candidate programs). Our restriction is the test
+suite, and we reduce this via a pass/fail verdict – do the tests pass?</p>
+<h2 id="measuring-generation-and-restriction-efficiency">Measuring Generation and Restriction Efficiency</h2>
+<p>The last example, TDD, might feel a bit unsatisfactory. One can imagine trying
+to solve Project Euler problem 9 via TDD:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Arrange -- choose some random inputs as a first trial</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Act</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> actual <span class="op">=</span> Euler<span class="op">.</span><span class="fu">sumOfSquares</span><span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Assert</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertTrue</span><span class="op">(</span>a <span class="op">&lt;</span> b<span class="op">);</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertTrue</span><span class="op">(</span>b <span class="op">&lt;</span> c<span class="op">);</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertEquals</span><span class="op">(</span><span class="dv">1000</span><span class="op">,</span> a <span class="op">+</span> b <span class="op">+</span> c<span class="op">);</span> <span class="co">// Fail!</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertEquals</span><span class="op">(</span>c <span class="op">*</span> c<span class="op">,</span> actual<span class="op">);</span>   <span class="co">// Fail!</span></span></code></pre></div>
+<p>I kid, I kid. Java can do brute force, just like JavaScript, even if TDD purists
+might sincerely suggest the above as a good starting point. But nonetheless,
+this example does indicate a difficulty with TDD: Finding meaningful inputs for
+your problem space.</p>
+<blockquote>
+<p>“…program testing can be used very effectively to show the presence of bugs
+but never to show their absence.”<br />
+– Edsger W. Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD303.html">On the reliability of programs</a></p>
+</blockquote>
+<p>This might be a helpful way to judge implementations of the
+constraint satisfaction problem: How much data does the generation produce, and how
+effective is the restriction step?</p>
+<p>Let’s consider the problem of finding bugs in source code you’ve produced. We
+generate candidate bugs and then apply some test to figure out which candidates
+are actually defects.
+Generation can be too sparse to find bugs or so dense it overwhelms you.
+Restriction can let real bugs through or flag false positives. Both axes can fail
+in two directions.</p>
+<table style="border: none;">
+<tr>
+<td style="border: none;">
+</td>
+<td style="border: none;">
+</td>
+<th colspan="3">
+Restriction
+</th>
+</tr>
+<tr>
+<td style="border: none;">
+</td>
+<td style="border: none;">
+</td>
+<th>
+Not restrictive enough
+</th>
+<th>
+“Just right”
+</th>
+<th>
+Too restrictive
+</th>
+</tr>
+<tr>
+<th rowspan="4" style="overflow-wrap: break-word;">
+Generator<br /><span style="font-weight: normal;">(number of cases considered)</span>
+</th>
+<th>
+Sampled
+</th>
+<td>
+TDD
+</td>
+<td>
+Property-based testing
+</td>
+<td>
+Overfitted unit tests
+</td>
+</tr>
+<tr>
+<th>
+“Just right”
+</th>
+<td>
+Smoke testing
+</td>
+<td>
+Correctness proofs
+</td>
+<td>
+Rust’s borrow checker<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+</td>
+</tr>
+<tr>
+<th>
+“A lot”
+</th>
+<td>
+<code>printf</code> debugging
+</td>
+<td>
+Profile-guided fuzzing
+</td>
+<td>
+Static analysis
+</td>
+</tr>
+<tr>
+<th>
+Too much
+</th>
+<td>
+Manually skimming a log file
+</td>
+<td>
+Symbolic execution
+</td>
+<td>
+Mutation testing
+</td>
+</tr>
+</table>
+<p>Lest you consider me too judgy for the table above, I don’t mean to suggest that
+you should not, for example, use static analysis due to false positives!
+Static analysis is a <em>fantastic</em> way to avoid bugs, even if you must occasionally
+suppress a finding. Still, the <em>ideal</em> static analyzer would have no false positives.
+Indeed, <em>all</em> of the techniques listed above have their place, but I do think
+that the table is honest about their shortcomings.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>These examples show the constraint satisfaction problem hiding in plain sight.
+Every tool above is making the same two decisions any
+constraint-satisfaction approach has to make: how to generate candidates, and
+how to test them. SMT solvers generate via
+decision procedures and test via assertions. Fuzzers generate via mutation and
+test via sanitizers. Type checkers generate via inference and test via
+unification. Even TDD fits the pattern, with the developer playing the role of the
+generator.</p>
+<p>Recognizing this pattern lets you compare tools on the same axes — execution
+model, generation density, and restriction tightness. Pick the one whose
+failure mode you can live with for the problem in front of you.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Especially the <a href="https://oneuptime.com/blog/post/2026-01-25-non-lexical-lifetimes-rust/view">pre-NLL borrow checker</a>,
+although safe Rust will always reject valid (but not provably memory-safe)
+programs. To be clear, I think this is a good thing!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'computer science'." href="../tags/computer%20science.html" rel="tag">computer science</a>, <a title="All pages tagged 'z3'." href="../tags/z3.html" rel="tag">z3</a>
+    
+</div>
+
+        </div>
+    </body>
+</html>
