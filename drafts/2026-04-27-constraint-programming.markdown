@@ -7,10 +7,10 @@ There's a pattern which shows up everywhere in programming, often disguised as
 something else. Once you see it, you can't unsee it. I don't _think_ it has a 
 single name. But I can give many examples! The pattern is, in an abstract sense:
 
-1. Take an input dataset and apply a function to project it into a different shape
-2. Write another function which restricts the results of that function to only 
+1. **Generation**: Take an input dataset and apply a function to project it into a different shape
+2. **Restriction**: Write another function which restricts the results of that function to only 
 those which are "interesting"
-3. (Optional): Write yet another function which reduces this to a single value,
+3. **Reduction** (optional): Write yet another function which reduces this to a single value,
   say, by summing the results or picking the minimum, or just taking the first 
   result that comes in
 
@@ -24,7 +24,8 @@ the 1980s:
 > actually solve the problem."<br/>
 > -- _The Art of Prolog_ by Leon Sterling and Ehud Shapiro (1986)
 
-Formally, this is called the [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem).
+Formally, this is called the 
+[**constraint satisfaction problem**](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem).
 
 ## The Abstraction
 
@@ -37,6 +38,8 @@ brute force method to solve [problem 9 of Project Euler](https://projecteuler.ne
 > There exists exactly one Pythagorean triplet for which $a + b + c = 1000$.<br/>
 > Find the product $abc$.
 
+Ok, we can do this in a one-liner:
+
 ```javascript
 const result = 
   // Generate numbers [a, b, c] where a + b + c = 1000 and a < b < c
@@ -44,7 +47,7 @@ const result =
     // restrict to Pythagorean triples
     .filter(([a,b,c]) => a*a + b*b === c*c) 
     // Reduce to the product
-    .map(([a,b,c]) => a*b*c).take(1).toArray()[0]
+    .map(([a,b,c]) => a*b*c).take(1).toArray()[0];
 ```
 
 This looks incredibly simple! It's not a "pattern," it's one line of code!
@@ -52,6 +55,21 @@ This looks incredibly simple! It's not a "pattern," it's one line of code!
 The abstraction really is that simple, and the implementations try to stay close to 
 that abstraction as much as possible. However, there can be a surprising amount
 of complexity in how the code is executed.
+
+Perhaps you've been programming for a long time and consider all of this to 
+be very obvious? Fine, you may not get a lot from this post! However, I do 
+remember when I was new to software development and how I might solve a Project 
+Euler problem was not obvious to me! One thing that I specifically did not 
+understand at that point was that brute force might be the right solution to a
+problem _at least in an abstract sense._ Having written a solution in terms of 
+brute force we can then optimize our solution if the performance is inadequate.
+
+I will further say that when I hear some of the dialog around agent-based 
+programming, specifically the "it might hallucinate!" or the "look how fast I can
+blast out garbage!" arguments I hear from both "sides," that I am reminded of 
+this pattern. If you don't restrict your solutions, with comprehensive tests or
+proofs, then yes, you're going to get errors, whether you generate your possible
+solutions with AI or by hand.
 
 ## Worked Out Examples 
 
@@ -63,8 +81,8 @@ be executed differently!
 ### MapReduce
 [Classic MapReduce](https://en.wikipedia.org/wiki/MapReduce) would seem to be a 
 direct mapping of the pattern above, but I will note that it's more of a 
-distributed execution paradigm. Running a Project Euler problem on a cluster 
-would be a bit silly and missing the point of Project Euler. But you can 
+distributed _execution_ paradigm. Running a Project Euler problem on a cluster 
+would be a bit silly and probably missing the point of Project Euler. But you can 
 certainly see how the "map" (generate + restrict) and "reduce" fit in here.
 
 ### SMT-LIB/Z3
@@ -93,6 +111,7 @@ Euler implemented in SMT-LIB, a pure specification language:
 ; And we want to return the product, since Project Euler needs a single number
 (declare-const product Int)
 (assert (= product (* a b c)))
+
 ; This checks if there's any solution at all
 (check-sat)
 ; This returns the solution
@@ -114,8 +133,8 @@ Similarly, Prolog lets us directly encode the problem from the specification:
 
 ```prolog
 answer(Product) :-
-    % a < b
     between(0, 998, A),
+    % a < b
     between(A, 998, B),
     % a + b + c = 1000
     C is 1000 - A - B,
@@ -178,13 +197,16 @@ your problem space.
 > but never to show their absence."<br/>
 > -- Edsger W. Dijkstra, [On the reliability of programs](https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD303.html)
 
-This might be a helpful way to judge implementations of the 
-constraint satisfaction problem: How much data does the generation produce, and how
-effective is the restriction step?
+This might be a helpful way to judge implementations of the constraint 
+satisfaction problem: How much data does the generation produce, and how 
+effective is the restriction step? Can programs written using this pattern go 
+wrong?
 
 Let's consider the problem of finding bugs in source code you've produced. We 
 generate candidate bugs and then apply some test to figure out which candidates 
-are actually defects.
+are actually defects. (For example, a static analyzer might look for string 
+concatenation in SQL statements and then attempt to restrict reporting to those
+instances where the data being concatenated is user-controlled.)
 Generation can be too sparse to find bugs or so dense it overwhelms you. 
 Restriction can let real bugs through or flag false positives. Both axes can fail 
 in two directions.
@@ -208,18 +230,24 @@ that the table is honest about their shortcomings.
 ## Conclusion
 
 These examples show the constraint satisfaction problem hiding in plain sight. 
-Every tool above is making the same two decisions any 
-constraint-satisfaction approach has to make: how to generate candidates, and 
-how to test them. SMT solvers generate via 
-decision procedures and test via assertions. Fuzzers generate via mutation and 
-test via sanitizers. Type checkers generate via inference and test via 
-unification. Even TDD fits the pattern, with the developer playing the role of the 
-generator.
+Every tool above is making the same two decisions any constraint-satisfaction 
+approach has to make: how to generate candidates, and how to test them. SMT 
+solvers generate via decision procedures and test via assertions. Fuzzers 
+generate via mutation and test via sanitizers. Type checkers generate via 
+inference and test via unification. Even TDD fits the pattern, with the developer 
+playing the role of the generator.
 
 Recognizing this pattern lets you compare tools on the same axes — execution 
 model, generation density, and restriction tightness. Pick the one whose 
-failure mode you can live with for the problem in front of you.
+performance and failure mode you can live with for the problem in front of you.
 
-[^nll]: Especially the [pre-NLL borrow checker](https://oneuptime.com/blog/post/2026-01-25-non-lexical-lifetimes-rust/view), 
+The most important thing I want you to take away from this post is to look for
+constraint solving solutions to programming problems in front of you. When
+you see one, don't be put off by questions of efficiency or false positives. 
+There are solutions to those! But by recognizing _the abstraction_ you can focus
+on the most important part, which is _correct_ generation and restriction.
+
+[^nll]: Especially the 
+[pre-NLL borrow checker](https://oneuptime.com/blog/post/2026-01-25-non-lexical-lifetimes-rust/view), 
 although safe Rust will always reject valid (but not provably memory-safe) 
 programs. To be clear, I think this is a good thing!
