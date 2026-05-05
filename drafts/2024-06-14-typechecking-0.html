@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Craig Stuntz's personal website about programming languages, type theory, DIY synthesizers, compilers, and math.">
-        <title>2024-06-14-typechecking-0 - Craig Stuntz</title>
+        <title>A Very Gentle Introduction to Type Checking, Introudction - Craig Stuntz</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css">
         <link rel="alternate" type="application/rss+xml" title="Craig Stuntz's blog" href="../feed.xml">
         <link rel="alternate" type="application/atom+xml" title="Craig Stuntz's blog" href="../atom.xml">
@@ -31,32 +31,22 @@
 
         <div id="content">
             
+                <h3 class="series">
+                    A Very Gentle Introduction to Type Checking,
+                        Introduction
+                    
+                </h3>
             
-                <h1>2024-06-14-typechecking-0</h1>
+            
+                <h1 class="chapterName">
+                    Introduction
+                </h1>
             
             <div class="info">
     Posted on June 14, 2024
     
 </div>
 
-<div id="header">
-<div id="logo">
-<a href="../">Craig Stuntz</a>
-</div>
-<div id="navigation">
-<a href="../">Home</a>
-<a href="../about.html">About</a>
-<a href="../presentations.html">Presentations</a>
-<a href="../archive.html">Archive</a>
-</div>
-</div>
-<div id="content">
-<h3 class="series" id="a-very-gentle-introduction-to-type-checking-introduction">A Very Gentle Introduction to Type Checking,
-Introduction</h3>
-<h1 class="chapterName" id="introduction">Introduction</h1>
-<div class="info">
-Posted on June 14, 2024
-</div>
 <div class="toc">
 <ul>
 <li>Introduction: Type checkin’</li>
@@ -120,7 +110,7 @@ one has to choose!</p>
 two types are “equivalent.”</p>
 <h2 id="meet-the-languages">Meet the Languages</h2>
 <p>The tutorial will be in three sections. You should complete them <em>in order.</em></p>
-<table style="width:99%;">
+<table>
 <colgroup>
 <col style="width: 51%" />
 <col style="width: 48%" />
@@ -208,22 +198,14 @@ required to work in Swift, and I don’t personally use it.</p>
 <p>If you want to use the Pie language in Racket, (or if you want to try the code
 in the Racket version of the tutorial) you will first probably want
 Dr. Racket if you don’t have it already. One way to do this on a Mac is:</p>
-<div id="cb1" class="sourceCode">
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> brew install <span class="at">--cask</span> racket</span></code></pre></div>
-</div>
 <p>You can then install Pie using the <code>raco</code> package manager for Racket:</p>
-<div id="cb2" class="sourceCode">
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> raco pkg install pie</span></code></pre></div>
-</div>
 <p>You can then open Dr. Racket, and type the traditional “Hello World” of Pie:</p>
-<div id="cb3" class="sourceCode">
 <div class="sourceCode" id="cb3"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a># lang pie</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">'spinach</span></span></code></pre></div>
-</div>
-<p>Then click the “Run” button and Pie will respond:<a href="#fn1" id="fnref1" class="footnote-ref" role="doc-noteref"><sup>1</sup></a></p>
-<div id="cb4" class="sourceCode">
+<p>Then click the “Run” button and Pie will respond:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">the</span> Atom <span class="dt">'spinach</span>)</span></code></pre></div>
-</div>
 <p>Congratulations! You’ve now done more Pie programming than 99.9% of your
 colleagues!</p>
 <h3 id="installing-haskell">Installing Haskell</h3>
@@ -248,22 +230,16 @@ Surveys in 2021.</p>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li><div id="fn1">
-<p><code>the</code> is a type declaration. The response declares that <code>’spinach</code> has the
-type <code>Atom</code>. This declaration was inferred from the literal <code>’spinach</code>
-because <code>(the Atom ’spinach)</code> is the normalized type annotation for an
-<code>Atom</code> named <code>’spinach</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p>
-</div></li>
+<li id="fn1"><p><code>the</code> is a type declaration. The response declares that <code>'spinach</code> has the
+type <code>Atom</code>. This declaration was inferred from the literal <code>'spinach</code>
+because <code>(the Atom 'spinach)</code> is the normalized type annotation for an
+<code>Atom</code> named <code>'spinach</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
-<div class="info">
-Tags: <a href="../tags/compilers.html" rel="tag" title="All pages tagged 'compilers'.">compilers</a>
-</div>
-</div>
 
 <div class="info">
     
-    Tags: 
+    Tags: <a title="All pages tagged 'compilers'." href="../tags/compilers.html" rel="tag">compilers</a>
     
 </div>
 
