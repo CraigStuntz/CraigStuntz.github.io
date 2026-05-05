@@ -73,7 +73,7 @@ solutions with AI or by hand.
 
 ## Worked Out Examples 
 
-The same thing keeps coming up, over and over again. Also, the implementations 
+The same pattern keeps coming up, over and over again. Also, the implementations 
 of this pattern vary quite a lot, so there is depth behind the seeming 
 simplicity. You can implement this pattern in various languages, and they will 
 be executed differently!
@@ -227,7 +227,7 @@ suppress a finding. Still, the _ideal_ static analyzer would have no false posit
 Indeed, _all_ of the techniques listed above have their place, but I do think 
 that the table is honest about their shortcomings.
 
-## Conclusion
+## Embracing Constraint Solving
 
 These examples show the constraint satisfaction problem hiding in plain sight. 
 Every tool above is making the same two decisions any constraint-satisfaction 
