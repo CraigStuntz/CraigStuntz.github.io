@@ -13,7 +13,17 @@
 
 #### Don't Fix the Bug!
 
+#### Use State Machines
+
 Instead make the bug impossible. 
+
+#### Write In the Domain Expert's Language
+
+### Deployment Patterns
+
+#### Immutable Infrastructure
+
+#### Design for Zero Downtime
 
 ### Work Patterns
 

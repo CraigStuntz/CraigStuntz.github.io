@@ -153,8 +153,9 @@ arguments `A`, `B`, and `C` to the output `Product`.
 I will spare you the implementation of Project Euler problem 9 in SQL, but this
 pattern is applicable to many problems in programming!
 
-For example, when fuzzing, we take a bunch of random inputs, restrict them to 
-those which crash or trigger [AddressSanitizer](https://github.com/google/sanitizers/wiki/addresssanitizer),
+For example, when [fuzzing](https://en.wikipedia.org/wiki/Fuzzing), we take a 
+bunch of random inputs, restrict them to those which crash or trigger 
+[AddressSanitizer](https://github.com/google/sanitizers/wiki/addresssanitizer),
 and then reduce the output by running a [corpus minimization](https://arxiv.org/abs/1905.13055).
 
 When doing agent driven development, we can generate many programs very quickly,
@@ -204,9 +205,10 @@ wrong?
 
 Let's consider the problem of finding bugs in source code you've produced. We 
 generate candidate bugs and then apply some test to figure out which candidates 
-are actually defects. (For example, a static analyzer might look for string 
-concatenation in SQL statements and then attempt to restrict reporting to those
-instances where the data being concatenated is user-controlled.)
+are actually defects. (For example, a 
+[static analyzer](https://en.wikipedia.org/wiki/Static_program_analysis) might 
+look for string concatenation in SQL statements and then attempt to restrict 
+reporting to those instances where the data being concatenated is user-controlled.)
 Generation can be too sparse to find bugs or so dense it overwhelms you. 
 Restriction can let real bugs through or flag false positives. Both axes can fail 
 in two directions.
