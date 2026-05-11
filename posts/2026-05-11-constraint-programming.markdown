@@ -1,6 +1,6 @@
 ---
 title: "You've Been Constraint-Solving All Along"
-tags: computer science, patterns, z3
+tags: computer science, constraint satisfaction problem, javascript, patterns, prolog, tdd, theorem provers, z3
 ---
 
 There's a pattern which shows up everywhere in programming, often disguised as 
@@ -225,7 +225,7 @@ in two directions.
 Lest you consider me too judgy for the table above, I don't mean to suggest that
 you should not, for example, use static analysis due to false positives! 
 Static analysis is a _fantastic_ way to avoid bugs, even if you must occasionally 
-suppress a finding. Still, the _ideal_ static analyzer would have no false positives. 
+suppress a false positive. Still, the _ideal_ static analyzer would have no false positives. 
 Indeed, _all_ of the techniques listed above have their place, but I do think 
 that the table is honest about their shortcomings.
 
