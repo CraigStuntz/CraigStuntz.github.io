@@ -7,8 +7,315 @@
         <description><![CDATA[Craig Stuntz's blog]]></description>
         <atom:link href="https://www.craigstuntz.com/feed.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 05 Feb 2026 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 11 May 2026 00:00:00 UT</lastBuildDate>
         <item>
+    <title>You've Been Constraint-Solving All Along</title>
+    <link>https://www.craigstuntz.com/posts/2026-05-11-constraint-programming.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on May 11, 2026
+    
+</div>
+
+<p>There’s a pattern which shows up everywhere in programming, often disguised as
+something else. Once you see it, you can’t unsee it. I don’t <em>think</em> it has a
+single name. But I can give many examples! The pattern is, in an abstract sense:</p>
+<ol type="1">
+<li><strong>Generation</strong>: Take an input dataset and apply a function to project it into a different shape</li>
+<li><strong>Restriction</strong>: Write another function which restricts the results of that function to only
+those which are “interesting”</li>
+<li><strong>Reduction</strong> (optional): Write yet another function which reduces this to a single value,
+say, by summing the results or picking the minimum, or just taking the first
+result that comes in</li>
+</ol>
+<p>The Prolog community called the naïve form of this “generate-and-test” since at least
+the 1980s:</p>
+<blockquote>
+<p>“Generate-and-test is a common technique in algorithm design and programming.
+Here is how generate-and-test works for problem solving. One process or
+routine generates candidate solutions to the problem, and another process or
+routine tests the candidates, trying to find one or all candidates that
+actually solve the problem.”<br/>
+– <em>The Art of Prolog</em> by Leon Sterling and Ehud Shapiro (1986)</p>
+</blockquote>
+<p>Formally, this is called the
+<a href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem"><strong>constraint satisfaction problem</strong></a>.</p>
+<h2 id="the-abstraction">The Abstraction</h2>
+<p>In case this isn’t absolutely clear, let’s look at some JavaScript which uses the
+brute force method to solve <a href="https://projecteuler.net/problem=9">problem 9 of Project Euler</a>:</p>
+<blockquote>
+<p>A Pythagorean triplet is a set of three natural numbers, <span class="math inline"><em>a</em> &lt; <em>b</em> &lt; <em>c</em></span>, for which
+<span class="math display">$$ \begin{align} a^2 + b^2 = c^2 \end{align} $$</span>
+For example, <span class="math inline">3<sup>2</sup> + 4<sup>2</sup> = 9 + 16 = 25 = 5<sup>2</sup></span>.<br/>
+There exists exactly one Pythagorean triplet for which <span class="math inline"><em>a</em> + <em>b</em> + <em>c</em> = 1000</span>.<br/>
+Find the product <span class="math inline"><em>a</em><em>b</em><em>c</em></span>.</p>
+</blockquote>
+<p>Ok, we can do this in a one-liner:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Generate numbers [a, b, c] where a + b + c = 1000 and a &lt; b &lt; c</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Array</span>(<span class="dv">1000</span>)<span class="op">.</span><span class="fu">keys</span>()<span class="op">.</span><span class="fu">flatMap</span>(a <span class="kw">=&gt;</span> <span class="bu">Array</span>(<span class="dv">1000</span>)<span class="op">.</span><span class="fu">keys</span>()<span class="op">.</span><span class="fu">filter</span>(b <span class="kw">=&gt;</span> a <span class="op">&lt;</span> b <span class="op">&amp;&amp;</span> b <span class="op">&lt;</span> <span class="dv">1000</span><span class="op">-</span>a<span class="op">-</span>b)<span class="op">.</span><span class="fu">map</span>(b <span class="kw">=&gt;</span> [a<span class="op">,</span> b<span class="op">,</span> <span class="dv">1000</span><span class="op">-</span>a<span class="op">-</span>b]))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// restrict to Pythagorean triples</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>(([a<span class="op">,</span>b<span class="op">,</span>c]) <span class="kw">=&gt;</span> a<span class="op">*</span>a <span class="op">+</span> b<span class="op">*</span>b <span class="op">===</span> c<span class="op">*</span>c) </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Reduce to the product</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(([a<span class="op">,</span>b<span class="op">,</span>c]) <span class="kw">=&gt;</span> a<span class="op">*</span>b<span class="op">*</span>c)<span class="op">.</span><span class="fu">take</span>(<span class="dv">1</span>)<span class="op">.</span><span class="fu">toArray</span>()[<span class="dv">0</span>]<span class="op">;</span></span></code></pre></div>
+<p>This looks incredibly simple! It’s not a “pattern,” it’s one line of code!</p>
+<p>The abstraction really is that simple, and the implementations try to stay close to
+that abstraction as much as possible. However, there can be a surprising amount
+of complexity in how the code is executed.</p>
+<p>Perhaps you’ve been programming for a long time and consider all of this to
+be very obvious? Fine, you may not get a lot from this post! However, I do
+remember when I was new to software development and how I might solve a Project
+Euler problem was not obvious to me! One thing that I specifically did not
+understand at that point was that brute force might be the right solution to a
+problem <em>at least in an abstract sense.</em> Having written a solution in terms of
+brute force we can then optimize our solution if the performance is inadequate.</p>
+<p>I will further say that when I hear some of the dialog around agent-based
+programming, specifically the “it might hallucinate!” or the “look how fast I can
+blast out garbage!” arguments I hear from both “sides,” that I am reminded of
+this pattern. If you don’t restrict your solutions, with comprehensive tests or
+proofs, then yes, you’re going to get errors, whether you generate your possible
+solutions with AI or by hand.</p>
+<h2 id="worked-out-examples">Worked Out Examples</h2>
+<p>The same pattern keeps coming up, over and over again. Also, the implementations
+of this pattern vary quite a lot, so there is depth behind the seeming
+simplicity. You can implement this pattern in various languages, and they will
+be executed differently!</p>
+<h3 id="mapreduce">MapReduce</h3>
+<p><a href="https://en.wikipedia.org/wiki/MapReduce">Classic MapReduce</a> would seem to be a
+direct mapping of the pattern above, but I will note that it’s more of a
+distributed <em>execution</em> paradigm. Running a Project Euler problem on a cluster
+would be a bit silly and probably missing the point of Project Euler. But you can
+certainly see how the “map” (generate + restrict) and “reduce” fit in here.</p>
+<h3 id="smt-libz3">SMT-LIB/Z3</h3>
+<p>Are you ready to get weird? Here is the same Problem 9 from Project
+Euler implemented in SMT-LIB, a pure specification language:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">; SMT-LIB is pretty basic and doesn&#39;t have exponentiation built in</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">; So we&#39;ll define this for legibility</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>(define-fun square ((num Int)) Int (<span class="op">*</span> num num))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">; The &quot;generation&quot; is &quot;all possible assignments to a, b, c&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>(declare-const a Int)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>(declare-const b Int)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>(declare-const c Int)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">; We restrict it to &quot;those which satisfy the specification&quot; by just writing it out!</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">; We are looking for a set of three natural numbers, a &lt; b &lt; c</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="kw">and</span> (<span class="op">&gt;=</span> a <span class="dv">0</span>) (<span class="op">&lt;</span> a b) (<span class="op">&lt;</span> b c)))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">; for which a^2 + b^2 = c^2</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">+</span> (square a) (square b)) (square c)))</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">; for which a + b + c = 1000</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> (<span class="op">+</span> a b c) <span class="dv">1000</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">; And we want to return the product, since Project Euler needs a single number</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>(declare-const product Int)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>(<span class="kw">assert</span> (<span class="op">=</span> product (<span class="op">*</span> a b c)))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">; This checks if there&#39;s any solution at all</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>(check-sat)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">; This returns the solution</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>(get-model)</span></code></pre></div>
+<p>If we hand this specification to a solver such as <a href="/tags/z3.html">Z3</a>, it will
+use decision procedures to solve the constraints directly rather than enumerate
+with brute force. <a href="https://microsoft.github.io/z3guide/playground/Freeform%20Editing/">Try it!</a></p>
+<p>It is less the case here that we are “generating” triples of integers and
+restricting them to those for which <span class="math inline"><em>a</em><sup>2</sup> + <em>b</em><sup>2</sup> = <em>c</em><sup>2</sup></span> and more the case that
+we are generating possible assignments to <code>a</code>, <code>b</code>, and <code>c</code> and restricting them
+to those which <em>correctly satisfy the specification we have given.</em></p>
+<h3 id="prolog">Prolog</h3>
+<p>Similarly, Prolog lets us directly encode the problem from the specification:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode prolog"><code class="sourceCode prolog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>answer(<span class="dt">Product</span>) <span class="kw">:-</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    between(<span class="dv">0</span><span class="kw">,</span> <span class="dv">998</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a &lt; b</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    between(<span class="dt">A</span><span class="kw">,</span> <span class="dv">998</span><span class="kw">,</span> <span class="dt">B</span>)<span class="kw">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a + b + c = 1000</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">C</span> <span class="dt">is</span> <span class="dv">1000</span> <span class="dt">-</span> <span class="dt">A</span> <span class="dt">-</span> <span class="dt">B</span><span class="kw">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">B</span> <span class="dt">&lt;</span> <span class="dt">C</span><span class="kw">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">% a^2 + b^2 = c^2</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">A</span><span class="fu">*</span><span class="dt">A</span> <span class="fu">+</span> <span class="dt">B</span><span class="fu">*</span><span class="dt">B</span> <span class="dt">=:=</span> <span class="dt">C*C</span><span class="kw">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Product</span> <span class="dt">is</span> <span class="dt">A</span> <span class="dt">*</span> <span class="dt">B</span> <span class="dt">*</span> <span class="dt">C</span><span class="kw">.</span></span></code></pre></div>
+<p>One way to think about what Prolog is doing here is that we are not so much
+writing a generator and restriction function as we are <em>binding</em> the input
+arguments <code>A</code>, <code>B</code>, and <code>C</code> to the output <code>Product</code>.</p>
+<h2 id="still-more-examples">Still More Examples</h2>
+<p>I will spare you the implementation of Project Euler problem 9 in SQL, but this
+pattern is applicable to many problems in programming!</p>
+<p>For example, when <a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, we take a
+bunch of random inputs, restrict them to those which crash or trigger
+<a href="https://github.com/google/sanitizers/wiki/addresssanitizer">AddressSanitizer</a>,
+and then reduce the output by running a <a href="https://arxiv.org/abs/1905.13055">corpus minimization</a>.</p>
+<p>When doing agent driven development, we can generate many programs very quickly,
+but they might be incorrect! If we have a formal proof of correctness then we
+can reduce the set of candidate programs to those which satisfy the
+specification. Agents turn out to be quite good at finding such programs.
+But without a proof, we might end up with something sloppy!</p>
+<p>In classic TDD, we start with a system under test which we are modifying
+(in effect, generating lots of candidate programs). Our restriction is the test
+suite, and we reduce this via a pass/fail verdict – do the tests pass?</p>
+<h2 id="measuring-generation-and-restriction-efficiency">Measuring Generation and Restriction Efficiency</h2>
+<p>The last example, TDD, might feel a bit unsatisfactory. One can imagine trying
+to solve Project Euler problem 9 via TDD:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Arrange -- choose some random inputs as a first trial</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Act</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">var</span> actual <span class="op">=</span> Euler<span class="op">.</span><span class="fu">sumOfSquares</span><span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Assert</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertTrue</span><span class="op">(</span>a <span class="op">&lt;</span> b<span class="op">);</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertTrue</span><span class="op">(</span>b <span class="op">&lt;</span> c<span class="op">);</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertEquals</span><span class="op">(</span><span class="dv">1000</span><span class="op">,</span> a <span class="op">+</span> b <span class="op">+</span> c<span class="op">);</span> <span class="co">// Fail!</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  Assert<span class="op">.</span><span class="fu">assertEquals</span><span class="op">(</span>c <span class="op">*</span> c<span class="op">,</span> actual<span class="op">);</span>   <span class="co">// Fail!</span></span></code></pre></div>
+<p>I kid, I kid. Java can do brute force, just like JavaScript, even if TDD purists
+might sincerely suggest the above as a good starting point. But nonetheless,
+this example does indicate a difficulty with TDD: Finding meaningful inputs for
+your problem space.</p>
+<blockquote>
+<p>“…program testing can be used very effectively to show the presence of bugs
+but never to show their absence.”<br/>
+– Edsger W. Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD303.html">On the reliability of programs</a></p>
+</blockquote>
+<p>This might be a helpful way to judge implementations of the constraint
+satisfaction problem: How much data does the generation produce, and how
+effective is the restriction step? Can programs written using this pattern go
+wrong?</p>
+<p>Let’s consider the problem of finding bugs in source code you’ve produced. We
+generate candidate bugs and then apply some test to figure out which candidates
+are actually defects. (For example, a
+<a href="https://en.wikipedia.org/wiki/Static_program_analysis">static analyzer</a> might
+look for string concatenation in SQL statements and then attempt to restrict
+reporting to those instances where the data being concatenated is user-controlled.)
+Generation can be too sparse to find bugs or so dense it overwhelms you.
+Restriction can let real bugs through or flag false positives. Both axes can fail
+in two directions.</p>
+<table style="border: none;">
+<tr>
+<td style="border: none;">
+</td>
+<td style="border: none;">
+</td>
+<th colspan="3">
+Restriction
+</th>
+</tr>
+<tr>
+<td style="border: none;">
+</td>
+<td style="border: none;">
+</td>
+<th>
+Not restrictive enough
+</th>
+<th>
+“Just right”
+</th>
+<th>
+Too restrictive
+</th>
+</tr>
+<tr>
+<th rowspan="4" style="overflow-wrap: break-word;">
+Generator<br/><span style="font-weight: normal;">(number of cases considered)</span>
+</th>
+<th>
+Sampled
+</th>
+<td>
+TDD
+</td>
+<td>
+Property-based testing
+</td>
+<td>
+Overfitted unit tests
+</td>
+</tr>
+<tr>
+<th>
+“Just right”
+</th>
+<td>
+Smoke testing
+</td>
+<td>
+Correctness proofs
+</td>
+<td>
+Rust’s borrow checker<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+</td>
+</tr>
+<tr>
+<th>
+“A lot”
+</th>
+<td>
+<code>printf</code> debugging
+</td>
+<td>
+Profile-guided fuzzing
+</td>
+<td>
+Static analysis
+</td>
+</tr>
+<tr>
+<th>
+Too much
+</th>
+<td>
+Manually skimming a log file
+</td>
+<td>
+Symbolic execution
+</td>
+<td>
+Mutation testing
+</td>
+</tr>
+</table>
+<p>Lest you consider me too judgy for the table above, I don’t mean to suggest that
+you should not, for example, use static analysis due to false positives!
+Static analysis is a <em>fantastic</em> way to avoid bugs, even if you must occasionally
+suppress a false positive. Still, the <em>ideal</em> static analyzer would have no false positives.
+Indeed, <em>all</em> of the techniques listed above have their place, but I do think
+that the table is honest about their shortcomings.</p>
+<h2 id="embracing-constraint-solving">Embracing Constraint Solving</h2>
+<p>These examples show the constraint satisfaction problem hiding in plain sight.
+Every tool above is making the same two decisions any constraint-satisfaction
+approach has to make: how to generate candidates, and how to test them. SMT
+solvers generate via decision procedures and test via assertions. Fuzzers
+generate via mutation and test via sanitizers. Type checkers generate via
+inference and test via unification. Even TDD fits the pattern, with the developer
+playing the role of the generator.</p>
+<p>Recognizing this pattern lets you compare tools on the same axes — execution
+model, generation density, and restriction tightness. Pick the one whose
+performance and failure mode you can live with for the problem in front of you.</p>
+<p>The most important thing I want you to take away from this post is to look for
+constraint solving solutions to programming problems in front of you. When
+you see one, don’t be put off by questions of efficiency or false positives.
+There are solutions to those! But by recognizing <em>the abstraction</em> you can focus
+on the most important part, which is <em>correct</em> generation and restriction.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Especially the
+<a href="https://oneuptime.com/blog/post/2026-01-25-non-lexical-lifetimes-rust/view">pre-NLL borrow checker</a>,
+although safe Rust will always reject valid (but not provably memory-safe)
+programs. To be clear, I think this is a good thing!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<div class="info">
+    
+    Tags: <a title="All pages tagged &#39;computer science&#39;." href="/tags/computer%20science.html" rel="tag">computer science</a>, <a title="All pages tagged &#39;constraint satisfaction problem&#39;." href="/tags/constraint%20satisfaction%20problem.html" rel="tag">constraint satisfaction problem</a>, <a title="All pages tagged &#39;javascript&#39;." href="/tags/javascript.html" rel="tag">javascript</a>, <a title="All pages tagged &#39;patterns&#39;." href="/tags/patterns.html" rel="tag">patterns</a>, <a title="All pages tagged &#39;prolog&#39;." href="/tags/prolog.html" rel="tag">prolog</a>, <a title="All pages tagged &#39;tdd&#39;." href="/tags/tdd.html" rel="tag">tdd</a>, <a title="All pages tagged &#39;theorem provers&#39;." href="/tags/theorem%20provers.html" rel="tag">theorem provers</a>, <a title="All pages tagged &#39;z3&#39;." href="/tags/z3.html" rel="tag">z3</a>
+    
+</div>
+]]></description>
+    <pubDate>Mon, 11 May 2026 00:00:00 UT</pubDate>
+    <guid>https://www.craigstuntz.com/posts/2026-05-11-constraint-programming.html</guid>
+    <dc:creator>Craig Stuntz</dc:creator>
+</item>
+<item>
     <title>Building a Synthesizer, Chapter 14: Building the Sequencer</title>
     <link>https://www.craigstuntz.com/posts/2026-02-05-building-a-synthesizer-14.html</link>
     <description><![CDATA[<div class="info">
@@ -2313,606 +2620,6 @@ on the subject.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩�
 ]]></description>
     <pubDate>Wed, 21 Feb 2024 00:00:00 UT</pubDate>
     <guid>https://www.craigstuntz.com/posts/2024-02-21-building-a-synthesizer-9.html</guid>
-    <dc:creator>Craig Stuntz</dc:creator>
-</item>
-<item>
-    <title>Building a Synthesizer, Chapter 8: Building the Envelope Generator</title>
-    <link>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</link>
-    <description><![CDATA[<div class="info">
-    Posted on January 31, 2024
-    
-</div>
-
-<div class="toc">
-<ul>
-<li><a href="2023-02-20-building-a-synthesizer-0.html">Introduction: The World of DIY Synthesizers</a></li>
-<li><a href="2023-02-21-building-a-synthesizer-1.html">1: The mki x es.EDU DIY System</a></li>
-<li><a href="2023-02-22-building-a-synthesizer-2.html">2: Building the Power Supply</a></li>
-<li><a href="2023-03-02-building-a-synthesizer-3.html">3: Breadboarding the VCO</a></li>
-<li><a href="2023-04-03-building-a-synthesizer-4.html">4: A Gentle Introduction to Op Amps</a></li>
-<li><a href="2023-05-22-building-a-synthesizer-5.html">5: Building the VCO</a></li>
-<li><a href="2023-08-11-building-a-synthesizer-6.html">6: The Logic Circuits Model of Computation</a></li>
-<li><a href="2023-09-21-building-a-synthesizer-7.html">7: Building the Mixer</a></li>
-<li>8: Building the Envelope Generator</li>
-<li><a href="2024-02-21-building-a-synthesizer-9.html">9: A Field Guide to Oscillators</a></li>
-<li><a href="2024-06-24-building-a-synthesizer-10.html">10: Building the VCA</a></li>
-<li><a href="2025-04-07-building-a-synthesizer-11.html">11: Debugging Circuits and Software Debugging</a></li>
-<li><a href="2025-09-09-building-a-synthesizer-12.html">12: Breadboarding the VCF</a></li>
-<li><a href="2025-12-27-building-a-synthesizer-13.html">13: Building the VCF</a></li>
-<li><a href="2026-02-05-building-a-synthesizer-14.html">14: Building the Sequencer</a></li>
-<li><a href="2023-02-23-building-a-synthesizer-glossary.html">Glossary and Electrical Connections</a></li>
-</ul>
-</div>
-<p>At this point, I’ve built an oscillator, which makes sound, but one issue it has
-is that it never <em>stops</em> making sound. It just runs forever, making a constant,
-unchanging drone, and that makes it difficult to play interesting music. Playing
-distinct notes is going to require two more
-modules: An <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-eg/">Envelope Generator</a>
-and a <a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-vca/">Voltage Controlled Amplifier</a>.</p>
-<p>It doesn’t really matter what order you build these in, but I decided to build
-the EG next because there are two of them in the full kit, and I wanted to space
-them out as much as possible.</p>
-<h2 id="what-even-is-an-envelope-generator">What Even Is an Envelope Generator?</h2>
-<p>An envelope allows you to vary the behavior of a sound over time. They’re
-frequently used to vary the volume, pitch, and filter cutoff of a sound, but
-really they can vary any parameter of a synth. As noted above, without an
-envelope your oscillator will just run forever, which most people don’t find
-musically pleasing!</p>
-<p>Here’s an envelope from the Logic Pro Retro Synth<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> plugin, which is similar to
-the envelopes you’ll find on many non-modular keyboard synthesizers:</p>
-<figure class>
-<a href="/images/synth/LogicProVintageSynthAmpEG.png">
-<img src="/images/synth/LogicProVintageSynthAmpEG.png" loading="lazy" width="400px" alt="The AMP ENV from Logic Pro. We can see an attack, decay, sustain, and release setting on a visual graph. There is a volume slider to the right.">
-</a>
-<figcaption>
-Retro Synth Amp Env
-</figcaption>
-</figure>
-<p>“A, D, S, and R,” in this picture, refer to “Attack, Decay, Sustain, and
-Release,” the four parameters of the envelope generator. This is the most common
-kind of envelope generator. If you’re not familiar with these parameters then
-I’d recommend <a href="https://www.perfectcircuit.com/signal/learning-synthesis-envelopes-1">reading this article</a>
-before continuing.</p>
-<p>This looks superficially similar to the envelope generator that we’ll be
-building, but it differs in some important aspects:</p>
-<ul>
-<li>The Retro Synth “envelope” is really more equivalent to a modular EG, VCA,
-and Mixer all wired together. There is some complexity hidden here.</li>
-<li>The Retro Synth envelope shown here is for amplitude (note volume) control
-<em>only.</em> (Retro Synth has a separate envelope which is hard-wired to filter
-cutoff or VCO pitch.) If you wanted to use an EG to modulate some other
-control, such as the effect mix, well, you can’t do that in Retro Synth. The
-EG module, on the other hand, can be connected to any other module with a
-CV input. (Some software synths are more flexible than Retro Synth in this
-respect and allow you to use an envelope to modulate any synth parameter.)</li>
-<li>With the Retro Synth envelope it’s possible to have a slow attack followed by
-a slow decay. As we’ll see, the mki x es.EDU module can’t do this, because it
-would have made the circuit more complex.</li>
-<li>The Retro Synth envelope’s attack, decay, and release rate controls are
-linear; the attack, for example, increases as a straight line. The
-mki x es.EDU envelope generator, on the other hand, follows a curve, which
-looks approximately logarithmic. Both sound fine, but you’ll hear the
-difference, especially with a slow setting.</li>
-</ul>
-<p>One thing which is common to nearly every synth envelope but might not be
-obvious to people who have not used them is that the controls here are:</p>
-<ul>
-<li>Attack <em>time</em></li>
-<li>Decay <em>time</em></li>
-<li>Sustain <strong><em>level</em></strong></li>
-<li>Release <em>time</em></li>
-</ul>
-<p>One of these things is not like the other! This will turn out to be surprisingly
-important in the discussion below.</p>
-<p>When using an envelope to control the note volume, you can change the shape of
-a note to be like an organ, which goes to full volume when you press a key and
-turns the note off when you release it:</p>
-<figure class>
-<a href="/images/synth/VintageSynthOrganEnv.png">
-<img src="/images/synth/VintageSynthOrganEnv.png" loading="lazy" width="400px" alt="An organ has a very short attack, no decay, sustain at 100%, and a very short release.">
-</a>
-<figcaption>
-Retro Synth Organ Envelope
-</figcaption>
-</figure>
-<p>…or a piano, where the note spikes briefly to full volume and then fades,
-eventually to nothing, as you hold the key. If you release the key during the
-decay the volume will immediately drop to nothing:</p>
-<figure class>
-<a href="/images/synth/VintageSynthPianoEnv.png">
-<img src="/images/synth/VintageSynthPianoEnv.png" loading="lazy" width="400px" alt="A piano has a very short attack, a slow decay, sustain at 0%, and an instant release.">
-</a>
-<figcaption>
-Retro Synth Piano Envelope
-</figcaption>
-</figure>
-<p>A real piano has a somewhat more complex decay, but the Retro Synth envelope
-can only do a linear decay. Other synths can do an exponential or arbitrary
-decay shape which will more accurately model a piano.</p>
-<p>It’s pretty common to have envelopes which aren’t really modeled after acoustic
-instruments, for example with a “pad” sound. This might have a slow attack, a
-slow decay, sustain at 75%, and a slow release:</p>
-<figure class>
-<a href="/images/synth/VintageSynthPadEnv.png">
-<img src="/images/synth/VintageSynthPadEnv.png" loading="lazy" width="400px" alt="A pad envelope">
-</a>
-<figcaption>
-Retro Synth Pad Envelope
-</figcaption>
-</figure>
-<p>As noted, this is one of two envelopes in the Retro Synth plugin, which is
-quite simple and lacks a modulation matrix. Other synth
-plugins have additional envelopes which can be arbitrarily routed to modulate
-any parameter on the synth via a <a href="https://support.apple.com/guide/logicpro/use-the-mod-matrix-lgsifc8644a6/mac">modulation matrix</a>.</p>
-<h2 id="modular-envelope-generators">Modular Envelope Generators</h2>
-<p>With an Envelope Generator <em>module,</em> you can accomplish these uses by connecting
-them to other modules:</p>
-<table>
-<colgroup>
-<col style="width: 45%" />
-<col style="width: 55%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Envelope use</th>
-<th>Modular equivalent</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Change volume of note as it’s held</td>
-<td>EG connected to Voltage Controlled Amplifier</td>
-</tr>
-<tr class="even">
-<td>Change filter cutoff as note is held</td>
-<td>EG connected to Voltage Controlled Filter</td>
-</tr>
-<tr class="odd">
-<td>Change pitch of note as note is held</td>
-<td>EG connected to VCO pitch CV input</td>
-</tr>
-</tbody>
-</table>
-<p>On a standard synthesizer you might have a separate envelope for each of these,
-a switch on the envelope, or a modulation matrix to choose between these
-functions. With a modular syntesizer, there is “just” an envelope generator, but
-you need to connect it to some other module to get it to do anything useful.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>A keyboard suitable for controlling a modular synth will have a “Gate” output
-which goes high when a key is pressed and low when the key is released. (Again,
-you don’t get chords, at least not without a surprisingly large amount of work.)
-So if you press a key for half a second and then release the key for half a
-second and repeat that cycle forever, the Gate output will look like a square
-wave with the low voltage at 0V and the high voltage at… well, it depends on the keyboard.</p>
-<h3 id="the-eurorack-standard-redux">The Eurorack “Standard,” Redux</h3>
-<p>Reviewing
-<a href="https://www.modwiggler.com/forum/viewtopic.php?t=259994">some of the online comments</a>,
-it seems that a few people had trouble with this module. Based on some of
-the comments there, it seems that once again people are getting bitten by the
-fact that the “Eurorack standard” is anything but! To be more precise, different
-keyboards and sequencers put out differing voltages on their Gate/Trigger output.</p>
-<p>To quote from the Doepfer <a href="https://doepfer.de/a100_man/a100t_e.htm">A-100 Technical Details</a>
-document:</p>
-<blockquote>
-<p>The gate level +5V shown in the picture is only an example. Within the A-100
-usually any voltage beyond about +3V is treated as “high” (e.g. +5V, +8V,
-+10V, +12V will work) and will trigger an ADSR or any other module with a Gate
-or Clock input (e.g. trigger delay, sequencer, clock divider, clock
-sequencer). Any voltage below 1V is treated as “low”. If the specification of
-a module differs from this voltage standard it is mentioned in the description
-of the module in question.</p>
-</blockquote>
-<p>The circuit in the mki x es.EDU Envelope Generator is designed to trigger at
-3.8V. Quoting from the manual:</p>
-<blockquote>
-<p>I’ve set up a voltage divider to get our reference voltage. A 100k/47k
-combination gives us approximately 3.8 V to work with. So whenever our input
-voltage is higher than that, the comparator’s output will jump to +12 V. And
-if it’s lower, it drops down to –12 V. Why did I choose that exact threshold?
-To be honest, mostly just because I had packs of 100k and 47k resistors lying
-on my table when I was testing this. But I still feel that 3.8 V is a
-decent value here.</p>
-</blockquote>
-<p>Given the fuzziness of the specification, “because I had these packs of
-resistors conveniently at hand” is as good of a reason as any, and meets the
-Doepfer requirements.</p>
-<p>I measured the output of my Novation SL MkIII’s Gate output, and it’s 5 V. People
-on <a href="https://www.modwiggler.com/forum/viewtopic.php?t=259994">the previously referenced thread</a>
-claim that the <a href="https://www.youtube.com/watch?v=p5RSIWbZ6Vc" 
-title="B*hr*ng*r: The Edgelords Of Music Production">B*hr*ng*r</a> Neutron is only 3.3 V. Which
-“kind of almost” conforms to the Doepfer text (“usually/about”!), but is
-apparently low enough to cause some heartache with this kit.</p>
-<p>The instructions for the kit say:</p>
-<blockquote>
-<p>To properly test this circuit, you’ll need a square wave LFO and a module
-with a CV input like a VCF.</p>
-</blockquote>
-<p>In light of the above, you would want to consider your inputs carefully!
-You could use the VCO module, but probably not for the output <em>and</em>
-input of the EG. My pocket scope has a function generator built in, but it can
-only output a maximum of 2.5v peak to peak.</p>
-<p>My recommendation is to measure the output of the actual device you’ll be using
-to control the module when you’re finished with it. I don’t typically use my
-keyboard when building the modules, as it’s big and I don’t want to carry it
-around the house, but I did take care to note its output. You don’t want to
-use one device when building a module and then be surprised by the power
-requirements of some other device when playing with the module.</p>
-<p>Also, you might want to consider changing the resistor going into the comparitor
-if you require supporting gear with a lower output. R9 in the schematic is a
-47k resistor. If you substitute a 33k restistor instead, then I calculate that
-you’ll change the trigger threshold to 3 V, which is maybe a better default?</p>
-<h3 id="the-mki-x-es.edu-envelope-generator">The mki x es.EDU Envelope Generator</h3>
-<p>Fundamentally, the way that the mki x es.EDU Envelope Generator module works is
-that it applies a low-pass filter to its Gate input. A low-pass filter will tend to
-round off the corners of a sharp change in a signal. This turns what looks like a
-square wave (presuming that you’re pressing and releasing a key at a constant
-rate) into a smoother shape.</p>
-<p>In the first iteration which you build on the breadboard it applies only <em>one</em>
-lowpass filter to the gate, giving you a more rounded shape. Then, by using a
-pair of diodes, two separate lowpass filters are used in the circuit, one for
-the rise, and a separate filter for the fall (see example on the right).</p>
-<p>That’s simple enough, but it’s a little <em>too</em> simple, even for these circuits,
-as just a couple of filters would allow you to control the attack and the release
-but not have a sustain. So, as you’ll see, things become a bit more compliacted.</p>
-<h2 id="breadboarding-the-envelope-generator">Breadboarding the Envelope Generator</h2>
-<h3 id="passive-vs.-active-circuits">Passive vs. Active Circuits</h3>
-<figure class="inlineRight">
-<a href="/images/synth/EGPassive.png">
-<img src="/images/synth/EGPassive.png" loading="lazy" width="400px" alt="There is a yellow square wave representing the Gate signal overlaid with a purple trace representing the envelope output. This purple trace raises slowly and asymptotically to the top of the yellow trace, and then when the yellow trace goes back to zero it slowly goes down, again following a roughly exponential curve.">
-</a>
-<figcaption>
-Passive trace
-</figcaption>
-</figure>
-<p>We start by building a passive EG, but as you can’t hook it up to anything which
-draws more current than an oscilloscope without changing the envelope, that’s
-really only good for demonstrating the principle of operation of the EG.
-Building a “useful” EG will require some op amps.</p>
-<p>If you look at the “Passive trace” figure on the right, the yellow trace is the square wave I
-am using as the input to the EG, and the purple trace is the output of the EG.
-As you can see, the output of the passive circuit is limited to the voltage of
-the input to the EG (which, as previously noted, is not consistent
-between different keyboards you might use to produce that input). Also, the
-output impedance would not be handled well; the
-shape of the waveform would change depending upon what you connected to the EG’s
-output.</p>
-<figure class="inlineRight">
-<a href="/images/synth/EGActive.png">
-<img src="/images/synth/EGActive.png" loading="lazy" width="400px" alt="Active trace">
-</a>
-<figcaption>
-Active trace
-</figcaption>
-</figure>
-<p>With the active EG the output voltage (see the “Active trace” figure) is now independent of
-the input voltage, and the impedance would be better handled, due to the use
-of a buffer op amp. Here’s what that looks like on the breadboard:</p>
-<figure>
-<a href="/images/synth/EGBreadboard.jpg">
-<img src="/images/synth/EGBreadboard.jpg" loading="lazy" width="800px" alt="Breadboarded simple EG with attack and decay pots">
-</a>
-<figcaption>
-Two pots and counting…“
-</figcaption>
-</figure>
-<p>(If you look <em>really closely</em> at this photo you’ll notice an extra resistor I’ve
-added to bring the voltage threshold down to about 2 V to start the EG. As noted
-above, my function generator has a limited voltage range.)</p>
-<div style="clear: both;">
-
-</div>
-<h3 id="attack-decayrelease-sustain-controls">Attack, Decay/Release, Sustain Controls</h3>
-<figure class="inlineRight">
-<a href="/images/synth/EGADSRPulse.png">
-<img src="/images/synth/EGADSRPulse.png" loading="lazy" width="400px" alt="ADSR trace with pulse">
-</a>
-<figcaption>
-ADSR trace
-</figcaption>
-</figure>
-<p>I’m going to explain how the attack and decay are implemented in the circuit.
-This is, ironically considering it was done to keep the circuit itself simple,
-somewhat complicated to understand, so feel free to skip ahead to the next
-section if you’re so inclined.</p>
-<p>In the images in this section, the Gate input is the yellow trace, the EG output
-is the purple trace, and the internal signal which the EG mixes into its input
-before shaping it with the filters
-is the cyan trace. The envelope <em>starts</em> at the center of the screen, not the
-left side.</p>
-<p>The way a “real” envelope generator works on a commercial
-synth works is first the attack happens, taking the envelope to its maximum
-level. Then the decay, as it goes to the sustain level, and finally, when the
-key is released, the release happens.</p>
-<p>With the mki x es.EDU kit, on the other hand, the decay only has a chance to
-happen when the attack is quite short. If you look at the “ADSR trace” on the right
-you can see that with a short attack, the decay can happen, followed by the
-sustain and release. This is the “best case scenario” for this circuit. With
-roughly this shape, you can adjust the attack (a little!), the decay/release
-times as a single value, and set a sustain level.</p>
-<figure class="inlineRight">
-<a href="/images/synth/EGSlowAttack.png">
-<img src="/images/synth/EGSlowAttack.png" loading="lazy" width="400px" alt="ADSR trace with slow attack">
-</a>
-<figcaption>
-ADSR trace with slow attack
-</figcaption>
-</figure>
-<p>When I dial in a longer attack, there is no decay; in this case the attack
-takes its time to even arrive at the sustain level, wherever that happens to
-be set. Importantly, the attack in this case only goes to the sustain level; it
-does not go to 100% as a standard synthesizer attack would do (even with this
-long attack).</p>
-<p>Note how the attack level is much higher in the “ADSR trace” example, and how
-the attack only goes to the “sustain” level in the
-“ADSR trace with slow attack” example.</p>
-<p>This is because of how the EG works. If you look at the figure
-called “ADSR trace with slow attack,” you can see a third, cyan trace. The cyan
-trace has a pulse which is fired when the input goes high. As you can see, the
-pulse is pretty short. One way to think about the duration of the pulse is that
-it’s the maximum length of time your attack can be for there to still have a
-separate decay. You can have a longer attack, yes, but if you do then:</p>
-<ol type="1">
-<li>You won’t get any decay, and</li>
-<li>Your attack will only go to the sustain level, not to 100%.</li>
-</ol>
-<p>One way to think about the mki x es.EDU EG is that it’s <em>two low-pass filters</em> on
-the sum of the gate signal and the internal control signal (one filter controls
-the speed of the attack; the second controls the speed of the decay <em>and</em>
-release). The lower we set the
-low-pass filters, the more we round the corners of the square gate signal into
-smooth curves.</p>
-<p>The envelope needs a sustain, and that can’t be accomplished with just filters.
-So instead of filtering the Gate signal directly, instead it
-first produces an internal control signal, represented by the cyan trace in the
-images just above.
-The EG generates a pulse at the start of the Gate
-similar to the “Trigger” output that some keyboards have, and separately reduces
-the gate down to a sustain level which you can adjust
-with a potentiometer. These two signals are mixed together, forming a shape like
-the cyan trace below. Just like before, you can vary the attack speed with
-one pot and the descending phases (decay and release) with another pot.</p>
-<figure class="horizontalTiles">
-<a href="/images/synth/EGPulse.png">
-<img src="/images/synth/EGPulse.png" loading="lazy" width="400px" alt="This shows the signal which will be used to generate the envelope. It has a thin bar going up to 100% on the left followed by a sustain level at about 50% for the rest of the pulse. Also shown is the square wave which is the input to the E.">
-</a>
-<figcaption>
-Pulse (tiny dot at the top)
-</figcaption>
-</figure>
-<figure class="horizontalTiles">
-<a href="/images/synth/EGPulseMeasure.png">
-<img src="/images/synth/EGPulseMeasure.png" loading="lazy" width="400px" alt="The same image as before, only it's overlaid with measurement cursors showing that the width of the attack pulse is 16 ms">
-</a>
-<figcaption>
-…with measurement
-</figcaption>
-</figure>
-<div style="clear: both;">
-
-</div>
-<p>In this example the input the the EG is shown in yellow and the wave which the
-EG will round off using filters to become its output is shown in cyan. The
-high pulse on the left always goes to 100%, and the sustain for the rest of the
-cycle is settable by the user. Here I’ve adjusted it to around 50%. The width
-of the pulse on the left is not assignable by the user; it’s always small; here
-I have measured it at a about 16 ms.</p>
-<p>So, if you use anything besides a very short attack then it will take
-longer than the pulse at the beginning of the envelope and will go to the
-sustain level instead of all the way to 100%.</p>
-<div style="clear: both;">
-
-</div>
-<h3 id="led">LED</h3>
-<p>I added an LED, and a transistor to drive it.</p>
-<figure>
-<a href="/images/synth/EGWithLED.jpg">
-<img src="/images/synth/EGWithLED.jpg" loading="lazy" width="800px" alt="Breadboarded EG with LED light shining">
-</a>
-<figcaption>
-The “LED Moment”
-</figcaption>
-</figure>
-<h3 id="inversion">Inversion</h3>
-<figure class="inlineRight">
-<a href="/images/synth/EGInverted.png">
-<img src="/images/synth/EGInverted.png" loading="lazy" width="400px" alt="Inverted trace">
-</a>
-<figcaption>
-Inverted trace
-</figcaption>
-</figure>
-<p>This time the blue trace on the right is showing the inverted output. No surprise
-there; it uses
-<a href="/posts/2023-04-03-building-a-synthesizer-4.html#inverter">an op amp in an inverting configuration</a>
-to produce this output.</p>
-<div style="clear: both;">
-
-</div>
-<h3 id="looping-the-envelope">Looping the Envelope</h3>
-<p>I found this section somewhat hard to understand, not least because the
-directions lead off with a confusing bit of language:</p>
-<figure>
-<a href="/images/synth/EGManualConfusion.png">
-<img src="/images/synth/EGManualConfusion.png" loading="lazy" width="800px" alt="Screenshot of the Looping the Envelope section of the manual, with a looping circuit diagram and the text &quot;You just patch it in between output (on the right) and input (on the left) &quot;">
-</a>
-<figcaption>
-It’s your other left…
-</figcaption>
-</figure>
-<p>I had thought this was a mistake; the input is on the right and the output
-is on the left.
-<a href="https://tinyurl.com/y7wh2o6u">Looking at the circuit simulator seemed to confirm this</a>.
-It was only when I watched
-<a href="https://www.youtube.com/watch?v=L9vTz0vm6pc">Moritz’s YouTube video</a> that I
-realized he was talking about the <em>envelope generator</em> inputs and outputs, not
-the I/O for the Schmitt trigger circuit pictured above. The <em>output</em> of
-the Schmitt trigger goes to the <em>input</em> of the envelope generator, and vice/versa!</p>
-<p>In the end the way that this produces a loop is pretty simple, and here’s how
-I would explain it:</p>
-<p>First, this circuit produces a <em>specific type of loop.</em> Namely, it loops
-whenever the envelope output goes to zero. This is quite reasonable, but it
-confused me as it’s not the sort of loop which
-you would get if you connected an LFO to the gate input of the EG, which would
-always happen on a certain timeframe regardless of where the envelope
-is in its cycle. The EG’s loop circuit always happens after the release.<br />
-Given that requirement, then we just
-need a circuit which will make the input go high whenever the output goes low.
-That sounds like a Schmitt trigger inverter, something which you’ll be familiar
-with if you’ve previously built the mki x es.EDU VCO, and the circuit shown is
-just building a Schmitt trigger inverter using an op amp and a few passive
-components.</p>
-<p>However, my confusion only got worse as I looked deeper into this step. I had
-found the breadboard diagrams increasingly difficult to line up with the schematics as
-the breadboard got more densely packed, and I ended up annotating the diagram
-in this step. It differs from the schematic in the step in a couple of important
-ways, and all of the jumpers and the unlabeled pots, op amps, and jacks had
-finally pushed past the point where I could keep track of this in my head.</p>
-<figure>
-<a href="/images/synth/EGHuh.png">
-<img src="/images/synth/EGHuh.png" loading="lazy" width="800px" alt="A schematic diagram of the full EG circuit with a breadboard diagram of the mostly-equivalent circuit below it, with a few differences circled and some annotations added to identify specific parts.">
-</a>
-<figcaption>
-Schematic and Breadboard
-</figcaption>
-</figure>
-<p>These are <em>mostly</em> the same as the diagrams from the manual, only I have added
-all of the colored annotations.
-<span class="warning" title="Instructions require clarification">⚠</span>
-Note, especially, the red circles. The
-breadboard version of the circuit does not include the switch (the components
-for the Gate input section are on the board, but they’re “permanently switched
-off” in this version), and in the breadboard version the resistor goes to the
-negative rail instead of ground. That last bit just seems like an error to me
-– the full schematic and the PC board layout later in the directions match
-the schematic here. So I ended up not doing this part.</p>
-<h3 id="the-mistake-i-made">The Mistake I Made</h3>
-<p>Another problem I had during the breadboarding of this circuit was at one point
-I mistakenly connected my oscilloscope’s ground clip to the -12V rail instead
-of ground. This made the output very distorted and caused the power supply to
-the synthesizer to start getting hot. It took me a while to find the issue because
-the way you route power to breadboards with two power rails when you need three
-is a little consuing. The video about why this is a bad idea is literally called
-<a href="https://www.youtube.com/watch?v=xaELqAo4kkQ">How NOT To Blow Up Your Oscilloscope!</a></p>
-<h2 id="modifications-can-we-fix-the-limitation-on-the-attack">Modifications: Can We Fix the Limitation on the Attack?</h2>
-<p>The limitation to very short attack times is somewhat less than ideal, so could
-we fix it? The “pulse” used to generate the attack is set to a pretty short
-duration, and it’s not adjustable. What if it were adjustable? That’s not so
-hard. We could replace the attack potentiometer with a stereo potentiometer
-(which is really just two separate potentiometers with a single shaft to adjust
-them). Then we could use one of these for the attack time, as before, and the
-second for adjusting the width of the pulse.</p>
-<p>So <a href="https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcAmALNZA2VAOMmB2SBVATlIQJAMxCVQGY6BTAWjDACgAlEd5HHVSo+YAXTFQpqSCimyYCTgHMpJEbISYFUTgCc+2ISP6D1UsPDj7DI85uHSi1gO62QjZO-ucAhu9R8EAYvQNpSOX5wKzhg6BwGQgZUTFIGHAICBAQwKhh8UkwBRgJSUuQKiMsrG0KPILrsHWr4TgATYNCG2jCQLzAAOUDcTgB5EEIvdJEiEWn5GwRSKZwRSeDVi1b-Mlp5pZWRQUkolvgoDFQBLKv8MBzEC7RrghwESES0-EJomrdd4KYQQAkIKTj-OqgujLTpgtwHWHQw66NxgGEyWQVEQYlHgGEMRJ40KxSDgkCQwloqaE0luSGbCm0Un+Oo4qkeWLHLynGKyVgweA4DJFd4lbDCSBUfmwOBCmgE5ZwMC4V5MM6k3isZCQMyOLUELz2PoePrQJDIM3yM1krEczFoQGCWl9B0422eXQdW2JQQCQQ+42DYY4dp9IUeEIu7GR-pDZUh3IiP2OjZzIFbGIXR4AQQAKrnswBhADSnETYeBkYDwidvysWeIIAAIgBRQvZgCaAHpuC2ADIt7MAZRbZIJewQ1L22tx48R8yhzoXM4X6aXhJrwQ3ODhW56O9THgPS82uFk8w9J7TwKCAavEa6PUjzt6HtfJLJvWrQRxL5-sRSbEPwAYw8IwcUAo8dAFKwIBgZ4Mled5PgYb48hlLhVEgs8wOxOowQAD2CDgOT2TAIBkCIjhAAA1ABJbMAB0AGchzo1sACFs24TgiNQuYymCBBgQAkBBGzJsACkAFUh1zFjZN44IIiwWQZCYLAmCTQQAAUR2kptRlYCSh24FiWwGGj+1GHTRwhHoAPAj83FYJy+Q4YkwVUdhJEgnzQmPXF2EcHF2G0O1PVEcK-PwNTYljYMVCitSjDCtTAtJUC0oirUdQihQZXgODoAKIpVgYUpykqBsuBc7VdRMer8rJVy1gNPgmvWUkOkjTAtAmNZ+oS+M-HcPrpwmfquVEfpeTiBIkhSNJEOyXIM1aFyjHMVqBt3XKGo6vKurLAg1kG2gPMmpk6xJaAz21XkYioIdZILOiBiS5VzvARwgVrZ0xEEcafu+0kiJoCZXhQCAgQosSQAkmS5JYgBZUdwaYIEqDETHSDU+H6KY1j2JbLieIAIz4OcmtKCBTqZE6TEuzd-PqC6boK8h3ke2CEYAFz53xgIAaxAZiAAcAEtheYFrmaCVnfzl3zcFEXyjGdYKgPc8QlZcwGcuZ5yZpEnXKy8UkAHtwHNfq4vIPoCqsMpxuQJBMRt4JOGt307fqSAvBnfJwHATggA">I tried this out in the circuit simulator</a>,
-and it seems to work, for the
-most part. (Except that the falstad.com simulator has no stereo potentiometers;
-I had to use two mono pots with separate adjustments.) But I can certainly make
-the attack longer by increasing the resistance of what used to be a single 10k
-resistor and is now a potentiometer. Overall it feels like an improvement.</p>
-<figure>
-<a href="/images/synth/EGSimulatorFixedAttack.png">
-<img src="/images/synth/EGSimulatorFixedAttack.png" loading="lazy" width="800px" alt="A schematic of the envelope generator in a circuit simulator with the modification described in the text.">
-</a>
-<figcaption>
-Improved Attack
-</figcaption>
-</figure>
-<p>Actually including it in the final project would require changes in packaging
-since the stereo pot is larger than a mono pot, and changes to the circuit.
-More importantly, I would need to tweak the resistor/capacitor values in the
-lowpass filter at the input so that the range of the pot was correct for both
-the pulse length and the attack curve across the full range of the stereo pot.</p>
-<h2 id="building-the-pc-board">Building the PC Board</h2>
-<p><span class="warning" title="Instructions require clarification">⚠</span>
-The PC board I received was labeled “EDUENV2.” The board in the instructions is
-“EDUENV1.” (This despite the fact that the instructions are <code>EG_MANUAL_v3.pdf</code>.
-Versioning is hard!) The component layouts are substantially different between
-EDUENV2 and EDUENV1.</p>
-<p>Building the PC board went very smoothly except at one point I mixed up a 100 k and a 100
-ohm resistor. These two are very different! I fixed this before powering the
-circuit.</p>
-<figure>
-<a href="/images/synth/EGPCBoard.jpg">
-<img src="/images/synth/EGPCBoard.jpg" loading="lazy" width="800px" alt="The completed PC board for the EG">
-</a>
-<figcaption>
-Completed PC board
-</figcaption>
-</figure>
-<figure>
-<a href="/images/synth/EGSideView.jpg">
-<img src="/images/synth/EGSideView.jpg" loading="lazy" width="800px" alt="A side view of the EG showing the PC board, the faceplate, and the potentiometers">
-</a>
-<figcaption>
-Side view
-</figcaption>
-</figure>
-<figure>
-<a href="/images/synth/VCOMixerEG.jpg">
-<img src="/images/synth/VCOMixerEG.jpg" loading="lazy" width="800px" alt="The Mixer, the VCO, and the EG, sitting side by side in the rack">
-</a>
-<figcaption>
-All three modules completed so far
-</figcaption>
-</figure>
-<h2 id="resources">Resources</h2>
-<h3 id="instructions">Instructions</h3>
-<ul>
-<li><a href="https://www.ericasynths.lv/media/EG_MANUAL_v3.pdf">mki x es.EDU Envelope Generator User Manual</a></li>
-</ul>
-<h3 id="community">Community</h3>
-<ul>
-<li><a href="https://www.modwiggler.com/forum/viewtopic.php?t=259994">Modwiggler thread</a></li>
-<li><a href="https://www.modulargrid.net/e/erica-synths-edu-envelope">Modulargrid page</a></li>
-</ul>
-<h3 id="product-pages">Product Pages</h3>
-<ul>
-<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/edu-diy-eg/">EDU DIY EG</a></li>
-<li><a href="https://www.ericasynths.lv/shop/diy-kits-1/mki-x-esedu-diy-system/">mki x es.EDU DIY System</a></li>
-</ul>
-<h3 id="simulations">Simulations</h3>
-<ul>
-<li><a href="https://tinyurl.com/y7ea7j3a">Simplest Envelope</a></li>
-<li><a href="https://tinyurl.com/y7xguhoo">Passive A/R Envelope</a></li>
-<li><a href="https://tinyurl.com/ycz4qc3b">Active A/R Envelope</a></li>
-<li><a href="https://tinyurl.com/yc2c8u5h">Pseudo ASDR Envelope</a></li>
-<li><a href="https://tinyurl.com/y7gr9hnj">Status LED</a></li>
-<li><a href="https://tinyurl.com/y9rrt8pp">Inverting Buffers</a></li>
-<li><a href="https://tinyurl.com/y7wh2o6u">Looped Envelope</a></li>
-</ul>
-<h3 id="videos">Videos</h3>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=Oo3Tu0WPqzE">Introducing the mki x es.EDU DIY EG kit</a>
-by Moritz Klein (5:03)</li>
-<li><a href="https://www.youtube.com/watch?v=aGFb7JbTdNU">Designing a simple ADSR(-ish) envelope generator from scratch</a>
-by Moritz Klein (30:59)</li>
-<li><a href="https://www.youtube.com/watch?v=L9vTz0vm6pc">How to loop any envelope</a>
-by Moritz Klein (2:48)</li>
-<li><a href="https://youtu.be/BKg2gU8tf08">Erica Synths .EDU Envelope - Building and Demo</a>
-by Synth DIY Guy (18:05)</li>
-</ul>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr />
-<ol>
-<li id="fn1"><p>I chose this comparison because Retro Synth is a very simple plugin. Other
-plugins such as Alchemy allow you to add an arbitrary number of envelopes routed
-to any parameter on the synth, having very complex shapes. That would be a huge
-digression here.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>In this sense the EG module is more like the envelopes in Alchemy, which can be
-used to modulate literally any knob on the soft synth, than the envelopes in
-Retro Synth, which are “hard-wired” to just three parameters. Logic Pro also has
-a “Modulator” Midi Effects plugin, which is a bit more like
-the envelope generator we’ll be building here in that it can be connected to
-nearly any plugin parameter, and functions both as an envelope generator and an
-LFO.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
-
-<div class="info">
-    
-    Tags: <a title="All pages tagged &#39;synthesis&#39;." href="/tags/synthesis.html" rel="tag">synthesis</a>, <a title="All pages tagged &#39;diy&#39;." href="/tags/diy.html" rel="tag">diy</a>, <a title="All pages tagged &#39;electrical engineering&#39;." href="/tags/electrical%20engineering.html" rel="tag">electrical engineering</a>
-    
-</div>
-]]></description>
-    <pubDate>Wed, 31 Jan 2024 00:00:00 UT</pubDate>
-    <guid>https://www.craigstuntz.com/posts/2024-01-31-building-a-synthesizer-8.html</guid>
     <dc:creator>Craig Stuntz</dc:creator>
 </item>
 
